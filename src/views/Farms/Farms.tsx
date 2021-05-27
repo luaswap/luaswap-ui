@@ -347,16 +347,6 @@ const Farms: React.FC = () => {
               <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
             ))}
           </Route>
-          <Route exact path={`${path}/history`}>
-            {farmsStakedMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
-            ))}
-          </Route>
-          <Route exact path={`${path}/archived`}>
-            {farmsStakedMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
-            ))}
-          </Route>
         </FlexLayout>
       </div>
     )
@@ -373,7 +363,7 @@ const Farms: React.FC = () => {
           {t('Farms')}
         </Heading>
         <Heading scale="lg" color="text">
-          {t('Stake Liquidity Pool (LP) tokens to earn.')}
+          {t('Earn LUA tokens by staking LUA-V1 LP token ')}
         </Heading>
       </PageHeader>
       <Page>

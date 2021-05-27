@@ -89,6 +89,7 @@ const tokens = {
     address: {
       56: '0x8519ea49c997f50ceffa444d240fb655e89248aa',
       97: '',
+      1: '0x33d0568941c0c64ff7e0fb4fba0b11bd37deed9f',
     },
     decimals: 18,
     projectLink: 'https://rampdefi.com/',
@@ -305,6 +306,7 @@ const tokens = {
     address: {
       56: '0x928e55dab735aa8260af3cedada18b5f70c72f1b',
       97: '',
+      1: '0xf8c3527cc04340b208c854e985240c02f7b7793f',
     },
     decimals: 18,
     projectLink: 'https://frontier.xyz/',
@@ -557,6 +559,7 @@ const tokens = {
     address: {
       56: '0x947950bcc74888a40ffa2593c5798f11fc9124c4',
       97: '',
+      1: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2'
     },
     decimals: 18,
     projectLink: 'https://sushi.com/',
@@ -610,7 +613,8 @@ const tokens = {
     symbol: 'ETH',
     address: {
       56: '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
-      97: '',
+      1: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+      88: '0x2EAA73Bd0db20c64f53fEbeA7b5F5E5Bccc7fb8b',
     },
     decimals: 18,
     projectLink: 'https://ethereum.org/en/',
@@ -674,6 +678,7 @@ const tokens = {
     address: {
       56: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
       97: '',
+      1: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     },
     decimals: 18,
     projectLink: 'https://www.centre.io/usdc',
@@ -737,6 +742,8 @@ const tokens = {
     address: {
       97: '0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5',
       56: '0x55d398326f99059ff775485246999027b3197955',
+      88: '0x381B31409e4D220919B2cFF012ED94d70135A59e',
+      1: '0xdac17f958d2ee523a2206206994597c13d831ec7'
     },
     decimals: 18,
     projectLink: 'https://tether.to/',
@@ -809,6 +816,7 @@ const tokens = {
     address: {
       56: '0xbf5140a22578168fd562dccf235e5d43a02ce9b1',
       97: '0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5',
+      1: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
     },
     decimals: 18,
     projectLink: 'https://uniswap.org/',
@@ -1398,6 +1406,83 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://deri.finance/#/index',
   },
+
+  // New token info for LUA-FARMING
+  lua: {
+    symbol: 'LUA',
+    address: {
+      88: '0x7262fa193e9590b2e075c3c16170f3f2f32f5c74',
+      1: '0xb1f66997a5760428d3a87d68b90bfe0ae64121cc'
+    },
+    decimals: 18,
+    projectLink: '',
+  },
+  tomo: {
+    symbol: 'TOMO',
+    address: {
+      88: '0xb1f66997a5760428d3a87d68b90bfe0ae64121cc'
+    },
+    decimals: 18,
+    projectLink: '',
+  },
+  ftt: {
+    symbol: 'FTT',
+    address: {
+      88: '0x33fa3c0c714638f12339F85dae89c42042a2D9Af',
+      1: '0x50d1c9771902476076ecfc8b2a83ad6b9355a4c9'
+    },
+    decimals: 18,
+    projectLink: '',
+  },
+  srm: {
+    symbol: 'SRM',
+    address: {
+      88: '0xc01643aC912B6a8ffC50CF8c1390934A6142bc91',
+      1: '0x476c5e26a75bd202a9683ffd34359c0cc15be0ff',
+    },
+    decimals: 18,
+    projectLink: '',
+  },
+  tomoe: {
+    symbol: 'TOMOE',
+    address: {
+      1: '0x05d3606d5c81eb9b7b18530995ec9b29da05faba'
+    },
+    decimals: 18,
+    projectLink: '',
+  },
+  wbtc: {
+    symbol: 'WBTC',
+    address: {
+      1: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
+    },
+    decimals: 18,
+    projectLink: '',
+  },
+  kat: {
+    symbol: 'KAT',
+    address: {
+      1: '0x14da230d6726c50f759bc1838717f8ce6373509c'
+    },
+    decimals: 18,
+    projectLink: '',
+  },
+  kai: {
+    symbol: 'KAI',
+    address: {
+      1: '0xd9ec3ff1f8be459bb9369b4e79e9ebcf7141c093'
+    },
+    decimals: 18,
+    projectLink: '',
+  },
+  om: {
+    symbol: 'OM',
+    address: {
+      1: '0x2baecdf43734f22fd5c152db08e3c27233f0c7d2'
+    },
+    decimals: 18,
+    projectLink: '',
+  }
 }
 
 export default tokens

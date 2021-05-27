@@ -18,22 +18,22 @@ const useFarmsWithBalance = () => {
   const { fastRefresh } = useRefresh()
 
   useEffect(() => {
-    const fetchBalances = async () => {
-      const calls = farmsConfig.map((farm) => ({
-        address: getMasterChefAddress(),
-        name: 'pendingCake',
-        params: [farm.pid, account],
-      }))
+    // const fetchBalances = async () => {
+    //   const calls = farmsConfig.map((farm) => ({
+    //     address: getMasterChefAddress(),
+    //     name: 'pendingCake',
+    //     params: [farm.pid, account],
+    //   }))
 
-      const rawResults = await multicall(masterChefABI, calls)
-      const results = farmsConfig.map((farm, index) => ({ ...farm, balance: new BigNumber(rawResults[index]) }))
+    //   const rawResults = await multicall(masterChefABI, calls)
+    //   const results = farmsConfig.map((farm, index) => ({ ...farm, balance: new BigNumber(rawResults[index]) }))
 
-      setFarmsWithBalances(results)
-    }
+    //   setFarmsWithBalances(results)
+    // }
 
-    if (account) {
-      fetchBalances()
-    }
+    // if (account) {
+    //   fetchBalances()
+    // }
   }, [account, fastRefresh])
 
   return farmsWithBalances
