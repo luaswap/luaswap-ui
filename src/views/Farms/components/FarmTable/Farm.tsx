@@ -35,6 +35,7 @@ const Farm: React.FunctionComponent<FarmProps> = ({ image, label, pid }) => {
   const { stakedBalance } = useFarmUser(pid)
   const { t } = useTranslation()
   const rawStakedBalance = getBalanceNumber(stakedBalance)
+  const images = image.split('-')
 
   const handleRenderFarming = (): JSX.Element => {
     if (rawStakedBalance) {
@@ -50,7 +51,8 @@ const Farm: React.FunctionComponent<FarmProps> = ({ image, label, pid }) => {
 
   return (
     <Container>
-      <IconImage src={`/images/farms/${image}.svg`} alt="icon" width={40} height={40} mr="8px" />
+      <IconImage src={`/images/farms/${images[0]}.png`} alt="icon" width={40} height={40} mr="8px" />
+      <IconImage src={`/images/farms/${images[1]}.png`} alt="icon" width={40} height={40} mr="8px" />
       <div>
         {handleRenderFarming()}
         <Text bold>{label}</Text>
