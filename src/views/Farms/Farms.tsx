@@ -120,7 +120,7 @@ const Farms: React.FC = () => {
   const { fastRefresh } = useRefresh()
   useEffect(() => {
     if (account) {
-      dispatch(fetchFarmUserDataAsync(account))
+      // dispatch(fetchFarmUserDataAsync(account))
     }
   }, [account, dispatch, fastRefresh])
 

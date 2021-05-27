@@ -1,6 +1,6 @@
 // Set of helper functions to facilitate wallet setup
 
-import { nodes } from './getRpcUrl'
+import getRpcUrl from './getRpcUrl'
 
 /**
  * Prompt the user to add BSC as a network on Metamask, or switch to BSC if the wallet is on a different network
@@ -22,7 +22,7 @@ export const setupNetwork = async () => {
               symbol: 'bnb',
               decimals: 18,
             },
-            rpcUrls: nodes,
+            rpcUrls: getRpcUrl(),
             blockExplorerUrls: ['https://bscscan.com/'],
           },
         ],
