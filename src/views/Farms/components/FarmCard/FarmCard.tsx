@@ -80,10 +80,9 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   const { t } = useTranslation()
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-
   // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
-  const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
+  const farmImages = farm.lpSymbol.split('-')
 
   const totalValueFormatted = farm.liquidity
     ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
@@ -109,7 +108,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         lpLabel={lpLabel}
         multiplier={farm.multiplier}
         isCommunityFarm={farm.isCommunity}
-        farmImage={farmImage}
+        farmImages={farmImages}
         tokenSymbol={farm.token.symbol}
       />
       {!removed && (
