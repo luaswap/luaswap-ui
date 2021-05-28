@@ -12,7 +12,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import useRefresh from 'hooks/useRefresh'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
 import {
-  fetchFarmsPublicDataAsync,
+  // fetchFarmsPublicDataAsync,
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
   fetchCakeVaultPublicData,
@@ -39,7 +39,7 @@ export const useFetchPublicData = () => {
       const blockNumber = await web3.eth.getBlockNumber()
       dispatch(fetchPoolsPublicDataAsync(blockNumber))
     }
-    dispatch(fetchFarmsPublicDataAsync())
+    // dispatch(fetchFarmsPublicDataAsync())
     fetchPoolsPublicData()
     dispatch(fetchPoolsStakingLimitsAsync())
   }, [dispatch, slowRefresh, web3])

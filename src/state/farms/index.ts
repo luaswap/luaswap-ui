@@ -23,7 +23,7 @@ const noAccountFarmConfig = farmsConfig.map((farm) => ({
   },
 }))
 
-const initialState: FarmsState = { data: noAccountFarmConfig, loadArchivedFarmsData: false, userDataLoaded: false }
+const initialState: FarmsState = { data: noAccountFarmConfig, userDataLoaded: false }
 
 export const farmsSlice = createSlice({
   name: 'Farms',
@@ -45,23 +45,19 @@ export const farmsSlice = createSlice({
       })
       state.userDataLoaded = true
     },
-    setLoadArchivedFarmsData: (state, action) => {
-      const loadArchivedFarmsData = action.payload
-      state.loadArchivedFarmsData = loadArchivedFarmsData
-    },
   },
 })
 
 // Actions
-export const { setFarmsPublicData, setFarmUserData, setLoadArchivedFarmsData } = farmsSlice.actions
+export const { setFarmUserData } = farmsSlice.actions
 
 // Thunks
-export const fetchFarmsPublicDataAsync = () => async (dispatch, getState) => {
-  const fetchArchived = getState().farms.loadArchivedFarmsData
-  const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
-  // const farms = await fetchFarms(farmsToFetch)
-  dispatch(setFarmsPublicData([]))
-}
+// export const fetchFarmsPublicDataAsync = () => async (dispatch, getState) => {
+//   const fetchArchived = getState().farms.loadArchivedFarmsData
+//   const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
+//   const farms = await fetchFarms(farmsToFetch)fetchFarmsPublicDataAsync
+//   dispatch(setFarmsPublicData([]))
+// }
 export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getState) => {
   const fetchArchived = getState().farms.loadArchivedFarmsData
   const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms

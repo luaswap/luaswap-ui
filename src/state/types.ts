@@ -57,7 +57,6 @@ export interface Profile {
 
 export interface FarmsState {
   data: Farm[]
-  loadArchivedFarmsData: boolean
   userDataLoaded: boolean
 }
 
