@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Route, useRouteMatch } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
+import { useAppDispatch } from 'state'
 import { useWeb3React } from '@web3-react/core'
 import { Image, Heading, RowType, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
@@ -10,6 +11,7 @@ import { useFarms, usePriceCakeBusd } from 'state/hooks'
 import usePersistState from 'hooks/usePersistState'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { fetchFarmUserDataAsync } from 'state/actions'
 import PageHeader from 'components/PageHeader'
 import FarmCard from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
@@ -98,6 +100,13 @@ const Farms: React.FC = () => {
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, 'pancake_farm_view')
   const { account } = useWeb3React()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchFarmUserDataAsync(account))
+    }
+  }, [account, dispatch])
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
@@ -132,7 +141,7 @@ const Farms: React.FC = () => {
         pid: farm.pid,
       },
       liquidity: {
-        liquidity: new BigNumber(1), // have to fill correct value
+        liquidity: farm.usdValue, // have to fill correct value
       },
       multiplier: {
         multiplier: farm.multiplier,

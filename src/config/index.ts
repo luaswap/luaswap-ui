@@ -28,3 +28,5 @@ export const LOTTERY_MAX_NUMBER_OF_TICKETS = 50
 export const LOTTERY_TICKET_PRICE = 1
 export const DEFAULT_TOKEN_DECIMAL = BIG_TEN.pow(18)
 export const DEFAULT_GAS = 200000
+export const API_ETH = 'https://wallet.tomochain.com/api/luaswap'
+export const API_TOMO = 'https://wallet.tomochain.com/api/luaswap/tomochain'

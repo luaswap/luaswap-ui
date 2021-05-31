@@ -9,7 +9,7 @@ const ReferenceElement = styled.div`
 `
 
 export interface LiquidityProps {
-  liquidity: BigNumber
+  liquidity: number
 }
 
 const LiquidityWrapper = styled.div`

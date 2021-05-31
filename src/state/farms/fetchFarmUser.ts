@@ -61,11 +61,10 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
   const calls = farmsToFetch.map((farm) => {
     return {
       address: masterChefAddress,
-      name: 'pendingCake',
+      name: 'pendingReward',
       params: [farm.pid, account],
     }
   })
-
   const rawEarnings = await multicall(masterchefABI, calls)
   const parsedEarnings = rawEarnings.map((earnings) => {
     return new BigNumber(earnings).toJSON()

@@ -15,7 +15,6 @@ import ApyButton from './ApyButton'
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number
-  liquidity?: BigNumber
 }
 
 const AccentGradient = keyframes`  
@@ -78,14 +77,13 @@ interface FarmCardProps {
 
 const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
   const { t } = useTranslation()
-
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
   const farmImages = farm.lpSymbol.split('-')
 
-  const totalValueFormatted = farm.liquidity
-    ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+  const totalValueFormatted = farm.usdValue
+    ? `$${parseFloat(farm.usdValue.toFixed(0)).toLocaleString('en-US')}`
     : '-'
 
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')

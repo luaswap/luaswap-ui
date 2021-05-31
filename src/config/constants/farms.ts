@@ -2,7 +2,7 @@ import tokens from './tokens'
 import { FarmConfig } from './types'
 
 // Tomo supported pools
-const farms: FarmConfig[] = [
+export const tomoSupportedPools: FarmConfig[] = [
   /**
    * These 3 farms (PID 0, 251, 252) should always be at the top of the file.
    */
@@ -80,7 +80,7 @@ const farms: FarmConfig[] = [
   }
 ]
 
-const supportedPools: FarmConfig[] = [
+export const allPools: FarmConfig[] = [
   {
     pid: 3,
     lpSymbol: 'LUA-USDC',
@@ -244,5 +244,3 @@ const supportedPools: FarmConfig[] = [
     quoteToken: tokens.usdt,
   },
 ]
-
-export default farms

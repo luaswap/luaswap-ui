@@ -1,5 +1,6 @@
 // Set of helper functions to facilitate wallet setup
 
+import { ChainId } from '@luaswap/sdk'
 import getRpcUrl from './getRpcUrl'
 
 /**
@@ -66,4 +67,8 @@ export const registerToken = async (
   })
 
   return tokenAdded
+}
+
+export function IsTomoChain(chainId: ChainId | undefined) {
+  return chainId === 88 || chainId === 89 || chainId === 99
 }

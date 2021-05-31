@@ -1,4 +1,4 @@
-export { fetchFarmUserDataAsync } from './farms'
+export { fetchFarmUserDataAsync, fetchFarms, setDefaultFarmData } from './farms'
 export {
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,

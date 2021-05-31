@@ -1,8 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import farmsConfig from 'config/constants/farms'
+import { allPools, tomoSupportedPools } from 'config/constants/farms'
 import isArchivedPid from 'utils/farmHelpers'
-import fetchFarms from './fetchFarms'
+import { IsTomoChain } from 'utils/wallet'
+import axios from 'axios'
+import { API_ETH, API_TOMO } from 'config'
 import {
   fetchFarmUserEarnings,
   fetchFarmUserAllowances,
@@ -11,9 +13,9 @@ import {
 } from './fetchFarmUser'
 import { FarmsState, Farm } from '../types'
 
-const nonArchivedFarms = farmsConfig.filter(({ pid }) => !isArchivedPid(pid))
+const nonArchivedFarms = allPools.filter(({ pid }) => !isArchivedPid(pid))
 
-const noAccountFarmConfig = farmsConfig.map((farm) => ({
+const allPoolConfig = allPools.map((farm) => ({
   ...farm,
   userData: {
     allowance: '0',
@@ -23,12 +25,29 @@ const noAccountFarmConfig = farmsConfig.map((farm) => ({
   },
 }))
 
-const initialState: FarmsState = { data: noAccountFarmConfig, userDataLoaded: false }
-
+const allTomoSupportedPools = tomoSupportedPools.map((farm) => ({
+  ...farm,
+  userData: {
+    allowance: '0',
+    tokenBalance: '0',
+    stakedBalance: '0',
+    earnings: '0',
+  },
+}))
+const initialState: FarmsState = { data: allPoolConfig, userDataLoaded: false }
 export const farmsSlice = createSlice({
   name: 'Farms',
   initialState,
   reducers: {
+    setDefaultFarmData: (state, action) => {
+      const chainId = action.payload
+      const IsTomo = IsTomoChain(chainId)
+      if (IsTomo) {
+        state.data = allTomoSupportedPools
+      } else {
+        state.data = allPoolConfig
+      }
+    },
     setFarmsPublicData: (state, action) => {
       const liveFarmsData: Farm[] = action.payload
       state.data = state.data.map((farm) => {
@@ -49,29 +68,25 @@ export const farmsSlice = createSlice({
 })
 
 // Actions
-export const { setFarmUserData } = farmsSlice.actions
+export const { setFarmUserData, setFarmsPublicData, setDefaultFarmData } = farmsSlice.actions
 
 // Thunks
-// export const fetchFarmsPublicDataAsync = () => async (dispatch, getState) => {
-//   const fetchArchived = getState().farms.loadArchivedFarmsData
-//   const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
-//   const farms = await fetchFarms(farmsToFetch)fetchFarmsPublicDataAsync
-//   dispatch(setFarmsPublicData([]))
-// }
-export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getState) => {
-  const fetchArchived = getState().farms.loadArchivedFarmsData
-  const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
-  const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
-  const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
-  const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
+export const fetchFarms = (chainId: number) => async (dispatch, getState) => {
+  const IsTomo = IsTomoChain(chainId)
+  const apiUrl = IsTomo ? API_TOMO : API_ETH
+  const { data } = await axios.get(`${apiUrl}/pools`)
+  dispatch(setFarmsPublicData(data))
+}
+export const fetchFarmUserDataAsync = (account: string, chainId?: number) => async (dispatch, getState) => {
+  const IsTomo = IsTomoChain(chainId)
+  const farmsToFetch = IsTomo ? tomoSupportedPools : allPools
+  // const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
+  // const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
+  // const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
   const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
-
-  const arrayOfUserDataObjects = userFarmAllowances.map((farmAllowance, index) => {
+  const arrayOfUserDataObjects = farmsToFetch.map((farmAllowance, index) => {
     return {
       pid: farmsToFetch[index].pid,
-      allowance: userFarmAllowances[index],
-      tokenBalance: userFarmTokenBalances[index],
-      stakedBalance: userStakedBalances[index],
       earnings: userFarmEarnings[index],
     }
   })

@@ -12,7 +12,8 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import useRefresh from 'hooks/useRefresh'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
 import {
-  // fetchFarmsPublicDataAsync,
+  setDefaultFarmData,
+  fetchFarms,
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
   fetchCakeVaultPublicData,
@@ -32,17 +33,22 @@ import { fetchPoolsStakingLimitsAsync } from './pools'
 
 export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()
+  const { chainId } = useWeb3React()
   const { slowRefresh } = useRefresh()
   const web3 = getWeb3NoAccount()
+  // useEffect(() => {
+  //   const fetchPoolsPublicData = async () => {
+  //     const blockNumber = await web3.eth.getBlockNumber()
+  //     dispatch(fetchPoolsPublicDataAsync(blockNumber))
+  //   }
+  //   fetchPoolsPublicData()
+  //   dispatch(fetchPoolsStakingLimitsAsync())
+  // }, [dispatch, slowRefresh, web3])
+  
   useEffect(() => {
-    const fetchPoolsPublicData = async () => {
-      const blockNumber = await web3.eth.getBlockNumber()
-      dispatch(fetchPoolsPublicDataAsync(blockNumber))
-    }
-    // dispatch(fetchFarmsPublicDataAsync())
-    fetchPoolsPublicData()
-    dispatch(fetchPoolsStakingLimitsAsync())
-  }, [dispatch, slowRefresh, web3])
+    dispatch(setDefaultFarmData(chainId))
+    dispatch(fetchFarms(chainId))
+  }, [chainId, dispatch])
 
   useEffect(() => {
     const interval = setInterval(async () => {
