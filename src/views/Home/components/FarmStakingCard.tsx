@@ -36,7 +36,7 @@ const Actions = styled.div`
 
 const FarmedStakingCard = () => {
   const [pendingTx, setPendingTx] = useState(false)
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { t } = useTranslation()
   const farmsWithBalance = useFarmsWithBalance()
   const masterChefContract = useMasterchef()
@@ -48,13 +48,13 @@ const FarmedStakingCard = () => {
     for (const farmWithBalance of balancesWithValue) {
       try {
         // eslint-disable-next-line no-await-in-loop
-        await harvest(masterChefContract, farmWithBalance.pid, account)
+        await harvest(masterChefContract, farmWithBalance.pid, account, chainId)
       } catch (error) {
         // TODO: find a way to handle when the user rejects transaction or it fails
       }
     }
     setPendingTx(false)
-  }, [account, balancesWithValue, masterChefContract])
+  }, [account, balancesWithValue, masterChefContract, chainId])
 
   return (
     <StyledFarmStakingCard>

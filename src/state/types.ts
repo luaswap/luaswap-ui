@@ -20,6 +20,7 @@ export interface Farm extends FarmConfig {
   tokenPriceVsQuote?: BigNumber
   poolWeight?: BigNumber
   usdValue?: number,
+  totalToken2Value?: number,
   userData?: {
     allowance: string
     tokenBalance: string

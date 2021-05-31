@@ -82,12 +82,13 @@ export const fetchFarmUserDataAsync = (account: string, chainId?: number) => asy
   const farmsToFetch = IsTomo ? tomoSupportedPools : allPools
   // const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
   // const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
-  // const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
-  const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
-  const arrayOfUserDataObjects = farmsToFetch.map((farmAllowance, index) => {
+  const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId)
+  const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId)
+  const arrayOfUserDataObjects = farmsToFetch.map((farm, index) => {
     return {
-      pid: farmsToFetch[index].pid,
+      pid: farm.pid,
       earnings: userFarmEarnings[index],
+      stakedBalance: userStakedBalances[index],
     }
   })
 

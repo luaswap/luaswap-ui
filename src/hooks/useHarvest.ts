@@ -7,27 +7,27 @@ import { useMasterchef, useSousChef } from './useContract'
 
 export const useHarvest = (farmPid: number) => {
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const masterChefContract = useMasterchef()
 
   const handleHarvest = useCallback(async () => {
-    const txHash = await harvest(masterChefContract, farmPid, account)
-    dispatch(fetchFarmUserDataAsync(account))
+    const txHash = await harvest(masterChefContract, farmPid, account, chainId)
+    dispatch(fetchFarmUserDataAsync(account, chainId))
     return txHash
-  }, [account, dispatch, farmPid, masterChefContract])
+  }, [account, dispatch, farmPid, masterChefContract, chainId])
 
   return { onReward: handleHarvest }
 }
 
 export const useSousHarvest = (sousId, isUsingBnb = false) => {
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const sousChefContract = useSousChef(sousId)
   const masterChefContract = useMasterchef()
 
   const handleHarvest = useCallback(async () => {
     if (sousId === 0) {
-      await harvest(masterChefContract, 0, account)
+      await harvest(masterChefContract, 0, account, chainId)
     } else if (isUsingBnb) {
       await soushHarvestBnb(sousChefContract, account)
     } else {
@@ -35,7 +35,7 @@ export const useSousHarvest = (sousId, isUsingBnb = false) => {
     }
     dispatch(updateUserPendingReward(sousId, account))
     dispatch(updateUserBalance(sousId, account))
-  }, [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId])
+  }, [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId, chainId])
 
   return { onReward: handleHarvest }
 }

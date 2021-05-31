@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { provider as ProviderType } from 'web3-core'
 import BigNumber from 'bignumber.js'
 import { getAddress } from 'utils/addressHelpers'
-import { getBep20Contract } from 'utils/contractHelpers'
+import { getERC20Contract } from 'utils/contractHelpers'
+import { useWeb3React } from '@web3-react/core'
 import { Button, Flex, Text } from '@pancakeswap/uikit'
 import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
@@ -30,6 +31,7 @@ interface FarmCardActionsProps {
 const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {
   const { t } = useTranslation()
   const [requestedApproval, setRequestedApproval] = useState(false)
+  const { library: ethereum } = useWeb3React()
   const { pid, lpAddresses } = farm
   const {
     allowance: allowanceAsString = 0,
@@ -44,10 +46,8 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const lpAddress = getAddress(lpAddresses)
   const lpName = farm.lpSymbol.toUpperCase()
   const isApproved = account && allowance && allowance.isGreaterThan(0)
-  const web3 = useWeb3()
-
-  const lpContract = getBep20Contract(lpAddress, web3)
-
+  const eProvider = ethereum && ethereum.provider ? ethereum.provider : null
+  const lpContract = getERC20Contract(eProvider, lpAddress)
   const { onApprove } = useApprove(lpContract)
 
   const handleApprove = useCallback(async () => {

@@ -1,6 +1,7 @@
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import web3NoAccount from 'utils/web3'
+import getRpcUrl from 'utils/getRpcUrl'
 import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
 
@@ -35,6 +36,7 @@ import lpTokenAbi from 'config/abi/lpToken.json'
 import cakeAbi from 'config/abi/cake.json'
 import ifoV1Abi from 'config/abi/ifoV1.json'
 import ifoV2Abi from 'config/abi/ifoV2.json'
+import ERC20ABI from 'config/abi/defaultERC20.json'
 import pointCenterIfo from 'config/abi/pointCenterIfo.json'
 import lotteryAbi from 'config/abi/lottery.json'
 import lotteryTicketAbi from 'config/abi/lotteryNft.json'
@@ -52,6 +54,12 @@ import chainlinkOracleAbi from 'config/abi/chainlinkOracle.json'
 const getContract = (abi: any, address: string, web3?: Web3) => {
   const _web3 = web3 ?? web3NoAccount
   return new _web3.eth.Contract(abi as unknown as AbiItem, address)
+}
+
+export const getERC20Contract = (provider: any, address: string) => {
+  const web3 = new Web3((provider as any) || getRpcUrl())
+  const contract = new web3.eth.Contract((ERC20ABI.abi as unknown) as AbiItem, address)
+  return contract
 }
 
 export const getBep20Contract = (address: string, web3?: Web3) => {
@@ -102,8 +110,8 @@ export const getLotteryContract = (web3?: Web3) => {
 export const getLotteryTicketContract = (web3?: Web3) => {
   return getContract(lotteryTicketAbi, getLotteryTicketAddress(), web3)
 }
-export const getMasterchefContract = (web3?: Web3) => {
-  return getContract(masterChef, getMasterChefAddress(), web3)
+export const getMasterchefContract = (web3?: Web3, chainId?: string) => {
+  return getContract(masterChef, getMasterChefAddress(chainId), web3)
 }
 export const getClaimRefundContract = (web3?: Web3) => {
   return getContract(claimRefundAbi, getClaimRefundAddress(), web3)

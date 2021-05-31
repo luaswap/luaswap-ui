@@ -3,10 +3,11 @@ import { DEFAULT_GAS, DEFAULT_TOKEN_DECIMAL } from 'config'
 import { ethers } from 'ethers'
 import { BIG_TEN, BIG_ZERO } from './bigNumber'
 
-export const approve = async (lpContract, masterChefContract, account) => {
+export const approve = async (lpContract, masterChefContract, account, chainId?) => {
+  const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x7A120' } : { from: account }
   return lpContract.methods
     .approve(masterChefContract.options.address, ethers.constants.MaxUint256)
-    .send({ from: account })
+    .send(gasLimit)
 }
 
 export const stake = async (masterChefContract, pid, amount, account) => {
@@ -81,20 +82,12 @@ export const sousEmergencyUnstake = async (sousChefContract, account) => {
     })
 }
 
-export const harvest = async (masterChefContract, pid, account) => {
-  if (pid === 0) {
-    return masterChefContract.methods
-      .leaveStaking('0')
-      .send({ from: account, gas: DEFAULT_GAS })
-      .on('transactionHash', (tx) => {
-        return tx.transactionHash
-      })
-  }
-
+export const harvest = async (masterChefContract, pid, account, chainId) => {
+  const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x7A120' } : { from: account }
   return masterChefContract.methods
-    .deposit(pid, '0')
-    .send({ from: account, gas: DEFAULT_GAS })
-    .on('transactionHash', (tx) => {
+    .claimReward(pid)
+    .send(gasLimit)
+    .on('transactionHash', tx => {
       return tx.transactionHash
     })
 }

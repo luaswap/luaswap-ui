@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
+import { useWeb3React } from '@web3-react/core'
+import { provider as ProviderType } from 'web3-core'
 import styled, { keyframes } from 'styled-components'
 import { Flex, Text, Skeleton } from '@pancakeswap/uikit'
 import { Farm } from 'state/types'
-import { provider as ProviderType } from 'web3-core'
 import { useTranslation } from 'contexts/Localization'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { BASE_ADD_LIQUIDITY_URL } from 'config'
+import { BASE_ADD_LIQUIDITY_URL, NUMBER_BLOCKS_PER_YEAR } from 'config'
+import useNewRewards from 'hooks/useNewRewards'
+import useLuaPrice from 'hooks/useLuaPrice'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
@@ -77,7 +80,11 @@ interface FarmCardProps {
 
 const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
   const { t } = useTranslation()
+  const { chainId } = useWeb3React()
+  const ID = chainId === 88 ? 88 : 1
+  const luaPrice = useLuaPrice()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
+  const newReward = useNewRewards(farm.pid + 1)
   // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
   const farmImages = farm.lpSymbol.split('-')
@@ -89,7 +96,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
   const earnLabel = 'LUA'
 
-  const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  // const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: farm.quoteToken.address,
@@ -113,10 +120,23 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{t('APR')}:</Text>
           <Text bold style={{ display: 'flex', alignItems: 'center' }}>
-            {farm.apr ? (
+            {newReward &&
+            farm &&
+            luaPrice &&
+            farm.usdValue &&
+            farm.totalToken2Value &&
+            farm.poolWeight ? (
               <>
                 {/* <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} /> */}
-                {farmAPR}%
+                {parseFloat(
+                luaPrice
+                  .times(NUMBER_BLOCKS_PER_YEAR[ID])
+                  .times(newReward.div(10 ** 18))
+                  .div(farm.usdValue)
+                  .div(10 ** 8)
+                  .times(100)
+                  .toFixed(2)
+              ).toLocaleString('en-US')}%
               </>
             ) : (
               <Skeleton height={24} width={80} />

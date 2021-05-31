@@ -10,18 +10,18 @@ import { useMasterchef, useCake, useSousChef, useLottery } from './useContract'
 // Approve a Farm
 export const useApprove = (lpContract: Contract) => {
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const masterChefContract = useMasterchef()
 
   const handleApprove = useCallback(async () => {
     try {
-      const tx = await approve(lpContract, masterChefContract, account)
+      const tx = await approve(lpContract, masterChefContract, account, chainId)
       dispatch(fetchFarmUserDataAsync(account))
       return tx
     } catch (e) {
       return false
     }
-  }, [account, dispatch, lpContract, masterChefContract])
+  }, [account, dispatch, lpContract, masterChefContract, chainId])
 
   return { onApprove: handleApprove }
 }

@@ -1,3 +1,4 @@
+import { ChainId } from '@luaswap/sdk'
 import BigNumber from 'bignumber.js/bignumber'
 import { BIG_TEN } from 'utils/bigNumber'
 
@@ -30,3 +31,24 @@ export const DEFAULT_TOKEN_DECIMAL = BIG_TEN.pow(18)
 export const DEFAULT_GAS = 200000
 export const API_ETH = 'https://wallet.tomochain.com/api/luaswap'
 export const API_TOMO = 'https://wallet.tomochain.com/api/luaswap/tomochain'
+export const API_URL: { [chainId in ChainId]: string } = {
+  1: 'https://wallet.tomochain.com/api/luaswap',
+  3: '',
+  4: '',
+  5: '',
+  42: '',
+  88: 'https://wallet.tomochain.com/api/luaswap/tomochain',
+  89: '',
+  99: ''
+}
+
+export const NUMBER_BLOCKS_PER_YEAR: { [chainId in ChainId]: number } = {
+  1: 2425000,
+  3: 2425000,
+  4: 2425000,
+  5: 2425000,
+  42: 2425000,
+  88: 12614400,
+  89: 12614400,
+  99: 12614400
+}
