@@ -11,6 +11,7 @@ import { BASE_ADD_LIQUIDITY_URL, NUMBER_BLOCKS_PER_YEAR } from 'config'
 import useNewRewards from 'hooks/useNewRewards'
 import useLuaPrice from 'hooks/useLuaPrice'
 import { IsTomoChain } from 'utils/wallet'
+import { getBalanceNumber } from 'utils/formatBalance'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
@@ -118,32 +119,34 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account }) => {
         tokenSymbol={farm.token.symbol}
       />
       {!removed && !isTomo && (
-        <Flex justifyContent="space-between" alignItems="center">
-          <Text>{t('APR')}:</Text>
-          <Text bold style={{ display: 'flex', alignItems: 'center' }}>
-            {newReward &&
-            farm &&
-            luaPrice &&
-            farm.usdValue &&
-            farm.totalToken2Value &&
-            farm.poolWeight ? (
-              <>
-                {/* <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} /> */}
-                {parseFloat(
-                luaPrice
-                  .times(NUMBER_BLOCKS_PER_YEAR[ID])
-                  .times(newReward.div(10 ** 18))
-                  .div(farm.usdValue)
-                  .div(10 ** 8)
-                  .times(100)
-                  .toFixed(2)
-              ).toLocaleString('en-US')}%
-              </>
-            ) : (
-              <Skeleton height={24} width={80} />
-            )}
-          </Text>
-        </Flex>
+        <>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Text>{t('APR')}:</Text>
+            <Text bold style={{ display: 'flex', alignItems: 'center' }}>
+              {newReward && farm && luaPrice && farm.usdValue && farm.totalToken2Value && farm.poolWeight ? (
+                <>
+                  {/* <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} /> */}
+                  {parseFloat(
+                    luaPrice
+                      .times(NUMBER_BLOCKS_PER_YEAR[ID])
+                      .times(newReward.div(10 ** 18))
+                      .div(farm.usdValue)
+                      .div(10 ** 8)
+                      .times(100)
+                      .toFixed(2),
+                  ).toLocaleString('en-US')}
+                  %
+                </>
+              ) : (
+                <Skeleton height={24} width={80} />
+              )}
+            </Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>{t('Reward')}:</Text>
+            <Text bold>{getBalanceNumber(newReward).toFixed(3)} LUA / block</Text>
+          </Flex>
+        </>
       )}
       <Flex justifyContent="space-between">
         <Text>{t('Earn')}:</Text>
