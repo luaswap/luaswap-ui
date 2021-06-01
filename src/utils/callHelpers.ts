@@ -4,10 +4,16 @@ import { ethers } from 'ethers'
 import { BIG_TEN, BIG_ZERO } from './bigNumber'
 
 export const approve = async (lpContract, masterChefContract, account, chainId?) => {
-  const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x7A120' } : { from: account }
-  return lpContract.methods
-    .approve(masterChefContract.options.address, ethers.constants.MaxUint256)
-    .send(gasLimit)
+  try {
+    const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x7A120' } : { from: account }
+    const res = await lpContract.methods
+      .approve(masterChefContract.options.address, ethers.constants.MaxUint256)
+      .send(gasLimit)
+      console.log(res, 'response')
+  } catch (error) {
+    console.log(error, 'error')
+  }
+
 }
 
 export const stake = async (masterChefContract, pid, amount, account) => {

@@ -11,6 +11,7 @@ import { useFarms, usePriceCakeBusd } from 'state/hooks'
 import usePersistState from 'hooks/usePersistState'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { latinise } from 'utils/latinise'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import PageHeader from 'components/PageHeader'
 import FarmCard from './components/FarmCard/FarmCard'
@@ -99,14 +100,14 @@ const Farms: React.FC = () => {
   const cakePrice = usePriceCakeBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, 'pancake_farm_view')
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (account) {
-      dispatch(fetchFarmUserDataAsync(account))
+      dispatch(fetchFarmUserDataAsync(account, chainId))
     }
-  }, [account, dispatch])
+  }, [account, dispatch, chainId])
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
@@ -115,7 +116,19 @@ const Farms: React.FC = () => {
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value)
   }
-  const rowData = farmsLP.map((farm) => {
+
+  const farmsLpMemoized = useMemo(() => {
+    if (query) {
+      const lowercaseQuery = latinise(query.toLowerCase())
+      return farmsLP.filter((farm) => {
+        return latinise(farm.lpSymbol.toLowerCase()).includes(lowercaseQuery)
+      })
+    }
+
+    return farmsLP
+  }, [query, farmsLP])
+
+  const rowData = farmsLpMemoized.map((farm) => {
     const { token, quoteToken } = farm
     const tokenAddress = token.address
     const quoteTokenAddress = quoteToken.address
@@ -186,7 +199,7 @@ const Farms: React.FC = () => {
       <div>
         <FlexLayout>
           <Route exact path={`${path}`}>
-            {farmsLP.map((farm) => (
+            {farmsLpMemoized.map((farm) => (
               <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
             ))}
           </Route>

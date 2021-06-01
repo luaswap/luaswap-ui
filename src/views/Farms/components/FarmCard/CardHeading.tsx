@@ -23,7 +23,6 @@ const MultiplierTag = styled(Tag)`
 
 const CardHeading: React.FC<ExpandableSectionProps> = ({
   lpLabel,
-  multiplier,
   isCommunityFarm,
   farmImages,
   tokenSymbol,
@@ -36,7 +35,6 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
         <Heading mb="4px">{lpLabel.split(' ')[0]}</Heading>
         <Flex justifyContent="center">
           {isCommunityFarm ? <CommunityTag /> : <CoreTag />}
-          <MultiplierTag variant="secondary">{multiplier}</MultiplierTag>
         </Flex>
       </Flex>
     </Wrapper>

@@ -31,7 +31,7 @@ interface FarmCardActionsProps {
 const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {
   const { t } = useTranslation()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { library: ethereum } = useWeb3React()
+  const { library } = useWeb3React()
   const { pid, lpAddresses } = farm
   const {
     allowance: allowanceAsString = 0,
@@ -46,7 +46,8 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const lpAddress = getAddress(lpAddresses)
   const lpName = farm.lpSymbol.toUpperCase()
   const isApproved = account && allowance && allowance.isGreaterThan(0)
-  const eProvider = ethereum && ethereum.provider ? ethereum.provider : null
+  // @ts-ignore
+  const eProvider = library || null
   const lpContract = getERC20Contract(eProvider, lpAddress)
   const { onApprove } = useApprove(lpContract)
 
