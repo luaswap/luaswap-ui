@@ -4753,6 +4753,19 @@ common-tags@^1.8.0:
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
   integrity sha512-6P6g0uetGpW/sdyUy/iQQCbFF0kWVMSIVSyYz7Zgjcgh8mgw8PQzDNZeyZ5DQ2gM7LBoZPHmnjz8rUthkBG5tw==
 
+common-uikitstrungdao@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/common-uikitstrungdao/-/common-uikitstrungdao-0.1.1.tgz#e8f5e05b5f5d51020384f8868d7ca7c8a5bbe9b4"
+  integrity sha512-gTePx2RUg4cRpMSo1LauK5JaA5UnBUjGtE0S+IxdZQbaJclBsqA1bo/0JanGgWya6pzL9CD8f8m8rrrHbksngA==
+  dependencies:
+    "@popperjs/core" "^2.9.2"
+    "@types/lodash" "^4.14.168"
+    "@types/styled-system" "^5.1.10"
+    lodash "^4.17.20"
+    react-popper "^2.2.5"
+    react-transition-group "^4.4.1"
+    styled-system "^5.1.5"
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"

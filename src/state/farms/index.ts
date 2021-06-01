@@ -80,15 +80,18 @@ export const fetchFarms = (chainId: number) => async (dispatch, getState) => {
 export const fetchFarmUserDataAsync = (account: string, chainId?: number) => async (dispatch, getState) => {
   const IsTomo = IsTomoChain(chainId)
   const farmsToFetch = IsTomo ? tomoSupportedPools : allPools
+  let userStakedBalances = null
   // const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
   // const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
-  const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId)
+  if (!IsTomo) {
+    userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId)
+  }
   const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId)
   const arrayOfUserDataObjects = farmsToFetch.map((farm, index) => {
     return {
       pid: farm.pid,
       earnings: userFarmEarnings[index],
-      stakedBalance: userStakedBalances[index],
+      stakedBalance: !IsTomo && userStakedBalances[index],
     }
   })
 

@@ -10,11 +10,11 @@ import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL, NUMBER_BLOCKS_PER_YEAR } from 'config'
 import useNewRewards from 'hooks/useNewRewards'
 import useLuaPrice from 'hooks/useLuaPrice'
+import { IsTomoChain } from 'utils/wallet'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
-import ApyButton from './ApyButton'
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number
@@ -78,10 +78,11 @@ interface FarmCardProps {
   account?: string
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account }) => {
   const { t } = useTranslation()
   const { chainId } = useWeb3React()
   const ID = chainId === 88 ? 88 : 1
+  const isTomo = IsTomoChain(ID)
   const luaPrice = useLuaPrice()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const newReward = useNewRewards(farm.pid + 1)
@@ -116,7 +117,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         farmImages={farmImages}
         tokenSymbol={farm.token.symbol}
       />
-      {!removed && (
+      {!removed && !isTomo && (
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{t('APR')}:</Text>
           <Text bold style={{ display: 'flex', alignItems: 'center' }}>

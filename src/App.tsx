@@ -27,8 +27,8 @@ BigNumber.config({
 const App: React.FC = () => {
   useEagerConnect()
   useFetchPublicData()
-  useFetchProfile()
-  useFetchPriceList()
+  // useFetchProfile()
+  // useFetchPriceList()
 
   return (
     <Router history={history}>

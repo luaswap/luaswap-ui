@@ -11,7 +11,6 @@ import {
 } from '@web3-react/walletconnect-connector'
 import { ConnectorNames, connectorLocalStorageKey } from '@pancakeswap/uikit'
 import { connectorsByName } from 'utils/web3React'
-import { setupNetwork } from 'utils/wallet'
 import useToast from 'hooks/useToast'
 import { profileClear } from 'state/profile'
 import { useAppDispatch } from 'state'
@@ -28,10 +27,7 @@ const useAuth = () => {
     if (connector) {
       activate(connector, async (error: Error) => {
         if (error instanceof UnsupportedChainIdError) {
-          const hasSetup = await setupNetwork()
-          if (hasSetup) {
-            activate(connector)
-          }
+          toastError('Please connect to the appropriate Ethereum network.')
         } else {
           window.localStorage.removeItem(connectorLocalStorageKey)
           if (error instanceof NoEthereumProviderError || error instanceof NoBscProviderError) {

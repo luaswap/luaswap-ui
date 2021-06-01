@@ -34,7 +34,7 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
       <Flex flexDirection="column" alignItems="flex-end">
         <Heading mb="4px">{lpLabel.split(' ')[0]}</Heading>
         <Flex justifyContent="center">
-          {isCommunityFarm ? <CommunityTag /> : <CoreTag />}
+          {/* {isCommunityFarm ? <CommunityTag /> : <CoreTag />} */}
         </Flex>
       </Flex>
     </Wrapper>
