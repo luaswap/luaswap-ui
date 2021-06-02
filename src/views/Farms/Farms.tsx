@@ -10,6 +10,7 @@ import Page from 'components/layout/Page'
 import { useFarms } from 'state/hooks'
 import useLuaPrice from 'hooks/useLuaPrice'
 import usePersistState from 'hooks/usePersistState'
+import useWeb3 from 'hooks/useWeb3'
 import { useTranslation } from 'contexts/Localization'
 import { NUMBER_BLOCKS_PER_YEAR } from 'config'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -104,14 +105,15 @@ const Farms: React.FC = () => {
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, 'pancake_farm_view')
   const { account, chainId } = useWeb3React()
+  const web3 = useWeb3()
   const dispatch = useAppDispatch()
   const ID = chainId === 88 ? 88 : 1
 
   useEffect(() => {
     if (account) {
-      dispatch(fetchFarmUserDataAsync(account, chainId))
+      dispatch(fetchFarmUserDataAsync(account, chainId, web3))
     }
-  }, [account, dispatch, chainId])
+  }, [account, dispatch, chainId, web3])
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded

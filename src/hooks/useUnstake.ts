@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
+import useWeb3 from 'hooks/useWeb3'
 import {
   fetchFarmUserDataAsync,
   updateUserStakedBalance,
@@ -12,16 +13,17 @@ import { useMasterchef, useSousChef } from './useContract'
 
 const useUnstake = (pid: number) => {
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
+  const web3 = useWeb3()
   const masterChefContract = useMasterchef()
 
   const handleUnstake = useCallback(
     async (amount: string) => {
       const txHash = await unstake(masterChefContract, pid, amount, account)
-      dispatch(fetchFarmUserDataAsync(account))
+      dispatch(fetchFarmUserDataAsync(account, chainId, web3))
       console.info(txHash)
     },
-    [account, dispatch, masterChefContract, pid],
+    [account, dispatch, masterChefContract, pid, chainId, web3],
   )
 
   return { onUnstake: handleUnstake }

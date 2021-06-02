@@ -4,6 +4,7 @@ import { Contract } from 'web3-eth-contract'
 import { ethers } from 'ethers'
 import { useAppDispatch } from 'state'
 import { updateUserAllowance, fetchFarmUserDataAsync } from 'state/actions'
+import useWeb3 from 'hooks/useWeb3'
 import { approve } from 'utils/callHelpers'
 import { useMasterchef, useCake, useSousChef, useLottery } from './useContract'
 
@@ -11,17 +12,18 @@ import { useMasterchef, useCake, useSousChef, useLottery } from './useContract'
 export const useApprove = (lpContract: Contract) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
+  const web3 = useWeb3()
   const masterChefContract = useMasterchef()
 
   const handleApprove = useCallback(async () => {
     try {
       const tx = await approve(lpContract, masterChefContract, account, chainId)
-      dispatch(fetchFarmUserDataAsync(account))
+      dispatch(fetchFarmUserDataAsync(account, chainId, web3))
       return tx
     } catch (e) {
       return false
     }
-  }, [account, dispatch, lpContract, masterChefContract, chainId])
+  }, [account, dispatch, lpContract, masterChefContract, chainId, web3])
 
   return { onApprove: handleApprove }
 }

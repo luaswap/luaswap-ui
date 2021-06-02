@@ -84,21 +84,19 @@ export const fetchFarms = (chainId: number, web3: Web3) => async (dispatch, getS
   const apyList = await Promise.all(apyListResponse)
   dispatch(setFarmsPublicData(apyList))
 }
-export const fetchFarmUserDataAsync = (account: string, chainId?: number) => async (dispatch, getState) => {
+export const fetchFarmUserDataAsync = (account: string, chainId?: number, web3?: Web3) => async (dispatch, getState) => {
   const IsTomo = IsTomoChain(chainId)
   const farmsToFetch = IsTomo ? tomoSupportedPools : allPools
-  let userStakedBalances = null
-  // const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
   // const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
-  if (!IsTomo) {
-    userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId)
-  }
-  const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId)
+  const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch, chainId, web3)
+  const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId, web3)
+  const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId, web3)
   const arrayOfUserDataObjects = farmsToFetch.map((farm, index) => {
     return {
       pid: farm.pid,
       earnings: userFarmEarnings[index],
-      stakedBalance: !IsTomo && userStakedBalances[index],
+      stakedBalance: userStakedBalances[index],
+      allowance: userFarmAllowances[index]
     }
   })
 

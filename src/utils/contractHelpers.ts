@@ -56,8 +56,8 @@ const getContract = (abi: any, address: string, web3?: Web3) => {
   return new _web3.eth.Contract(abi as unknown as AbiItem, address)
 }
 
-export const getERC20Contract = (provider: any, address: string) => {
-  const web3 = new Web3((provider as any) || getRpcUrl())
+export const getERC20Contract = (provider: any, address: string, chainId?: number) => {
+  const web3 = new Web3((provider as any) || getRpcUrl(chainId))
   const contract = new web3.eth.Contract((ERC20ABI.abi as unknown) as AbiItem, address)
   return contract
 }
@@ -110,7 +110,7 @@ export const getLotteryContract = (web3?: Web3) => {
 export const getLotteryTicketContract = (web3?: Web3) => {
   return getContract(lotteryTicketAbi, getLotteryTicketAddress(), web3)
 }
-export const getMasterchefContract = (web3?: Web3, chainId?: string) => {
+export const getMasterchefContract = (web3?: Web3, chainId?: number) => {
   return getContract(masterChef, getMasterChefAddress(chainId), web3)
 }
 export const getClaimRefundContract = (web3?: Web3) => {
