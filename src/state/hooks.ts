@@ -44,7 +44,6 @@ export const useFetchPublicData = () => {
   //   fetchPoolsPublicData()
   //   dispatch(fetchPoolsStakingLimitsAsync())
   // }, [dispatch, slowRefresh, web3])
-  
   useEffect(() => {
     dispatch(setDefaultFarmData(chainId))
     dispatch(fetchFarms(chainId, web3))

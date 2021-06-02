@@ -8,7 +8,6 @@ import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL, NUMBER_BLOCKS_PER_YEAR } from 'config'
-import useLuaPrice from 'hooks/useLuaPrice'
 import { IsTomoChain } from 'utils/wallet'
 import { getBalanceNumber } from 'utils/formatBalance'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
@@ -76,14 +75,14 @@ interface FarmCardProps {
   cakePrice?: BigNumber
   provider?: ProviderType
   account?: string
+  luaPrice?: BigNumber
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice }) => {
   const { t } = useTranslation()
   const { chainId } = useWeb3React()
   const ID = chainId === 88 ? 88 : 1
   const isTomo = IsTomoChain(ID)
-  const luaPrice = useLuaPrice()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   // const newReward = useNewRewards(farm.pid + 1)
   const newReward = farm.reward ? new BigNumber(farm.reward) : new BigNumber(0)

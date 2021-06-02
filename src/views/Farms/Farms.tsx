@@ -214,7 +214,7 @@ const Farms: React.FC = () => {
         <FlexLayout>
           <Route exact path={`${path}`}>
             {farmsLpMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} account={account} removed={false} />
+              <FarmCard key={farm.pid} farm={farm} account={account} removed={false} luaPrice={luaPrice} />
             ))}
           </Route>
         </FlexLayout>
