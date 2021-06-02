@@ -9,6 +9,7 @@ import Nfts from 'config/constants/nfts'
 import { getWeb3NoAccount } from 'utils/web3'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
+import useWeb3 from 'hooks/useWeb3'
 import useRefresh from 'hooks/useRefresh'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
 import {
@@ -33,9 +34,9 @@ import { fetchPoolsStakingLimitsAsync } from './pools'
 
 export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()
+  const web3 = useWeb3()
   const { chainId } = useWeb3React()
   const { slowRefresh } = useRefresh()
-  const web3 = getWeb3NoAccount()
   // useEffect(() => {
   //   const fetchPoolsPublicData = async () => {
   //     const blockNumber = await web3.eth.getBlockNumber()
@@ -47,8 +48,8 @@ export const useFetchPublicData = () => {
   
   useEffect(() => {
     dispatch(setDefaultFarmData(chainId))
-    dispatch(fetchFarms(chainId))
-  }, [chainId, dispatch])
+    dispatch(fetchFarms(chainId, web3))
+  }, [chainId, dispatch, web3])
 
   useEffect(() => {
     const interval = setInterval(async () => {

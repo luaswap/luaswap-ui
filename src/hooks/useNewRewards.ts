@@ -18,7 +18,7 @@ async function UnknownBlock(address, method, params, cache, chainId) {
       params,
       cache
     })
-    
+
     return data.data
   }
 
@@ -30,27 +30,30 @@ const getNewRewardPerBlock = async (web3, pid1 = 0, chainId) => {
     // // if (await checkPoolActive(pid1 - 1, chainId)) {
         // @ts-ignore
         const reward = await UnknownBlock(chef._address, 'getNewRewardPerBlock(uint256):(uint256)', [pid1], true, chainId)
-        return new BigNumber(reward)
+        return {
+          pid: pid1 - 1,
+          reward,
+        }
     //     // } 
     //     //   return new BigNumber('0')
         
         
     }
     
-const useNewReward = (pid1 = 0) => {
-  const {chainId} = useWeb3React()
-  const web3 = useWeb3()
-  const [newReward, setNewRewad] = useState<BigNumber>()
+// const useNewReward = (pid1 = 0) => {
+//   const {chainId} = useWeb3React()
+//   const web3 = useWeb3()
+//   const [newReward, setNewRewad] = useState<BigNumber>()
 
-  useEffect(() => {
-    async function fetchData() {
-      const v = chainId === 88 ? new BigNumber(0) : await getNewRewardPerBlock(web3, pid1, chainId)
-      setNewRewad(v)
-    }
-    fetchData()
-  }, [chainId, pid1, web3])
+//   useEffect(() => {
+//     async function fetchData() {
+//       const v = chainId === 88 ? new BigNumber(0) : await getNewRewardPerBlock(web3, pid1, chainId)
+//       setNewRewad(v)
+//     }
+//     fetchData()
+//   }, [chainId, pid1, web3])
 
-  return newReward
-}
+//   return newReward
+// }
 
-export default useNewReward
+export default getNewRewardPerBlock

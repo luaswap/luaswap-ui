@@ -7,10 +7,13 @@ import { Image, Heading, RowType, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import { useFarms, usePriceCakeBusd } from 'state/hooks'
+import { useFarms } from 'state/hooks'
+import useLuaPrice from 'hooks/useLuaPrice'
 import usePersistState from 'hooks/usePersistState'
 import { useTranslation } from 'contexts/Localization'
+import { NUMBER_BLOCKS_PER_YEAR } from 'config'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { IsTomoChain } from 'utils/wallet'
 import { latinise } from 'utils/latinise'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import PageHeader from 'components/PageHeader'
@@ -97,11 +100,12 @@ const Farms: React.FC = () => {
   const { path } = useRouteMatch()
   const { t } = useTranslation()
   const { data: farmsLP, userDataLoaded } = useFarms()
-  const cakePrice = usePriceCakeBusd()
+  const luaPrice = useLuaPrice()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, 'pancake_farm_view')
   const { account, chainId } = useWeb3React()
   const dispatch = useAppDispatch()
+  const ID = chainId === 88 ? 88 : 1
 
   useEffect(() => {
     if (account) {
@@ -133,7 +137,7 @@ const Farms: React.FC = () => {
     const tokenAddress = token.address
     const quoteTokenAddress = quoteToken.address
     const lpLabel = farm.lpSymbol && farm.lpSymbol.split(' ')[0].toUpperCase().replace('PANCAKE', '')
-
+    const reward = farm.reward ? new BigNumber(farm.reward) : new BigNumber(0)
     const row: RowProps = {
       apr: {
         value: '1', // have to fill correct value
@@ -141,8 +145,16 @@ const Farms: React.FC = () => {
         lpLabel,
         tokenAddress,
         quoteTokenAddress,
-        cakePrice,
-        originalValue: 1, // have to fill correct value
+        luaPrice,
+        originalValue: parseFloat(
+          luaPrice
+            .times(NUMBER_BLOCKS_PER_YEAR[ID])
+            .times(reward.div(10 ** 18))
+            .div(farm.usdValue)
+            .div(10 ** 8)
+            .times(100)
+            .toFixed(2),
+        ).toLocaleString('en-US'), // have to fill correct value
       },
       farm: {
         image: farm.lpSymbol.split(' ')[0].toLocaleLowerCase(),
@@ -200,7 +212,7 @@ const Farms: React.FC = () => {
         <FlexLayout>
           <Route exact path={`${path}`}>
             {farmsLpMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
+              <FarmCard key={farm.pid} farm={farm} account={account} removed={false} />
             ))}
           </Route>
         </FlexLayout>

@@ -13,8 +13,8 @@ export interface AprProps {
   lpLabel: string
   tokenAddress?: Address
   quoteTokenAddress?: Address
-  cakePrice: BigNumber
-  originalValue: number
+  luaPrice: BigNumber
+  originalValue: string
   hideButton?: boolean
 }
 
@@ -45,29 +45,35 @@ const Apr: React.FC<AprProps> = ({
   lpLabel,
   tokenAddress,
   quoteTokenAddress,
-  cakePrice,
+  luaPrice,
   originalValue,
   hideButton = false,
 }) => {
   const liquidityUrlPathParts = getLiquidityUrlPathParts({ quoteTokenAddress, tokenAddress })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
 
-  return originalValue !== 0 ? (
-    <Container>
-      {originalValue ? (
-        <>
-          <AprWrapper>{value}%</AprWrapper>
-          {!hideButton && (
-            <ApyButton lpLabel={lpLabel} cakePrice={cakePrice} apr={originalValue} addLiquidityUrl={addLiquidityUrl} />
-          )}
-        </>
-      ) : (
-        <AprWrapper>
-          <Skeleton width={60} />
-        </AprWrapper>
-      )}
-    </Container>
-  ) : (
+  // return originalValue !== 0 ? (
+  //   <Container>
+  //     {originalValue ? (
+  //       <>
+  //         <AprWrapper>{value}%</AprWrapper>
+  //         {!hideButton && (
+  //           <ApyButton lpLabel={lpLabel} cakePrice={cakePrice} apr={originalValue} addLiquidityUrl={addLiquidityUrl} />
+  //         )}
+  //       </>
+  //     ) : (
+  //       <AprWrapper>
+  //         <Skeleton width={60} />
+  //       </AprWrapper>
+  //     )}
+  //   </Container>
+  // ) : (
+  //   <Container>
+  //     <AprWrapper>{originalValue}%</AprWrapper>
+  //   </Container>
+  // )
+
+  return (
     <Container>
       <AprWrapper>{originalValue}%</AprWrapper>
     </Container>

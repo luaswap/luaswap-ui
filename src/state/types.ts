@@ -21,7 +21,8 @@ export interface Farm extends FarmConfig {
   poolWeight?: BigNumber
   usdValue?: number,
   totalToken2Value?: number,
-  apy?: number, 
+  apy?: number,
+  reward?: string, 
   userData?: {
     allowance: string
     tokenBalance: string

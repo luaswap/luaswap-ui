@@ -1,9 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+import Web3 from 'web3'
+import getNewRewardPerBlock from 'hooks/useNewRewards'
 import { allPools, tomoSupportedPools } from 'config/constants/farms'
 import isArchivedPid from 'utils/farmHelpers'
 import { IsTomoChain } from 'utils/wallet'
-import axios from 'axios'
 import { API_ETH, API_TOMO } from 'config'
 import {
   fetchFarmUserEarnings,
@@ -71,11 +73,16 @@ export const farmsSlice = createSlice({
 export const { setFarmUserData, setFarmsPublicData, setDefaultFarmData } = farmsSlice.actions
 
 // Thunks
-export const fetchFarms = (chainId: number) => async (dispatch, getState) => {
+export const fetchFarms = (chainId: number, web3: Web3) => async (dispatch, getState) => {
   const IsTomo = IsTomoChain(chainId)
   const apiUrl = IsTomo ? API_TOMO : API_ETH
   const { data } = await axios.get(`${apiUrl}/pools`)
   dispatch(setFarmsPublicData(data))
+  const apyListResponse = data.map(farm => {
+    return getNewRewardPerBlock(web3, farm.pid + 1, chainId)
+  })
+  const apyList = await Promise.all(apyListResponse)
+  dispatch(setFarmsPublicData(apyList))
 }
 export const fetchFarmUserDataAsync = (account: string, chainId?: number) => async (dispatch, getState) => {
   const IsTomo = IsTomoChain(chainId)

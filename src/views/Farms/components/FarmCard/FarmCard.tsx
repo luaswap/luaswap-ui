@@ -8,7 +8,6 @@ import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL, NUMBER_BLOCKS_PER_YEAR } from 'config'
-import useNewRewards from 'hooks/useNewRewards'
 import useLuaPrice from 'hooks/useLuaPrice'
 import { IsTomoChain } from 'utils/wallet'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -18,7 +17,7 @@ import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 
 export interface FarmWithStakedValue extends Farm {
-  apr?: number
+  apr?: number,
 }
 
 const AccentGradient = keyframes`  
@@ -86,7 +85,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account }) => {
   const isTomo = IsTomoChain(ID)
   const luaPrice = useLuaPrice()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const newReward = useNewRewards(farm.pid + 1)
+  // const newReward = useNewRewards(farm.pid + 1)
+  const newReward = farm.reward ? new BigNumber(farm.reward) : new BigNumber(0)
   // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
   const farmImages = farm.lpSymbol.split('-')
