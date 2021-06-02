@@ -144,7 +144,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account }) => {
           </Flex>
           <Flex justifyContent="space-between">
             <Text>{t('Reward')}:</Text>
-            <Text bold>{getBalanceNumber(newReward).toFixed(3)} LUA / block</Text>
+            <Text bold>{newReward ? getBalanceNumber(newReward).toFixed(3) : '~'} LUA / block</Text>
           </Flex>
         </>
       )}
