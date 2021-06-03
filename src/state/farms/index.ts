@@ -87,7 +87,7 @@ export const fetchFarms = (chainId: number, web3: Web3) => async (dispatch, getS
 export const fetchFarmUserDataAsync = (account: string, chainId?: number, web3?: Web3) => async (dispatch, getState) => {
   const IsTomo = IsTomoChain(chainId)
   const farmsToFetch = IsTomo ? tomoSupportedPools : allPools
-  // const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
+  const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch, chainId, web3)
   const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch, chainId, web3)
   const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId, web3)
   const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId, web3)
@@ -96,7 +96,8 @@ export const fetchFarmUserDataAsync = (account: string, chainId?: number, web3?:
       pid: farm.pid,
       earnings: userFarmEarnings[index],
       stakedBalance: userStakedBalances[index],
-      allowance: userFarmAllowances[index]
+      allowance: userFarmAllowances[index],
+      tokenBalance: userFarmTokenBalances[index],
     }
   })
 
