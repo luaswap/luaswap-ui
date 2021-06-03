@@ -13,6 +13,7 @@ interface FarmCardActionsProps {
   pid?: number
 }
 
+// TODO: Change value of the cakePrice here
 const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()

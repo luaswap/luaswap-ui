@@ -13,7 +13,7 @@ import { ActionContainer, ActionTitles, Title, Subtle, ActionContent, Earned, St
 interface HarvestActionProps extends FarmWithStakedValue {
   userDataReady: boolean
 }
-
+// TODO: change cakePrice to LuaPrice
 const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userData, userDataReady }) => {
   const earningsBigNumber = new BigNumber(userData.earnings)
   const cakePrice = usePriceCakeBusd()
