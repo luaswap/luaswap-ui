@@ -1,10 +1,6 @@
-import { useEffect, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import { API_URL, API_ETH, API_TOMO } from 'config'
 import { getMasterchefContract } from 'utils/contractHelpers'
-import useWeb3 from 'hooks/useWeb3'
 import axios from 'axios'
-import BigNumber from 'bignumber.js'
 
 async function UnknownBlock(address, method, params, cache, chainId) {
     let apiUrl
