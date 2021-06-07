@@ -10,7 +10,7 @@ export const useHarvest = (farmPid: number) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
   const web3 = useWeb3()
-  const masterChefContract = useMasterchef()
+  const masterChefContract = useMasterchef(chainId)
 
   const handleHarvest = useCallback(async () => {
     const txHash = await harvest(masterChefContract, farmPid, account, chainId)
@@ -25,7 +25,7 @@ export const useSousHarvest = (sousId, isUsingBnb = false) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
   const sousChefContract = useSousChef(sousId)
-  const masterChefContract = useMasterchef()
+  const masterChefContract = useMasterchef(chainId)
 
   const handleHarvest = useCallback(async () => {
     if (sousId === 0) {

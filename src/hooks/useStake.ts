@@ -10,7 +10,7 @@ const useStake = (pid: number) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
   const web3 = useWeb3()
-  const masterChefContract = useMasterchef()
+  const masterChefContract = useMasterchef(chainId)
 
   const handleStake = useCallback(
     async (amount: string) => {
@@ -26,8 +26,8 @@ const useStake = (pid: number) => {
 
 export const useSousStake = (sousId: number, isUsingBnb = false) => {
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
-  const masterChefContract = useMasterchef()
+  const { account, chainId } = useWeb3React()
+  const masterChefContract = useMasterchef(chainId)
   const sousChefContract = useSousChef(sousId)
 
   const handleStake = useCallback(

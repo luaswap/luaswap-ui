@@ -15,7 +15,7 @@ const useUnstake = (pid: number) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
   const web3 = useWeb3()
-  const masterChefContract = useMasterchef()
+  const masterChefContract = useMasterchef(chainId)
 
   const handleUnstake = useCallback(
     async (amount: string) => {
@@ -31,8 +31,8 @@ const useUnstake = (pid: number) => {
 
 export const useSousUnstake = (sousId, enableEmergencyWithdraw = false) => {
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
-  const masterChefContract = useMasterchef()
+  const { account, chainId } = useWeb3React()
+  const masterChefContract = useMasterchef(chainId)
   const sousChefContract = useSousChef(sousId)
 
   const handleUnstake = useCallback(

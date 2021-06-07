@@ -39,7 +39,7 @@ const FarmedStakingCard = () => {
   const { account, chainId } = useWeb3React()
   const { t } = useTranslation()
   const farmsWithBalance = useFarmsWithBalance()
-  const masterChefContract = useMasterchef()
+  const masterChefContract = useMasterchef(chainId)
   const balancesWithValue = farmsWithBalance.filter((balanceType) => balanceType.balance.toNumber() > 0)
 
   const harvestAllFarms = useCallback(async () => {

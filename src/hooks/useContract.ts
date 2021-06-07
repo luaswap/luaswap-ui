@@ -81,9 +81,9 @@ export const useLotteryTicket = () => {
   return useMemo(() => getLotteryTicketContract(web3), [web3])
 }
 
-export const useMasterchef = () => {
+export const useMasterchef = (chainId: number) => {
   const web3 = useWeb3()
-  return useMemo(() => getMasterchefContract(web3), [web3])
+  return useMemo(() => getMasterchefContract(web3, chainId), [web3, chainId])
 }
 
 export const useSousChef = (id) => {

@@ -13,7 +13,7 @@ export const useApprove = (lpContract: Contract) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
   const web3 = useWeb3()
-  const masterChefContract = useMasterchef()
+  const masterChefContract = useMasterchef(chainId)
 
   const handleApprove = useCallback(async () => {
     try {
