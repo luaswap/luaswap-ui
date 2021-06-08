@@ -7,10 +7,11 @@ import useTheme from 'hooks/useTheme'
 import useAuth from 'hooks/useAuth'
 import useLuaPrice from 'hooks/useLuaPrice'
 import { useProfile } from 'state/hooks'
+import { connectNetwork } from 'utils/wallet'
 import config from './config'
 
 const Menu = (props) => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { login, logout } = useAuth()
   const { isDark, toggleTheme } = useTheme()
   const luaPrice = useLuaPrice()
@@ -30,7 +31,9 @@ const Menu = (props) => {
       account={account}
       login={login}
       logout={logout}
+      connectNetwork={connectNetwork}
       isDark={isDark}
+      chainId={chainId}
       toggleTheme={toggleTheme}
       currentLang={currentLanguage.code}
       langs={languageList}

@@ -4753,10 +4753,10 @@ common-tags@^1.8.0:
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
   integrity sha512-6P6g0uetGpW/sdyUy/iQQCbFF0kWVMSIVSyYz7Zgjcgh8mgw8PQzDNZeyZ5DQ2gM7LBoZPHmnjz8rUthkBG5tw==
 
-common-uikitstrungdao@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/common-uikitstrungdao/-/common-uikitstrungdao-0.1.1.tgz#e8f5e05b5f5d51020384f8868d7ca7c8a5bbe9b4"
-  integrity sha512-gTePx2RUg4cRpMSo1LauK5JaA5UnBUjGtE0S+IxdZQbaJclBsqA1bo/0JanGgWya6pzL9CD8f8m8rrrHbksngA==
+common-uikitstrungdao@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/common-uikitstrungdao/-/common-uikitstrungdao-0.1.3.tgz#2da09018c7c5aacf35dba7ef05e079c61311a132"
+  integrity sha512-iVwDszk2Rw9sEfDhgk6U757wncOVxJ+68+H8fA6CeNovMKjm+rZWbAbBilLutbojOnYMyhXeh8v1gXkdf/hrJA==
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/lodash" "^4.14.168"
