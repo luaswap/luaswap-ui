@@ -38,8 +38,7 @@ const Menu = (props) => {
       currentLang={currentLanguage.code}
       langs={languageList}
       setLang={setLanguage}
-      // @ts-ignore
-      cakePriceUsd={formatLuaPrice}
+      luaPriceUsd={formatLuaPrice}
       links={config(t)}
       profile={{
         username: profile?.username,
