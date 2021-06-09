@@ -58,7 +58,7 @@ const getContract = (abi: any, address: string, web3?: Web3) => {
 
 export const getERC20Contract = (provider: any, address: string, chainId?: number) => {
   const web3 = new Web3((provider as any) || getRpcUrl(chainId))
-  const contract = new web3.eth.Contract((ERC20ABI.abi as unknown) as AbiItem, address)
+  const contract = new web3.eth.Contract(ERC20ABI.abi as unknown as AbiItem, address)
   return contract
 }
 

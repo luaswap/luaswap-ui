@@ -559,7 +559,7 @@ const tokens = {
     address: {
       56: '0x947950bcc74888a40ffa2593c5798f11fc9124c4',
       97: '',
-      1: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2'
+      1: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
     },
     decimals: 18,
     projectLink: 'https://sushi.com/',
@@ -743,7 +743,7 @@ const tokens = {
       97: '0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5',
       56: '0x55d398326f99059ff775485246999027b3197955',
       88: '0x381B31409e4D220919B2cFF012ED94d70135A59e',
-      1: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+      1: '0xdac17f958d2ee523a2206206994597c13d831ec7',
     },
     decimals: 18,
     projectLink: 'https://tether.to/',
@@ -1412,7 +1412,7 @@ const tokens = {
     symbol: 'LUA',
     address: {
       88: '0x7262fa193e9590b2e075c3c16170f3f2f32f5c74',
-      1: '0xb1f66997a5760428d3a87d68b90bfe0ae64121cc'
+      1: '0xb1f66997a5760428d3a87d68b90bfe0ae64121cc',
     },
     decimals: 18,
     projectLink: '',
@@ -1420,7 +1420,7 @@ const tokens = {
   tomo: {
     symbol: 'TOMO',
     address: {
-      88: '0xb1f66997a5760428d3a87d68b90bfe0ae64121cc'
+      88: '0xb1f66997a5760428d3a87d68b90bfe0ae64121cc',
     },
     decimals: 18,
     projectLink: '',
@@ -1429,7 +1429,7 @@ const tokens = {
     symbol: 'FTT',
     address: {
       88: '0x33fa3c0c714638f12339F85dae89c42042a2D9Af',
-      1: '0x50d1c9771902476076ecfc8b2a83ad6b9355a4c9'
+      1: '0x50d1c9771902476076ecfc8b2a83ad6b9355a4c9',
     },
     decimals: 18,
     projectLink: '',
@@ -1446,7 +1446,7 @@ const tokens = {
   tomoe: {
     symbol: 'TOMOE',
     address: {
-      1: '0x05d3606d5c81eb9b7b18530995ec9b29da05faba'
+      1: '0x05d3606d5c81eb9b7b18530995ec9b29da05faba',
     },
     decimals: 18,
     projectLink: '',
@@ -1454,7 +1454,7 @@ const tokens = {
   wbtc: {
     symbol: 'WBTC',
     address: {
-      1: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
+      1: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
     },
     decimals: 18,
     projectLink: '',
@@ -1462,7 +1462,7 @@ const tokens = {
   kat: {
     symbol: 'KAT',
     address: {
-      1: '0x14da230d6726c50f759bc1838717f8ce6373509c'
+      1: '0x14da230d6726c50f759bc1838717f8ce6373509c',
     },
     decimals: 18,
     projectLink: '',
@@ -1470,7 +1470,7 @@ const tokens = {
   kai: {
     symbol: 'KAI',
     address: {
-      1: '0xd9ec3ff1f8be459bb9369b4e79e9ebcf7141c093'
+      1: '0xd9ec3ff1f8be459bb9369b4e79e9ebcf7141c093',
     },
     decimals: 18,
     projectLink: '',
@@ -1478,11 +1478,11 @@ const tokens = {
   om: {
     symbol: 'OM',
     address: {
-      1: '0x2baecdf43734f22fd5c152db08e3c27233f0c7d2'
+      1: '0x2baecdf43734f22fd5c152db08e3c27233f0c7d2',
     },
     decimals: 18,
     projectLink: '',
-  }
+  },
 }
 
 export default tokens

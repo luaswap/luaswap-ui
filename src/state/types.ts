@@ -19,10 +19,10 @@ export interface Farm extends FarmConfig {
   lpTotalSupply?: BigNumber
   tokenPriceVsQuote?: BigNumber
   poolWeight?: BigNumber
-  usdValue?: number,
-  totalToken2Value?: number,
-  apy?: number,
-  reward?: string, 
+  usdValue?: number
+  totalToken2Value?: number
+  apy?: number
+  reward?: string
   userData?: {
     allowance: string
     tokenBalance: string

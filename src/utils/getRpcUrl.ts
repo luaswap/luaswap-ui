@@ -8,7 +8,7 @@ export const RPC_URL: { [chainId in ChainId]: string } = {
   42: '',
   88: 'https://rpc.tomochain.com',
   89: '',
-  99: ''
+  99: '',
 }
 
 const getNodeUrl = (chainId?: number) => {

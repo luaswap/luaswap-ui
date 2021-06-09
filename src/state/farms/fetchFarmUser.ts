@@ -6,7 +6,12 @@ import multicall from 'utils/multicall'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { FarmConfig } from 'config/constants/types'
 
-export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[], chainId: number, web3?: Web3) => {
+export const fetchFarmUserAllowances = async (
+  account: string,
+  farmsToFetch: FarmConfig[],
+  chainId: number,
+  web3?: Web3,
+) => {
   const masterChefAddress = getMasterChefAddress(chainId)
   const calls = farmsToFetch.map((farm) => {
     const lpContractAddress = getAddress(farm.lpAddresses, chainId)
@@ -21,7 +26,12 @@ export const fetchFarmUserAllowances = async (account: string, farmsToFetch: Far
   return parsedLpAllowances
 }
 
-export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: FarmConfig[], chainId: number, web3?: Web3) => {
+export const fetchFarmUserTokenBalances = async (
+  account: string,
+  farmsToFetch: FarmConfig[],
+  chainId: number,
+  web3?: Web3,
+) => {
   const calls = farmsToFetch.map((farm) => {
     const lpContractAddress = getAddress(farm.lpAddresses, chainId)
     return {
@@ -38,7 +48,12 @@ export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: 
   return parsedTokenBalances
 }
 
-export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch: FarmConfig[], chainId: number, web3?: Web3) => {
+export const fetchFarmUserStakedBalances = async (
+  account: string,
+  farmsToFetch: FarmConfig[],
+  chainId: number,
+  web3?: Web3,
+) => {
   const masterChefAddress = getMasterChefAddress(chainId)
   const calls = farmsToFetch.map((farm) => {
     return {
@@ -54,7 +69,12 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
   return parsedStakedBalances
 }
 
-export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmConfig[], chainId: number, web3?: Web3) => {
+export const fetchFarmUserEarnings = async (
+  account: string,
+  farmsToFetch: FarmConfig[],
+  chainId: number,
+  web3?: Web3,
+) => {
   const masterChefAddress = getMasterChefAddress(chainId)
 
   const calls = farmsToFetch.map((farm) => {

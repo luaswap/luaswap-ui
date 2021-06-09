@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react'
+import React, { useMemo } from 'react'
 import { Menu as UikitMenu } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import { languageList } from 'config/localization/languages'

@@ -16,7 +16,7 @@ import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 
 export interface FarmWithStakedValue extends Farm {
-  apr?: number,
+  apr?: number
 }
 
 const AccentGradient = keyframes`  
@@ -90,9 +90,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
   const farmImages = farm.lpSymbol.split('-')
 
-  const totalValueFormatted = farm.usdValue
-    ? `$${parseFloat(farm.usdValue.toFixed(0)).toLocaleString('en-US')}`
-    : '-'
+  const totalValueFormatted = farm.usdValue ? `$${parseFloat(farm.usdValue.toFixed(0)).toLocaleString('en-US')}` : '-'
 
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
   const earnLabel = 'LUA'

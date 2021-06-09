@@ -77,7 +77,7 @@ export const tomoSupportedPools: FarmConfig[] = [
     },
     token: tokens.eth,
     quoteToken: tokens.usdt,
-  }
+  },
 ]
 
 export const allPools: FarmConfig[] = [

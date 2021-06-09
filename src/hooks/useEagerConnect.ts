@@ -13,7 +13,7 @@ const useEagerConnect = () => {
     // if (connectorId) {
     //   login(connectorId)
     // }
-    injected.isAuthorized().then(isAuthorized => {
+    injected.isAuthorized().then((isAuthorized) => {
       if (isAuthorized && connectorId) {
         login(connectorId)
       }

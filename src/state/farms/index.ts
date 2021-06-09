@@ -78,30 +78,31 @@ export const fetchFarms = (chainId: number, web3: Web3) => async (dispatch, getS
   const apiUrl = IsTomo ? API_TOMO : API_ETH
   const { data } = await axios.get(`${apiUrl}/pools`)
   dispatch(setFarmsPublicData(data))
-  const apyListResponse = data.map(farm => {
+  const apyListResponse = data.map((farm) => {
     return getNewRewardPerBlock(web3, farm.pid + 1, chainId)
   })
   const apyList = await Promise.all(apyListResponse)
   dispatch(setFarmsPublicData(apyList))
 }
-export const fetchFarmUserDataAsync = (account: string, chainId?: number, web3?: Web3) => async (dispatch, getState) => {
-  const IsTomo = IsTomoChain(chainId)
-  const farmsToFetch = IsTomo ? tomoSupportedPools : allPools
-  const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch, chainId, web3)
-  const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch, chainId, web3)
-  const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId, web3)
-  const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId, web3)
-  const arrayOfUserDataObjects = farmsToFetch.map((farm, index) => {
-    return {
-      pid: farm.pid,
-      earnings: userFarmEarnings[index],
-      stakedBalance: userStakedBalances[index],
-      allowance: userFarmAllowances[index],
-      tokenBalance: userFarmTokenBalances[index],
-    }
-  })
+export const fetchFarmUserDataAsync =
+  (account: string, chainId?: number, web3?: Web3) => async (dispatch, getState) => {
+    const IsTomo = IsTomoChain(chainId)
+    const farmsToFetch = IsTomo ? tomoSupportedPools : allPools
+    const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch, chainId, web3)
+    const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch, chainId, web3)
+    const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId, web3)
+    const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId, web3)
+    const arrayOfUserDataObjects = farmsToFetch.map((farm, index) => {
+      return {
+        pid: farm.pid,
+        earnings: userFarmEarnings[index],
+        stakedBalance: userStakedBalances[index],
+        allowance: userFarmAllowances[index],
+        tokenBalance: userFarmTokenBalances[index],
+      }
+    })
 
-  dispatch(setFarmUserData({ arrayOfUserDataObjects }))
-}
+    dispatch(setFarmUserData({ arrayOfUserDataObjects }))
+  }
 
 export default farmsSlice.reducer
