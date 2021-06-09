@@ -29,7 +29,6 @@ const App: React.FC = () => {
   useInactiveListener()
   // useFetchProfile()
   // useFetchPriceList()
-
   return (
     <HashRouter>
       <ResetCSS />
@@ -46,7 +45,7 @@ const App: React.FC = () => {
             <Route path="/add" exact>
               <Home />
             </Route>
-            <Route exact strict path="/farms">
+            <Route path="/farms">
               <Farms />
             </Route>
             {/* 404 */}

@@ -10,7 +10,6 @@ import getRpcUrl from './getRpcUrl'
  */
 export const connectNetwork = async (options) => {
   const { chainName, nativeCurrency, chainId } = options
-  console.log(getRpcUrl(chainId), 'options ?')
   const provider = (window as WindowChain).ethereum
   if (provider) {
     try {

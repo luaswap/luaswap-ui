@@ -28,6 +28,7 @@ const useAuth = () => {
       activate(connector, async (error: Error) => {
         if (error instanceof UnsupportedChainIdError) {
           toastError('Please connect to the appropriate Ethereum network.')
+          logout()
         } else {
           window.localStorage.removeItem(connectorLocalStorageKey)
           if (error instanceof NoEthereumProviderError || error instanceof NoBscProviderError) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
-import { Route, useRouteMatch } from 'react-router-dom'
+import { Route, useRouteMatch, useHistory } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useAppDispatch } from 'state'
 import { useWeb3React } from '@web3-react/core'
@@ -108,6 +108,7 @@ const Farms: React.FC = () => {
   const web3 = useWeb3()
   const dispatch = useAppDispatch()
   const ID = chainId === 88 ? 88 : 1
+  const history = useHistory()
 
   useEffect(() => {
     if (account) {

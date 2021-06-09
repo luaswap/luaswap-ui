@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react'
-import { Menu as UikitMenu } from 'common-uikitstrungdao'
+import React, { useMemo, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { Menu as UikitMenu, walletOptions } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import { languageList } from 'config/localization/languages'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import useAuth from 'hooks/useAuth'
+import useLocationParams from 'hooks/useLocationParams'
 import useLuaPrice from 'hooks/useLuaPrice'
 import { useProfile } from 'state/hooks'
 import { connectNetwork } from 'utils/wallet'
@@ -16,7 +18,9 @@ const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()
   const luaPrice = useLuaPrice()
   const { profile } = useProfile()
+  const location = useLocation()
   const { currentLanguage, setLanguage, t } = useTranslation()
+  const queryChainId = useLocationParams(location)
 
   const formatLuaPrice = useMemo(() => {
     if (luaPrice) {
@@ -26,6 +30,13 @@ const Menu = (props) => {
     return 0
   }, [luaPrice])
 
+  useEffect(() => {
+    if (queryChainId) {
+      const option = walletOptions.find(opts => opts.chainId === queryChainId)
+      connectNetwork(option)
+    }
+  }, [queryChainId])
+
   return (
     <UikitMenu
       account={account}
@@ -34,6 +45,7 @@ const Menu = (props) => {
       connectNetwork={connectNetwork}
       isDark={isDark}
       chainId={chainId}
+      queryChainId={queryChainId}
       toggleTheme={toggleTheme}
       currentLang={currentLanguage.code}
       langs={languageList}
