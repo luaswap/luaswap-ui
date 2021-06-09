@@ -1,5 +1,5 @@
 import React, { lazy, useEffect } from 'react'
-import { Router, Redirect, Route, Switch } from 'react-router-dom'
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom'
 import { ResetCSS } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect, { useInactiveListener } from 'hooks/useEagerConnect'
@@ -10,7 +10,6 @@ import SuspenseWithChunkError from './components/SuspenseWithChunkError'
 import ToastListener from './components/ToastListener'
 import PageLoader from './components/PageLoader'
 import EasterEgg from './components/EasterEgg'
-import history from './routerHistory'
 
 // Route-based code splitting
 // Only pool is included in the main bundle because of it's the most visited page
@@ -32,13 +31,13 @@ const App: React.FC = () => {
   // useFetchPriceList()
 
   return (
-    <Router history={history}>
+    <HashRouter>
       <ResetCSS />
       <GlobalStyle />
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
-            <Route path="/" exact>
+            <Route exact strict path="/" >
               <Home />
             </Route>
             <Route path="/swap" exact>
@@ -47,7 +46,7 @@ const App: React.FC = () => {
             <Route path="/add" exact>
               <Home />
             </Route>
-            <Route path="/farms">
+            <Route exact strict path="/farms">
               <Farms />
             </Route>
             {/* 404 */}
@@ -57,7 +56,7 @@ const App: React.FC = () => {
       </Menu>
       <EasterEgg iterations={2} />
       <ToastListener />
-    </Router>
+    </HashRouter>
   )
 }
 
