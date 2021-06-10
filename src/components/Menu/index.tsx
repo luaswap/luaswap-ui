@@ -20,7 +20,7 @@ const Menu = (props) => {
   const { profile } = useProfile()
   const location = useLocation()
   const { currentLanguage, setLanguage, t } = useTranslation()
-  const queryChainId = useLocationParams(location)
+  const [queryChainId, updateLocation] = useLocationParams(location)
 
   const formatLuaPrice = useMemo(() => {
     if (luaPrice) {
@@ -34,8 +34,9 @@ const Menu = (props) => {
     if (queryChainId) {
       const option = walletOptions.find(opts => opts.chainId === queryChainId)
       connectNetwork(option)
+      updateLocation()
     }
-  }, [queryChainId])
+  }, [queryChainId, updateLocation, location])
 
   return (
     <UikitMenu
