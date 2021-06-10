@@ -32,12 +32,12 @@ const Menu = (props) => {
 
   useEffect(() => {
     if (queryChainId) {
-      const option = walletOptions.find(opts => opts.chainId === queryChainId)
-      connectNetwork(option)
+      // const option = walletOptions.find(opts => opts.chainId === queryChainId)
+      // connectNetwork(option)
+      updateLocation()
     }
-    updateLocation()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryChainId, chainId])
+  }, [queryChainId, updateLocation, location])
 
   return (
     <UikitMenu
