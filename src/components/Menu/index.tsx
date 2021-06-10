@@ -8,6 +8,7 @@ import useTheme from 'hooks/useTheme'
 import useAuth from 'hooks/useAuth'
 import useLocationParams from 'hooks/useLocationParams'
 import useLuaPrice from 'hooks/useLuaPrice'
+import useEthBalance from 'hooks/useEthBalance'
 import { useProfile } from 'state/hooks'
 import { connectNetwork } from 'utils/wallet'
 import config from './config'
@@ -19,6 +20,7 @@ const Menu = (props) => {
   const luaPrice = useLuaPrice()
   const { profile } = useProfile()
   const location = useLocation()
+  const userEthBalance = useEthBalance()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const [queryChainId, updateLocation] = useLocationParams(location)
 
@@ -52,6 +54,7 @@ const Menu = (props) => {
       currentLang={currentLanguage.code}
       langs={languageList}
       setLang={setLanguage}
+      userEthBalance={userEthBalance}
       luaPriceUsd={formatLuaPrice}
       links={config(t)}
       profile={{

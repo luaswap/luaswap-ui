@@ -246,7 +246,6 @@ const Farms: React.FC = () => {
           </FilterContainer>
         </ControlContainer>
         {renderContent()}
-        <StyledImage src="/images/3dpan.png" alt="Pancake illustration" width={120} height={103} />
       </Page>
     </>
   )
