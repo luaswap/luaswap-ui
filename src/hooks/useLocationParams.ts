@@ -39,6 +39,7 @@ const useLocationParams = (location: Location = { pathname: '', search: '', stat
   }, [chainId, queryId])
 
   useEffect(() => {
+    console.log(search, 'does change ?')
     if (search) {
       const { network } = queryString.parse(search)
       const queryChainId = NETWORK_MAP[String(network).toLowerCase()]

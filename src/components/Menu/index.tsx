@@ -34,9 +34,10 @@ const Menu = (props) => {
     if (queryChainId) {
       const option = walletOptions.find(opts => opts.chainId === queryChainId)
       connectNetwork(option)
-      updateLocation()
     }
-  }, [queryChainId, updateLocation, location])
+    updateLocation()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryChainId, chainId])
 
   return (
     <UikitMenu
