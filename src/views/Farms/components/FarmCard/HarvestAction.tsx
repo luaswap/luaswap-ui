@@ -5,8 +5,6 @@ import { useTranslation } from 'contexts/Localization'
 import { useHarvest } from 'hooks/useHarvest'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useWeb3React } from '@web3-react/core'
-import { usePriceCakeBusd } from 'state/hooks'
-import CardBusdValue from '../../../Home/components/CardBusdValue'
 
 interface FarmCardActionsProps {
   earnings?: BigNumber

@@ -1,9 +1,9 @@
-import React, { lazy, useEffect } from 'react'
-import { HashRouter, Redirect, Route, Switch } from 'react-router-dom'
+import React, { lazy } from 'react'
+import { HashRouter, Route, Switch } from 'react-router-dom'
 import { ResetCSS } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect, { useInactiveListener } from 'hooks/useEagerConnect'
-import { useFetchPriceList, useFetchProfile, useFetchPublicData } from 'state/hooks'
+import { useFetchProfile, useFetchPublicData } from 'state/hooks'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
 import SuspenseWithChunkError from './components/SuspenseWithChunkError'
@@ -37,12 +37,6 @@ const App: React.FC = () => {
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
             <Route exact strict path="/" >
-              <Home />
-            </Route>
-            <Route path="/swap" exact>
-              <Home />
-            </Route>
-            <Route path="/add" exact>
               <Home />
             </Route>
             <Route path="/farms">

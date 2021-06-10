@@ -6,7 +6,7 @@ import { Card, CardBody, CardHeader, Flex, Heading, PrizeIcon } from '@pancakesw
 import { useProfile } from 'state/hooks'
 import { Achievement } from 'state/types'
 import { addPoints } from 'state/profile'
-import { addAchievement } from 'state/achievements'
+// import { addAchievement } from 'state/achievements'
 import { useTranslation } from 'contexts/Localization'
 import { getClaimableIfoData } from 'utils/achievements'
 import AchievementRow from './AchievementRow'
@@ -30,7 +30,7 @@ const ClaimPointsCallout = () => {
   }, [account, dispatch, setClaimableAchievement])
 
   const handleCollectSuccess = (achievement: Achievement) => {
-    dispatch(addAchievement(achievement))
+    // dispatch(addAchievement(achievement))
     dispatch(addPoints(achievement.points))
 
     setClaimableAchievement((prevClaimableAchievements) =>
