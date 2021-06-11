@@ -73,17 +73,19 @@ export const useFarmUser = (pid) => {
 // Profile
 
 export const useFetchProfile = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchProfile(account))
-  }, [account, dispatch])
+    if (chainId && account) {
+      dispatch(fetchProfile(account, chainId))
+    }
+  }, [account, dispatch, chainId])
 }
 
 export const useProfile = () => {
-  const { isInitialized, isLoading, data, hasRegistered }: ProfileState = useSelector((state: State) => state.profile)
-  return { profile: data, hasProfile: isInitialized && hasRegistered, isInitialized, isLoading }
+  const { isInitialized, isLoading, data, isUnlock }: ProfileState = useSelector((state: State) => state.profile)
+  return { profile: data, isUnlock, isInitialized, isLoading }
 }
 
 // Block

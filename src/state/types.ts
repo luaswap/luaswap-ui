@@ -45,16 +45,8 @@ export interface Pool extends PoolConfig {
 }
 
 export interface Profile {
-  userId: number
-  points: number
-  teamId: number
-  nftAddress: string
-  tokenId: number
-  isActive: boolean
-  username: string
-  nft?: Nft
-  team: Team
-  hasRegistered: boolean
+  totalLuaLock: string,
+  luaUnlockAble: string,
 }
 
 // Slices states
@@ -96,7 +88,7 @@ export interface PoolsState {
 export interface ProfileState {
   isInitialized: boolean
   isLoading: boolean
-  hasRegistered: boolean
+  isUnlock: boolean
   data: Profile
 }
 

@@ -8,6 +8,9 @@ export default {
     97: '0xd3af5fe61dbaf8f73149bfcfa9fb653ff096029a',
     56: '0x6ab8463a4185b80905e05a9ff80a2d6b714b9e95',
   },
+  lua: {
+    1: '0xB1f66997A5760428D3a87D68b90BfE0aE64121cC',
+  },
   lottery: {
     97: '0x99c2EcD51d52c036B00130d882Bc65f20Fdecf9f',
     56: '0x3C3f2049cc17C136a604bE23cF7E42745edf3b91',

@@ -1,80 +1,35 @@
-import Cookies from 'js-cookie'
-import { getProfileContract } from 'utils/contractHelpers'
-import { Nft } from 'config/constants/types'
-import { getNftByTokenId } from 'utils/collectibles'
-import { Profile } from 'state/types'
-import { transformProfileResponse } from './helpers'
+import axios from 'axios'
+import BigNumber from 'bignumber.js'
+import { TokenAmount, Token } from '@luaswap/sdk'
+import { API_URL, LUA_CONTRACT } from 'config'
 
-const profileContract = getProfileContract()
-const profileApi = process.env.REACT_APP_API_PROFILE
+const LUA = new Token(1, '0xB1f66997A5760428D3a87D68b90BfE0aE64121cC', 18, 'LUA', 'LuaToken')
 
-export interface GetProfileResponse {
-  hasRegistered: boolean
-  profile?: Profile
+const getProfile = async (address: string, chainId: number) => {
+  const LUA_REWARD_URL = `${API_URL[chainId]}/read/${LUA_CONTRACT[chainId]}`
+  const totalLuaLockPromise = axios.post(LUA_REWARD_URL, {
+    method: 'lockOf(address):(uint256)',
+    params: [address],
+    cache: true,
+  })
+
+  const luaUnLockAblePromise = axios.post(LUA_REWARD_URL, {
+    method: 'canUnlockAmount(address):(uint256)',
+    params: [address],
+    cache: true,
+  })
+
+  const [totalLuaLockResult, luaUnlockAbleResult] = await Promise.all([totalLuaLockPromise, luaUnLockAblePromise])
+  const totalLuaLock = new TokenAmount(LUA, totalLuaLockResult.data.data || '0')
+  const luaUnlockAble = new TokenAmount(LUA, luaUnlockAbleResult.data.data || '0')
+  const formatLuaLock = new BigNumber(totalLuaLock.toFixed(3)).toFormat()
+  const formatLuaUnlockable = new BigNumber(luaUnlockAble.toFixed(3)).toFormat()
+  return { totalLuaLock: formatLuaLock, luaUnlockAble: formatLuaUnlockable }
 }
 
-const getUsername = async (address: string): Promise<string> => {
-  try {
-    const response = await fetch(`${profileApi}/api/users/${address}`)
-
-    if (!response.ok) {
-      return ''
-    }
-
-    const { username = '' } = await response.json()
-
-    return username
-  } catch (error) {
-    return ''
-  }
-}
-
-const getProfile = async (address: string): Promise<GetProfileResponse> => {
-  try {
-    const hasRegistered = (await profileContract.methods.hasRegistered(address).call()) as boolean
-
-    if (!hasRegistered) {
-      return { hasRegistered, profile: null }
-    }
-
-    const profileResponse = await profileContract.methods.getUserProfile(address).call()
-    const { userId, points, teamId, tokenId, nftAddress, isActive } = transformProfileResponse(profileResponse)
-    // const team = await getTeam(teamId)
-    const username = await getUsername(address)
-
-    // If the profile is not active the tokenId returns 0, which is still a valid token id
-    // so only fetch the nft data if active
-    let nft: Nft
-    if (isActive) {
-      nft = await getNftByTokenId(nftAddress, tokenId)
-
-      // Save the preview image in a cookie so it can be used on the exchange
-      Cookies.set(
-        `profile_${address}`,
-        {
-          username,
-          avatar: `https://pancakeswap.finance/images/nfts/${nft?.images.sm}`,
-        },
-        { domain: 'pancakeswap.finance', secure: true, expires: 30 },
-      )
-    }
-
-    const profile = {
-      userId,
-      points,
-      teamId,
-      tokenId,
-      username,
-      nftAddress,
-      isActive,
-      nft,
-      team: {},
-    } as Profile
-
-    return { hasRegistered, profile }
-  } catch (error) {
-    return null
-  }
+const doUnlockLua = async () => {
+  // const luaContract = useLuaTokenContract(LUA.address)
+  // await luaContract.unlock()
 }
 
 export default getProfile

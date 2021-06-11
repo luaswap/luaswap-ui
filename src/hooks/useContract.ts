@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import useWeb3 from 'hooks/useWeb3'
+import { Contract } from 'web3-eth-contract'
 import {
   getBep20Contract,
   getCakeContract,
@@ -22,6 +23,7 @@ import {
   getPredictionsContract,
   getChainlinkOracleContract,
   getSouschefV2Contract,
+  getLuaContract,
 } from 'utils/contractHelpers'
 
 /**
@@ -84,6 +86,11 @@ export const useLotteryTicket = () => {
 export const useMasterchef = (chainId: number) => {
   const web3 = useWeb3()
   return useMemo(() => getMasterchefContract(web3, chainId), [web3, chainId])
+}
+
+export const useLuaContract = (chainId: number) => {
+  const web3 = useWeb3()
+  return useMemo(() => getLuaContract(web3, chainId), [web3, chainId])
 }
 
 export const useSousChef = (id) => {

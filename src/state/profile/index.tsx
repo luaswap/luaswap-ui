@@ -1,14 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ProfileState } from 'state/types'
+import { ProfileState, Profile } from 'state/types'
 import type { AppDispatch } from 'state'
-import getProfile, { GetProfileResponse } from './getProfile'
+import getProfile from './getProfile'
 
 const initialState: ProfileState = {
   isInitialized: false,
   isLoading: true,
-  hasRegistered: false,
-  data: null,
+  isUnlock: false,
+  data: {
+    luaUnlockAble: '0',
+    totalLuaLock: '0',
+  },
 }
 
 export const profileSlice = createSlice({
@@ -18,14 +21,12 @@ export const profileSlice = createSlice({
     profileFetchStart: (state) => {
       state.isLoading = true
     },
-    profileFetchSucceeded: (_state, action: PayloadAction<GetProfileResponse>) => {
-      const { profile, hasRegistered } = action.payload
-
-      return {
-        isInitialized: true,
-        isLoading: false,
-        hasRegistered,
-        data: profile,
+    profileFetchSucceeded: (_state, action) => {
+      const { totalLuaLock, luaUnlockAble } = action.payload
+      _state.isLoading = false
+      _state.data = {
+        totalLuaLock,
+        luaUnlockAble,
       }
     },
     profileFetchFailed: (state) => {
@@ -36,22 +37,22 @@ export const profileSlice = createSlice({
       ...initialState,
       isLoading: false,
     }),
-    addPoints: (state, action: PayloadAction<number>) => {
-      state.data.points += action.payload
-    },
+    unlockLuaStatus: (state, action) => {
+      state.isUnlock = action.payload
+    }
   },
 })
 
 // Actions
-export const { profileFetchStart, profileFetchSucceeded, profileFetchFailed, profileClear, addPoints } =
+export const { profileFetchStart, profileFetchSucceeded, profileFetchFailed, profileClear, unlockLuaStatus } =
   profileSlice.actions
 
 // Thunks
 // TODO: this should be an AsyncThunk
-export const fetchProfile = (address: string) => async (dispatch: AppDispatch) => {
+export const fetchProfile = (address: string, chainId: number) => async (dispatch: AppDispatch) => {
   try {
     dispatch(profileFetchStart())
-    const response = await getProfile(address)
+    const response = await getProfile(address, chainId)
     dispatch(profileFetchSucceeded(response))
   } catch (error) {
     dispatch(profileFetchFailed())

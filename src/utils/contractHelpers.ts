@@ -23,6 +23,7 @@ import {
   getCakeVaultAddress,
   getPredictionsAddress,
   getChainlinkOracleAddress,
+  getLuaAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -41,6 +42,7 @@ import pointCenterIfo from 'config/abi/pointCenterIfo.json'
 import lotteryAbi from 'config/abi/lottery.json'
 import lotteryTicketAbi from 'config/abi/lotteryNft.json'
 import masterChef from 'config/abi/masterchef.json'
+import luaAbi from 'config/abi/lua.json'
 import sousChef from 'config/abi/sousChef.json'
 import sousChefV2 from 'config/abi/sousChefV2.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
@@ -112,6 +114,9 @@ export const getLotteryTicketContract = (web3?: Web3) => {
 }
 export const getMasterchefContract = (web3?: Web3, chainId?: number) => {
   return getContract(masterChef, getMasterChefAddress(chainId), web3)
+}
+export const getLuaContract = (web3?: Web3, chainId?: number) => {
+  return getContract(luaAbi, getLuaAddress(chainId), web3)
 }
 export const getClaimRefundContract = (web3?: Web3) => {
   return getContract(claimRefundAbi, getClaimRefundAddress(), web3)

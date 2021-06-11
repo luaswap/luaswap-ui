@@ -27,7 +27,7 @@ const App: React.FC = () => {
   useEagerConnect()
   useFetchPublicData()
   useInactiveListener()
-  // useFetchProfile()
+  useFetchProfile()
   // useFetchPriceList()
   return (
     <HashRouter>

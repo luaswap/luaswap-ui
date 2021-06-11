@@ -1,6 +1,6 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Menu as UikitMenu, walletOptions } from 'common-uikitstrungdao'
+import { Menu as UikitMenu } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import { languageList } from 'config/localization/languages'
 import { useTranslation } from 'contexts/Localization'
@@ -9,7 +9,10 @@ import useAuth from 'hooks/useAuth'
 import useLocationParams from 'hooks/useLocationParams'
 import useLuaPrice from 'hooks/useLuaPrice'
 import useEthBalance from 'hooks/useEthBalance'
+import { useLuaContract } from 'hooks/useContract'
 import { useProfile } from 'state/hooks'
+import { unlockLuaStatus } from 'state/profile'
+import { useAppDispatch } from 'state'
 import { connectNetwork } from 'utils/wallet'
 import config from './config'
 
@@ -17,13 +20,14 @@ const Menu = (props) => {
   const { account, chainId } = useWeb3React()
   const { login, logout } = useAuth()
   const { isDark, toggleTheme } = useTheme()
+  const dispatch = useAppDispatch()
   const luaPrice = useLuaPrice()
-  const { profile } = useProfile()
+  const { profile, isUnlock } = useProfile()
+  const luaContract = useLuaContract(chainId)
   const location = useLocation()
   const userEthBalance = useEthBalance()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const [queryChainId, updateLocation] = useLocationParams(location)
-
   const formatLuaPrice = useMemo(() => {
     if (luaPrice) {
       return luaPrice.div(10 ** 8).toNumber()
@@ -38,15 +42,31 @@ const Menu = (props) => {
       // connectNetwork(option)
       updateLocation()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryChainId, updateLocation, location])
 
+  const unlockLua = useCallback(() => {
+    if (luaContract) {
+      luaContract.methods
+        .unlock()
+        .call()
+        .then((res) => {
+          dispatch(unlockLuaStatus(true))
+        })
+        .catch((err) => {
+          dispatch(unlockLuaStatus(false))
+          console.log(err, 'error')
+        })
+    }
+  }, [luaContract, dispatch])
   return (
     <UikitMenu
       account={account}
       login={login}
       logout={logout}
       connectNetwork={connectNetwork}
+      accountData={profile}
+      isUnlock={isUnlock}
       isDark={isDark}
       chainId={chainId}
       queryChainId={queryChainId}
@@ -54,16 +74,11 @@ const Menu = (props) => {
       currentLang={currentLanguage.code}
       langs={languageList}
       setLang={setLanguage}
+      unlockLua={unlockLua}
       userEthBalance={userEthBalance}
       luaPriceUsd={formatLuaPrice}
       links={config(t)}
-      profile={{
-        username: profile?.username,
-        image: profile?.nft ? `/images/nfts/${profile.nft?.images.sm}` : undefined,
-        profileLink: '/profile',
-        noProfileLink: '/profile',
-        showPip: !profile?.username,
-      }}
+      profile={{}}
       {...props}
     />
   )

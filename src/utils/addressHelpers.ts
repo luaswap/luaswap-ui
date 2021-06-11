@@ -13,6 +13,9 @@ export const getCakeAddress = () => {
 export const getMasterChefAddress = (chainId?) => {
   return getAddress(addresses.masterChef, chainId)
 }
+export const getLuaAddress = (chainId?) => {
+  return getAddress(addresses.lua, chainId)
+}
 export const getMulticallAddress = (chainId?) => {
   return getAddress(addresses.multiCall, chainId)
 }
