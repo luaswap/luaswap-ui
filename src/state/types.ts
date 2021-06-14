@@ -19,6 +19,7 @@ export interface Farm extends FarmConfig {
   lpTotalSupply?: BigNumber
   tokenPriceVsQuote?: BigNumber
   poolWeight?: BigNumber
+  addLiquidityLink: string
   usdValue?: number
   totalToken2Value?: number
   apy?: number
