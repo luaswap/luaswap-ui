@@ -12,6 +12,11 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     icon: 'FarmIcon',
     href: '/farms',
   },
+  {
+    label: t('IDO'),
+    icon: 'IfoIcon',
+    href: '/idos',
+  },
 ]
 
 export default config

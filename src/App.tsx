@@ -16,6 +16,7 @@ import EasterEgg from './components/EasterEgg'
 const Home = lazy(() => import('./views/Home'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Farms = lazy(() => import('./views/Farms'))
+const Idos = lazy(() => import('./views/Idos'))
 
 // This config is required for number formatting
 BigNumber.config({
@@ -41,6 +42,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/farms">
               <Farms />
+            </Route>
+            <Route path="/idos">
+              <Idos />
             </Route>
             {/* 404 */}
             <Route component={NotFound} />
