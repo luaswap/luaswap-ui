@@ -5,7 +5,7 @@ import PoolDetail from './PoolDetail'
 import IdoLayout from './IdoLayout'
 
 const Row = styled.div`
-  min-width: 600px;
+  max-width: 600px;
   margin: 0 auto;
 `
 
