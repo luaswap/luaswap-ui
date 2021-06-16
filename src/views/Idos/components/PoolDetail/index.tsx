@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import {
   Card,
@@ -45,9 +46,12 @@ const ImageContainer = styled.span`
 `
 
 const PoolDetail = () => {
+  const history = useHistory()
+  const { path } = useRouteMatch()
+
   return (
     <Card ribbon={<CardRibbon variantColor="success" text="Opening" />}>
-      <CardBody style={{ height: '350px' }}>
+      <CardBody style={{ height: '350px', cursor: 'pointer' }} onClick={() => { history.push(`${path}/project/1`) }}>
         <Flex mb="15px" alignItems="center">
           <ImageContainer>
             <img src="https://i.ibb.co/YtdXYjg/cross.jpg" alt="img" style={{ width: '100%', height: '100%' }} />
