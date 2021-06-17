@@ -1,16 +1,42 @@
-import React from 'react'
-import { Card, CardBody, Flex, Button, Text } from 'common-uikitstrungdao'
+import React, { useState } from 'react'
+import { Card, CardBody, Flex, Button, Text, TabMenu, Tab } from 'common-uikitstrungdao'
+import styled from 'styled-components'
+
+const Row = styled.div`
+  width: 40%;
+`
 
 const PoolInformation = () => {
+  const [index, setIndex] = useState(0)
+
   return (
-    <Card
-      style={{
-        width: '40%',
-        height: '300px',
-      }}
-    >
-      <CardBody>Website</CardBody>
-    </Card>
+    <Row>
+      <TabMenu
+        activeIndex={index}
+        onItemClick={(idx) => setIndex(idx)}
+        innerStyle={{
+          width: '100%',
+        }}
+        wrapperStyle={{
+          width: '100%',
+        }}
+      >
+        <Tab
+          style={{
+            width: '100%',
+          }}
+        >
+          Pool Information
+        </Tab>
+        <Tab
+          style={{
+            width: '100%',
+          }}
+        >
+          Token Information
+        </Tab>
+      </TabMenu>
+    </Row>
   )
 }
 

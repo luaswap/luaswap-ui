@@ -25,7 +25,7 @@ const ProjectDetail = () => {
         <PoolSummary />
         <Deposit />
       </Flex>
-      <Heading as="h2" scale="xl" color="secondary" mb="24px">
+      <Heading as="h2" scale="lg" color="secondary" mb="24px">
         Project Detail
       </Heading>
       <Flex mt="40px" mb="40px">

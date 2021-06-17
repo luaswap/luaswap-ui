@@ -45,8 +45,8 @@ const PoolSummary = () => {
   return (
     <Card
       style={{
-        width: '70%',
-        marginRight: '20px',
+        width: '60%',
+        marginRight: '24px',
       }}
     >
       <CardBody
@@ -85,6 +85,20 @@ const PoolSummary = () => {
         <Link href="google.com" mb="15px">
           Learn more
         </Link>
+        <Flex justifyContent="space-between" mb="10px">
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text color="secondary">Swap rate</Text>
+            <Text>1 BUSD = 10 BBANK</Text>
+          </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text color="secondary">Cap</Text>
+            <Text>1000000</Text>
+          </Flex>
+          <Flex justifyContent="flex-end" flexDirection="column">
+            <Text color="secondary">Access</Text>
+            <Text>Private</Text>
+          </Flex>
+        </Flex>
       </CardBody>
     </Card>
   )
