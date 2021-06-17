@@ -9,6 +9,7 @@ import {
   MediumIcon,
   WorldIcon,
   TelegramIcon,
+  Progress,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 
@@ -98,6 +99,11 @@ const PoolSummary = () => {
             <Text color="secondary">Access</Text>
             <Text>Private</Text>
           </Flex>
+        </Flex>
+        <Progress variant="round" primaryStep={90} />
+        <Flex justifyContent="space-between" mt="10px">
+          <Text color="secondary">88000 USDT/1000000 USDT</Text>
+          <Text color="secondary">88.88%</Text>
         </Flex>
       </CardBody>
     </Card>

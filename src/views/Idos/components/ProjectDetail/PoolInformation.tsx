@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, CardBody, Flex, Button, Text, TabMenu, Tab } from 'common-uikitstrungdao'
+import { TabMenu, Tab } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 
 const Row = styled.div`
