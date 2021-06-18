@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-  Flex,
-  Heading
-} from 'common-uikitstrungdao'
+import { Flex, Heading, BaseLayout } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import Steps from './Steps'
 import Deposit from './Deposit'

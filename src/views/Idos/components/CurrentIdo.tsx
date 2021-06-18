@@ -16,13 +16,13 @@ const CurrentIdo = () => {
         Opening Pools
       </Text>
       <Row>
-        <PoolDetail />
+        <PoolDetail status="Opening"/>
       </Row>
       <Text fontSize="20px" textAlign="center">
         Upcoming Pools
       </Text>
       <Row>
-        <PoolDetail />
+        <PoolDetail status="Opening" />
       </Row>
     </IdoLayout>
   )

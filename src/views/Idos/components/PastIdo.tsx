@@ -12,7 +12,7 @@ const PastIdo = () => {
   return (
     <IdoLayout>
       <Row>
-        <PoolDetail />
+        <PoolDetail status="Closed" />
       </Row>
     </IdoLayout>
   )

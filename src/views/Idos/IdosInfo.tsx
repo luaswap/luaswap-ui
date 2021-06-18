@@ -18,10 +18,10 @@ const Idos = () => {
         <Flex mb="32px">
           <ButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="subtle">
             <ButtonMenuItem as={Link} to={`${url}`}>
-              {t('Next IFO')}
+              {t('Upcoming Pools')}
             </ButtonMenuItem>
             <ButtonMenuItem as={Link} to={`${url}/history`}>
-              {t('Past IFOs')}
+              {t('Previous Pools')}
             </ButtonMenuItem>
           </ButtonMenu>
         </Flex>
