@@ -1,12 +1,19 @@
 import React from 'react'
 import { Flex, Button, Text } from 'common-uikitstrungdao'
+import styled from 'styled-components'
+
+const StyledWrapper = styled(Flex)`
+  width: 100%;
+  margin-bottom: 40px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 60%;
+    margin-right: 24px;
+  }
+`
 
 const ProjectInfo = () => {
   return (
-    <Flex flexDirection="column" style={{
-      width: '60%',
-      marginRight: '24px',
-    }}>
+    <StyledWrapper flexDirection="column">
       <Flex>
         <Button mr="10px" variant="tertiary">
           WEBSITE
@@ -41,7 +48,7 @@ const ProjectInfo = () => {
         dynamic fees. Features will be added as key technical and ecosystem pieces become available on Solana, i.e.
         inter-program composability, price oracles, etc.
       </Text>
-    </Flex>
+    </StyledWrapper>
   )
 }
 

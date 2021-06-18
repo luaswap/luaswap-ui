@@ -42,14 +42,17 @@ const ImageContainer = styled.div`
   margin-right: 10px;
 `
 
+const CardWrapper = styled(Card)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 60%;
+    margin-right: 24px;
+  }
+`
+
 const PoolSummary = () => {
   return (
-    <Card
-      style={{
-        width: '60%',
-        marginRight: '24px',
-      }}
-    >
+    <CardWrapper>
       <CardBody
         style={{
           height: '350px',
@@ -106,7 +109,7 @@ const PoolSummary = () => {
           <Text color="secondary">88.88%</Text>
         </Flex>
       </CardBody>
-    </Card>
+    </CardWrapper>
   )
 }
 

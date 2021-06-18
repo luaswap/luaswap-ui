@@ -29,7 +29,7 @@ const Hero = () => {
   const { t } = useTranslation()
 
   return (
-    <Box mb="32px">
+    <Box>
       <StyledHero>
         <Container>
           <Heading as="h1" scale="xl" mb="24px">

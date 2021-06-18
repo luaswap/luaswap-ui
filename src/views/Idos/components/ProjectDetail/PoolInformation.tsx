@@ -3,7 +3,11 @@ import { TabMenu, Tab } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 
 const Row = styled.div`
-  width: 40%;
+  width: 100%;
+  margin-bottom: 40px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 40%;
+  }
 `
 
 const PoolInformation = () => {

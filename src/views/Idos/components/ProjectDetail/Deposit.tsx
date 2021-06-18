@@ -1,8 +1,18 @@
 import React, { useState } from 'react'
 import { Card, CardBody, Flex, Button, Text } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
+import styled from 'styled-components'
 import UnlockButton from 'components/UnlockButton'
 import ModalInput from 'components/ModalInput'
+
+const CardWrapper = styled(Card)`
+  width: 100%;
+  margin-top: 24px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 40%;
+    margin-top: 0px;
+  }
+`
 
 const Deposit = () => {
   const { account } = useWeb3React()
@@ -20,11 +30,7 @@ const Deposit = () => {
   }
 
   return (
-    <Card
-      style={{
-        width: '40%',
-      }}
-    >
+    <CardWrapper>
       <CardBody
         style={{
           display: 'flex',
@@ -62,7 +68,7 @@ const Deposit = () => {
           </Text>
         </Flex>
       </CardBody>
-    </Card>
+    </CardWrapper>
   )
 }
 
