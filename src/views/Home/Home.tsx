@@ -2,9 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import Web3 from 'web3'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
-
-import { Heading, Text, BaseLayout, Input, Button, Flex, useModal, ChevronDownIcon } from 'common-u
-import { useTranslation } from 'contexts/Localization'
+import { Heading, Text, BaseLayout, Input, Button, Flex, useModal, ChevronDownIcon } from 'common-uikitstrungdao'
 import PageHeader from 'components/PageHeader'
 
 // import { useAppDispatch } from 'state'
@@ -53,8 +51,8 @@ const StyleWrapper = styled.div`
 const IconWrapper = styled.div`
   width: 30px;
   height: 30px;
-  background-color: #d9f9f0;
-  color: #00d897;
+  background-color: #D9F9F0;
+  color: #00D897;
   text-align: center;
   line-height: 30px;
   border-radius: 50px;
@@ -260,7 +258,7 @@ const Home: React.FC = () => {
             <CardValue value={totalInUSD} lineHeight="1.5" fontSize="25" />
           </Card>
         </Cards>
-      </Page>
+      </Page >
     </>
   )
 }
