@@ -96,3 +96,8 @@ export const useBlock = () => {
 export const useInitialBlock = () => {
   return useSelector((state: State) => state.block.initialBlock)
 }
+// Blockfolio
+
+// export const useWallet = () => {
+//   return useSelect((state: State) => state.blockfolio.wallets)
+// }

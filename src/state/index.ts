@@ -4,6 +4,7 @@ import farmsReducer from './farms'
 import pricesReducer from './prices'
 import profileReducer from './profile'
 import blockReducer from './block'
+import blockfolioReducer from './blockfolio'
 
 const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
@@ -12,6 +13,7 @@ const store = configureStore({
     farms: farmsReducer,
     prices: pricesReducer,
     profile: profileReducer,
+    blockfolio: blockfolioReducer
   },
 })
 
