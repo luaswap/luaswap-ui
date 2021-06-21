@@ -24,6 +24,7 @@ import {
   getChainlinkOracleContract,
   getSouschefV2Contract,
   getLuaContract,
+  getLuaIdoContract
 } from 'utils/contractHelpers'
 
 /**
@@ -91,6 +92,11 @@ export const useMasterchef = (chainId: number) => {
 export const useLuaContract = (chainId: number) => {
   const web3 = useWeb3()
   return useMemo(() => getLuaContract(web3, chainId), [web3, chainId])
+}
+
+export const useLuaIdoContract = (chainId: number) => {
+  const web3 = useWeb3()
+  return useMemo(() => getLuaIdoContract(web3, chainId), [web3, chainId])
 }
 
 export const useSousChef = (id) => {

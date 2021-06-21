@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'contexts/Localization'
 import { Route, useRouteMatch, Link } from 'react-router-dom'
+import { useWeb3React } from '@web3-react/core'
 import { ButtonMenu, ButtonMenuItem, Flex } from 'common-uikitstrungdao'
-import Container from 'components/layout/Container'
+import { useLuaIdoContract } from 'hooks/useContract'
 import Page from 'components/layout/Page'
 import Hero from './components/Hero'
 import CurrentIdo from './components/CurrentIdo'
@@ -11,6 +12,14 @@ import PastIdo from './components/PastIdo'
 const Idos = () => {
   const { t } = useTranslation()
   const { path, url, isExact } = useRouteMatch()
+  const { chainId, account } = useWeb3React()
+  const luaIdoContract = useLuaIdoContract(chainId)
+  
+  useEffect(() => {
+    if (chainId) {
+      luaIdoContract.methods.IDOs(0).call().then(res => console.log(res, 'res'))
+    }
+  }, [luaIdoContract, account, chainId])
 
   return (
     <>

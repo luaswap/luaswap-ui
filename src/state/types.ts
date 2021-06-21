@@ -50,6 +50,9 @@ export interface Profile {
   luaUnlockAble: string
 }
 
+export interface Ido {
+  value: number
+}
 // Slices states
 
 export interface FarmsState {
@@ -91,6 +94,10 @@ export interface ProfileState {
   isLoading: boolean
   isUnlock: boolean
   data: Profile
+}
+
+export interface IdoState {
+  idos: Ido[]
 }
 
 export type TeamResponse = {
