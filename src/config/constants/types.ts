@@ -59,8 +59,8 @@ export interface FarmConfig {
   quoteToken: Token
   multiplier?: string
   isCommunity?: boolean
-  addLiquidityLink :string
-  pairLink: string,
+  addLiquidityLink: string
+  pairLink: string
   dual?: {
     rewardPerBlock: number
     earnLabel: string

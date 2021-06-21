@@ -26,7 +26,7 @@ const useLocationParams = (location: Location = { pathname: '', search: '', stat
       location: { pathname },
     } = history
     const networkName = isSameNetwork ? CHAIN_MAP[chainId] : CHAIN_MAP[queryId]
-    history.push({
+    history.replace({
       pathname,
       ...(networkName && { search: `?network=${networkName}` }),
     })

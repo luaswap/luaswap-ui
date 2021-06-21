@@ -25,17 +25,9 @@ const StyledPage = styled(Container)`
 const PageMeta = () => {
   const { t } = useTranslation()
   const { pathname } = useLocation()
-  // const cakePriceUsd = usePriceCakeBusd()
-  // const cakePriceUsdDisplay = cakePriceUsd.eq(0)
-  //   ? ''
-  //   : `$${cakePriceUsd.toNumber().toLocaleString(undefined, {
-  //       minimumFractionDigits: 3,
-  //       maximumFractionDigits: 3,
-  //     })}`
-
-  const pageMeta = getCustomMeta(pathname, t) || {}
+  const path = pathname.split('/').filter((s) => s)
+  const pageMeta = getCustomMeta(path, t) || {}
   const { title, description, image } = { ...DEFAULT_META, ...pageMeta }
-  // const pageTitle = cakePriceUsdDisplay ? [title, cakePriceUsdDisplay].join(' - ') : title
 
   return (
     <Helmet>

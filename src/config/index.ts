@@ -50,7 +50,7 @@ export const LUA_CONTRACT: { [chainId in ChainId]: string } = {
   42: '',
   88: '0x7262fa193e9590B2E075c3C16170f3f2f32F5C74',
   89: '',
-  99: ''
+  99: '',
 }
 
 export const NUMBER_BLOCKS_PER_YEAR: { [chainId in ChainId]: number } = {

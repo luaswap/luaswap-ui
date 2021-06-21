@@ -43,7 +43,7 @@ const Menu = (props) => {
       updateLocation()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryChainId, updateLocation, location])
+  }, [queryChainId, updateLocation, location.pathname])
 
   const unlockLua = useCallback(() => {
     if (luaContract) {
