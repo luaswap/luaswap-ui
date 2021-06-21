@@ -28,4 +28,3 @@ export const useApprove = (lpContract: Contract) => {
 
   return { onApprove: handleApprove }
 }
-

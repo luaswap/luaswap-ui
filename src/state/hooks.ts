@@ -6,11 +6,7 @@ import { useAppDispatch } from 'state'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useWeb3 from 'hooks/useWeb3'
 import useRefresh from 'hooks/useRefresh'
-import {
-  setDefaultFarmData,
-  fetchFarms,
-  setBlock,
-} from './actions'
+import { setDefaultFarmData, fetchFarms, setBlock } from './actions'
 import { State, Farm, ProfileState, FarmsState } from './types'
 import { fetchProfile } from './profile'
 

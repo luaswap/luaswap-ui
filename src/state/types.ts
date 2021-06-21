@@ -4,11 +4,11 @@ import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constant
 export type TranslatableText =
   | string
   | {
-    key: string
-    data?: {
-      [key: string]: string | number
+      key: string
+      data?: {
+        [key: string]: string | number
+      }
     }
-  }
 
 export interface Farm extends FarmConfig {
   tokenAmountMc?: BigNumber
@@ -46,8 +46,8 @@ export interface Pool extends PoolConfig {
 }
 
 export interface Profile {
-  totalLuaLock: string,
-  luaUnlockAble: string,
+  totalLuaLock: string
+  luaUnlockAble: string
 }
 
 // Slices states

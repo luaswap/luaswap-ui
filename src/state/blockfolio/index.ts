@@ -4,8 +4,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { BlockfolioState } from 'state/types'
 
 const initialState: BlockfolioState = {
-    isLoading: false,
-    wallets: []
+  isLoading: false,
+  wallets: [],
 }
 // Thunks
 // export const fetchBlockfolio = createAsyncThunk(
@@ -27,25 +27,22 @@ const initialState: BlockfolioState = {
 //     })
 
 export const blockfolioSlice = createSlice({
-    name: 'blockfolio',
-    initialState,
-    reducers: {
-        setWallet: (state, action) => {
-            state.wallets = action.payload
-        }
-
-    }
-    // extraReducers: (builder) => {
-    //     builder.addCase(fetchBlockfolio.pending, (state) => {
-    //         state.isLoading = true
-    //     })
-    //     builder.addCase(fetchBlockfolio.fulfilled, (state, action) => {
-    //         state.isLoading = false
-    //         state.data = action.payload.data
-    //     })
-    // },
+  name: 'blockfolio',
+  initialState,
+  reducers: {
+    setWallet: (state, action) => {
+      state.wallets = action.payload
+    },
+  },
+  // extraReducers: (builder) => {
+  //     builder.addCase(fetchBlockfolio.pending, (state) => {
+  //         state.isLoading = true
+  //     })
+  //     builder.addCase(fetchBlockfolio.fulfilled, (state, action) => {
+  //         state.isLoading = false
+  //         state.data = action.payload.data
+  //     })
+  // },
 })
-
-
 
 export default blockfolioSlice.reducer

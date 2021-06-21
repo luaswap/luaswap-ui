@@ -13,7 +13,7 @@ const store = configureStore({
     farms: farmsReducer,
     prices: pricesReducer,
     profile: profileReducer,
-    blockfolio: blockfolioReducer
+    blockfolio: blockfolioReducer,
   },
 })
 
