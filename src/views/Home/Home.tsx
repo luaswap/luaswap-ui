@@ -2,8 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import Web3 from 'web3'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
-import { Heading, Text, BaseLayout, Input } from '@pancakeswap/uikit'
-import { Button, Flex, useModal } from 'common-uikitstrungdao'
+import { Heading, Text, BaseLayout, Input, Button, Flex, useModal, ChevronDownIcon } from 'common-uikitstrungdao'
 import PageHeader from 'components/PageHeader'
 
 // import { useAppDispatch } from 'state'
@@ -14,26 +13,14 @@ import PageHeader from 'components/PageHeader'
 import Page from 'components/layout/Page'
 import CardValue from './components/CardValue'
 import WalletModal from './components/WalletModal'
+import AddressModal from './components/AddressModal'
 import WalletIcon from './components/Icon/WalletIcon'
 import PoolIcon from './components/Icon/PoolIcon'
+import LinkIcon from './components/Icon/LinkIcon'
+import CalendarIcon from './components/Icon/CalendarIcon'
+import PencilIcon from './components/Icon/PencilIcon'
 
-const Hero = styled.div`
-  align-items: center;
-  background-repeat: no-repeat;
-  background-position: top center;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin: auto;
-  margin-bottom: 32px;
-  padding-top: 116px;
-  text-align: left;
-  ${({ theme }) => theme.mediaQueries.lg} {
-    background-position: left center, right center;
-    height: 165px;
-    padding-top: 0;
-  }
-`
+
 const Cards = styled(BaseLayout)`
   align-items: stretch;
   justify-content: stretch;
@@ -72,9 +59,49 @@ const IconWrapper = styled.div`
   font-size: 16px;
   margin-right: 10px;
 `
-
+const StyleWalletManage = styled.div`
+  position: absolute;
+  min-width: 300px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px #bbbbbb;
+  padding: 20px;
+  top: 100%;
+  right: 0;
+  border-radius: 15px;
+`
+const StyleTextBox = styled.div`
+  padding: 5px;
+  display: flex;
+  align-items: center;
+`
+const StyleBox = styled.div`
+  padding-top: 10px;
+  padding-bottom: 10px;
+`
+const AddressBox = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+  cursor: pointer;
+`
+const StyleAction = styled.div`
+  display: flex;
+  align-items: center;
+  svg{
+    border-radius: 100%;
+    border: 1px solid #dfe8f9;
+    font-size: 30px;
+    padding: 8px;
+    margin-left: 10px;
+    :hover{
+      background-color: #dfe8f9;
+    }
+  }
+`
 const Home: React.FC = () => {
   const { account } = useWeb3React()
+  const [isOpen, setIsOpen] = useState(false)
+  const watched = "0x63ca3de924fa6c9bd5c1e61bb787ae804d504490"
+  // const address = "0xe42BF6C707Ff70ADBCb5D3C41a18af9c7b59078d"
   // const [val, setVal] = useState('')
   // const [isAddress, setIsAddress] = useState(false)
   // // const { isLoading, data } = useWallet()
@@ -105,7 +132,8 @@ const Home: React.FC = () => {
   //   }
   // }, [dispatch, val, setVal, setIsAddress])
 
-  const [onPresentWallet] = useModal(<WalletModal />,)
+  const [onPresentWallet] = useModal(<WalletModal />)
+  const [onPresentAddress] = useModal(<AddressModal />)
   const totalInUSD = 100.000
   return (
     <>
@@ -126,9 +154,78 @@ const Home: React.FC = () => {
         </Flex>
         {!isAddress && <Text>Not ethereum address</Text>}
         </> */}
-
-        <Text> Net Worth</Text>
-        <CardValue value={totalInUSD} prefix='$' lineHeight="1.5" />
+        <Flex justifyContent="space-between">
+          <div>
+            <Text> Net Worth</Text>
+            <CardValue value={totalInUSD} prefix='$' lineHeight="1.5" />
+          </div>
+          <Flex position="relative">
+            <StyleTextBox onClick={() => setIsOpen(!isOpen)}>
+              <Text mr="10px">WalletManage</Text>
+              <ChevronDownIcon />
+            </StyleTextBox>
+            {isOpen &&
+              <StyleWalletManage>
+                <StyleBox>
+                  <Text color="#657795" pb="10px">Connected</Text>
+                  <AddressBox>
+                    <IconWrapper>
+                      <WalletIcon />
+                    </IconWrapper>
+                    <Text>{`${account.substring(0, 6)}...${account.substring(account.length - 4, account.length)}`}</Text>
+                    <StyleAction>
+                      <PencilIcon />
+                      <CalendarIcon />
+                      <LinkIcon />
+                    </StyleAction>
+                  </AddressBox>
+                  <AddressBox>
+                    <IconWrapper>
+                      <WalletIcon />
+                    </IconWrapper>
+                    <Text>{`${account.substring(0, 6)}...${account.substring(account.length - 4, account.length)}`}</Text>
+                    <StyleAction>
+                      <PencilIcon />
+                      <CalendarIcon />
+                      <LinkIcon />
+                    </StyleAction>
+                  </AddressBox>
+                </StyleBox>
+                <StyleBox>
+                  <Text color="#657795" pb="10px">Watched</Text>
+                  <AddressBox>
+                    <IconWrapper>
+                      <WalletIcon />
+                    </IconWrapper>
+                    <Text>{`${watched.substring(0, 6)}...${watched.substring(watched.length - 4, watched.length)}`}</Text>
+                    <StyleAction>
+                      <PencilIcon />
+                      <CalendarIcon />
+                      <LinkIcon />
+                    </StyleAction>
+                  </AddressBox>
+                  <AddressBox>
+                    <IconWrapper>
+                      <WalletIcon />
+                    </IconWrapper>
+                    <Text>{`${watched.substring(0, 6)}...${watched.substring(watched.length - 4, watched.length)}`}</Text>
+                    <StyleAction>
+                      <PencilIcon />
+                      <CalendarIcon />
+                      <LinkIcon />
+                    </StyleAction>
+                  </AddressBox>
+                </StyleBox>
+                <StyleBox style={{ borderTop: "1px solid #dfe8f9", cursor: "pointer" }} onClick={onPresentAddress}>
+                  <Text color="#657795">Manage Addresses</Text>
+                </StyleBox>
+                <StyleBox>
+                  <Text color="#657795">Network Settings</Text>
+                </StyleBox>
+              </StyleWalletManage>
+            }
+          </Flex>
+        </Flex>
         <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Account Overview</Text>
         <Cards>
           <Card onClick={onPresentWallet}>
