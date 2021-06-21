@@ -17,7 +17,7 @@ const Idos = () => {
       <Hero />
       <Page>
         <Flex mb="32px">
-          <ButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="subtle">
+          <ButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="primary">
             <ButtonMenuItem as={Link} to={`${url}`}>
               {t('Upcoming Pools')}
             </ButtonMenuItem>

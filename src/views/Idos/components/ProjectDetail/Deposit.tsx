@@ -43,6 +43,7 @@ const Deposit = () => {
           {account ? (
             <Button
               mb="15px"
+              variant="primary"
               onClick={() => {
                 setIsCommit(true)
               }}
@@ -52,7 +53,7 @@ const Deposit = () => {
           ) : (
             <UnlockButton />
           )}
-          {isCommit && (
+          {isCommit && account && (
             <ModalInput
               value={value}
               onSelectMax={handleSelectMax}

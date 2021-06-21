@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
-import { ResetCSS } from '@pancakeswap/uikit'
+import { ResetCSS } from 'common-uikitstrungdao'
 import BigNumber from 'bignumber.js'
 import useEagerConnect, { useInactiveListener } from 'hooks/useEagerConnect'
 import { useFetchProfile, useFetchPublicData } from 'state/hooks'

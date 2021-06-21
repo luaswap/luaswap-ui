@@ -46,7 +46,7 @@ const IfoSteps: React.FC = () => {
       case 0:
         return (
           <CardBody>
-            <Heading as="h4" color="secondary" mb="16px">
+            <Heading as="h4" color="primary" mb="16px">
               {t('Activate your Profile')}
             </Heading>
             <Text color="textSubtle" small mb="16px">
@@ -66,7 +66,7 @@ const IfoSteps: React.FC = () => {
       case 1:
         return (
           <CardBody>
-            <Heading as="h4" color="secondary" mb="16px">
+            <Heading as="h4" color="primary" mb="16px">
               {t('Guarantee your spot')}
             </Heading>
             <Text color="textSubtle" small>
@@ -80,7 +80,7 @@ const IfoSteps: React.FC = () => {
       case 2:
         return (
           <CardBody>
-            <Heading as="h4" color="secondary" mb="16px">
+            <Heading as="h4" color="primary" mb="16px">
               {t('Execute your right')}
             </Heading>
             <Text color="textSubtle" small>
@@ -93,7 +93,7 @@ const IfoSteps: React.FC = () => {
       case 3:
         return (
           <CardBody>
-            <Heading as="h4" color="secondary" mb="16px">
+            <Heading as="h4" color="primary" mb="16px">
               {t('Claim your tokens')}
             </Heading>
             <Text color="textSubtle" small>
@@ -108,7 +108,7 @@ const IfoSteps: React.FC = () => {
 
   return (
     <Wrapper>
-      <Heading as="h2" scale="xl" color="secondary" mb="24px" textAlign="center">
+      <Heading as="h2" scale="xl" mb="24px" textAlign="center">
         {t('How to "Luastarts"')}
       </Heading>
       <Stepper>

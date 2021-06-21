@@ -93,30 +93,30 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ status }) => {
         </Link>
         <Flex justifyContent="space-between" mb="10px">
           <Flex justifyContent="flex-start" flexDirection="column">
-            <Text color="secondary">Swap rate</Text>
+            <Text color="primary">Swap rate</Text>
             <Text>1 BUSD = 10 BBANK</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
-            <Text color="secondary">Cap</Text>
+            <Text color="primary">Cap</Text>
             <Text>1000000</Text>
           </Flex>
           <Flex justifyContent="flex-end" flexDirection="column">
-            <Text color="secondary">Access</Text>
+            <Text color="primary">Access</Text>
             <Text>Private</Text>
           </Flex>
         </Flex>
         <Flex justifyContent="space-between" mb="10px">
-          <Text color="secondary">Progress</Text>
-          <Text color="secondary">Participants: 9999</Text>
+          <Text color="primary">Progress</Text>
+          <Text color="primary">Participants: 9999</Text>
         </Flex>
         <Progress variant="round" primaryStep={50} />
         <Flex mt="10px" justifyContent="space-between">
           <Flex flexDirection="column">
-            <Text color="secondary">Min allocation</Text>
+            <Text color="primary">Min allocation</Text>
             <Text>100 LNFT</Text>
           </Flex>
           <Flex flexDirection="column">
-            <Text color="secondary">Max allocation</Text>
+            <Text color="primary">Max allocation</Text>
             <Text>1000 LNFT</Text>
           </Flex>
         </Flex>
