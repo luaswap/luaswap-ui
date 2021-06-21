@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Heading, Text, BaseLayout, Input } from '@pancakeswap/uikit'
 import { Button, Flex, useModal } from 'common-uikitstrungdao'
+import PageHeader from 'components/PageHeader'
 
 // import { useAppDispatch } from 'state'
 // import { useWallet } from 'state/hooks'
@@ -16,7 +17,23 @@ import WalletModal from './components/WalletModal'
 import WalletIcon from './components/Icon/WalletIcon'
 import PoolIcon from './components/Icon/PoolIcon'
 
-
+const Hero = styled.div`
+  align-items: center;
+  background-repeat: no-repeat;
+  background-position: top center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+  margin-bottom: 32px;
+  padding-top: 116px;
+  text-align: left;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    background-position: left center, right center;
+    height: 165px;
+    padding-top: 0;
+  }
+`
 const Cards = styled(BaseLayout)`
   align-items: stretch;
   justify-content: stretch;
@@ -91,23 +108,25 @@ const Home: React.FC = () => {
   const [onPresentWallet] = useModal(<WalletModal />,)
   const totalInUSD = 100.000
   return (
-    <Page>
-      {/* <Hero>
-        <Heading as="h1" scale="xl" mb="24px" color="secondary">
-          {t('Luaswap')}
+    <>
+      <PageHeader>
+        <Heading as="h1" scale="xl" color="secondary" mb="24px">
+          Manage your assets and liabilities in one simple interface.
         </Heading>
-        <Text>{t('The #1 AMM and yield farm')}</Text>
-      </Hero> */}
-      {/* <>
+        <Heading scale="lg" color="text">
+          Get unique access to opportunities in open finance.
+        </Heading>
+      </PageHeader>
+      <Page>
+        {/* <>
         <Text fontSize="40px">Manage your assets and liabilities in one simple interface.</Text>
         <Flex marginBottom="40px" marginTop="40px" maxWidth="600px" alignItems="center">
           <StyleInput onChange={handleChange} />
           <Button scale="md" onClick={handleSubmit}>Add Address</Button>
         </Flex>
         {!isAddress && <Text>Not ethereum address</Text>}
-      </> */}
-      {/* {account && */}
-      <>
+        </> */}
+
         <Text> Net Worth</Text>
         <CardValue value={totalInUSD} prefix='$' lineHeight="1.5" />
         <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Account Overview</Text>
@@ -142,9 +161,8 @@ const Home: React.FC = () => {
             <CardValue value={totalInUSD} lineHeight="1.5" fontSize="25" />
           </Card>
         </Cards>
-      </>
-      {/* } */}
-    </Page >
+      </Page >
+    </>
   )
 }
 
