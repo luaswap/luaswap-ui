@@ -4,11 +4,11 @@ import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constant
 export type TranslatableText =
   | string
   | {
-      key: string
-      data?: {
-        [key: string]: string | number
-      }
+    key: string
+    data?: {
+      [key: string]: string | number
     }
+  }
 
 export interface Farm extends FarmConfig {
   tokenAmountMc?: BigNumber
@@ -273,7 +273,18 @@ export interface PredictionsState {
   history: HistoryData
   bets: BetData
 }
+// Blockfolio
+export interface BlockfolioState {
+  isLoading: boolean
+  wallets: WalletProps[]
+}
 
+export interface WalletProps {
+  address: string
+  isConnected: boolean
+  isActive: boolean
+  walletType: string
+}
 // Global state
 
 export interface State {
@@ -286,4 +297,5 @@ export interface State {
   profile: ProfileState
   teams: TeamsState
   collectibles: CollectiblesState
+  blockfolio: BlockfolioState
 }
