@@ -58,9 +58,9 @@ const Deposit = () => {
               value={value}
               onSelectMax={handleSelectMax}
               onChange={handleChange}
-              max='100'
-              symbol='USDT'
-              inputTitle='Deposit'
+              max="100"
+              symbol="USDT"
+              inputTitle="Deposit"
             />
           )}
           <Text textAlign="center" mt="10px">

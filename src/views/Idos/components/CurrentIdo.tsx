@@ -16,7 +16,7 @@ const CurrentIdo = () => {
         Opening Pools
       </Text>
       <Row>
-        <PoolDetail status="Opening"/>
+        <PoolDetail status="Opening" />
       </Row>
       <Text fontSize="20px" textAlign="center">
         Upcoming Pools

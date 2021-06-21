@@ -12,7 +12,7 @@ export const getCustomMeta = (path: string[], t: ContextApi['t']): PageMeta => {
   if (path.length !== 0) {
     routeName = path[0]
   }
-  
+
   switch (routeName) {
     case '/':
       return {

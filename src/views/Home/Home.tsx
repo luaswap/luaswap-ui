@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import Web3 from 'web3'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
-import {  Heading, Text, BaseLayout, Input, Button, Flex, useModal   } from 'common-uikitstrungdao'
+import { Heading, Text, BaseLayout, Input, Button, Flex, useModal } from 'common-uikitstrungdao'
 import { useTranslation } from 'contexts/Localization'
 import PageHeader from 'components/PageHeader'
 
@@ -64,8 +64,8 @@ const StyleWrapper = styled.div`
 const IconWrapper = styled.div`
   width: 30px;
   height: 30px;
-  background-color: #D9F9F0;
-  color: #00D897;
+  background-color: #d9f9f0;
+  color: #00d897;
   text-align: center;
   line-height: 30px;
   border-radius: 50px;
@@ -105,8 +105,8 @@ const Home: React.FC = () => {
   //   }
   // }, [dispatch, val, setVal, setIsAddress])
 
-  const [onPresentWallet] = useModal(<WalletModal />,)
-  const totalInUSD = 100.000
+  const [onPresentWallet] = useModal(<WalletModal />)
+  const totalInUSD = 100.0
   return (
     <>
       <PageHeader>
@@ -128,8 +128,11 @@ const Home: React.FC = () => {
         </> */}
 
         <Text> Net Worth</Text>
-        <CardValue value={totalInUSD} prefix='$' lineHeight="1.5" />
-        <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Account Overview</Text>
+        <CardValue value={totalInUSD} prefix="$" lineHeight="1.5" />
+        <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px">
+          {' '}
+          Account Overview
+        </Text>
         <Cards>
           <Card onClick={onPresentWallet}>
             <StyleWrapper>
@@ -161,7 +164,7 @@ const Home: React.FC = () => {
             <CardValue value={totalInUSD} lineHeight="1.5" fontSize="25" />
           </Card>
         </Cards>
-      </Page >
+      </Page>
     </>
   )
 }

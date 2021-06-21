@@ -66,9 +66,14 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ status }) => {
             <img src="https://i.ibb.co/YtdXYjg/cross.jpg" alt="img" style={{ width: '100%', height: '100%' }} />
           </ImageContainer>
           <PoolInfoBlock>
-            <Text fontSize="24px" bold onClick={navigateToProjectDetail} style={{
-              cursor: 'pointer'
-            }}>
+            <Text
+              fontSize="24px"
+              bold
+              onClick={navigateToProjectDetail}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
               Solana
             </Text>
             <Flex marginBottom="5px" alignItems="center">

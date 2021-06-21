@@ -97,7 +97,10 @@ const IfoSteps: React.FC = () => {
               {t('Claim your tokens')}
             </Heading>
             <Text color="textSubtle" small>
-              {t('When the IDO finishes, you can claim the tokens you bought, and any of unspent money will be returned to your wallet')} <br />
+              {t(
+                'When the IDO finishes, you can claim the tokens you bought, and any of unspent money will be returned to your wallet',
+              )}{' '}
+              <br />
             </Text>
           </CardBody>
         )

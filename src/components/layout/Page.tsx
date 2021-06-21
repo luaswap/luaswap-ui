@@ -25,7 +25,7 @@ const StyledPage = styled(Container)`
 const PageMeta = () => {
   const { t } = useTranslation()
   const { pathname } = useLocation()
-  const path = pathname.split('/').filter(s => s)
+  const path = pathname.split('/').filter((s) => s)
   const pageMeta = getCustomMeta(path, t) || {}
   const { title, description, image } = { ...DEFAULT_META, ...pageMeta }
 

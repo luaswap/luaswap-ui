@@ -39,7 +39,7 @@ export const profileSlice = createSlice({
     }),
     unlockLuaStatus: (state, action) => {
       state.isUnlock = action.payload
-    }
+    },
   },
 })
 
