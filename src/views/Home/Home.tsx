@@ -20,7 +20,11 @@ import LinkIcon from './components/Icon/LinkIcon'
 import CalendarIcon from './components/Icon/CalendarIcon'
 import PencilIcon from './components/Icon/PencilIcon'
 
-
+const Line = styled.hr`
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  margin-top: 0;
+  margin-bottom: 10px;
+`
 const Cards = styled(BaseLayout)`
   align-items: stretch;
   justify-content: stretch;
@@ -35,7 +39,7 @@ const Card = styled.div`
   align-items: center;
   padding: 20px;
   border-radius: 15px;
-  border: 1px solid #dfe8f9;
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   cursor: pointer;
 `
 const StyleInput = styled(Input)`
@@ -62,8 +66,8 @@ const IconWrapper = styled.div`
 const StyleWalletManage = styled.div`
   position: absolute;
   min-width: 300px;
-  background-color: #fff;
-  box-shadow: 0 2px 8px #bbbbbb;
+  background-color: ${({ theme }) => theme.colors.background};
+  box-shadow: 0 2px 8px ${({ theme }) => theme.colors.cardBorder};
   padding: 20px;
   top: 100%;
   right: 0;
@@ -75,7 +79,6 @@ const StyleTextBox = styled.div`
   align-items: center;
 `
 const StyleBox = styled.div`
-  padding-top: 10px;
   padding-bottom: 10px;
 `
 const AddressBox = styled.div`
@@ -88,15 +91,17 @@ const StyleAction = styled.div`
   align-items: center;
   svg{
     border-radius: 100%;
-    border: 1px solid #dfe8f9;
+    border: 1px solid ${({ theme }) => theme.colors.cardBorder};
     font-size: 30px;
     padding: 8px;
     margin-left: 10px;
+    color: ${({ theme }) => theme.colors.text};
     :hover{
-      background-color: #dfe8f9;
+      background-color: ${({ theme }) => theme.colors.backgroundDisabled};
     }
   }
 `
+
 const Home: React.FC = () => {
   const { account } = useWeb3React()
   const [isOpen, setIsOpen] = useState(false)
@@ -167,7 +172,7 @@ const Home: React.FC = () => {
             {isOpen &&
               <StyleWalletManage>
                 <StyleBox>
-                  <Text color="#657795" pb="10px">Connected</Text>
+                  <Text pb="10px">Connected</Text>
                   <AddressBox>
                     <IconWrapper>
                       <WalletIcon />
@@ -192,7 +197,7 @@ const Home: React.FC = () => {
                   </AddressBox>
                 </StyleBox>
                 <StyleBox>
-                  <Text color="#657795" pb="10px">Watched</Text>
+                  <Text pb="10px">Watched</Text>
                   <AddressBox>
                     <IconWrapper>
                       <WalletIcon />
@@ -216,11 +221,12 @@ const Home: React.FC = () => {
                     </StyleAction>
                   </AddressBox>
                 </StyleBox>
-                <StyleBox style={{ borderTop: "1px solid #dfe8f9", cursor: "pointer" }} onClick={onPresentAddress}>
-                  <Text color="#657795">Manage Addresses</Text>
+                <Line />
+                <StyleBox style={{ cursor: "pointer" }} onClick={onPresentAddress}>
+                  <Text>Manage Addresses</Text>
                 </StyleBox>
                 <StyleBox>
-                  <Text color="#657795">Network Settings</Text>
+                  <Text>Network Settings</Text>
                 </StyleBox>
               </StyleWalletManage>
             }

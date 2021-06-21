@@ -104,7 +104,7 @@ const Table: React.FC = () => {
   return (
     // <Container>
     <TableContainer>
-      <Text fontSize="16px" color="#657795" marginBottom="15px">
+      <Text fontSize="16px" marginBottom="15px">
         Ethereum
       </Text>
       <TableWrapper ref={tableWrapperEl}>
@@ -112,7 +112,7 @@ const Table: React.FC = () => {
           <TableHead>
             <tr>
               {columns.map((i) => {
-                return <th key={i[1]}> {i[0]}</th>
+                return <th key={i[1]}><Text> {i[0]} </Text></th>
               })}
             </tr>
           </TableHead>
@@ -128,9 +128,9 @@ const Table: React.FC = () => {
                       </LinkExternal>
                     </CellInner>
                   </StyleTd>
-                  <StyleTd> {row.amount}</StyleTd>
-                  <StyleTd> {row.symbol}</StyleTd>
-                  <StyleTd> {row.usd}</StyleTd>
+                  <StyleTd><Text>{row.amount} </Text></StyleTd>
+                  <StyleTd><Text> {row.symbol}</Text></StyleTd>
+                  <StyleTd><Text> {row.usd}</Text></StyleTd>
                 </tr>
               )
             })}
