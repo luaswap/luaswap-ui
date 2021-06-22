@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
+import { useLuaIdoContract } from 'hooks/useContract'
 import { Card, CardBody, Flex, Button, Text } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
@@ -14,19 +16,36 @@ const CardWrapper = styled(Card)`
   }
 `
 
-const Deposit = () => {
-  const { account } = useWeb3React()
+interface DepositProps {
+  maxAmount: string
+  totalCommited: string
+}
+
+const Deposit: React.FC<DepositProps> = ({ maxAmount, totalCommited }) => {
+  const { account, chainId } = useWeb3React()
   const [isCommit, setIsCommit] = useState(false)
   const [value, setValue] = useState('0')
+  const luaIdoContract = useLuaIdoContract(chainId)
+
+  const maxAmountAllowed = useMemo(() => {
+    return new BigNumber(maxAmount).minus(new BigNumber(totalCommited)).toString()
+  }, [maxAmount, totalCommited])
 
   const handleSelectMax = () => {
-    console.log('select max')
+    setValue(maxAmountAllowed)
   }
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget.validity.valid) {
       setValue(e.currentTarget.value.replace(/,/g, '.'))
     }
+  }
+
+  const onHandleCommit = async () => {
+    const res = await luaIdoContract.methods.commit('0', '1000').send({
+      from: account,
+      value: '1000'
+    })
   }
 
   return (
@@ -45,7 +64,11 @@ const Deposit = () => {
               mb="15px"
               variant="primary"
               onClick={() => {
-                setIsCommit(true)
+                if (isCommit) {
+                  onHandleCommit()
+                } else {
+                  setIsCommit(true)
+                }
               }}
             >
               Commit your USDT
@@ -58,7 +81,7 @@ const Deposit = () => {
               value={value}
               onSelectMax={handleSelectMax}
               onChange={handleChange}
-              max="100"
+              max={maxAmountAllowed}
               symbol="USDT"
               inputTitle="Deposit"
             />

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import Web3 from 'web3'
 import { getLuaIdoContract } from 'utils/contractHelpers'
 import { getFullDisplayBalance } from 'utils/formatBalance'
@@ -18,42 +19,35 @@ export interface IdoDetail {
   totalCommittedAmount: string
 }
 
-const mappingIdoResponse = (idoList: any[]): IdoDetail[] => {
-  const result: IdoDetail[] = []
-  idoList.forEach(({
-    claimAt,
-    closeAt,
-    creator,
-    idoToken,
-    maxAmountPay,
-    minAmountPay,
-    openAt,
-    payToken,
-    swappedAmountIDO,
-    swappedAmountPay,
-    totalAmountIDO,
-    totalAmountPay,
-    totalCommittedAmount,
-  }) => {
-    result.push({
-      claimAt,
-      closeAt,
-      creator,
-      idoToken,
-      maxAmountPay: getFullDisplayBalance(maxAmountPay),
-      minAmountPay: getFullDisplayBalance(minAmountPay),
-      openAt,
-      payToken,
-      swappedAmountIDO,
-      swappedAmountPay,
-      totalAmountIDO: getFullDisplayBalance(totalAmountIDO),
-      totalAmountPay: getFullDisplayBalance(totalAmountPay),
-      totalCommittedAmount,
-    })
-  })
-
-  return result
-}
+export const mappingIdoResponse = ({
+  claimAt,
+  closeAt,
+  creator,
+  idoToken,
+  maxAmountPay,
+  minAmountPay,
+  openAt,
+  payToken,
+  swappedAmountIDO,
+  swappedAmountPay,
+  totalAmountIDO,
+  totalAmountPay,
+  totalCommittedAmount,
+}): IdoDetail => ({
+  claimAt,
+  closeAt,
+  creator,
+  idoToken,
+  maxAmountPay: getFullDisplayBalance(maxAmountPay),
+  minAmountPay: getFullDisplayBalance(minAmountPay),
+  openAt,
+  payToken,
+  swappedAmountIDO,
+  swappedAmountPay,
+  totalAmountIDO: getFullDisplayBalance(totalAmountIDO),
+  totalAmountPay: getFullDisplayBalance(totalAmountPay),
+  totalCommittedAmount,
+})
 
 export const fetchIdosInformation = async (chainId: number, web3?: Web3): Promise<IdoDetail[]> => {
   try {
@@ -67,8 +61,9 @@ export const fetchIdosInformation = async (chainId: number, web3?: Web3): Promis
     }
 
     const result = await Promise.all(idoList)
-    return mappingIdoResponse(result)
+    return result.map((item) => mappingIdoResponse(item))
   } catch (error) {
+    console.log(error, 'fail to fetch')
     return []
   }
 }

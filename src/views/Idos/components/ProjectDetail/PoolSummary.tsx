@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import BigNumber from 'bignumber.js'
 import {
   Card,
   CardBody,
@@ -12,6 +13,7 @@ import {
   Progress,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
+import { IdoDetail } from 'state/ido/fetchIdosData'
 
 const IconWrapper = styled.a`
   color: #212121;
@@ -50,7 +52,23 @@ const CardWrapper = styled(Card)`
   }
 `
 
-const PoolSummary = () => {
+interface PoolSummaryProps {
+  idoDetail: IdoDetail | null
+}
+
+const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
+  const { totalAmountIDO, totalAmountPay, totalCommittedAmount } = idoDetail
+  const rate = useMemo(() => {
+    return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(2)
+  }, [totalAmountIDO, totalAmountPay])
+
+  const progressPercentage = useMemo(() => {
+    if (totalCommittedAmount && totalAmountPay) {
+      return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
+    }
+
+    return 0
+  }, [totalCommittedAmount, totalAmountPay])
   return (
     <CardWrapper>
       <CardBody
@@ -92,21 +110,23 @@ const PoolSummary = () => {
         <Flex justifyContent="space-between" mb="10px">
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
-            <Text>1 BUSD = 10 BBANK</Text>
+            <Text>1 BUSD = {rate} BBANK</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>
-            <Text>1000000</Text>
+            <Text>{totalAmountIDO}</Text>
           </Flex>
           <Flex justifyContent="flex-end" flexDirection="column">
             <Text color="primary">Access</Text>
             <Text>Private</Text>
           </Flex>
         </Flex>
-        <Progress variant="round" primaryStep={90} />
+        <Progress variant="round" primaryStep={progressPercentage} />
         <Flex justifyContent="space-between" mt="10px">
-          <Text color="secondary">88000 USDT/1000000 USDT</Text>
-          <Text color="secondary">88.88%</Text>
+          <Text color="secondary">
+            {totalCommittedAmount} USDT/{totalAmountPay} USDT
+          </Text>
+          <Text color="secondary">{progressPercentage}%</Text>
         </Flex>
       </CardBody>
     </CardWrapper>

@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constants/types'
+import { IdoDetail } from './ido/fetchIdosData'
 
 export type TranslatableText =
   | string
@@ -50,9 +51,6 @@ export interface Profile {
   luaUnlockAble: string
 }
 
-export interface Ido {
-  value: number
-}
 // Slices states
 
 export interface FarmsState {
@@ -97,7 +95,7 @@ export interface ProfileState {
 }
 
 export interface IdoState {
-  idos: Ido[]
+  idos: IdoDetail[]
   isLoading: boolean
 }
 
@@ -306,4 +304,5 @@ export interface State {
   teams: TeamsState
   collectibles: CollectiblesState
   blockfolio: BlockfolioState
+  idos: IdoState
 }

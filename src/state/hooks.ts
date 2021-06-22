@@ -7,7 +7,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import useWeb3 from 'hooks/useWeb3'
 import useRefresh from 'hooks/useRefresh'
 import { setDefaultFarmData, fetchFarms, setBlock } from './actions'
-import { State, Farm, ProfileState, FarmsState } from './types'
+import { State, Farm, ProfileState, FarmsState, IdoState } from './types'
 import { fetchProfile } from './profile'
 import { fetchAllIdoData } from './ido'
 
@@ -75,6 +75,13 @@ export const useFarmUser = (pid) => {
     stakedBalance: farm?.userData ? new BigNumber(farm.userData.stakedBalance) : BIG_ZERO,
     earnings: farm?.userData ? new BigNumber(farm.userData.earnings) : BIG_ZERO,
   }
+}
+
+// IDO
+export const useIdo = (): IdoState => {
+  const idos = useSelector((state: State) => state.idos)
+
+  return idos
 }
 
 // Profile
