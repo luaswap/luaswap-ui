@@ -9,6 +9,7 @@ import useRefresh from 'hooks/useRefresh'
 import { setDefaultFarmData, fetchFarms, setBlock } from './actions'
 import { State, Farm, ProfileState, FarmsState } from './types'
 import { fetchProfile } from './profile'
+import { fetchAllIdoData } from './ido'
 
 export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()
@@ -36,6 +37,16 @@ export const useFetchPublicData = () => {
 
     return () => clearInterval(interval)
   }, [dispatch, web3])
+}
+
+export const useFetchIdoData = () => {
+  const dispatch = useAppDispatch()
+  const web3 = useWeb3()
+  const { chainId } = useWeb3React()
+
+  useEffect(() => {
+    dispatch(fetchAllIdoData(chainId, web3))
+  }, [chainId, web3, dispatch])
 }
 
 // Farms

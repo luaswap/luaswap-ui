@@ -98,6 +98,7 @@ export interface ProfileState {
 
 export interface IdoState {
   idos: Ido[]
+  isLoading: boolean
 }
 
 export type TeamResponse = {

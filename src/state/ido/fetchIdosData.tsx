@@ -1,40 +1,74 @@
-import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
-import erc20ABI from 'config/abi/erc20.json'
-import multicall from 'utils/multicall'
-import { getLuaIdoAddress, getAddress } from 'utils/addressHelpers'
-import { getERC20Contract } from 'utils/contractHelpers'
-import { FarmConfig } from 'config/constants/types'
+import { getLuaIdoContract } from 'utils/contractHelpers'
+import { getFullDisplayBalance } from 'utils/formatBalance'
 
-export const fetchIdosInformation = async (
-  account: string,
-  farmsToFetch: FarmConfig[],
-  chainId: number,
-  web3?: Web3,
-) => {
-  const luaSwapIdoAddress = getLuaIdoAddress(chainId)
-
+export interface IdoDetail {
+  claimAt: string
+  closeAt: string
+  creator: string
+  idoToken: string
+  maxAmountPay: string
+  minAmountPay: string
+  openAt: string
+  payToken: string
+  swappedAmountIDO: string
+  swappedAmountPay: string
+  totalAmountIDO: string
+  totalAmountPay: string
+  totalCommittedAmount: string
 }
 
-export const fetchFarmUserTokenBalances = async (
-  account: string,
-  farmsToFetch: FarmConfig[],
-  chainId: number,
-  web3?: Web3,
-) => {
-  const calls = farmsToFetch.map((farm) => {
-    const lpContractAddress = getAddress(farm.lpAddresses, chainId)
-    return {
-      address: lpContractAddress,
-      name: 'balanceOf',
-      params: [account],
+const mappingIdoResponse = (idoList: any[]): IdoDetail[] => {
+  const result: IdoDetail[] = []
+  idoList.forEach(({
+    claimAt,
+    closeAt,
+    creator,
+    idoToken,
+    maxAmountPay,
+    minAmountPay,
+    openAt,
+    payToken,
+    swappedAmountIDO,
+    swappedAmountPay,
+    totalAmountIDO,
+    totalAmountPay,
+    totalCommittedAmount,
+  }) => {
+    result.push({
+      claimAt,
+      closeAt,
+      creator,
+      idoToken,
+      maxAmountPay: getFullDisplayBalance(maxAmountPay),
+      minAmountPay: getFullDisplayBalance(minAmountPay),
+      openAt,
+      payToken,
+      swappedAmountIDO,
+      swappedAmountPay,
+      totalAmountIDO: getFullDisplayBalance(totalAmountIDO),
+      totalAmountPay: getFullDisplayBalance(totalAmountPay),
+      totalCommittedAmount,
+    })
+  })
+
+  return result
+}
+
+export const fetchIdosInformation = async (chainId: number, web3?: Web3): Promise<IdoDetail[]> => {
+  try {
+    const idoList = []
+    const luaIdoContract = getLuaIdoContract(web3, chainId)
+    const numberOfIdo = await luaIdoContract.methods.numberOfIDO().call()
+
+    for (let i = 0; i < numberOfIdo; i++) {
+      const idoDetail = luaIdoContract.methods.IDOs(i).call()
+      idoList.push(idoDetail)
     }
-  })
 
-  const rawTokenBalances = await multicall(erc20ABI, calls, chainId, web3)
-  const parsedTokenBalances = rawTokenBalances.map((tokenBalance) => {
-    return new BigNumber(tokenBalance).toJSON()
-  })
-  return parsedTokenBalances
+    const result = await Promise.all(idoList)
+    return mappingIdoResponse(result)
+  } catch (error) {
+    return []
+  }
 }
-
