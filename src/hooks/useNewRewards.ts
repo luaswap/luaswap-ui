@@ -32,7 +32,6 @@ const getNewRewardPerBlock = async (web3, pid1 = 0, chainId) => {
     true,
     chainId,
   )
-  console.log(pool)
   const poolReward = await UnknownBlock(
     // @ts-ignore
     chef._address,

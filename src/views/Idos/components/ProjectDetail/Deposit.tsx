@@ -4,10 +4,13 @@ import { Card, CardBody, Flex, Button, Text } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
+import { IdoDetail } from 'state/ido/fetchIdosData'
 import useDepositIdo from 'hooks/useDepositIdo'
 import UnlockButton from 'components/UnlockButton'
 import ModalInput from 'components/ModalInput'
 import { getDecimalAmount } from 'utils/formatBalance'
+import { compareWithCurrentDateTime, getUtcDateString } from 'utils/formatTime'
+import Timer from '../Timer'
 
 const CardWrapper = styled(Card)`
   width: 100%;
@@ -19,19 +22,20 @@ const CardWrapper = styled(Card)`
 `
 
 interface DepositProps {
-  maxAmount: string
+  idoDetail: IdoDetail | null
   totalCommited: string
 }
 
-const Deposit: React.FC<DepositProps> = ({ maxAmount, totalCommited }) => {
+const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
   const { account } = useWeb3React()
   const [isCommit, setIsCommit] = useState(false)
   const [value, setValue] = useState('0')
   const { toastSuccess, toastError } = useToast()
   const { onDeposit } = useDepositIdo()
+  const { maxAmountPay, claimAt, openAt, closeAt } = idoDetail
   const maxAmountAllowed = useMemo(() => {
-    return new BigNumber(maxAmount).minus(new BigNumber(totalCommited)).toString()
-  }, [maxAmount, totalCommited])
+    return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommited)).toString()
+  }, [maxAmountPay, totalCommited])
 
   const handleSelectMax = () => {
     setValue(maxAmountAllowed)
@@ -64,6 +68,7 @@ const Deposit: React.FC<DepositProps> = ({ maxAmount, totalCommited }) => {
         }}
       >
         <Flex justifyContent="center" alignItems="center" flexDirection="column">
+          <Timer openAt={openAt} closeAt={closeAt} />
           {account ? (
             <Button
               mb="15px"
@@ -93,7 +98,7 @@ const Deposit: React.FC<DepositProps> = ({ maxAmount, totalCommited }) => {
           )}
           <Text textAlign="center" mt="10px">
             Deposit USDT to commit the slots, Unspent USDT can be withdrawn when IDO finishes. Token can be claimed
-            after Fri, 25 Jun 2021 08.00.00 GMT
+            after {getUtcDateString(claimAt)}
           </Text>
         </Flex>
       </CardBody>

@@ -58,7 +58,6 @@ interface PoolSummaryProps {
 
 const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
   const { totalAmountIDO, totalAmountPay, totalCommittedAmount } = idoDetail
-  console.log(idoDetail, 'ido detail ?')
   const rate = useMemo(() => {
     return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(2)
   }, [totalAmountIDO, totalAmountPay])
