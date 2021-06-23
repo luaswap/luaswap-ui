@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js';
 import addresses from 'config/constants/contracts'
 import tokens from 'config/constants/tokens'
 import { Address } from 'config/constants/types'
@@ -67,4 +68,6 @@ export const getChainlinkOracleAddress = () => {
   return getAddress(addresses.chainlinkOracle)
 }
 
-
+export const isEmptyAddress = (address) => {
+  return new BigNumber(address).toNumber() === 0
+}

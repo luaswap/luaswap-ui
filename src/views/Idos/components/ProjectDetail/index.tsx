@@ -6,6 +6,8 @@ import Page from 'components/layout/Page'
 import { IdoDetail, mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { useLuaIdoContract } from 'hooks/useContract'
 import makeBatchRequest from 'utils/makeBatchRequest'
+import { getFullDisplayBalance } from 'utils/formatBalance'
+import { useBlock } from 'state/hooks'
 import Steps from './Steps'
 import Deposit from './Deposit'
 import PoolSummary from './PoolSummary'
@@ -46,6 +48,7 @@ const ProjectDetail = () => {
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
   const [totalCommited, setTotalCommited] = useState<string>('0')
   const luaIdoContract = useLuaIdoContract(chainId)
+  const { currentBlock } = useBlock()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,12 +61,11 @@ const ProjectDetail = () => {
       const idoDetailInfo = await luaIdoContract.methods.IDOs(0).call()
       setIdoDetail(mappingIdoResponse(idoDetailInfo))
       const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
-      console.log(commitedAmount, 'commited? detail')
-      setTotalCommited(commitedAmount)
+      setTotalCommited(getFullDisplayBalance(commitedAmount))
     }
 
     fetchData()
-  }, [luaIdoContract, account])
+  }, [luaIdoContract, account, currentBlock])
 
   return (
     <Page>

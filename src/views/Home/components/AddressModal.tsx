@@ -3,7 +3,7 @@ import { Modal } from 'common-uikitstrungdao'
 import InputAddress from './InputAddress'
 
 interface AddressModalProps {
-    onDismiss?: () => void
+  onDismiss?: () => void
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {

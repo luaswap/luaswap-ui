@@ -53,8 +53,8 @@ const StyleWrapper = styled.div`
 const IconWrapper = styled.div`
   width: 30px;
   height: 30px;
-  background-color: #D9F9F0;
-  color: #00D897;
+  background-color: #d9f9f0;
+  color: #00d897;
   text-align: center;
   line-height: 30px;
   border-radius: 50px;
@@ -124,11 +124,14 @@ const Home: React.FC = () => {
         <Flex justifyContent="space-between">
           <div>
             <Text> Net Worth</Text>
-            <CardValue value={totalInUSD} prefix='$' lineHeight="1.5" />
+            <CardValue value={totalInUSD} prefix="$" lineHeight="1.5" />
           </div>
           <AddressManage />
         </Flex>
-        <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Account Overview</Text>
+        <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px">
+          {' '}
+          Account Overview
+        </Text>
         <Cards>
           <Card onClick={onPresentWallet}>
             <StyleWrapper>
