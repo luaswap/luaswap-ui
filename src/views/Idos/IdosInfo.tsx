@@ -12,14 +12,6 @@ import PastIdo from './components/PastIdo'
 const Idos = () => {
   const { t } = useTranslation()
   const { path, url, isExact } = useRouteMatch()
-  const { chainId, account } = useWeb3React()
-  const luaIdoContract = useLuaIdoContract(chainId)
-
-  useEffect(() => {
-    if (chainId) {
-      luaIdoContract.methods.IDOs(0).call().then(res => console.log(res, 'res'))
-    }
-  }, [luaIdoContract, account, chainId])
 
   return (
     <>
