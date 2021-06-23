@@ -29,6 +29,19 @@ export const stake = async (masterChefContract, pid, amount, account, chainId?) 
     })
 }
 
+// TODO: should change the index of the IDO contract
+export const depositIdo = async (luaIdoContract, account, amount) => {
+  return luaIdoContract.methods
+    .commit('0', amount)
+    .send({
+      from: account,
+      value: amount,
+    })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
 export const sousStake = async (sousChefContract, amount, decimals = 18, account) => {
   return sousChefContract.methods
     .deposit(new BigNumber(amount).times(BIG_TEN.pow(decimals)).toString())

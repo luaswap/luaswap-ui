@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
-import { useLuaIdoContract } from 'hooks/useContract'
 import { Card, CardBody, Flex, Button, Text } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
+import useToast from 'hooks/useToast'
+import useDepositIdo from 'hooks/useDepositIdo'
 import UnlockButton from 'components/UnlockButton'
 import ModalInput from 'components/ModalInput'
+import { getDecimalAmount } from 'utils/formatBalance'
 
 const CardWrapper = styled(Card)`
   width: 100%;
@@ -22,11 +24,11 @@ interface DepositProps {
 }
 
 const Deposit: React.FC<DepositProps> = ({ maxAmount, totalCommited }) => {
-  const { account, chainId } = useWeb3React()
+  const { account } = useWeb3React()
   const [isCommit, setIsCommit] = useState(false)
   const [value, setValue] = useState('0')
-  const luaIdoContract = useLuaIdoContract(chainId)
-
+  const { toastSuccess, toastError } = useToast()
+  const { onDeposit } = useDepositIdo()
   const maxAmountAllowed = useMemo(() => {
     return new BigNumber(maxAmount).minus(new BigNumber(totalCommited)).toString()
   }, [maxAmount, totalCommited])
@@ -42,10 +44,14 @@ const Deposit: React.FC<DepositProps> = ({ maxAmount, totalCommited }) => {
   }
 
   const onHandleCommit = async () => {
-    const res = await luaIdoContract.methods.commit('0', '1000').send({
-      from: account,
-      value: '1000'
-    })
+    try {
+      const commitedAmmount = getDecimalAmount(new BigNumber(value)).toString()
+      await onDeposit(commitedAmmount)
+      toastSuccess('Deposit Successfully')
+    } catch (error) {
+      toastError('Fail to deposit')
+    }
+
   }
 
   return (

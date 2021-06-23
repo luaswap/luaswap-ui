@@ -2,6 +2,8 @@
 import Web3 from 'web3'
 import { getLuaIdoContract } from 'utils/contractHelpers'
 import { getFullDisplayBalance } from 'utils/formatBalance'
+import BigNumber from 'bignumber.js'
+import { isEmptyAddress } from 'utils/addressHelpers'
 
 export interface IdoDetail {
   claimAt: string
@@ -33,21 +35,23 @@ export const mappingIdoResponse = ({
   totalAmountIDO,
   totalAmountPay,
   totalCommittedAmount,
-}): IdoDetail => ({
-  claimAt,
-  closeAt,
-  creator,
-  idoToken,
-  maxAmountPay: getFullDisplayBalance(maxAmountPay),
-  minAmountPay: getFullDisplayBalance(minAmountPay),
-  openAt,
-  payToken,
-  swappedAmountIDO,
-  swappedAmountPay,
-  totalAmountIDO: getFullDisplayBalance(totalAmountIDO),
-  totalAmountPay: getFullDisplayBalance(totalAmountPay),
-  totalCommittedAmount,
-})
+}): IdoDetail => {
+  return {
+    claimAt,
+    closeAt,
+    creator,
+    idoToken,
+    maxAmountPay: getFullDisplayBalance(maxAmountPay),
+    minAmountPay: getFullDisplayBalance(minAmountPay),
+    openAt,
+    payToken,
+    swappedAmountIDO,
+    swappedAmountPay,
+    totalAmountIDO: getFullDisplayBalance(totalAmountIDO),
+    totalAmountPay: getFullDisplayBalance(totalAmountPay),
+    totalCommittedAmount: getFullDisplayBalance(totalCommittedAmount),
+  }
+}
 
 export const fetchIdosInformation = async (chainId: number, web3?: Web3): Promise<IdoDetail[]> => {
   try {

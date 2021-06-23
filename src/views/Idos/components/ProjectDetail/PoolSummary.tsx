@@ -58,6 +58,7 @@ interface PoolSummaryProps {
 
 const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
   const { totalAmountIDO, totalAmountPay, totalCommittedAmount } = idoDetail
+  console.log(idoDetail, 'ido detail ?')
   const rate = useMemo(() => {
     return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(2)
   }, [totalAmountIDO, totalAmountPay])
@@ -110,7 +111,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
         <Flex justifyContent="space-between" mb="10px">
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
-            <Text>1 BUSD = {rate} BBANK</Text>
+            <Text>1 ETH = {rate} BBANK</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>
@@ -124,7 +125,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
         <Progress variant="round" primaryStep={progressPercentage} />
         <Flex justifyContent="space-between" mt="10px">
           <Text color="secondary">
-            {totalCommittedAmount} USDT/{totalAmountPay} USDT
+            {totalCommittedAmount} ETH/{totalAmountPay} ETH
           </Text>
           <Text color="secondary">{progressPercentage}%</Text>
         </Flex>
