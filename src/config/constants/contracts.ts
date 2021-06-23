@@ -70,9 +70,9 @@ export default {
     97: '',
   },
   luaswapIdo: {
-    1337: '0xd9596211538ba6df18cfa9A9bfD484EBc0e7b990',
+    1337: '0x56843832a0840589a9f46EcA1a71e996A28c2c8B',
     89: '',
     88: '',
-    1: '0xd9596211538ba6df18cfa9A9bfD484EBc0e7b990'
+    1: '0x56843832a0840589a9f46EcA1a71e996A28c2c8B'
   }
 }

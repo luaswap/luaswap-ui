@@ -9,8 +9,8 @@ import useDepositIdo from 'hooks/useDepositIdo'
 import UnlockButton from 'components/UnlockButton'
 import ModalInput from 'components/ModalInput'
 import { getDecimalAmount } from 'utils/formatBalance'
-import { compareWithCurrentDateTime, getUtcDateString } from 'utils/formatTime'
-import Timer from '../Timer'
+import { getUtcDateString } from 'utils/formatTime'
+import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
   width: 100%;
@@ -68,7 +68,7 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
         }}
       >
         <Flex justifyContent="center" alignItems="center" flexDirection="column">
-          <Timer openAt={openAt} closeAt={closeAt} />
+          <CountDown openAt={openAt} closeAt={closeAt} />
           {account ? (
             <Button
               mb="15px"
