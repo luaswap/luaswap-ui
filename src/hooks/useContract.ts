@@ -24,7 +24,7 @@ import {
   getChainlinkOracleContract,
   getSouschefV2Contract,
   getLuaContract,
-  getLuaIdoContract
+  getLuaIdoContract,
 } from 'utils/contractHelpers'
 
 /**

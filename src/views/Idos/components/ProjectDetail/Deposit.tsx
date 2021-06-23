@@ -51,7 +51,6 @@ const Deposit: React.FC<DepositProps> = ({ maxAmount, totalCommited }) => {
     } catch (error) {
       toastError('Fail to deposit')
     }
-
   }
 
   return (
