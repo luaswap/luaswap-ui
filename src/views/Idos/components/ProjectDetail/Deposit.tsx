@@ -44,7 +44,7 @@ const Deposit: React.FC<DepositProps> = ({ maxAmount, totalCommited }) => {
   const onHandleCommit = async () => {
     const res = await luaIdoContract.methods.commit('0', '1000').send({
       from: account,
-      value: '1000'
+      value: '1000',
     })
   }
 

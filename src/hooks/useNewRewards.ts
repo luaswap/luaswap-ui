@@ -24,8 +24,24 @@ const getNewRewardPerBlock = async (web3, pid1 = 0, chainId) => {
   //     return new BigNumber(await UnknownBlock(chef._address, 'getNewRewardPerBlock(uint256):(uint256)', [pid1], true, chainId))
   // }
   // // if (await checkPoolActive(pid1 - 1, chainId)) {
-  // @ts-ignore
-  const reward = await UnknownBlock(chef._address, 'getNewRewardPerBlock(uint256):(uint256)', [pid1], true, chainId)
+  const pool = await UnknownBlock(
+    // @ts-ignore
+    chef._address,
+    'poolInfo(uint256):(address lp, uint point, uint lastBlock, uint share)',
+    [pid1 - 1],
+    true,
+    chainId,
+  )
+  console.log(pool)
+  const poolReward = await UnknownBlock(
+    // @ts-ignore
+    chef._address,
+    'getPoolReward(uint256,uint256,uint256):(uint dev, uint farmer)',
+    [parseInt(pool.lastBlock), parseInt(pool.lastBlock) + 1, pool.point],
+    true,
+    chainId,
+  )
+  const reward = poolReward.farmer
   return {
     pid: pid1 - 1,
     reward,

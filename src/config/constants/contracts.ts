@@ -73,6 +73,6 @@ export default {
     1337: '0xFD9085bf9e76E993CDded101c31b45413091d6E6',
     89: '',
     88: '',
-    1: '0xFD9085bf9e76E993CDded101c31b45413091d6E6'
-  }
+    1: '0xFD9085bf9e76E993CDded101c31b45413091d6E6',
+  },
 }

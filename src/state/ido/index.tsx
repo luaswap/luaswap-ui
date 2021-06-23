@@ -20,8 +20,7 @@ export const idosSlice = createSlice({
 })
 
 // // Actions
-export const { setIdosData } =
-  idosSlice.actions
+export const { setIdosData } = idosSlice.actions
 
 export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
   const idosInformation = await fetchIdosInformation(chainId, web3)

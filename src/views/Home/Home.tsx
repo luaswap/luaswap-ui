@@ -20,7 +20,6 @@ import LinkIcon from './components/Icon/LinkIcon'
 import CalendarIcon from './components/Icon/CalendarIcon'
 import PencilIcon from './components/Icon/PencilIcon'
 
-
 const Cards = styled(BaseLayout)`
   align-items: stretch;
   justify-content: stretch;
@@ -51,8 +50,8 @@ const StyleWrapper = styled.div`
 const IconWrapper = styled.div`
   width: 30px;
   height: 30px;
-  background-color: #D9F9F0;
-  color: #00D897;
+  background-color: #d9f9f0;
+  color: #00d897;
   text-align: center;
   line-height: 30px;
   border-radius: 50px;
@@ -86,13 +85,13 @@ const AddressBox = styled.div`
 const StyleAction = styled.div`
   display: flex;
   align-items: center;
-  svg{
+  svg {
     border-radius: 100%;
     border: 1px solid #dfe8f9;
     font-size: 30px;
     padding: 8px;
     margin-left: 10px;
-    :hover{
+    :hover {
       background-color: #dfe8f9;
     }
   }
@@ -100,7 +99,7 @@ const StyleAction = styled.div`
 const Home: React.FC = () => {
   const { account } = useWeb3React()
   const [isOpen, setIsOpen] = useState(false)
-  const watched = "0x63ca3de924fa6c9bd5c1e61bb787ae804d504490"
+  const watched = '0x63ca3de924fa6c9bd5c1e61bb787ae804d504490'
   // const address = "0xe42BF6C707Ff70ADBCb5D3C41a18af9c7b59078d"
   // const [val, setVal] = useState('')
   // const [isAddress, setIsAddress] = useState(false)
@@ -134,7 +133,7 @@ const Home: React.FC = () => {
 
   const [onPresentWallet] = useModal(<WalletModal />)
   const [onPresentAddress] = useModal(<AddressModal />)
-  const totalInUSD = 100.000
+  const totalInUSD = 100.0
   return (
     <>
       <PageHeader>
@@ -157,22 +156,27 @@ const Home: React.FC = () => {
         <Flex justifyContent="space-between">
           <div>
             <Text> Net Worth</Text>
-            <CardValue value={totalInUSD} prefix='$' lineHeight="1.5" />
+            <CardValue value={totalInUSD} prefix="$" lineHeight="1.5" />
           </div>
           <Flex position="relative">
             <StyleTextBox onClick={() => setIsOpen(!isOpen)}>
               <Text mr="10px">WalletManage</Text>
               <ChevronDownIcon />
             </StyleTextBox>
-            {isOpen &&
+            {isOpen && (
               <StyleWalletManage>
                 <StyleBox>
-                  <Text color="#657795" pb="10px">Connected</Text>
+                  <Text color="#657795" pb="10px">
+                    Connected
+                  </Text>
                   <AddressBox>
                     <IconWrapper>
                       <WalletIcon />
                     </IconWrapper>
-                    <Text>{`${account.substring(0, 6)}...${account.substring(account.length - 4, account.length)}`}</Text>
+                    <Text>{`${account.substring(0, 6)}...${account.substring(
+                      account.length - 4,
+                      account.length,
+                    )}`}</Text>
                     <StyleAction>
                       <PencilIcon />
                       <CalendarIcon />
@@ -183,7 +187,10 @@ const Home: React.FC = () => {
                     <IconWrapper>
                       <WalletIcon />
                     </IconWrapper>
-                    <Text>{`${account.substring(0, 6)}...${account.substring(account.length - 4, account.length)}`}</Text>
+                    <Text>{`${account.substring(0, 6)}...${account.substring(
+                      account.length - 4,
+                      account.length,
+                    )}`}</Text>
                     <StyleAction>
                       <PencilIcon />
                       <CalendarIcon />
@@ -192,12 +199,17 @@ const Home: React.FC = () => {
                   </AddressBox>
                 </StyleBox>
                 <StyleBox>
-                  <Text color="#657795" pb="10px">Watched</Text>
+                  <Text color="#657795" pb="10px">
+                    Watched
+                  </Text>
                   <AddressBox>
                     <IconWrapper>
                       <WalletIcon />
                     </IconWrapper>
-                    <Text>{`${watched.substring(0, 6)}...${watched.substring(watched.length - 4, watched.length)}`}</Text>
+                    <Text>{`${watched.substring(0, 6)}...${watched.substring(
+                      watched.length - 4,
+                      watched.length,
+                    )}`}</Text>
                     <StyleAction>
                       <PencilIcon />
                       <CalendarIcon />
@@ -208,7 +220,10 @@ const Home: React.FC = () => {
                     <IconWrapper>
                       <WalletIcon />
                     </IconWrapper>
-                    <Text>{`${watched.substring(0, 6)}...${watched.substring(watched.length - 4, watched.length)}`}</Text>
+                    <Text>{`${watched.substring(0, 6)}...${watched.substring(
+                      watched.length - 4,
+                      watched.length,
+                    )}`}</Text>
                     <StyleAction>
                       <PencilIcon />
                       <CalendarIcon />
@@ -216,17 +231,20 @@ const Home: React.FC = () => {
                     </StyleAction>
                   </AddressBox>
                 </StyleBox>
-                <StyleBox style={{ borderTop: "1px solid #dfe8f9", cursor: "pointer" }} onClick={onPresentAddress}>
+                <StyleBox style={{ borderTop: '1px solid #dfe8f9', cursor: 'pointer' }} onClick={onPresentAddress}>
                   <Text color="#657795">Manage Addresses</Text>
                 </StyleBox>
                 <StyleBox>
                   <Text color="#657795">Network Settings</Text>
                 </StyleBox>
               </StyleWalletManage>
-            }
+            )}
           </Flex>
         </Flex>
-        <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Account Overview</Text>
+        <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px">
+          {' '}
+          Account Overview
+        </Text>
         <Cards>
           <Card onClick={onPresentWallet}>
             <StyleWrapper>
@@ -258,7 +276,7 @@ const Home: React.FC = () => {
             <CardValue value={totalInUSD} lineHeight="1.5" fontSize="25" />
           </Card>
         </Cards>
-      </Page >
+      </Page>
     </>
   )
 }
