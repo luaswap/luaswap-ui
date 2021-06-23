@@ -1,8 +1,9 @@
 import React from 'react'
 import { Modal } from '@pancakeswap/uikit'
 // import { WalletTokenBalance } from 'config/constants/types'
+import TokenTable from './TokenTable'
 import Spacer from '../../../components/Spacer'
-import Table from '../../../components/Table'
+
 
 interface WalletModalProps {
   onDismiss?: () => void
@@ -11,9 +12,9 @@ interface WalletModalProps {
 const WalletModal: React.FC<WalletModalProps> = ({ onDismiss }) => {
   return (
     <Modal title="Wallet" onDismiss={onDismiss}>
-      <Table />
+      <TokenTable />
       <Spacer size="md" />
-      <Table />
+      <TokenTable />
     </Modal>
   )
 }

@@ -5,7 +5,7 @@ import { BlockfolioState } from 'state/types'
 
 const initialState: BlockfolioState = {
   isLoading: false,
-  wallets: [],
+  wallets: []
 }
 // Thunks
 // export const fetchBlockfolio = createAsyncThunk(

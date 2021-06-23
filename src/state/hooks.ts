@@ -94,6 +94,6 @@ export const useInitialBlock = () => {
 }
 // Blockfolio
 
-// export const useWallet = () => {
-//   return useSelect((state: State) => state.blockfolio.wallets)
-// }
+export const useWallet = () => {
+  return useSelector((state: State) => state.blockfolio.wallets)
+}

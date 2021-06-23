@@ -72,7 +72,7 @@ const TokenIcon = styled.img`
   margin-right: 10px;
 `
 const TokenName = styled.span``
-const Table: React.FC = () => {
+const TokenTable: React.FC = () => {
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
   const data = [
@@ -142,4 +142,4 @@ const Table: React.FC = () => {
   )
 }
 
-export default Table
+export default TokenTable

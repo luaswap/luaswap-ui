@@ -5,6 +5,7 @@ import pricesReducer from './prices'
 import profileReducer from './profile'
 import blockReducer from './block'
 import blockfolioReducer from './blockfolio'
+import idosReducer from './ido'
 
 const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
@@ -14,6 +15,7 @@ const store = configureStore({
     prices: pricesReducer,
     profile: profileReducer,
     blockfolio: blockfolioReducer,
+    idos: idosReducer,
   },
 })
 

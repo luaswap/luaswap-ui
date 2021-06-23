@@ -13,18 +13,14 @@ import PageHeader from 'components/PageHeader'
 import Page from 'components/layout/Page'
 import CardValue from './components/CardValue'
 import WalletModal from './components/WalletModal'
-import AddressModal from './components/AddressModal'
+import AddressManage from './components/AddressManage'
+// import AddressModal from './components/AddressModal'
 import WalletIcon from './components/Icon/WalletIcon'
 import PoolIcon from './components/Icon/PoolIcon'
-import LinkIcon from './components/Icon/LinkIcon'
-import CalendarIcon from './components/Icon/CalendarIcon'
-import PencilIcon from './components/Icon/PencilIcon'
+// import LinkIcon from './components/Icon/LinkIcon'
+// import CalendarIcon from './components/Icon/CalendarIcon'
+// import PencilIcon from './components/Icon/PencilIcon'
 
-const Line = styled.hr`
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  margin-top: 0;
-  margin-bottom: 10px;
-`
 const Cards = styled(BaseLayout)`
   align-items: stretch;
   justify-content: stretch;
@@ -63,53 +59,16 @@ const IconWrapper = styled.div`
   font-size: 16px;
   margin-right: 10px;
 `
-const StyleWalletManage = styled.div`
-  position: absolute;
-  min-width: 300px;
-  background-color: ${({ theme }) => theme.colors.background};
-  box-shadow: 0 2px 8px ${({ theme }) => theme.colors.cardBorder};
-  padding: 20px;
-  top: 100%;
-  right: 0;
-  border-radius: 15px;
-`
-const StyleTextBox = styled.div`
-  padding: 5px;
-  display: flex;
-  align-items: center;
-`
-const StyleBox = styled.div`
-  padding-bottom: 10px;
-`
-const AddressBox = styled.div`
-  display: flex;
-  margin-bottom: 10px;
-  cursor: pointer;
-`
-const StyleAction = styled.div`
-  display: flex;
-  align-items: center;
-  svg{
-    border-radius: 100%;
-    border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-    font-size: 30px;
-    padding: 8px;
-    margin-left: 10px;
-    color: ${({ theme }) => theme.colors.text};
-    :hover{
-      background-color: ${({ theme }) => theme.colors.backgroundDisabled};
-    }
-  }
-`
 
 const Home: React.FC = () => {
-  const { account } = useWeb3React()
-  const [isOpen, setIsOpen] = useState(false)
-  const watched = "0x63ca3de924fa6c9bd5c1e61bb787ae804d504490"
+  // const { account } = useWeb3React()
+  // const [isOpen, setIsOpen] = useState(false)
+  // const watched = "0x63ca3de924fa6c9bd5c1e61bb787ae804d504490"
   // const address = "0xe42BF6C707Ff70ADBCb5D3C41a18af9c7b59078d"
   // const [val, setVal] = useState('')
   // const [isAddress, setIsAddress] = useState(false)
-  // // const { isLoading, data } = useWallet()
+  // const { wallets } = useWallet()
+  // console.log(wallets)
   // const dispatch = useAppDispatch()
   // const { t } = useTranslation()
   // const earningsSum = 74.000
@@ -138,12 +97,12 @@ const Home: React.FC = () => {
   // }, [dispatch, val, setVal, setIsAddress])
 
   const [onPresentWallet] = useModal(<WalletModal />)
-  const [onPresentAddress] = useModal(<AddressModal />)
+  // const [onPresentAddress] = useModal(<AddressModal />)
   const totalInUSD = 100.000
   return (
     <>
       <PageHeader>
-        <Heading as="h1" scale="xl" color="secondary" mb="24px">
+        <Heading as="h1" scale="xl" mb="24px">
           Manage your assets and liabilities in one simple interface.
         </Heading>
         <Heading scale="lg" color="text">
@@ -164,73 +123,7 @@ const Home: React.FC = () => {
             <Text> Net Worth</Text>
             <CardValue value={totalInUSD} prefix='$' lineHeight="1.5" />
           </div>
-          <Flex position="relative">
-            <StyleTextBox onClick={() => setIsOpen(!isOpen)}>
-              <Text mr="10px">WalletManage</Text>
-              <ChevronDownIcon />
-            </StyleTextBox>
-            {isOpen &&
-              <StyleWalletManage>
-                <StyleBox>
-                  <Text pb="10px">Connected</Text>
-                  <AddressBox>
-                    <IconWrapper>
-                      <WalletIcon />
-                    </IconWrapper>
-                    <Text>{`${account.substring(0, 6)}...${account.substring(account.length - 4, account.length)}`}</Text>
-                    <StyleAction>
-                      <PencilIcon />
-                      <CalendarIcon />
-                      <LinkIcon />
-                    </StyleAction>
-                  </AddressBox>
-                  <AddressBox>
-                    <IconWrapper>
-                      <WalletIcon />
-                    </IconWrapper>
-                    <Text>{`${account.substring(0, 6)}...${account.substring(account.length - 4, account.length)}`}</Text>
-                    <StyleAction>
-                      <PencilIcon />
-                      <CalendarIcon />
-                      <LinkIcon />
-                    </StyleAction>
-                  </AddressBox>
-                </StyleBox>
-                <StyleBox>
-                  <Text pb="10px">Watched</Text>
-                  <AddressBox>
-                    <IconWrapper>
-                      <WalletIcon />
-                    </IconWrapper>
-                    <Text>{`${watched.substring(0, 6)}...${watched.substring(watched.length - 4, watched.length)}`}</Text>
-                    <StyleAction>
-                      <PencilIcon />
-                      <CalendarIcon />
-                      <LinkIcon />
-                    </StyleAction>
-                  </AddressBox>
-                  <AddressBox>
-                    <IconWrapper>
-                      <WalletIcon />
-                    </IconWrapper>
-                    <Text>{`${watched.substring(0, 6)}...${watched.substring(watched.length - 4, watched.length)}`}</Text>
-                    <StyleAction>
-                      <PencilIcon />
-                      <CalendarIcon />
-                      <LinkIcon />
-                    </StyleAction>
-                  </AddressBox>
-                </StyleBox>
-                <Line />
-                <StyleBox style={{ cursor: "pointer" }} onClick={onPresentAddress}>
-                  <Text>Manage Addresses</Text>
-                </StyleBox>
-                <StyleBox>
-                  <Text>Network Settings</Text>
-                </StyleBox>
-              </StyleWalletManage>
-            }
-          </Flex>
+          <AddressManage />
         </Flex>
         <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Account Overview</Text>
         <Cards>
@@ -260,7 +153,28 @@ const Home: React.FC = () => {
               </IconWrapper>
               <Text> LuaSafe </Text>
             </StyleWrapper>
+            <CardValue value={totalInUSD} lineHeight="1.5" fontSize="25" />
+          </Card>
+        </Cards>
+        <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Network</Text>
+        <Cards>
+          <Card onClick={onPresentWallet}>
+            <StyleWrapper>
+              <IconWrapper>
+                <WalletIcon />
+              </IconWrapper>
+              <Text> Ethereum</Text>
+            </StyleWrapper>
 
+            <CardValue value={totalInUSD} lineHeight="1.5" fontSize="25" />
+          </Card>
+          <Card onClick={onPresentWallet}>
+            <StyleWrapper>
+              <IconWrapper>
+                <WalletIcon />
+              </IconWrapper>
+              <Text> TomoChain</Text>
+            </StyleWrapper>
             <CardValue value={totalInUSD} lineHeight="1.5" fontSize="25" />
           </Card>
         </Cards>

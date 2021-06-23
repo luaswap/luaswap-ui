@@ -6,7 +6,7 @@ import Web3 from 'web3'
 const POLLING_INTERVAL = 12000
 const NETWORK_URL = process.env.REACT_APP_NETWORK_URL
 
-export const injected = new InjectedConnector({ supportedChainIds: [1, 88] })
+export const injected = new InjectedConnector({ supportedChainIds: [1, 88, 89, 1337] })
 
 const walletconnect = new WalletConnectConnector({
   rpc: { 1: NETWORK_URL },

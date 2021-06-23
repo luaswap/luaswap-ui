@@ -10,6 +10,11 @@ export const getAddress = (address: Address, chainId?: number): string => {
 export const getCakeAddress = () => {
   return getAddress(tokens.cake.address)
 }
+
+export const getLuaIdoAddress = (chainId?) => {
+  return getAddress(addresses.luaswapIdo, chainId)
+}
+
 export const getMasterChefAddress = (chainId?) => {
   return getAddress(addresses.masterChef, chainId)
 }

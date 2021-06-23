@@ -4,11 +4,11 @@ import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constant
 export type TranslatableText =
   | string
   | {
-      key: string
-      data?: {
-        [key: string]: string | number
-      }
+    key: string
+    data?: {
+      [key: string]: string | number
     }
+  }
 
 export interface Farm extends FarmConfig {
   tokenAmountMc?: BigNumber
@@ -50,6 +50,9 @@ export interface Profile {
   luaUnlockAble: string
 }
 
+export interface Ido {
+  value: number
+}
 // Slices states
 
 export interface FarmsState {
@@ -91,6 +94,10 @@ export interface ProfileState {
   isLoading: boolean
   isUnlock: boolean
   data: Profile
+}
+
+export interface IdoState {
+  idos: Ido[]
 }
 
 export type TeamResponse = {
@@ -280,10 +287,10 @@ export interface BlockfolioState {
 }
 
 export interface WalletProps {
-  address: string
-  isConnected: boolean
-  isActive: boolean
-  walletType: string
+  address?: string
+  isConnected?: boolean
+  isActive?: boolean
+  walletType?: string
 }
 // Global state
 
