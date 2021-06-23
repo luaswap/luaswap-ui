@@ -1,12 +1,15 @@
 import React, { useState, useRef } from "react"
 import styled from 'styled-components'
 import { Heading, Text, BaseLayout, Input, Button, Flex, useModal, ChevronDownIcon } from 'common-uikitstrungdao'
+
+// import { useWallet } from "state/hooks"
 import useOnClickOutside from "hooks/useClickOutside"
 import AddressModal from './AddressModal'
 import WalletIcon from './Icon/WalletIcon'
 import LinkIcon from './Icon/LinkIcon'
 import CalendarIcon from './Icon/CalendarIcon'
 import PencilIcon from './Icon/PencilIcon'
+
 
 
 const Line = styled.hr`
@@ -67,6 +70,8 @@ const StyleAction = styled.div`
 const AddressManage: React.FC = () => {
     const ref = useRef()
     const [isOpen, setIsOpen] = useState(false)
+    // const wallets = useWallet()
+    // console.log(wallets)
     const watched = "0x63ca3de924fa6c9bd5c1e61bb787ae804d504490"
     const address = "0xe42BF6C707Ff70ADBCb5D3C41a18af9c7b59078d"
     const [onPresentAddress] = useModal(<AddressModal />)

@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import Web3 from 'web3'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Heading, Text, BaseLayout, Input, Button, Flex, useModal, ChevronDownIcon } from 'common-uikitstrungdao'
 import PageHeader from 'components/PageHeader'
 
-// import { useAppDispatch } from 'state'
-// import { useWallet } from 'state/hooks'
+import { useAppDispatch } from 'state'
+import { useWallet } from 'state/hooks'
+import { WalletProps } from 'state/types'
+import { setWallet } from 'state/blockfolio'
 // import { fetchWallet } from 'state/portfolio'
 // import { useTranslation } from 'contexts/Localization'
 
@@ -14,6 +15,7 @@ import Page from 'components/layout/Page'
 import CardValue from './components/CardValue'
 import WalletModal from './components/WalletModal'
 import AddressManage from './components/AddressManage'
+import InPutAddress from './components/InputAddress'
 // import AddressModal from './components/AddressModal'
 import WalletIcon from './components/Icon/WalletIcon'
 import PoolIcon from './components/Icon/PoolIcon'
@@ -59,42 +61,49 @@ const IconWrapper = styled.div`
   font-size: 16px;
   margin-right: 10px;
 `
+// const defaultWalletObj = {
+//   address: "",
+//   isActive: false,
+// }
+
 
 const Home: React.FC = () => {
-  // const { account } = useWeb3React()
-  // const [isOpen, setIsOpen] = useState(false)
+  const { account } = useWeb3React()
+  // const [objWallet, setObjWallet] = useState<WalletProps>(defaultWalletObj)
+  const { wallets } = useWallet()
+  const dispatch = useAppDispatch()
+  const [isOpen, setIsOpen] = useState(false)
   // const watched = "0x63ca3de924fa6c9bd5c1e61bb787ae804d504490"
   // const address = "0xe42BF6C707Ff70ADBCb5D3C41a18af9c7b59078d"
   // const [val, setVal] = useState('')
   // const [isAddress, setIsAddress] = useState(false)
-  // const { wallets } = useWallet()
+  
   // console.log(wallets)
-  // const dispatch = useAppDispatch()
+  
   // const { t } = useTranslation()
   // const earningsSum = 74.000
   // const walletValue = 1.897
-
-  // useEffect(() => {
-  //   if (account) {
-  //     dispatch(fetchWallet(account))
-  //   }
-  // }, [account, dispatch])
-
-  // const handleChange = useCallback(
-  //   (e) => {
-  //     if (e.target.value) {
-  //       setVal(e.target.value)
-  //     }
-  //   },
-  //   [setVal],
-  // )
-  // const handleSubmit = useCallback(() => {
-  //   if (Web3.utils.isAddress(val)) {
-  //     setIsAddress(true)
-  //     dispatch(fetchWallet(val))
-  //     setVal('')
-  //   }
-  // }, [dispatch, val, setVal, setIsAddress])
+  useEffect(() => {    
+    if (account) {
+      if (wallets.length < 1) {
+        const w = {
+          address: account,
+          isConnected: true,
+          isActive: true
+        }
+        dispatch(setWallet(w))
+      }
+      // else {
+      //   const w = {
+      //     address: account,
+      //     isConnected: true,
+      //     isActive: false
+      //   }
+      //   dispatch(setWallet(w))
+      // }
+    }
+  }, [dispatch, account, wallets.length])
+   
 
   const [onPresentWallet] = useModal(<WalletModal />)
   // const [onPresentAddress] = useModal(<AddressModal />)
@@ -108,16 +117,10 @@ const Home: React.FC = () => {
         <Heading scale="lg" color="text">
           Get unique access to opportunities in open finance.
         </Heading>
-      </PageHeader>
+      </PageHeader>      
       <Page>
-        {/* <>
-        <Text fontSize="40px">Manage your assets and liabilities in one simple interface.</Text>
-        <Flex marginBottom="40px" marginTop="40px" maxWidth="600px" alignItems="center">
-          <StyleInput onChange={handleChange} />
-          <Button scale="md" onClick={handleSubmit}>Add Address</Button>
-        </Flex>
-        {!isAddress && <Text>Not ethereum address</Text>}
-        </> */}
+        {wallets.length > 0 || account ?
+        <>
         <Flex justifyContent="space-between">
           <div>
             <Text> Net Worth</Text>
@@ -178,7 +181,11 @@ const Home: React.FC = () => {
             <CardValue value={totalInUSD} lineHeight="1.5" fontSize="25" />
           </Card>
         </Cards>
+      </>
+        : <InPutAddress />
+      }
       </Page >
+        
     </>
   )
 }

@@ -8,8 +8,8 @@ import { useTranslation } from 'contexts/Localization'
 import Spacer from 'components/Spacer'
 
 // interface TableProps {
-//     head: Array<string[]>
-//     body: DetailType[]
+//     columns: Array<string[]>
+//     data: DetailType[]
 // }
 
 // export interface LTableProps {

@@ -66,3 +66,5 @@ export const getPredictionsAddress = () => {
 export const getChainlinkOracleAddress = () => {
   return getAddress(addresses.chainlinkOracle)
 }
+
+
