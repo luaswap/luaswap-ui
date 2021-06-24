@@ -14,6 +14,7 @@ import {
   TelegramIcon,
   Progress,
 } from 'common-uikitstrungdao'
+import { Pool } from '../../types'
 
 const PoolInfoBlock = styled.div`
   display: flex;
@@ -47,10 +48,10 @@ const ImageContainer = styled.span`
 `
 
 interface PoolDetailProps {
-  status: string
+  pool: Pool
 }
 
-const PoolDetail: React.FC<PoolDetailProps> = ({ status }) => {
+const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
 
@@ -59,7 +60,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ status }) => {
   }, [history, path])
 
   return (
-    <Card ribbon={<CardRibbon variantColor="primary" text={status} />}>
+    <Card ribbon={<CardRibbon variantColor="primary" text="Opening" />}>
       <CardBody style={{ height: '400px' }}>
         <Flex mb="15px" alignItems="center">
           <ImageContainer onClick={navigateToProjectDetail}>

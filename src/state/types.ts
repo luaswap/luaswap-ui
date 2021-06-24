@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js'
 import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constants/types'
-import { IdoDetail } from './ido/fetchIdosData'
 
 export type TranslatableText =
   | string
@@ -305,4 +304,19 @@ export interface State {
   collectibles: CollectiblesState
   blockfolio: BlockfolioState
   idos: IdoState
+}
+export interface IdoDetail {
+  claimAt: string
+  closeAt: string
+  creator: string
+  idoToken: string
+  maxAmountPay: string
+  minAmountPay: string
+  openAt: string
+  payToken: string
+  swappedAmountIDO: string
+  swappedAmountPay: string
+  totalAmountIDO: string
+  totalAmountPay: string
+  totalCommittedAmount: string
 }

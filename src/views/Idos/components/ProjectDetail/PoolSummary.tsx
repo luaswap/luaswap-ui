@@ -13,7 +13,7 @@ import {
   Progress,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
-import { IdoDetail } from 'state/ido/fetchIdosData'
+import { IdoDetail } from 'state/types'
 
 const IconWrapper = styled.a`
   color: #212121;
