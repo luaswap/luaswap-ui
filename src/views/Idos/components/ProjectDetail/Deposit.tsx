@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { Card, CardBody, Flex, Button, Text } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
@@ -9,7 +9,9 @@ import useDepositIdo from 'hooks/useDepositIdo'
 import UnlockButton from 'components/UnlockButton'
 import ModalInput from 'components/ModalInput'
 import { getDecimalAmount } from 'utils/formatBalance'
-import { getUtcDateString } from 'utils/formatTime'
+import { getUtcDateString, timestampAndCurrentDifference } from 'utils/formatTime'
+import useSecondsUntilCurrent from '../../hooks/useSecondsUntilCurrent'
+import { PoolStatus } from '../../types'
 import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
@@ -20,7 +22,6 @@ const CardWrapper = styled(Card)`
     margin-top: 0px;
   }
 `
-
 interface DepositProps {
   idoDetail: IdoDetail | null
   totalCommited: string
@@ -37,17 +38,35 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommited)).toString()
   }, [maxAmountPay, totalCommited])
 
-  const handleSelectMax = () => {
-    setValue(maxAmountAllowed)
-  }
+  const openAtSeconds = useSecondsUntilCurrent(openAt)
+  const closedAtSeconds = useSecondsUntilCurrent(closeAt)
+  const claimAtSeconds = useSecondsUntilCurrent(claimAt)
+  /* Variable to check if pool is open or not based on openAt and closeAt timestamp received from smart contract */
+  const poolStatus: PoolStatus = useMemo(() => {
+    /* If open time > 0 and closed time > 0 -> the Pool is not open yet */
+    if (openAtSeconds > 0 && closedAtSeconds > 0) {
+      return 'not open'
+    }
+    if (openAtSeconds <= 0 && closedAtSeconds > 0) {
+      return 'open'
+    }
+    if (openAtSeconds <= 0 && closedAtSeconds <= 0 && claimAtSeconds > 0) {
+      return 'claim'
+    }
+    return 'closed'
+  }, [openAtSeconds, closedAtSeconds, claimAtSeconds])
 
-  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleSelectMax = useCallback(() => {
+    setValue(maxAmountAllowed)
+  }, [maxAmountAllowed])
+
+  const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget.validity.valid) {
       setValue(e.currentTarget.value.replace(/,/g, '.'))
     }
-  }
+  }, [])
 
-  const onHandleCommit = async () => {
+  const onHandleCommit = useCallback(async () => {
     try {
       const commitedAmmount = getDecimalAmount(new BigNumber(value)).toString()
       await onDeposit(commitedAmmount)
@@ -55,7 +74,7 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
     } catch (error) {
       toastError('Fail to deposit')
     }
-  }
+  }, [onDeposit, value, toastError, toastSuccess])
 
   return (
     <CardWrapper>
@@ -68,7 +87,12 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
         }}
       >
         <Flex justifyContent="center" alignItems="center" flexDirection="column">
-          <CountDown openAt={openAt} closeAt={closeAt} />
+          <CountDown
+            openAtSeconds={openAtSeconds}
+            closedAtSeconds={closedAtSeconds}
+            poolStatus={poolStatus}
+            claimAtSeconds={claimAtSeconds}
+          />
           {account ? (
             <Button
               mb="15px"

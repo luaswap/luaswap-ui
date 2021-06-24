@@ -47,3 +47,11 @@ export const differenceInSecond = (date1: Date, date2: Date): number => {
 
   return null
 }
+
+export const timestampAndCurrentDifference = (timestamp) => {
+  if (timestamp) {
+    return differenceInSecond(getDateTypeValue(timestamp), new Date())
+  }
+
+  return null
+}

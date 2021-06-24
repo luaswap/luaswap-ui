@@ -1,46 +1,48 @@
-import React, { useMemo } from 'react'
-import { differenceInSecond, getDateTypeValue } from "utils/formatTime"
-import useGetCountDownInSeconds from 'views/Idos/hooks/useGetCountDownInSeconds'
+import React from 'react'
+import getTimePeriods from "utils/getTimePeriods"
 import Timer from '../Timer'
+import { PoolStatus } from '../../types'
 
 interface CountDownProps {
-  openAt: string
-  closeAt: string
+  openAtSeconds: number
+  closedAtSeconds: number
+  claimAtSeconds: number
+  poolStatus: PoolStatus
 }
 
 const TimerOpen = ({ openAtSeconds }) => {
-  const timeUntilOpen = useGetCountDownInSeconds(openAtSeconds)
+  const timeUntilOpen = getTimePeriods(openAtSeconds)
   return <Timer suffix="Open" timeUntil={timeUntilOpen} />
 }
 
 const TimerClose = ({ closedAtSeconds }) => {
-  const timeUntilClosed= useGetCountDownInSeconds(closedAtSeconds)
+  const timeUntilClosed= getTimePeriods(closedAtSeconds)
   return <Timer suffix="Finish" timeUntil={timeUntilClosed} />
 }
 
-const CountDown: React.FC<CountDownProps> = ({
-  openAt,
-  closeAt
-}) => {
-  const openAtSeconds = differenceInSecond(getDateTypeValue(openAt), new Date())
-  const closedAtSeconds = differenceInSecond(getDateTypeValue(closeAt), new Date())
-  const isClose = useMemo(() => {
-    /* If open time > 0 and closed time > 0 -> the Pool is not open yet */
-    if (openAtSeconds > 0 && closedAtSeconds > 0) {
-      return true
-    }
-    return false
-  }, [openAtSeconds, closedAtSeconds])
+const TimerClaim = ({ claimAtSeconds }) => {
+  const timeUntilClaim= getTimePeriods(claimAtSeconds)
+  return <Timer suffix="Claim" timeUntil={timeUntilClaim} />
+}
 
-  /* Pool time is finished */
-  if (openAtSeconds < 0 && closedAtSeconds < 0) {
+const CountDown: React.FC<CountDownProps> = ({
+  openAtSeconds,
+  closedAtSeconds,
+  claimAtSeconds,
+  poolStatus
+}) => {
+  if (poolStatus === 'closed') {
     return null
   }
-
-  if (isClose) {
+  
+  if (poolStatus === 'claim') {
+    return <TimerClaim claimAtSeconds={claimAtSeconds}/>
+  }
+  
+  if (poolStatus === 'not open') {
     return <TimerOpen openAtSeconds={openAtSeconds} />
   }
-
+  
   return <TimerClose closedAtSeconds={closedAtSeconds} />
 }
 
