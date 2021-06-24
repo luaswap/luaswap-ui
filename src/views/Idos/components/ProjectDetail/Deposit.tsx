@@ -6,10 +6,10 @@ import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import { IdoDetail } from 'state/ido/fetchIdosData'
 import useDepositIdo from 'hooks/useDepositIdo'
-import UnlockButton from 'components/UnlockButton'
 import ModalInput from 'components/ModalInput'
 import { getDecimalAmount } from 'utils/formatBalance'
-import { getUtcDateString, timestampAndCurrentDifference } from 'utils/formatTime'
+import { getUtcDateString } from 'utils/formatTime'
+import ActionButton from './ActionButton'
 import useSecondsUntilCurrent from '../../hooks/useSecondsUntilCurrent'
 import { PoolStatus } from '../../types'
 import CountDown from './CountDown'
@@ -29,7 +29,6 @@ interface DepositProps {
 
 const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
   const { account } = useWeb3React()
-  const [isCommit, setIsCommit] = useState(false)
   const [value, setValue] = useState('0')
   const { toastSuccess, toastError } = useToast()
   const { onDeposit } = useDepositIdo()
@@ -76,6 +75,10 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
     }
   }, [onDeposit, value, toastError, toastSuccess])
 
+  const onHandleClaim = useCallback(() => {
+    console.log('claming')
+  }, [])
+
   return (
     <CardWrapper>
       <CardBody
@@ -93,24 +96,8 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
             poolStatus={poolStatus}
             claimAtSeconds={claimAtSeconds}
           />
-          {account ? (
-            <Button
-              mb="15px"
-              variant="primary"
-              onClick={() => {
-                if (isCommit) {
-                  onHandleCommit()
-                } else {
-                  setIsCommit(true)
-                }
-              }}
-            >
-              Commit your USDT
-            </Button>
-          ) : (
-            <UnlockButton />
-          )}
-          {isCommit && account && (
+          <ActionButton poolStatus={poolStatus} onCommit={onHandleCommit} onClaim={onHandleClaim} />
+          {account && (
             <ModalInput
               value={value}
               onSelectMax={handleSelectMax}
