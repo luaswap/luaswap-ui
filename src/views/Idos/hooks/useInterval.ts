@@ -1,8 +1,10 @@
 /* eslint-disable consistent-return */
 import { useEffect, useRef } from 'react'
+import { useWeb3React } from '@web3-react/core'
 
 export default function useInterval(callback, delay) {
   const savedCallback = useRef()
+  const { chainId, account } = useWeb3React()
 
   // Remember the latest callback.
   useEffect(() => {
@@ -19,5 +21,5 @@ export default function useInterval(callback, delay) {
       const id = setInterval(tick, delay)
       return () => clearInterval(id)
     }
-  }, [delay])
+  }, [delay, chainId, account])
 }

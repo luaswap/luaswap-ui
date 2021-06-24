@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Heading, BaseLayout } from 'common-uikitstrungdao'
+import { Flex, Heading } from 'common-uikitstrungdao'
 import styled from 'styled-components'
-import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/layout/Page'
+import PageLoader from 'components/PageLoader'
 import { IdoDetail, mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { useLuaIdoContract } from 'hooks/useContract'
 import useWeb3 from 'hooks/useWeb3'
@@ -78,7 +78,7 @@ const ProjectDetail = () => {
     <Page>
       <Row>
         {loading ? (
-          <>Loading...</>
+          <PageLoader />
         ) : (
           <>
             {' '}
