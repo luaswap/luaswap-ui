@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constants/types'
+import { Pool as PoolIdoDetail } from 'views/Idos/types'
 
 export type TranslatableText =
   | string
@@ -96,6 +97,7 @@ export interface ProfileState {
 export interface IdoState {
   idos: IdoDetail[]
   isLoading: boolean
+  openPools: PoolIdoDetail[]
 }
 
 export type TeamResponse = {

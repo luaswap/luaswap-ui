@@ -129,7 +129,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
         <Flex justifyContent="space-between" mb="10px">
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
-            <Text>1 BUSD = 10 BBANK</Text>
+            <Text>1 BUSD = 10 BBANK</Text> 
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>

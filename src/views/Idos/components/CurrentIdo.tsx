@@ -104,14 +104,20 @@ const pools: Pool[] = [
   },
 ]
 
-const CurrentIdo = () => {
+interface CurrentIdoProps {
+  openPools: Pool[]
+}
+
+const CurrentIdo: React.FC<CurrentIdoProps> = ({
+  openPools
+}) => {
   return (
     <IdoLayout>
       <Text fontSize="20px" textAlign="center">
         Opening Pools
       </Text>
       <Row>
-        {pools.map((pool) => {
+        {openPools.map((pool) => {
           return <PoolDetail pool={pool} />
         })}
       </Row>
