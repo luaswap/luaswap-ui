@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import {
   Card,
@@ -13,8 +14,10 @@ import {
   WorldIcon,
   TelegramIcon,
   Progress,
+  Image,
 } from 'common-uikitstrungdao'
-import { Pool } from '../../types'
+import useDeepMemo from 'hooks/useDeepMemo'
+import { IdoDetailInfo, Pool } from '../../types'
 
 const PoolInfoBlock = styled.div`
   display: flex;
@@ -51,20 +54,46 @@ interface PoolDetailProps {
   pool: Pool
 }
 
+interface FormatPool extends IdoDetailInfo {
+  img: string
+  name: string
+  description: string
+  status
+}
+
 const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
+  const { chainId } = useWeb3React()
 
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/1`)
   }, [history, path])
+
+  const poolData = useDeepMemo<FormatPool>(() => {
+    const {
+      img,
+      name,
+      description,
+      status,
+      index
+    } = pool
+    // TODO: should refactor this piece of code when we have API
+    return {
+      img,
+      name,
+      description,
+      status,
+      ...index["89"][0]
+    }
+  }, [pool, chainId])
 
   return (
     <Card ribbon={<CardRibbon variantColor="primary" text="Opening" />}>
       <CardBody style={{ height: '400px' }}>
         <Flex mb="15px" alignItems="center">
           <ImageContainer onClick={navigateToProjectDetail}>
-            <img src="https://i.ibb.co/YtdXYjg/cross.jpg" alt="img" style={{ width: '100%', height: '100%' }} />
+            <Image src={poolData.img} alt="img" width={60} height={60} />
           </ImageContainer>
           <PoolInfoBlock>
             <Text
@@ -75,7 +104,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
                 cursor: 'pointer',
               }}
             >
-              Solana
+              {poolData.name}
             </Text>
             <Flex marginBottom="5px" alignItems="center">
               <IconWrapper href="google.com" target="__blank">
@@ -93,7 +122,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
             </Flex>
           </PoolInfoBlock>
         </Flex>
-        <Text>AI-powered, traditional mobile banking experience with seamless crypto integration and seamless</Text>
+        <Text>{poolData.description}</Text>
         <Link href="google.com" mb="15px">
           Learn more
         </Link>
