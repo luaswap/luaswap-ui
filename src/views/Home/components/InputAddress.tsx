@@ -38,7 +38,6 @@ const InputAddress: React.FC = () => {
     let w
     const handleSubmit = () => {
         if (Web3.utils.isAddress(val)) {
-            console.log(wallets)
             if (wallets.length < 1) {
                 w = {
                     address: val,

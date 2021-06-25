@@ -1,29 +1,17 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { Text } from '@pancakeswap/uikit'
+import { LinkExternal, Text } from 'common-uikitstrungdao'
 
-// import { DetailType } from 'state/types'
-import { LinkExternal } from 'common-uikitstrungdao'
+import { ApiDetailType } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import Spacer from 'components/Spacer'
 
-// interface TableProps {
-//     columns: Array<string[]>
-//     data: DetailType[]
-// }
-
-// export interface LTableProps {
-//     data: Array<any>
-//     columns: Array<any>
-// }
-
-// const Container = styled.div`
-//   filter: ${({ theme }) => theme.card.dropShadow};
-//   width: 100%;
-//   background: ${({ theme }) => theme.card.background};
-//   border-radius: 16px;
-//   margin: 16px 0px;
-// `
+interface TableProps {
+  tag: string,
+  network?: string,
+  columns: Array<string[]>
+  data: ApiDetailType[]
+}
 
 const TableWrapper = styled.div`
   overflow: visible;
@@ -45,7 +33,7 @@ const TableHead = styled.thead`
   text-align: left;
   font-size: 18px;
   th {
-    padding: 10px 20px 10px 0;
+    padding: 10px 50px 10px 0;
   }
 `
 const TableBody = styled.tbody`
@@ -72,40 +60,68 @@ const TokenIcon = styled.img`
   margin-right: 10px;
 `
 const TokenName = styled.span``
-const TokenTable: React.FC = () => {
+const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
+
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
-  const data = [
-    {
-      imgs: ['https://etherscan.io/token/images/addxyz_32.png'],
-      link: 'https://etherscan.io/token/0x635d081fd8f6670135d8a3640e2cf78220787d56',
-      tokenName: 'ADD',
-      symbol: 'ADD',
-      address: '0x635d081fd8f6670135d8a3640e2cf78220787d56',
-      amount: '613.8751923 ADD',
-      usd: '156.86 USD',
-    },
-    {
-      imgs: ['https://etherscan.io/token/images/tomochain_32.png'],
-      link: 'https://etherscan.io/token/0x05D3606d5c81EB9b7B18530995eC9B29da05FaBa',
-      tokenName: 'TomoChain',
-      symbol: 'TOMOE',
-      address: '0x05D3606d5c81EB9b7B18530995eC9B29da05FaBa',
-      amount: '11.02038385 TOMOE',
-      usd: '17.85 USD',
-    },
-  ]
-  const columns = [
-    ['Token', 'tokenName'],
-    ['Amount', 'amount'],
-    ['Symbol', 'symbol'],
-    ['USD', 'usd'],
-  ]
+
+  const renderContent = (row, type: string) => {
+    console.log(row, type)
+    switch (type) {
+      case 'balance':
+        return (
+          <tr key={row.amount}>
+            <StyleTd>
+              <CellInner>
+                <TokenIcon src={row.imgs[0]} alt={row.tokenName} />
+                <LinkExternal href={row.link}>
+                  <TokenName>{row.tokenName}</TokenName>
+                </LinkExternal>
+              </CellInner>
+            </StyleTd>
+            <StyleTd><Text>{parseFloat(row.quantity).toFixed(2)} {row.symbol} </Text></StyleTd>
+            {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
+            <StyleTd><Text> {row.usd}</Text></StyleTd>
+          </tr>
+        )
+      case 'luaswapliquidity':
+        return (
+          <tr key={row.amount}>
+            <StyleTd>
+              <CellInner>
+                <TokenIcon src={row.imgs[0]} alt={row.token0.symbol} />
+                <TokenIcon src={row.imgs[1]} alt={row.token1.symbol} />
+                <LinkExternal href={row.link}>
+                  <TokenName>{row.tokenName}</TokenName>
+                </LinkExternal>
+              </CellInner>
+            </StyleTd>
+            <StyleTd><Text>{row.balance} </Text></StyleTd>
+            <StyleTd><Text> {row.poolSharePercent}</Text></StyleTd>
+            <StyleTd><Text> {row.usd}</Text></StyleTd>
+          </tr>
+        )
+      case 'LuaSafe':
+        return (
+          <tr key={row.amount}>
+            <StyleTd>
+              <Text>{`${row.address.substring(0, 6)}...${row.address.substring(row.address.length - 4, row.address.length)}`}</Text>
+            </StyleTd>
+            <StyleTd><Text>{row.token} </Text></StyleTd>
+            <StyleTd><Text> {parseFloat(row.quantity).toFixed(2)}</Text></StyleTd>
+            <StyleTd><Text> {row.apy}</Text></StyleTd>
+            <StyleTd><Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text></StyleTd>
+          </tr>
+        )
+      default:
+        return null
+    }
+  }
   return (
-    // <Container>
+
     <TableContainer>
       <Text fontSize="16px" marginBottom="15px">
-        Ethereum
+        {network}
       </Text>
       <TableWrapper ref={tableWrapperEl}>
         <StyledTable>
@@ -118,27 +134,12 @@ const TokenTable: React.FC = () => {
           </TableHead>
           <TableBody>
             {data.map((row) => {
-              return (
-                <tr key={row.amount}>
-                  <StyleTd>
-                    <CellInner>
-                      <TokenIcon src={row.imgs[0]} alt={row.tokenName} />
-                      <LinkExternal href={row.link}>
-                        <TokenName>{row.tokenName}</TokenName>
-                      </LinkExternal>
-                    </CellInner>
-                  </StyleTd>
-                  <StyleTd><Text>{row.amount} </Text></StyleTd>
-                  <StyleTd><Text> {row.symbol}</Text></StyleTd>
-                  <StyleTd><Text> {row.usd}</Text></StyleTd>
-                </tr>
-              )
+              return renderContent(row, tag)
             })}
           </TableBody>
         </StyledTable>
       </TableWrapper>
     </TableContainer>
-    // </Container>
   )
 }
 

@@ -291,6 +291,27 @@ export interface WalletProps {
   isActive?: boolean
   walletType?: string
 }
+export interface DataApiType {
+  totalInUSD: number
+  tomochain: ApiNetworkType
+  ethereum: ApiNetworkType
+}
+export interface ApiNetworkType {
+  tag: string
+  name: string
+  totalInUSD: string
+  detailsHeader: Array<string[]>
+  details: ApiDetailType[]
+}
+export interface ApiDetailType {
+  imgs: Array<string>
+  link: string
+  tokenName: string
+  symbol: string
+  address: string
+  amount: string
+  usd: string
+}
 // Global state
 
 export interface State {

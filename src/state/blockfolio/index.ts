@@ -12,10 +12,8 @@ export const blockfolioSlice = createSlice({
   initialState,
   reducers: {
     setWallet: (state, action) => {
-      console.log(action,state.wallets.length)
       if (state.wallets.length > 0) {
         state.wallets.forEach((element, index) => {
-          console.log(index)
           if (element.address !== action.payload.address) {
             state.wallets.push(action.payload)
           } else{
