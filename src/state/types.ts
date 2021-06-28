@@ -5,11 +5,11 @@ import { Pool as PoolIdoDetail } from 'views/Idos/types'
 export type TranslatableText =
   | string
   | {
-      key: string
-      data?: {
-        [key: string]: string | number
-      }
+    key: string
+    data?: {
+      [key: string]: string | number
     }
+  }
 
 export interface Farm extends FarmConfig {
   tokenAmountMc?: BigNumber
@@ -288,10 +288,31 @@ export interface BlockfolioState {
 }
 
 export interface WalletProps {
+  address?: string
+  isConnected?: boolean
+  isActive?: boolean
+  walletType?: string
+}
+export interface DataApiType {
+  totalInUSD: number
+  tomochain: ApiNetworkType
+  ethereum: ApiNetworkType
+}
+export interface ApiNetworkType {
+  tag: string
+  name: string
+  totalInUSD: string
+  detailsHeader: Array<string[]>
+  details: ApiDetailType[]
+}
+export interface ApiDetailType {
+  imgs: Array<string>
+  link: string
+  tokenName: string
+  symbol: string
   address: string
-  isConnected: boolean
-  isActive: boolean
-  walletType: string
+  amount: string
+  usd: string
 }
 // Global state
 
