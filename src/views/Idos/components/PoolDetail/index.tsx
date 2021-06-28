@@ -64,20 +64,20 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
     history.push(`${path}/project/1`)
   }, [history, path])
 
-  const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO } =
+  const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO, status } =
     useDeepMemo<FormatPool>(() => {
-      const { img: _img, name: _name, description: _description, status, index } = pool
+      const { img: _img, name: _name, description: _description, status: _status, index } = pool
       const poolInfoChainId = Object.keys(index).map((id) => {
         return formatPoolDetail(index[id])
       })
-      console.log(poolInfoChainId, 'chain id ?')
+
       const totalPoolData = formatPoolDetail(poolInfoChainId)
 
       return {
         img: _img,
         name: _name,
         description: _description,
-        status,
+        status: _status,
         ...totalPoolData,
       }
     }, [pool, chainId])
@@ -92,7 +92,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
 
   return (
     <Card ribbon={<CardRibbon variantColor="primary" text="Opening" />}>
-      <CardBody style={{ height: '400px' }}>
+      <CardBody style={{ height: '350px' }}>
         <Flex mb="15px" alignItems="center">
           <ImageContainer onClick={navigateToProjectDetail}>
             <Image src={img} alt="img" width={60} height={60} />
@@ -137,10 +137,6 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
             <Text color="primary">Access</Text>
             <Text>Private</Text>
           </Flex>
-        </Flex>
-        <Flex justifyContent="space-between" mb="10px">
-          <Text color="primary">Progress</Text>
-          <Text color="primary">Participants: 9999</Text>
         </Flex>
         <Progress variant="round" primaryStep={progressPercentage} />
         <Flex mt="10px" justifyContent="space-between">

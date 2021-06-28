@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'contexts/Localization'
 import { useSelector } from 'react-redux'
 import { Route, useRouteMatch, Link } from 'react-router-dom'
 import { ButtonMenu, ButtonMenuItem, Flex } from 'common-uikitstrungdao'
-import { useAppDispatch } from 'state'
-import { selectOpenPools } from 'state/ido'
+import { selectOpenPools, selectLoadingStatus } from 'state/ido'
 import PageLoader from 'components/PageLoader'
 import Page from 'components/layout/Page'
-import { fetchPools } from 'state/actions'
 import Hero from './components/Hero'
 import CurrentIdo from './components/CurrentIdo'
 import PastIdo from './components/PastIdo'
 
 const Idos = () => {
   const { t } = useTranslation()
-  const [loading, setLoading] = useState(true)
   const { path, url, isExact } = useRouteMatch()
   const openPools = useSelector(selectOpenPools)
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    dispatch(
-      fetchPools({
-        onSuccess: () => setLoading(false),
-        onError: () => setLoading(false),
-      }),
-    )
-  }, [dispatch])
+  const isLoading = useSelector(selectLoadingStatus)
 
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <PageLoader />
       ) : (
         <>

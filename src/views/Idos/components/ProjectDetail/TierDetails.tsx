@@ -3,24 +3,15 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { selectUserTier } from 'state/profile'
 
-import {
-  Card,
-  CardBody,
-  CardRibbon,
-  Text,
-  Link,
-  Flex,
-  TwitterIcon,
-  MediumIcon,
-  WorldIcon,
-  TelegramIcon,
-  Progress,
-  Image,
-  Button,
-} from 'common-uikitstrungdao'
-import { selectOpenPools, selectPool } from 'state/ido'
-import { formatPoolDetail, formatPoolTotalTierByChainID } from 'utils/formatPoolData'
+import { Card, CardBody, Text, Flex, Image, Button } from 'common-uikitstrungdao'
+import { selectPool } from 'state/ido'
+import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo } from 'views/Idos/types'
+
+interface TierProps {
+  data: IdoDetailInfo
+  userTier: number
+}
 
 const ImageContainer = styled.span`
   display: flex;
@@ -65,6 +56,71 @@ const TIER_INFO = {
   },
 }
 
+const Tier: React.FC<TierProps> = ({
+  data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken, payToken },
+  userTier,
+}) => (
+  <TierCard>
+    <CardBody style={{ height: '400px' }}>
+      <Flex mb="15px" alignItems="center">
+        <ImageContainer>
+          <Image src={TIER_INFO[tier].icon} alt="img" width={60} height={60} />
+        </ImageContainer>
+        <div>
+          <Text fontSize="24px" bold>
+            {TIER_INFO[tier].name}
+          </Text>
+          <Text fontSize="15px" bold>
+            Tier {tier}
+          </Text>
+        </div>
+      </Flex>
+      <Text mb="20px">{TIER_INFO[tier].description}</Text>
+      <Flex justifyContent="space-between">
+        <Text>Total {idoToken.symbol}</Text>
+        <Text bold>
+          {totalAmountIDO} {idoToken.symbol}
+        </Text>
+      </Flex>
+      <Flex justifyContent="space-between">
+        <Text>Funds to raise</Text>
+        <Text bold>
+          {totalAmountPay} {payToken.symbol}
+        </Text>
+      </Flex>
+      <Flex justifyContent="space-between">
+        <Text>Price per {idoToken.symbol}</Text>
+        <Text bold>
+          {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
+        </Text>
+      </Flex>
+      <Flex justifyContent="space-between">
+        <Text>Total committed</Text>
+        <Text bold>
+          {totalCommittedAmount} {payToken.symbol}
+        </Text>
+      </Flex>
+      {userTier + 2 === parseInt(tier) && (
+        <Button width="100%" mt="30px" disabled={userTier + 2 === parseInt(tier)}>
+          <Text bold>Your Tier. GET READY!</Text>
+          <Image
+            src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
+            alt="img"
+            width={40}
+            height={40}
+            ml="20px"
+          />
+        </Button>
+      )}
+      {userTier + 2 < parseInt(tier) && (
+        <Button width="100%" mt="30px" variant="subtle">
+          {TIER_INFO[tier].CTA}
+        </Button>
+      )}
+    </CardBody>
+  </TierCard>
+)
+
 const TierDetails: React.FC<{
   index: string
 }> = ({ index }) => {
@@ -87,77 +143,10 @@ const TierDetails: React.FC<{
     return []
   }, [pool])
 
-  interface TierProps {
-    data: IdoDetailInfo
-  }
-  const Tier: React.FC<TierProps> = ({
-    data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken, payToken },
-  }) => (
-    <TierCard>
-      <CardBody style={{ height: '400px' }}>
-        <Flex mb="15px" alignItems="center">
-          <ImageContainer>
-            <Image src={TIER_INFO[tier].icon} alt="img" width={60} height={60} />
-          </ImageContainer>
-          <div>
-            <Text fontSize="24px" bold>
-              {TIER_INFO[tier].name}
-            </Text>
-            <Text fontSize="15px" bold>
-              Tier {tier}
-            </Text>
-          </div>
-        </Flex>
-        <Text mb="20px">{TIER_INFO[tier].description}</Text>
-        <Flex justifyContent="space-between">
-          <Text>Total {idoToken.symbol}</Text>
-          <Text bold>
-            {totalAmountIDO} {idoToken.symbol}
-          </Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Funds to raise</Text>
-          <Text bold>
-            {totalAmountPay} {payToken.symbol}
-          </Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Price per {idoToken.symbol}</Text>
-          <Text bold>
-            {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
-          </Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Total committed</Text>
-          <Text bold>
-            {totalCommittedAmount} {payToken.symbol}
-          </Text>
-        </Flex>
-        {userTier + 2 === parseInt(tier) && (
-          <Button width="100%" mt="30px" disabled={userTier + 2 === parseInt(tier)}>
-            <Text bold>Your Tier. GET READY!</Text>
-            <Image
-              src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
-              alt="img"
-              width={40}
-              height={40}
-              ml="20px"
-            />
-          </Button>
-        )}
-        {userTier + 2 < parseInt(tier) && (
-          <Button width="100%" mt="30px" variant="subtle">
-            {TIER_INFO[tier].CTA}
-          </Button>
-        )}
-      </CardBody>
-    </TierCard>
-  )
-
   return (
     <Flex flexWrap="wrap" justifyContent="space-between">
       {tiersss.map((e: IdoDetailInfo, i: number) => (
-        <Tier data={e} key={e.tier} />
+        <Tier data={e} key={e.tier} userTier={userTier} />
       ))}
     </Flex>
   )
