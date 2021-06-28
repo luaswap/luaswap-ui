@@ -65,7 +65,6 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
-
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/1`)
   }, [history, path])

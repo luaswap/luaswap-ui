@@ -92,7 +92,7 @@ export const useFetchProfile = () => {
 
   useEffect(() => {
     if (chainId && account) {
-      dispatch(fetchProfile(account, chainId))
+      dispatch(fetchProfile(account, chainId, account))
     }
   }, [account, dispatch, chainId])
 }

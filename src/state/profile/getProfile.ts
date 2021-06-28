@@ -5,7 +5,7 @@ import { API_URL, LUA_CONTRACT } from 'config'
 
 const LUA = new Token(1, '0xB1f66997A5760428D3a87D68b90BfE0aE64121cC', 18, 'LUA', 'LuaToken')
 
-const getProfile = async (address: string, chainId: number) => {
+const getProfile = async (address: string, chainId: number, account: string) => {
   const LUA_REWARD_URL = `${API_URL[chainId]}/read/${LUA_CONTRACT[chainId]}`
   const totalLuaLockPromise = axios.post(LUA_REWARD_URL, {
     method: 'lockOf(address):(uint256)',
@@ -19,17 +19,19 @@ const getProfile = async (address: string, chainId: number) => {
     cache: true,
   })
 
+  // Todo: we should change to real account here
+  const { data = {} } = await axios.get('https://api.luaswap.org/api/ido/tier/0x5289d1a9c889b758269c3913136791b2d52d996a')
   const [totalLuaLockResult, luaUnlockAbleResult] = await Promise.all([totalLuaLockPromise, luaUnLockAblePromise])
   const totalLuaLock = new TokenAmount(LUA, totalLuaLockResult.data.data || '0')
   const luaUnlockAble = new TokenAmount(LUA, luaUnlockAbleResult.data.data || '0')
   const formatLuaLock = new BigNumber(totalLuaLock.toFixed(3)).toFormat()
   const formatLuaUnlockable = new BigNumber(luaUnlockAble.toFixed(3)).toFormat()
-  return { totalLuaLock: formatLuaLock, luaUnlockAble: formatLuaUnlockable }
+  return { totalLuaLock: formatLuaLock, luaUnlockAble: formatLuaUnlockable, tier: data.tier }
 }
 
-const doUnlockLua = async () => {
-  // const luaContract = useLuaTokenContract(LUA.address)
-  // await luaContract.unlock()
+export const getTierData = async (account: string) => {
+  const { data = {} } = await axios.get('https://api.luaswap.org/api/ido/tier/0x5289d1a9c889b758269c3913136791b2d52d996a')
+  return data.tier
 }
 
 export default getProfile

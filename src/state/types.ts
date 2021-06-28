@@ -49,6 +49,7 @@ export interface Pool extends PoolConfig {
 export interface Profile {
   totalLuaLock: string
   luaUnlockAble: string
+  userTier: number | null
 }
 
 // Slices states

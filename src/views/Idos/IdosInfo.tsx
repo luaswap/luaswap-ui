@@ -19,8 +19,12 @@ const Idos = () => {
   const openPools = useSelector(selectOpenPools)
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(fetchPools())
-    setLoading(false)
+    dispatch(
+      fetchPools({
+        onSuccess: () => setLoading(false),
+        onError: () => setLoading(false),
+      }),
+    )
   }, [dispatch])
 
   return (
