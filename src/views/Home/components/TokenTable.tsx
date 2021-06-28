@@ -66,14 +66,13 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
   const { t } = useTranslation()
 
   const renderContent = (row, type: string) => {
-    console.log(row, type)
     switch (type) {
-      case 'balance':
+      case 'balance':        
         return (
           <tr key={row.amount}>
             <StyleTd>
               <CellInner>
-                <TokenIcon src={row.imgs[0]} alt={row.tokenName} />
+                <TokenIcon src={row.imgs[0]} alt={row.tokenName}  />
                 <LinkExternal href={row.link}>
                   <TokenName>{row.tokenName}</TokenName>
                 </LinkExternal>
@@ -141,6 +140,16 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
       </TableWrapper>
     </TableContainer>
   )
+}
+
+const ImageExists = (url) => {
+
+    const http = new XMLHttpRequest()
+
+    http.open('HEAD', url, false)
+    http.send()
+
+    return http.status !== 404
 }
 
 export default TokenTable
