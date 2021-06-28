@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { selectUserTier } from 'state/profile'
@@ -18,7 +18,8 @@ import {
   Image,
 } from 'common-uikitstrungdao'
 import { selectOpenPools, selectPool } from 'state/ido'
-import { useMemo } from 'react'
+import { formatPoolDetail, formatPoolTotalTierByChainID } from 'utils/formatPoolData'
+import { IdoDetailInfo } from 'views/Idos/types'
 
 const ImageContainer = styled.span`
   display: flex;
@@ -44,12 +45,22 @@ const TierCard = styled(Card)`
 const TierDetails: React.FC<{
   index: string
 }> = ({ index }) => {
-  // const [tiers, setIndex] = useState([0, 1, 2])
+  const [tiers, setIndex] = useState([0, 1, 2])
 
   const userTier = useSelector(selectUserTier)
   const pool = useSelector(selectPool(index))
 
-  const Tier = (data) => (
+  const tiersss: IdoDetailInfo = useMemo(() => {
+    const chainIds = Object.keys(pool.index)
+    let result = pool.index[chainIds[0]]
+    for (let i = 1; i < chainIds.length; i++) {
+      result = formatPoolTotalTierByChainID(result, pool.index[chainIds[i]])
+    }
+
+    return result
+  }, [pool])
+
+  const Tier = (data: IdoDetailInfo) => (
     <TierCard>
       <CardBody style={{ height: '400px' }}>
         <Flex mb="15px" alignItems="center">

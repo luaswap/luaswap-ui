@@ -19,3 +19,21 @@ export const formatPoolDetail = (allTierPool: IdoDetailInfo[]): IdoDetailInfo =>
     },
   )
 }
+
+export const formatPoolTotalTierByChainID = (
+  allTierPool1: IdoDetailInfo[],
+  allTierPool2: IdoDetailInfo[],
+): IdoDetailInfo[] => {
+  return allTierPool1.map((e) => {
+    const e2 = allTierPool2.find((p) => e2.tier === e.tier)
+    if (e2) {
+      return {
+        ...e,
+        totalCommittedAmount: e.totalCommittedAmount + e2.totalCommittedAmount,
+        totalAmountPay: e.totalAmountPay + e2.totalAmountPay,
+        totalAmountIDO: e.totalAmountIDO + e2.totalAmountIDO,
+      }
+    }
+    return e
+  })
+}
