@@ -11,11 +11,13 @@ import { IdoDetail } from 'state/types'
 import makeBatchRequest from 'utils/makeBatchRequest'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { useBlock } from 'state/hooks'
+
 import Steps from './Steps'
 import Deposit from './Deposit'
 import PoolSummary from './PoolSummary'
 import ProjectInfo from './ProjectInfo'
 import PoolInformation from './PoolInformation'
+import TierDetails from './TierDetails'
 
 const Row = styled.div`
   max-width: 1200px;
@@ -87,10 +89,14 @@ const ProjectDetail = () => {
               <PoolSummary idoDetail={idoDetail} />
               <Deposit idoDetail={idoDetail} totalCommited={totalCommited} />
             </StyledFlex>
-            <Heading as="h2" scale="lg" mb="24px">
+            <Heading as="h2" scale="lg" mb="24px" mt="50px">
+              Tier Infomation
+            </Heading>
+            <TierDetails index="0"/>
+            <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Project Detail
             </Heading>
-            <StyledFlex mt="40px" mb="40px" flexWrap="wrap">
+            <StyledFlex flexWrap="wrap">
               <ProjectInfo />
               <PoolInformation />
             </StyledFlex>
