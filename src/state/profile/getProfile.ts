@@ -20,7 +20,9 @@ const getProfile = async (address: string, chainId: number) => {
   })
 
   // Todo: we should change to real account here
-  const { data = {} } = await axios.get('https://api.luaswap.org/api/ido/tier/0x5289d1a9c889b758269c3913136791b2d52d996a')
+  const { data = {} } = await axios.get(
+    'https://api.luaswap.org/api/ido/tier/0x5289d1a9c889b758269c3913136791b2d52d996a',
+  )
   const [totalLuaLockResult, luaUnlockAbleResult] = await Promise.all([totalLuaLockPromise, luaUnLockAblePromise])
   const totalLuaLock = new TokenAmount(LUA, totalLuaLockResult.data.data || '0')
   const luaUnlockAble = new TokenAmount(LUA, luaUnlockAbleResult.data.data || '0')

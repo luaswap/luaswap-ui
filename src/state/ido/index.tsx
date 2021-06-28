@@ -56,3 +56,4 @@ export const fetchPools =
 
 // Selector
 export const selectOpenPools = (state) => state.idos.openPools
+export const selectPool = (index) => (state) => state.idos.openPools[index]

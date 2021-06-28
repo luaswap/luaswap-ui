@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import getTimePeriods from "utils/getTimePeriods"
+import { useEffect, useState } from 'react'
+import getTimePeriods from 'utils/getTimePeriods'
 
 let timeoutId = null
 

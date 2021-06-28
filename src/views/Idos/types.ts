@@ -1,7 +1,6 @@
+export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim'
 
-export type PoolStatus = "not open" | "open" | "closed" | "claim"
-
-export type ChainId = "89"
+export type ChainId = '89'
 
 export interface TokenInfo {
   address: string
@@ -42,7 +41,7 @@ export interface Pool {
   closeAt: number
   claimAt: number
   index: {
-    "89": IdoDetailInfo[]
-  },
+    '89': IdoDetailInfo[]
+  }
   status: number
 }

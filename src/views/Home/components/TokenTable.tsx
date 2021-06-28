@@ -7,8 +7,8 @@ import { useTranslation } from 'contexts/Localization'
 import Spacer from 'components/Spacer'
 
 interface TableProps {
-  tag: string,
-  network?: string,
+  tag: string
+  network?: string
   columns: Array<string[]>
   data: ApiDetailType[]
 }
@@ -61,7 +61,6 @@ const TokenIcon = styled.img`
 `
 const TokenName = styled.span``
 const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
-
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
 
@@ -79,9 +78,15 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
                 </LinkExternal>
               </CellInner>
             </StyleTd>
-            <StyleTd><Text>{parseFloat(row.quantity).toFixed(2)} {row.symbol} </Text></StyleTd>
+            <StyleTd>
+              <Text>
+                {parseFloat(row.quantity).toFixed(2)} {row.symbol}{' '}
+              </Text>
+            </StyleTd>
             {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
-            <StyleTd><Text> {row.usd}</Text></StyleTd>
+            <StyleTd>
+              <Text> {row.usd}</Text>
+            </StyleTd>
           </tr>
         )
       case 'luaswapliquidity':
@@ -96,21 +101,38 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
                 </LinkExternal>
               </CellInner>
             </StyleTd>
-            <StyleTd><Text>{row.balance} </Text></StyleTd>
-            <StyleTd><Text> {row.poolSharePercent}</Text></StyleTd>
-            <StyleTd><Text> {row.usd}</Text></StyleTd>
+            <StyleTd>
+              <Text>{row.balance} </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.poolSharePercent}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.usd}</Text>
+            </StyleTd>
           </tr>
         )
       case 'LuaSafe':
         return (
           <tr key={row.amount}>
             <StyleTd>
-              <Text>{`${row.address.substring(0, 6)}...${row.address.substring(row.address.length - 4, row.address.length)}`}</Text>
+              <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
+                row.address.length - 4,
+                row.address.length,
+              )}`}</Text>
             </StyleTd>
-            <StyleTd><Text>{row.token} </Text></StyleTd>
-            <StyleTd><Text> {parseFloat(row.quantity).toFixed(2)}</Text></StyleTd>
-            <StyleTd><Text> {row.apy}</Text></StyleTd>
-            <StyleTd><Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text></StyleTd>
+            <StyleTd>
+              <Text>{row.token} </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.quantity).toFixed(2)}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.apy}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text>
+            </StyleTd>
           </tr>
         )
       default:
@@ -118,7 +140,6 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
     }
   }
   return (
-
     <TableContainer>
       <Text fontSize="16px" marginBottom="15px">
         {network}
@@ -128,7 +149,11 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
           <TableHead>
             <tr>
               {columns.map((i) => {
-                return <th key={i[1]}><Text> {i[0]} </Text></th>
+                return (
+                  <th key={i[1]}>
+                    <Text> {i[0]} </Text>
+                  </th>
+                )
               })}
             </tr>
           </TableHead>

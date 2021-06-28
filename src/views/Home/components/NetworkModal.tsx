@@ -9,21 +9,18 @@ const StyleOverFlow = styled.div`
   overflow-y: auto;
 `
 interface NetworkModalProps {
-    data: ApiNetworkType
-    onDismiss?: () => void
+  data: ApiNetworkType
+  onDismiss?: () => void
 }
 
 const NetworkModal: React.FC<NetworkModalProps> = ({ onDismiss, data }) => {
-    return (
-        <Modal title="Wallet" onDismiss={onDismiss}>
-            <StyleOverFlow>
-                <TokenTable
-                    data={data.details}
-                    columns={data.detailsHeader}
-                    tag={data.tag} />
-            </StyleOverFlow>
-        </Modal>
-    )
+  return (
+    <Modal title="Wallet" onDismiss={onDismiss}>
+      <StyleOverFlow>
+        <TokenTable data={data.details} columns={data.detailsHeader} tag={data.tag} />
+      </StyleOverFlow>
+    </Modal>
+  )
 }
 
 export default NetworkModal

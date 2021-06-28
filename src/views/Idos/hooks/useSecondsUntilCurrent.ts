@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 import { timestampAndCurrentDifference } from 'utils/formatTime'
 import useInterval from './useInterval'
 
@@ -11,7 +11,6 @@ const useSecondsUntilCurrent = (timestamp) => {
       setNumberOfSeconds(newSeconds)
     }
   }, 1000)
-
 
   return numberOfSeconds
 }

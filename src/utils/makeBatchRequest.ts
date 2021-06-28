@@ -14,7 +14,7 @@ import { getWeb3NoAccount } from './web3'
 const makeBatchRequest = (calls: any[], web3?: Web3): Promise<any[]> => {
   try {
     const web3Instance = web3 || getWeb3NoAccount()
-    const batch = new web3Instance.BatchRequest
+    const batch = new web3Instance.BatchRequest()
 
     const promises = calls.map((call) => {
       return new Promise((resolve, reject) => {

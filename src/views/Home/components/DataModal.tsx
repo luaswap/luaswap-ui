@@ -24,21 +24,23 @@ const DataModal: React.FC<DataModalProps> = ({ onDismiss, data }) => {
   return (
     <Modal title="Wallet" onDismiss={onDismiss}>
       <StyleOverFlow>
-        {data.ethereum.details.length > 0 &&
+        {data.ethereum.details.length > 0 && (
           <TokenTable
             data={data.ethereum.details}
             columns={data.ethereum.detailsHeader}
             tag={data.ethereum.tag}
-            network="Ethereum" />
-        }
+            network="Ethereum"
+          />
+        )}
         <Spacer size="md" />
-        {data.tomochain.details.length > 0 &&
+        {data.tomochain.details.length > 0 && (
           <TokenTable
             data={data.tomochain.details}
             columns={data.tomochain.detailsHeader}
             tag={data.tomochain.tag}
-            network="TomoChain" />
-        }
+            network="TomoChain"
+          />
+        )}
       </StyleOverFlow>
     </Modal>
   )
