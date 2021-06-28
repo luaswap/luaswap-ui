@@ -64,21 +64,23 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
     history.push(`${path}/project/1`)
   }, [history, path])
 
-  const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO } = useDeepMemo<FormatPool>(() => {
-    const { img: _img, name: _name, description: _description, status, index } = pool
-    const poolInfoChainId =  Object.keys(index).map(id => {
-      return formatPoolDetail(index[id])
-    })
-    const totalPoolData = formatPoolDetail(poolInfoChainId)
+  const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO } =
+    useDeepMemo<FormatPool>(() => {
+      const { img: _img, name: _name, description: _description, status, index } = pool
+      const poolInfoChainId = Object.keys(index).map((id) => {
+        return formatPoolDetail(index[id])
+      })
+      console.log(poolInfoChainId, 'chain id ?')
+      const totalPoolData = formatPoolDetail(poolInfoChainId)
 
-    return {
-      img: _img,
-      name: _name,
-      description: _description,
-      status,
-      ...totalPoolData,
-    }
-  }, [pool, chainId])
+      return {
+        img: _img,
+        name: _name,
+        description: _description,
+        status,
+        ...totalPoolData,
+      }
+    }, [pool, chainId])
 
   const progressPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
