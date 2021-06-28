@@ -5,7 +5,7 @@ import { API_URL, LUA_CONTRACT } from 'config'
 
 const LUA = new Token(1, '0xB1f66997A5760428D3a87D68b90BfE0aE64121cC', 18, 'LUA', 'LuaToken')
 
-const getProfile = async (address: string, chainId: number, account: string) => {
+const getProfile = async (address: string, chainId: number) => {
   const LUA_REWARD_URL = `${API_URL[chainId]}/read/${LUA_CONTRACT[chainId]}`
   const totalLuaLockPromise = axios.post(LUA_REWARD_URL, {
     method: 'lockOf(address):(uint256)',

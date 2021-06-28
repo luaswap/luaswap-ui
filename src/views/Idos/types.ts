@@ -25,6 +25,13 @@ export interface IdoDetailInfo {
   index: string
   chainId: string
 }
+
+export interface FormatPool extends IdoDetailInfo {
+  img: string
+  name: string
+  description: string
+  status
+}
 export interface Pool {
   id: string
   img: string
