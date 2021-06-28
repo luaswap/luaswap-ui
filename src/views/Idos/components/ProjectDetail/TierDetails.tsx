@@ -90,9 +90,9 @@ const TierDetails: React.FC<{
 
   return (
     <Flex flexWrap="wrap" justifyContent="space-between">
-      {tiers.map((e, i) => (
+      {/* {tiers.map((e, i) => (
         <Tier data={e} key={e} />
-      ))}
+      ))} */}
     </Flex>
   )
 }

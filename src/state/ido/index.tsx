@@ -28,11 +28,17 @@ export const idosSlice = createSlice({
     setOpenPools: (state, action) => {
       state.openPools = action.payload
     },
+    fetchIdoStats: (state) => {
+      state.isLoading = true
+    },
+    fetchIdoEnds: (state) => {
+      state.isLoading = false
+    },
   },
 })
 
 // Actions
-export const { setIdosData, setOpenPools } = idosSlice.actions
+export const { setIdosData, setOpenPools, fetchIdoEnds, fetchIdoStats } = idosSlice.actions
 
 export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
   const idosInformation = await fetchIdosInformation(chainId, web3)
@@ -42,18 +48,19 @@ export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch,
 export default idosSlice.reducer
 
 // Thunks
-export const fetchPools =
-  ({ onSuccess, onError }: CallBackFunction) =>
-  async (dispatch, getState) => {
-    try {
-      const { data } = await axios.get(`https://api.luaswap.org/api/ido/pools/open`)
-      dispatch(setOpenPools(data))
-      onSuccess()
-    } catch (error) {
-      onError()
-    }
+export const fetchPools = () => async (dispatch, getState) => {
+  try {
+    dispatch(fetchIdoStats())
+    const { data } = await axios.get(`https://api.luaswap.org/api/ido/pools/open`)
+    dispatch(setOpenPools(data))
+    dispatch(fetchIdoEnds())
+  } catch (error) {
+    dispatch(fetchIdoEnds())
   }
+}
 
 // Selector
-export const selectOpenPools = (state) => state.idos.openPools
-export const selectPool = (index) => (state) => state.idos.openPools[index]
+export const selectIdoState = (state) => state.idos
+export const selectOpenPools = (state) => selectIdoState(state).openPools
+export const selectLoadingStatus = (state) => selectIdoState(state).isLoading
+export const selectPool = (index) => (state) => selectIdoState(state).openPools[index]

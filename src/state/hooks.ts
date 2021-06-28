@@ -45,8 +45,7 @@ export const useFetchIdoData = () => {
   const { chainId } = useWeb3React()
 
   useEffect(() => {
-    // @ts-ignore
-    dispatch(fetchPools({ onError: () => {}, onSuccess: () => {} }))
+    dispatch(fetchPools())
   }, [chainId, web3, dispatch])
 }
 
