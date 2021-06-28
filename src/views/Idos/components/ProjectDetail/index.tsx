@@ -92,7 +92,7 @@ const ProjectDetail = () => {
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Tier Infomation
             </Heading>
-            <TierDetails index="0"/>
+            <TierDetails index="0" />
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Project Detail
             </Heading>

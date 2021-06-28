@@ -43,12 +43,12 @@ const TierCard = styled(Card)`
 
 const TierDetails: React.FC<{
   index: string
-}> = ({index}) => {
+}> = ({ index }) => {
   // const [tiers, setIndex] = useState([0, 1, 2])
 
   const userTier = useSelector(selectUserTier)
   const pool = useSelector(selectPool(index))
-  
+
   const Tier = (data) => (
     <TierCard>
       <CardBody style={{ height: '400px' }}>
@@ -56,17 +56,14 @@ const TierDetails: React.FC<{
           <ImageContainer>
             <Image src="https://luaswap.org/static/media/logo.d77b343b.png" alt="img" width={60} height={60} />
           </ImageContainer>
-          <Text
-            fontSize="24px"
-            bold
-          >
+          <Text fontSize="24px" bold>
             Tier 1
           </Text>
         </Flex>
         <Text>For every user, who holds less than 100 LUA and 100 TOMO</Text>
         <Flex justifyContent="flex-start" flexDirection="column">
           <Text color="primary">Swap rate</Text>
-          <Text>1 BUSD = 10 BBANK</Text> 
+          <Text>1 BUSD = 10 BBANK</Text>
         </Flex>
         <Flex justifyContent="flex-start" flexDirection="column">
           <Text color="primary">Cap</Text>
@@ -80,9 +77,13 @@ const TierDetails: React.FC<{
     </TierCard>
   )
 
-  return <Flex flexWrap="wrap" justifyContent="space-between">
-    {tiers.map((e, i) => <Tier data={e} key={e} />)}
-  </Flex>
+  return (
+    <Flex flexWrap="wrap" justifyContent="space-between">
+      {tiers.map((e, i) => (
+        <Tier data={e} key={e} />
+      ))}
+    </Flex>
+  )
 }
 
 export default TierDetails

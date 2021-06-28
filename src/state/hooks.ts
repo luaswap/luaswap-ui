@@ -46,7 +46,7 @@ export const useFetchIdoData = () => {
 
   useEffect(() => {
     // @ts-ignore
-    dispatch(fetchPools({onError: () => {}, onSuccess: () => {}}))
+    dispatch(fetchPools({ onError: () => {}, onSuccess: () => {} }))
   }, [chainId, web3, dispatch])
 }
 

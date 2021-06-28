@@ -14,9 +14,7 @@ interface CurrentIdoProps {
   openPools: Pool[]
 }
 
-const CurrentIdo: React.FC<CurrentIdoProps> = ({
-  openPools
-}) => {
+const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools }) => {
   return (
     <IdoLayout>
       <Text fontSize="20px" textAlign="center">

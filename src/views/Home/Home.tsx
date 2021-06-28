@@ -4,7 +4,6 @@ import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Heading, Text, BaseLayout, Input, Progress, Flex, useModal, ChevronDownIcon, Box } from 'common-uikitstrungdao'
 
-
 import { useAppDispatch } from 'state'
 import { useWallet } from 'state/hooks'
 import { DataApiType } from 'state/types'
@@ -29,15 +28,15 @@ const initialState: DataApiType = {
     name: '',
     totalInUSD: '0',
     detailsHeader: [],
-    details: []
+    details: [],
   },
   ethereum: {
     tag: '',
     name: '',
     totalInUSD: '0',
     detailsHeader: [],
-    details: []
-  }
+    details: [],
+  },
 }
 const initialNetwork = {
   tomochain: {
@@ -49,7 +48,7 @@ const initialNetwork = {
     balance: initialState.ethereum,
     liquidity: initialState.ethereum,
     luasafe: initialState.ethereum,
-  }
+  },
 }
 const initialInUSD = {
   balance: 0,
@@ -60,7 +59,7 @@ const initialInUSD = {
   tLuasafe: 0,
   eBalance: 0,
   eLiquidity: 0,
-  eLuasafe: 0
+  eLuasafe: 0,
 }
 
 const Cards = styled(BaseLayout)`
@@ -138,7 +137,7 @@ const Home: React.FC = () => {
         const w = {
           address: account,
           isConnected: true,
-          isActive: true
+          isActive: true,
         }
         dispatch(setWallet(w))
       }
@@ -167,7 +166,8 @@ const Home: React.FC = () => {
       const tlu = tLuasafeResult.data.totalInUSD.replace(/,/g, '')
 
       const usdData = {
-        balance: parseFloat(tb) + parseFloat(tli) + parseFloat(tlu) + parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
+        balance:
+          parseFloat(tb) + parseFloat(tli) + parseFloat(tlu) + parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
         tomoNetwork: parseFloat(tb) + parseFloat(tli) + parseFloat(tlu),
         ethNetwork: parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
         tBalance: parseFloat(tb),
@@ -175,28 +175,28 @@ const Home: React.FC = () => {
         tLuasafe: parseFloat(tlu),
         eBalance: parseFloat(eb),
         eLiquidity: parseFloat(eli),
-        eLuasafe: parseFloat(elu)
+        eLuasafe: parseFloat(elu),
       }
       settotalInUSD(usdData)
 
       const wallet = {
         totalInUSD: parseFloat(eb) + parseFloat(tb),
         tomochain: tBalanceResult.data,
-        ethereum: eBalanceResult.data
+        ethereum: eBalanceResult.data,
       }
       setDataWallet(wallet)
 
       const liquidity = {
         totalInUSD: parseFloat(eli) + parseFloat(tli),
         tomochain: tLiquidityResult.data,
-        ethereum: eLiquidityResult.data
+        ethereum: eLiquidityResult.data,
       }
       setDataLiquidity(liquidity)
 
       const luasafe = {
         totalInUSD: parseFloat(elu) + parseFloat(tlu),
         tomochain: tLuasafeResult.data,
-        ethereum: eLuasafeResult.data
+        ethereum: eLuasafeResult.data,
       }
       setDataLuasafe(luasafe)
 
@@ -212,15 +212,14 @@ const Home: React.FC = () => {
           totalInUSD: parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
           balance: eBalanceResult.data,
           liquidity: eLiquidityResult.data,
-          luasafe: eLuasafeResult.data
-        }
+          luasafe: eLuasafeResult.data,
+        },
       }
       // @ts-ignore
       setDataNetwork(network)
       // return { wallet, liquidity, luasafe, network }
     }
-    if (account)
-      fetchBlockfolio(account)
+    if (account) fetchBlockfolio(account)
   }, [account])
 
   const [onPresentWallet] = useModal(<DataModal data={dataWallet} />)
@@ -245,7 +244,7 @@ const Home: React.FC = () => {
         </Heading>
       </PageHeader>
       <Page>
-        {wallets.length > 0 || account ?
+        {wallets.length > 0 || account ? (
           <>
             <Flex justifyContent="space-between">
               <div>
@@ -260,7 +259,7 @@ const Home: React.FC = () => {
             </Text>
             <Cards>
               <Card onClick={onPresentWallet}>
-                <Flex alignItems="center" >
+                <Flex alignItems="center">
                   <IconWrapper>
                     <WalletIcon />
                   </IconWrapper>
@@ -269,7 +268,7 @@ const Home: React.FC = () => {
 
                 <CardValue value={dataWallet.totalInUSD} decimals={2} prefix="$" lineHeight="1.5" fontSize="20px" />
               </Card>
-              {dataLiquidity.totalInUSD > 0 &&
+              {dataLiquidity.totalInUSD > 0 && (
                 <Card onClick={onPresentLiquidity}>
                   <Flex alignItems="center">
                     <IconWrapper>
@@ -279,8 +278,8 @@ const Home: React.FC = () => {
                   </Flex>
                   <CardValue value={dataLiquidity.totalInUSD} decimals={2} lineHeight="1.5" fontSize="20px" />
                 </Card>
-              }
-              {dataLuasafe.totalInUSD > 0 &&
+              )}
+              {dataLuasafe.totalInUSD > 0 && (
                 <Card onClick={onPresentLuasafe}>
                   <Flex alignItems="center">
                     <IconWrapper>
@@ -290,55 +289,115 @@ const Home: React.FC = () => {
                   </Flex>
                   <CardValue value={dataLuasafe.totalInUSD} prefix="$" decimals={2} lineHeight="1.5" fontSize="20px" />
                 </Card>
-              }
+              )}
             </Cards>
-            {(dataInUSD.ethNetwork > 0 || dataInUSD.tomoNetwork > 0) &&
+            {(dataInUSD.ethNetwork > 0 || dataInUSD.tomoNetwork > 0) && (
               <>
-                <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Network</Text>
+                <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px">
+                  {' '}
+                  Network
+                </Text>
                 <Cards>
-                  {dataInUSD.ethNetwork > 0 &&
+                  {dataInUSD.ethNetwork > 0 && (
                     <CardNetwork>
-                      <FlexNetwork >
+                      <FlexNetwork>
                         <Flex alignItems="center">
                           <IconWrapper>
                             <WalletIcon />
                           </IconWrapper>
                           <Text> Ethereum</Text>
                         </Flex>
-                        <CardValue value={dataInUSD.ethNetwork} decimals={2} prefix="$" lineHeight="1.5" fontSize="20px" />
+                        <CardValue
+                          value={dataInUSD.ethNetwork}
+                          decimals={2}
+                          prefix="$"
+                          lineHeight="1.5"
+                          fontSize="20px"
+                        />
                       </FlexNetwork>
                       <FlexBox>
-                        {dataInUSD.eBalance > 0 &&
-                          <Flex onClick={onEthWallet} justifyContent="space-between" alignItems="center" pt="10px" pb="10px">
+                        {dataInUSD.eBalance > 0 && (
+                          <Flex
+                            onClick={onEthWallet}
+                            justifyContent="space-between"
+                            alignItems="center"
+                            pt="10px"
+                            pb="10px"
+                          >
                             <Text>{t('Wallet')}</Text>
                             <Box width="400px" mr="20px" ml="20px">
-                              <Progress variant="round" primaryStep={(dataInUSD.eBalance / dataInUSD.ethNetwork) * 100} scale="sm" />
+                              <Progress
+                                variant="round"
+                                primaryStep={(dataInUSD.eBalance / dataInUSD.ethNetwork) * 100}
+                                scale="sm"
+                              />
                             </Box>
-                            <CardValue value={dataInUSD.eBalance} decimals={2} prefix="$" lineHeight="1.5" fontSize="16px" bold={false} />
+                            <CardValue
+                              value={dataInUSD.eBalance}
+                              decimals={2}
+                              prefix="$"
+                              lineHeight="1.5"
+                              fontSize="16px"
+                              bold={false}
+                            />
                           </Flex>
-                        }
-                        {dataInUSD.eLiquidity > 0 &&
-                          <Flex onClick={onEthLiquidity} justifyContent="space-between" alignItems="center" pt="10px" pb="10px" >
+                        )}
+                        {dataInUSD.eLiquidity > 0 && (
+                          <Flex
+                            onClick={onEthLiquidity}
+                            justifyContent="space-between"
+                            alignItems="center"
+                            pt="10px"
+                            pb="10px"
+                          >
                             <Text>{t('Liquidity Pool')}</Text>
                             <Box width="400px" mr="20px" ml="20px">
-                              <Progress variant="round" primaryStep={(dataInUSD.eLiquidity / dataInUSD.ethNetwork) * 100} scale="sm" />
+                              <Progress
+                                variant="round"
+                                primaryStep={(dataInUSD.eLiquidity / dataInUSD.ethNetwork) * 100}
+                                scale="sm"
+                              />
                             </Box>
-                            <CardValue value={dataInUSD.eLiquidity} decimals={2} prefix="$" lineHeight="1.5" fontSize="16px" bold={false} />
+                            <CardValue
+                              value={dataInUSD.eLiquidity}
+                              decimals={2}
+                              prefix="$"
+                              lineHeight="1.5"
+                              fontSize="16px"
+                              bold={false}
+                            />
                           </Flex>
-                        }
-                        {dataInUSD.eLuasafe > 0 &&
-                          <Flex onClick={onEthLuasafe} justifyContent="space-between" alignItems="center" pt="10px" pb="10px" >
+                        )}
+                        {dataInUSD.eLuasafe > 0 && (
+                          <Flex
+                            onClick={onEthLuasafe}
+                            justifyContent="space-between"
+                            alignItems="center"
+                            pt="10px"
+                            pb="10px"
+                          >
                             <Text>{t('LuaSafe')}</Text>
                             <Box width="400px" mr="20px" ml="20px">
-                              <Progress variant="round" primaryStep={(dataInUSD.eLuasafe / dataInUSD.ethNetwork) * 100} scale="sm" />
+                              <Progress
+                                variant="round"
+                                primaryStep={(dataInUSD.eLuasafe / dataInUSD.ethNetwork) * 100}
+                                scale="sm"
+                              />
                             </Box>
-                            <CardValue value={dataInUSD.eLuasafe} decimals={2} prefix="$" lineHeight="1.5" fontSize="16px" bold={false} />
+                            <CardValue
+                              value={dataInUSD.eLuasafe}
+                              decimals={2}
+                              prefix="$"
+                              lineHeight="1.5"
+                              fontSize="16px"
+                              bold={false}
+                            />
                           </Flex>
-                        }
+                        )}
                       </FlexBox>
                     </CardNetwork>
-                  }
-                  {dataInUSD.tomoNetwork > 0 &&
+                  )}
+                  {dataInUSD.tomoNetwork > 0 && (
                     <CardNetwork>
                       <FlexNetwork>
                         <Flex alignItems="center">
@@ -347,48 +406,104 @@ const Home: React.FC = () => {
                           </IconWrapper>
                           <Text> TomoChain</Text>
                         </Flex>
-                        <CardValue value={dataInUSD.tomoNetwork} decimals={2} prefix="$" lineHeight="1.5" fontSize="20px" />
+                        <CardValue
+                          value={dataInUSD.tomoNetwork}
+                          decimals={2}
+                          prefix="$"
+                          lineHeight="1.5"
+                          fontSize="20px"
+                        />
                       </FlexNetwork>
                       <FlexBox>
-                        {dataInUSD.tBalance > 0 &&
-                          <Flex onClick={onTomoWallet} justifyContent="space-between" alignItems="center" pt="10px" pb="10px">
+                        {dataInUSD.tBalance > 0 && (
+                          <Flex
+                            onClick={onTomoWallet}
+                            justifyContent="space-between"
+                            alignItems="center"
+                            pt="10px"
+                            pb="10px"
+                          >
                             <Text>{t('Wallet')}</Text>
                             <Box width="400px" mr="20px" ml="20px">
-                              <Progress variant="round" primaryStep={(dataInUSD.tBalance / dataInUSD.tomoNetwork) * 10} scale="sm" />
+                              <Progress
+                                variant="round"
+                                primaryStep={(dataInUSD.tBalance / dataInUSD.tomoNetwork) * 10}
+                                scale="sm"
+                              />
                             </Box>
-                            <CardValue value={dataInUSD.tBalance} decimals={2} prefix="$" lineHeight="1.5" fontSize="16px" bold={false} />
+                            <CardValue
+                              value={dataInUSD.tBalance}
+                              decimals={2}
+                              prefix="$"
+                              lineHeight="1.5"
+                              fontSize="16px"
+                              bold={false}
+                            />
                           </Flex>
-                        }
-                        {dataInUSD.tLiquidity > 0 &&
-                          <Flex onClick={onTomoLiquidity} justifyContent="space-between" alignItems="center" pt="10px" pb="10px" >
+                        )}
+                        {dataInUSD.tLiquidity > 0 && (
+                          <Flex
+                            onClick={onTomoLiquidity}
+                            justifyContent="space-between"
+                            alignItems="center"
+                            pt="10px"
+                            pb="10px"
+                          >
                             <Text>{t('Liquidity Pool')}</Text>
                             <Box width="400px" mr="20px" ml="20px">
-                              <Progress variant="round" primaryStep={(dataInUSD.tLiquidity / dataInUSD.tomoNetwork) * 100} scale="sm" />
+                              <Progress
+                                variant="round"
+                                primaryStep={(dataInUSD.tLiquidity / dataInUSD.tomoNetwork) * 100}
+                                scale="sm"
+                              />
                             </Box>
-                            <CardValue value={dataInUSD.tLiquidity} decimals={2} prefix="$" lineHeight="1.5" fontSize="16px" bold={false} />
+                            <CardValue
+                              value={dataInUSD.tLiquidity}
+                              decimals={2}
+                              prefix="$"
+                              lineHeight="1.5"
+                              fontSize="16px"
+                              bold={false}
+                            />
                           </Flex>
-                        }
-                        {dataInUSD.tLuasafe > 0 &&
-                          <Flex onClick={onTomoLuasafe} justifyContent="space-between" alignItems="center" pt="10px" pb="10px" >
+                        )}
+                        {dataInUSD.tLuasafe > 0 && (
+                          <Flex
+                            onClick={onTomoLuasafe}
+                            justifyContent="space-between"
+                            alignItems="center"
+                            pt="10px"
+                            pb="10px"
+                          >
                             <Text>{t('LuaSafe')}</Text>
                             <Box width="400px" mr="20px" ml="20px">
-                              <Progress variant="round" primaryStep={(dataInUSD.tLuasafe / dataInUSD.tomoNetwork) * 100} scale="sm" />
+                              <Progress
+                                variant="round"
+                                primaryStep={(dataInUSD.tLuasafe / dataInUSD.tomoNetwork) * 100}
+                                scale="sm"
+                              />
                             </Box>
-                            <CardValue value={dataInUSD.tLuasafe} decimals={2} prefix="$" lineHeight="1.5" fontSize="16px" bold={false} />
+                            <CardValue
+                              value={dataInUSD.tLuasafe}
+                              decimals={2}
+                              prefix="$"
+                              lineHeight="1.5"
+                              fontSize="16px"
+                              bold={false}
+                            />
                           </Flex>
-                        }
+                        )}
                       </FlexBox>
                     </CardNetwork>
-                  }
+                  )}
                 </Cards>
-
               </>
-            }
+            )}
           </>
-          : <InPutAddress />
-        }
-      </Page >
-
+        ) : (
+          <InPutAddress />
+        )}
+      </Page>
     </>
   )
 }

@@ -43,9 +43,9 @@ export default idosSlice.reducer
 
 // Thunks
 export const fetchPools =
-({ onSuccess, onError }: CallBackFunction) =>
-async (dispatch, getState) => {
-  try {
+  ({ onSuccess, onError }: CallBackFunction) =>
+  async (dispatch, getState) => {
+    try {
       const { data } = await axios.get(`https://api.luaswap.org/api/ido/pools/open`)
       dispatch(setOpenPools(data))
       onSuccess()
@@ -56,4 +56,4 @@ async (dispatch, getState) => {
 
 // Selector
 export const selectOpenPools = (state) => state.idos.openPools
-export const selectPool = index => state => state.idos.openPools[index]
+export const selectPool = (index) => (state) => state.idos.openPools[index]

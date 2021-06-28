@@ -4,7 +4,7 @@ import { BlockfolioState } from 'state/types'
 
 const initialState: BlockfolioState = {
   isLoading: false,
-  wallets: []
+  wallets: [],
 }
 
 export const blockfolioSlice = createSlice({
@@ -16,18 +16,18 @@ export const blockfolioSlice = createSlice({
         state.wallets.forEach((element, index) => {
           if (element.address !== action.payload.address) {
             state.wallets.push(action.payload)
-          } else{
+          } else {
             state.wallets[index] = action.payload
           }
         })
       } else {
         state.wallets.push(action.payload)
-      }      
+      }
     },
     // setActive: (state, action){
-      
+
     // }
-  }  
+  },
 })
 // // Actions
 export const { setWallet } = blockfolioSlice.actions

@@ -70,20 +70,14 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   }, [history, path])
 
   const poolData = useDeepMemo<FormatPool>(() => {
-    const {
-      img,
-      name,
-      description,
-      status,
-      index
-    } = pool
+    const { img, name, description, status, index } = pool
     // TODO: should refactor this piece of code when we have API
     return {
       img,
       name,
       description,
       status,
-      ...index["89"][0]
+      ...index['89'][0],
     }
   }, [pool, chainId])
 
@@ -128,7 +122,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
         <Flex justifyContent="space-between" mb="10px">
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
-            <Text>1 BUSD = 10 BBANK</Text> 
+            <Text>1 BUSD = 10 BBANK</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>
