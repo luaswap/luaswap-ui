@@ -30,7 +30,7 @@ const getProfile = async (address: string, chainId: number, account: string) => 
 }
 
 export const getTierData = async (account: string) => {
-  const { data = {} } = await axios.get('https://api.luaswap.org/api/ido/tier/0x5289d1a9c889b758269c3913136791b2d52d996a')
+  const { data = {} } = await axios.get(`https://api.luaswap.org/api/ido/tier/${account}`)
   return data.tier
 }
 
