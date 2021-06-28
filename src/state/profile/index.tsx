@@ -59,12 +59,12 @@ export const { profileFetchStart, profileFetchSucceeded, profileFetchFailed, pro
 
 // Thunks
 // TODO: this should be an AsyncThunk
-export const fetchProfile = (address: string, chainId: number, account: string) => async (dispatch: AppDispatch) => {
+export const fetchProfile = (address: string, chainId: number) => async (dispatch: AppDispatch) => {
   try {
     dispatch(profileFetchStart())
-    const tierResponse = await getTierData(account)
+    const tierResponse = await getTierData(address)
     dispatch(profileTierFetchSucceeded(tierResponse))
-    const response = await getProfile(address, chainId, account)
+    const response = await getProfile(address, chainId)
     dispatch(profileFetchSucceeded(response))
   } catch (error) {
     dispatch(profileFetchFailed())
