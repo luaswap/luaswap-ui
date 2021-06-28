@@ -36,6 +36,7 @@ const ImageContainer = styled.span`
 
 const TierCard = styled(Card)`
   width: 100%;
+  margin-bottom: 15px;
 
   ${({ theme }) => theme.mediaQueries.md} {
     width: calc(33.33% - 16px);
