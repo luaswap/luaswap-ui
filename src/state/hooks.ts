@@ -7,7 +7,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import useWeb3 from 'hooks/useWeb3'
 import useRefresh from 'hooks/useRefresh'
 import { setDefaultFarmData, fetchFarms, setBlock } from './actions'
-import { State, Farm, ProfileState, FarmsState, IdoState } from './types'
+import { State, Farm, ProfileState, FarmsState, IdoState, BlockfolioState } from './types'
 import { fetchProfile } from './profile'
 import { fetchAllIdoData } from './ido'
 
@@ -112,6 +112,9 @@ export const useInitialBlock = () => {
 }
 // Blockfolio
 
-// export const useWallet = () => {
-//   return useSelect((state: State) => state.blockfolio.wallets)
-// }
+export const useWallet = (): BlockfolioState => {
+  return useSelector((state: State) => state.blockfolio)
+}
+// const walletByAdress = walletState.reduce((acc, curr) => {
+//     return acc[curr.address]
+//   }, {})
