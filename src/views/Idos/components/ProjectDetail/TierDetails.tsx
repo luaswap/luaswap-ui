@@ -40,6 +40,7 @@ const TierCard = styled(Card)`
 
   ${({ theme }) => theme.mediaQueries.md} {
     width: calc(33.33% - 16px);
+    margin-bottom: 0;
   }
 `
 
