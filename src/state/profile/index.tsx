@@ -12,6 +12,7 @@ const initialState: ProfileState = {
     luaUnlockAble: '0',
     totalLuaLock: '0',
     userTier: null,
+    nextTier: [],
   },
 }
 
@@ -26,17 +27,18 @@ export const profileSlice = createSlice({
       const { totalLuaLock, luaUnlockAble, tier } = action.payload
       _state.isLoading = false
       _state.data = {
+        ..._state.data,
         totalLuaLock,
         luaUnlockAble,
-        userTier: tier,
       }
     },
     profileTierFetchSucceeded: (_state, action) => {
-      const tier = action.payload
+      const { tier, nextTiers } = action.payload
       _state.isLoading = false
       _state.data = {
         ..._state.data,
         userTier: tier,
+        nextTier: nextTiers,
       }
     },
     profileFetchFailed: (state) => {

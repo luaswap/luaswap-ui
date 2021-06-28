@@ -70,6 +70,8 @@ const TierDetails: React.FC<{
 }> = ({ index }) => {
   const userTier = useSelector(selectUserTier)
 
+  console.log(userTier)
+
   const pool = useSelector(selectPool(index))
 
   const tiersss: IdoDetailInfo[] = useMemo(() => {
@@ -131,8 +133,8 @@ const TierDetails: React.FC<{
             {totalCommittedAmount} {payToken.symbol}
           </Text>
         </Flex>
-        {userTier + 1 === parseInt(tier) ? (
-          <Button width="100%" mt="30px" disabled={userTier + 1 === parseInt(tier)}>
+        {userTier + 2 === parseInt(tier) && (
+          <Button width="100%" mt="30px" disabled={userTier + 2 === parseInt(tier)}>
             <Text bold>Your Tier. GET READY!</Text>
             <Image
               src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
@@ -142,7 +144,8 @@ const TierDetails: React.FC<{
               ml="20px"
             />
           </Button>
-        ) : (
+        )}
+        {userTier + 2 < parseInt(tier) && (
           <Button width="100%" mt="30px" variant="subtle">
             {TIER_INFO[tier].CTA}
           </Button>

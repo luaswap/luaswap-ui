@@ -19,21 +19,17 @@ const getProfile = async (address: string, chainId: number) => {
     cache: true,
   })
 
-  // Todo: we should change to real account here
-  const { data = {} } = await axios.get(
-    'https://api.luaswap.org/api/ido/tier/0x5289d1a9c889b758269c3913136791b2d52d996a',
-  )
   const [totalLuaLockResult, luaUnlockAbleResult] = await Promise.all([totalLuaLockPromise, luaUnLockAblePromise])
   const totalLuaLock = new TokenAmount(LUA, totalLuaLockResult.data.data || '0')
   const luaUnlockAble = new TokenAmount(LUA, luaUnlockAbleResult.data.data || '0')
   const formatLuaLock = new BigNumber(totalLuaLock.toFixed(3)).toFormat()
   const formatLuaUnlockable = new BigNumber(luaUnlockAble.toFixed(3)).toFormat()
-  return { totalLuaLock: formatLuaLock, luaUnlockAble: formatLuaUnlockable, tier: data.tier }
+  return { totalLuaLock: formatLuaLock, luaUnlockAble: formatLuaUnlockable }
 }
 
 export const getTierData = async (account: string) => {
   const { data = {} } = await axios.get(`https://api.luaswap.org/api/ido/tier/${account}`)
-  return data.tier
+  return data
 }
 
 export default getProfile

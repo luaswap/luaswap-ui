@@ -46,10 +46,17 @@ export interface Pool extends PoolConfig {
   }
 }
 
+export interface Tier {
+  addQuantityLua: number
+  addQuantityTomo: number
+  tier: number
+}
+
 export interface Profile {
   totalLuaLock: string
   luaUnlockAble: string
   userTier: number | null
+  nextTier: Tier[]
 }
 
 // Slices states
