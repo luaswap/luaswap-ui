@@ -72,3 +72,7 @@ export const fetchProfile = (address: string, chainId: number, account: string) 
 }
 
 export default profileSlice.reducer
+
+// Selectors
+export const selectUserData = (state) => state.profile.data
+export const selectUserTier = (state) => selectUserData(state).userTier
