@@ -10,12 +10,14 @@ interface ActionButtonProps {
   onCommit(): any
   onClaim(): any
   disabled: boolean
+  symbol: string
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
   poolStatus,
   onClaim,
   onCommit,
+  symbol,
   disabled,
 }): ReactElement | null => {
   const { account } = useWeb3React()
@@ -29,7 +31,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   }
 
   if (poolStatus === 'open') {
-    return <CommitButton onClick={onCommit} />
+    return <CommitButton onClick={onCommit} symbol={symbol} />
   }
 
   return null

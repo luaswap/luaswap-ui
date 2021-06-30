@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 import { Flex, Button, Text } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { Pool } from 'views/Idos/types'
@@ -17,7 +18,7 @@ interface ProjectInfoProps {
 }
 
 const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
-  const { projectDetail, links } = currentPoolData
+  const { projectDetail, links = [] } = currentPoolData
 
   return (
     <StyledWrapper flexDirection="column">

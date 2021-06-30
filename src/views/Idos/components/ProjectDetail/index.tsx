@@ -10,7 +10,7 @@ import { mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { useLuaIdoContract } from 'hooks/useContract'
 import useWeb3 from 'hooks/useWeb3'
 import { IdoDetail } from 'state/types'
-import { fetchPool, selectCurrentPool, selectLoadingStatus } from 'state/ido'
+import { fetchPool, selectCurrentPool, selectLoadingCurrentPool } from 'state/ido'
 import { useAppDispatch } from 'state'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { useBlock } from 'state/hooks'
@@ -65,14 +65,13 @@ const ProjectDetail = () => {
   const [totalCommited, setTotalCommited] = useState<string>('0')
   const luaIdoContract = useLuaIdoContract(chainId)
   const currentPoolData = useSelector(selectCurrentPool)
-  const isLoadingPool = useSelector(selectLoadingStatus)
+  const isLoadingPool = useSelector(selectLoadingCurrentPool)
   const { currentBlock } = useBlock()
   useEffect(() => {
     const fetchData = async () => {
       try {
         const idoDetailInfo = await luaIdoContract.methods.IDOs(0).call()
         const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
-        console.log(idoDetailInfo, 'ido detaulk ìno')
         setIdoDetail(mappingIdoResponse(idoDetailInfo))
         setTotalCommited(getFullDisplayBalance(commitedAmount))
         setLoading(false)
@@ -103,7 +102,7 @@ const ProjectDetail = () => {
             {' '}
             <StyledFlex mb="40px" flexWrap="wrap">
               <PoolSummary idoDetail={idoDetail} currentPoolData={currentPoolData} />
-              <Deposit idoDetail={idoDetail} totalCommited={totalCommited} />
+              <Deposit idoDetail={idoDetail} totalCommited={totalCommited} currentPoolData={currentPoolData} />
             </StyledFlex>
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Tier Infomation

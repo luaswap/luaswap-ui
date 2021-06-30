@@ -105,8 +105,14 @@ export interface ProfileState {
 export interface IdoState {
   idos: IdoDetail[]
   isLoading: boolean
-  openPools: PoolIdoDetail[]
-  currentPool: PoolIdoDetail | Record<string, unknown>
+  openPools: {
+    isLoading: boolean
+    data: PoolIdoDetail[]
+  }
+  currentPool: {
+    isLoading: boolean
+    data: PoolIdoDetail | Record<string, unknown>
+  }
 }
 
 export type TeamResponse = {

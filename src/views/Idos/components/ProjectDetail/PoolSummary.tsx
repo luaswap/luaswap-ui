@@ -61,7 +61,10 @@ interface PoolSummaryProps {
 
 const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData }) => {
   const { totalAmountIDO, totalAmountPay, totalCommittedAmount, swappedAmountPay } = idoDetail
-  const { img, description, name } = currentPoolData
+  const { img, description, name, index } = currentPoolData
+  console.log(currentPoolData, 'current pool data ?')
+  // Todo: we should change this code when deploy to test ENV
+  const { idoToken, payToken } = index['89'][0]
   const [poolStatus] = usePoolStatus(idoDetail)
   const rate = useMemo(() => {
     return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(2)
@@ -94,7 +97,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData })
     <CardWrapper>
       <CardBody
         style={{
-          height: '375px',
+          height: '350px',
         }}
       >
         <Flex mb="15px" alignItems="center">
@@ -128,7 +131,9 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData })
         <Flex justifyContent="space-between" mb="10px">
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
-            <Text>1 ETH = {rate} BBANK</Text>
+            <Text>
+              1 {payToken.symbol} = {rate} {idoToken.symbol}
+            </Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>
@@ -157,7 +162,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData })
         </Flex>
         <Flex justifyContent="space-between" mt="10px">
           <Text>
-            {isPoolInProgress ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay} ETH
+            {isPoolInProgress ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay} {payToken.symbol}
           </Text>
           <Text color="secondary">{isPoolInProgress ? totalCommitedPercentage : totalSwapAmountPercentage}%</Text>
         </Flex>

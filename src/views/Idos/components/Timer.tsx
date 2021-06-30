@@ -18,7 +18,7 @@ const Timer: React.FC<Props> = ({ suffix, timeUntil }) => {
   const { t } = useTranslation()
 
   return (
-    <Flex justifyContent="center" mb="32px">
+    <Flex justifyContent="center" mb="16px">
       <>
         <PocketWatchIcon width="48px" mr="16px" />
         <Flex alignItems="center">

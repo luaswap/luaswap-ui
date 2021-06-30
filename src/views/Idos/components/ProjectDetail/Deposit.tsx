@@ -8,6 +8,7 @@ import { IdoDetail } from 'state/types'
 import useDepositIdo from 'hooks/useDepositIdo'
 import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import ModalInput from 'components/ModalInput'
+import { Pool } from 'views/Idos/types'
 import { getDecimalAmount } from 'utils/formatBalance'
 import { getUtcDateString } from 'utils/formatTime'
 import ActionButton from './ActionButton'
@@ -25,9 +26,10 @@ const CardWrapper = styled(Card)`
 interface DepositProps {
   idoDetail: IdoDetail | null
   totalCommited: string
+  currentPoolData: Pool
 }
 
-const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
+const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited, currentPoolData }) => {
   const { account } = useWeb3React()
   const [value, setValue] = useState('0')
   const { toastSuccess, toastError } = useToast()
@@ -35,6 +37,9 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
   const { onClaimReward } = useClaimRewardIdo()
   const { maxAmountPay, claimAt, totalCommittedAmount } = idoDetail
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(idoDetail)
+  const { index } = currentPoolData
+  // Todo: we should change this code when deploy to test ENV
+  const { payToken } = index['89'][0]
   const maxAmountAllowed = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommited)).toString()
   }, [maxAmountPay, totalCommited])
@@ -110,6 +115,7 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
             onCommit={onHandleCommit}
             onClaim={onHandleClaim}
             disabled={!isClaimable}
+            symbol={payToken.symbol}
           />
           {account && isPoolInProgress && (
             <ModalInput
@@ -117,7 +123,7 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
               onSelectMax={handleSelectMax}
               onChange={handleChange}
               max={maxAmountAllowed}
-              symbol="USDT"
+              symbol={payToken.symbol}
               inputTitle="Deposit"
             />
           )}
