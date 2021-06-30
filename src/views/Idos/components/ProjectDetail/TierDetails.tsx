@@ -6,7 +6,7 @@ import { selectUserTier } from 'state/profile'
 import { Card, CardBody, Text, Flex, Image, Button } from 'common-uikitstrungdao'
 import { selectPool } from 'state/ido'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
-import { IdoDetailInfo } from 'views/Idos/types'
+import { ChainId, IdoDetailInfo } from 'views/Idos/types'
 
 interface TierProps {
   data: IdoDetailInfo
@@ -122,26 +122,22 @@ const Tier: React.FC<TierProps> = ({
 )
 
 const TierDetails: React.FC<{
-  index: string
-}> = ({ index }) => {
+  tierData: Record<ChainId, IdoDetailInfo[]>
+}> = ({ tierData }) => {
   const userTier = useSelector(selectUserTier)
 
-  console.log(userTier)
-
-  const pool = useSelector(selectPool(index))
-
   const tiersss: IdoDetailInfo[] = useMemo(() => {
-    if (pool) {
-      const chainIds = Object.keys(pool.index)
-      let result: IdoDetailInfo[] = pool.index[chainIds[0]]
+    if (tierData) {
+      const chainIds = Object.keys(tierData)
+      let result: IdoDetailInfo[] = tierData[chainIds[0]]
       for (let i = 1; i < chainIds.length; i++) {
-        result = formatPoolTotalTierByChainID(result, pool.index[chainIds[i]])
+        result = formatPoolTotalTierByChainID(result, tierData[chainIds[i]])
       }
 
       return result
     }
     return []
-  }, [pool])
+  }, [tierData])
 
   return (
     <Flex flexWrap="wrap" justifyContent="space-between">

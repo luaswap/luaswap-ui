@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Flex, Heading } from 'common-uikitstrungdao'
+import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/layout/Page'
@@ -8,7 +10,8 @@ import { mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { useLuaIdoContract } from 'hooks/useContract'
 import useWeb3 from 'hooks/useWeb3'
 import { IdoDetail } from 'state/types'
-import makeBatchRequest from 'utils/makeBatchRequest'
+import { fetchPool, selectCurrentPool, selectLoadingStatus } from 'state/ido'
+import { useAppDispatch } from 'state'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { useBlock } from 'state/hooks'
 
@@ -48,22 +51,28 @@ const defaultIdoDetail = {
   totalCommittedAmount: null,
 }
 
+interface ParamsType {
+  id: string
+}
+
 const ProjectDetail = () => {
   const { chainId, account } = useWeb3React()
   const web3 = useWeb3()
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
   const [loading, setLoading] = useState(true)
+  const { id } = useParams<ParamsType>()
+  const dispatch = useAppDispatch()
   const [totalCommited, setTotalCommited] = useState<string>('0')
   const luaIdoContract = useLuaIdoContract(chainId)
+  const currentPoolData = useSelector(selectCurrentPool)
+  const isLoadingPool = useSelector(selectLoadingStatus)
   const { currentBlock } = useBlock()
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [idoDetailInfo, commitedAmount] = await makeBatchRequest(
-          [luaIdoContract.methods.IDOs(0).call, luaIdoContract.methods.userCommitedAmount(account, 0).call],
-          web3,
-        )
+        const idoDetailInfo = await luaIdoContract.methods.IDOs(0).call()
+        const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
+        console.log(idoDetailInfo, 'ido detaulk ìno')
         setIdoDetail(mappingIdoResponse(idoDetailInfo))
         setTotalCommited(getFullDisplayBalance(commitedAmount))
         setLoading(false)
@@ -75,29 +84,36 @@ const ProjectDetail = () => {
     if (account) {
       fetchData()
     }
-  }, [luaIdoContract, account, currentBlock, web3])
+  }, [luaIdoContract, account, currentBlock, web3, id])
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchPool(id))
+    }
+  }, [id, dispatch])
 
   return (
     <Page>
       <Row>
-        {loading ? (
+        {/* When we finish loading data from contract + data from API */}
+        {loading || isLoadingPool ? (
           <PageLoader />
         ) : (
           <>
             {' '}
             <StyledFlex mb="40px" flexWrap="wrap">
-              <PoolSummary idoDetail={idoDetail} />
+              <PoolSummary idoDetail={idoDetail} currentPoolData={currentPoolData} />
               <Deposit idoDetail={idoDetail} totalCommited={totalCommited} />
             </StyledFlex>
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Tier Infomation
             </Heading>
-            <TierDetails index="0" />
+            <TierDetails tierData={currentPoolData.index} />
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Project Detail
             </Heading>
             <StyledFlex flexWrap="wrap">
-              <ProjectInfo />
+              <ProjectInfo currentPoolData={currentPoolData} />
               <PoolInformation />
             </StyledFlex>
             <Steps />

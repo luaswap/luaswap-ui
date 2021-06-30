@@ -106,6 +106,7 @@ export interface IdoState {
   idos: IdoDetail[]
   isLoading: boolean
   openPools: PoolIdoDetail[]
+  currentPool: PoolIdoDetail | Record<string, unknown>
 }
 
 export type TeamResponse = {

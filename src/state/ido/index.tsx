@@ -5,12 +5,14 @@ import axios from 'axios'
 import { IsTomoChain } from 'utils/wallet'
 import { IdoState } from 'state/types'
 import { API_ETH, API_TOMO } from 'config'
+import { Pool } from 'views/Idos/types'
 import { fetchIdosInformation } from './fetchIdosData'
 
 const initialState: IdoState = {
   isLoading: false,
   idos: [],
   openPools: [],
+  currentPool: {},
 }
 
 interface CallBackFunction {
@@ -28,6 +30,9 @@ export const idosSlice = createSlice({
     setOpenPools: (state, action) => {
       state.openPools = action.payload
     },
+    setCurrentPool: (state, action) => {
+      state.currentPool = action.payload
+    },
     fetchIdoStats: (state) => {
       state.isLoading = true
     },
@@ -38,7 +43,7 @@ export const idosSlice = createSlice({
 })
 
 // Actions
-export const { setIdosData, setOpenPools, fetchIdoEnds, fetchIdoStats } = idosSlice.actions
+export const { setIdosData, setOpenPools, setCurrentPool, fetchIdoEnds, fetchIdoStats } = idosSlice.actions
 
 export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
   const idosInformation = await fetchIdosInformation(chainId, web3)
@@ -59,8 +64,20 @@ export const fetchPools = () => async (dispatch, getState) => {
   }
 }
 
+export const fetchPool = (id: string) => async (dispatch, getState) => {
+  try {
+    dispatch(fetchIdoStats())
+    const { data } = await axios.get(`https://api.luaswap.org/api/ido/pools/detail/open/${id}`)
+    dispatch(setCurrentPool(data))
+    dispatch(fetchIdoEnds())
+  } catch (error) {
+    dispatch(fetchIdoEnds())
+  }
+}
+
 // Selector
 export const selectIdoState = (state) => state.idos
 export const selectOpenPools = (state) => selectIdoState(state).openPools
 export const selectLoadingStatus = (state) => selectIdoState(state).isLoading
+export const selectCurrentPool = (state): Pool => selectIdoState(state).currentPool
 export const selectPool = (index) => (state) => selectIdoState(state).openPools[index]

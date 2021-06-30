@@ -26,7 +26,7 @@ const TimerClaim = ({ claimAtSeconds }) => {
 }
 
 const CountDown: React.FC<CountDownProps> = ({ openAtSeconds, closedAtSeconds, claimAtSeconds, poolStatus }) => {
-  if (poolStatus === 'closed') {
+  if (poolStatus === 'closed' || poolStatus === null) {
     return null
   }
 

@@ -61,8 +61,8 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
   const navigateToProjectDetail = useCallback(() => {
-    history.push(`${path}/project/1`)
-  }, [history, path])
+    history.push(`${path}/project/${pool.id}`)
+  }, [history, path, pool.id])
 
   const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO, status } =
     useDeepMemo<FormatPool>(() => {
