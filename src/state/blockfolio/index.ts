@@ -12,15 +12,14 @@ export const blockfolioSlice = createSlice({
   initialState,
   reducers: {
     setWallet: (state, action) => {
-      // console.log(Object.keys(state.wallets))
       Object.keys(state.wallets).forEach(key => {
-        // console.log(key)
-        state.wallets[key] = {
-          ...state.wallets[key],
-          isActive: false
+        if(key !== action.payload.address){
+          state.wallets[key] = {
+            ...state.wallets[key],
+            isActive: false
+          }
         }
       })
-      console.log(Object.values(state.wallets))
       state.wallets[action.payload.address] = action.payload
     },
     addWalletFromInput: (state, action) => {
@@ -28,13 +27,14 @@ export const blockfolioSlice = createSlice({
     },
     setWalletActive: (state, action) => {
       Object.keys(state.wallets).forEach(key => {
-        console.log(key !== action.payload)
+        // active => false
         if(key !== action.payload){
           state.wallets[key] = {
             ...state.wallets[key],
             isActive: false
           }
         } else {
+          // active => true
           state.wallets[action.payload] = {
             ...state.wallets[action.payload],
             isActive: true

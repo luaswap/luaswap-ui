@@ -4,16 +4,13 @@ import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Heading, Text, BaseLayout, Progress, Flex, useModal, Box, Skeleton } from 'common-uikitstrungdao'
 
-// import { API_BLOCKFOLIO } from 'config'
+import { API_BLOCKFOLIO } from 'config'
 import { useAppDispatch } from 'state'
 import { useWallet } from 'state/hooks'
 import { DataApiType } from 'state/types'
 import { setWallet } from 'state/blockfolio'
-// import { fetBlockfolio } from 'state/blockfolio/fetBlockfolio'
-// import { fetchWallet } from 'state/portfolio'
 import { useTranslation } from 'contexts/Localization'
 import PageHeader from 'components/PageHeader'
-import UnlockButton from 'components/UnlockButton'
 import Page from 'components/layout/Page'
 import CardValue from './components/CardValue'
 import DataModal from './components/DataModal'
@@ -24,8 +21,6 @@ import WalletIcon from './components/Icon/WalletIcon'
 import PoolIcon from './components/Icon/PoolIcon'
 import AccountLoading from './components/Loading/AccountLoading'
 import NetworkLoading from './components/Loading/NetworkLoading'
-
-
 
 const initialState: DataApiType = {
   totalInUSD: 0,
@@ -82,7 +77,6 @@ const Card = styled.div`
   align-items: center;
   padding: 20px;
   border-radius: 15px;
-  // border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   cursor: pointer;
 `
@@ -148,19 +142,23 @@ const Home: React.FC = () => {
   
   useEffect(() => {    
     const fetchBlockfolio = async (address: string) => {
-      const tBalance = axios.get(`${'http://localhost:8020/tomochain/balance/'}${address}`)
-      const tLiquidity = axios.get(`${'http://localhost:8020/tomochain/luaswapliquidity/'}${address}`)
-      const tLuasafe = axios.get(`${'http://localhost:8020/tomochain/luasafe/'}${address}`)
-      const eBalance = axios.get(`${'http://localhost:8020/ethereum/balance/'}${address}`)
-      const eLiquidity = axios.get(`${'http://localhost:8020/ethereum/luaswapliquidity/'}${address}`)
-      const eLuasafe = axios.get(`${'http://localhost:8020/ethereum/luasafe/'}${address}`)
-      // const tMasternode = axios.get(`${'https://api.luaswap.org/api-v3/tomochain/staking/'}${address}`)
+      const tBalance = axios.get(`${API_BLOCKFOLIO}tomochain/balance/${address}`)
+      const tLiquidity = axios.get(`${API_BLOCKFOLIO}/tomochain/luaswapliquidity/${address}`)
+      const tLuasafe = axios.get(`${API_BLOCKFOLIO}tomochain/luasafe/${address}`)
+      const tLuafarm = axios.get(`${API_BLOCKFOLIO}tomochain/luafarm/${address}`)
+      const tMasternode = axios.get(`${API_BLOCKFOLIO}tomochain/staking/${address}`)
+
+      const eBalance = axios.get(`${API_BLOCKFOLIO}ethereum/balance/${address}`)
+      const eLiquidity = axios.get(`${API_BLOCKFOLIO}ethereum/luaswapliquidity/${address}`)
+      const eLuasafe = axios.get(`${API_BLOCKFOLIO}ethereum/luasafe/${address}`)
+      const eLuafarm = axios.get(`${API_BLOCKFOLIO}ethereum/luafarm/${address}`)
+      
       setIsLoading(true)
       const [tBalanceResult, tLiquidityResult, tLuasafeResult, eBalanceResult, eLiquidityResult, eLuasafeResult] =
         await Promise.all([tBalance, tLiquidity, tLuasafe, eBalance, eLiquidity, eLuasafe])
       setIsLoading(false)
       // Return normalized token names
-      
+      // console.log(tMasternodeResult)
       const eb = eBalanceResult.data.totalInUSD.replace(/,/g, '')
       const tb = tBalanceResult.data.totalInUSD.replace(/,/g, '')
       const eli = eLiquidityResult.data.totalInUSD.replace(/,/g, '')

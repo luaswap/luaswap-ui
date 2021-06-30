@@ -34,6 +34,7 @@ const StyleWalletManage = styled.div`
   top: 100%;
   right: 0;
   border-radius: 15px;
+  z-index: 1;
 `
 const StyleBox = styled.div`
   padding-bottom: 10px;
@@ -114,7 +115,7 @@ const AddressManage: React.FC<AddressManageProps> = ({data}) => {
             <StyleBox>
             <Text pb="10px">Connected</Text>
             {filterWalletConnected.map((w) => 
-              <AddressBox>
+              <AddressBox key={w.address}>
                 <IconWrapper>
                   <WalletIcon />
                 </IconWrapper>
@@ -136,7 +137,7 @@ const AddressManage: React.FC<AddressManageProps> = ({data}) => {
             <StyleBox>
             <Text pb="10px">Watched</Text>
             {filterWalletWatched.map((w) => 
-              <AddressBox>
+              <AddressBox  key={w.address}>
                 <IconWrapper>
                   <WalletIcon />
                 </IconWrapper>
