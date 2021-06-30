@@ -62,7 +62,6 @@ interface PoolSummaryProps {
 const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData }) => {
   const { totalAmountIDO, totalAmountPay, totalCommittedAmount, swappedAmountPay } = idoDetail
   const { img, description, name, index } = currentPoolData
-  console.log(currentPoolData, 'current pool data ?')
   // Todo: we should change this code when deploy to test ENV
   const { idoToken, payToken } = index['89'][0]
   const [poolStatus] = usePoolStatus(idoDetail)

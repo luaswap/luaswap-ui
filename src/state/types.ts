@@ -109,9 +109,13 @@ export interface IdoState {
     isLoading: boolean
     data: PoolIdoDetail[]
   }
+  closedPools: {
+    isLoading: boolean
+    data: PoolIdoDetail[]
+  }
   currentPool: {
     isLoading: boolean
-    data: PoolIdoDetail | Record<string, unknown>
+    data: PoolIdoDetail
   }
 }
 

@@ -6,7 +6,7 @@ import { selectUserNextTier, selectUserTier } from 'state/profile'
 import { Card, CardBody, Text, Flex, Image, Button } from 'common-uikitstrungdao'
 import { selectPool } from 'state/ido'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
-import { ChainId, IdoDetailInfo } from 'views/Idos/types'
+import { ChainId, IdoDetailInfo, Pool } from 'views/Idos/types'
 import { Tier } from 'state/types'
 
 interface TierProps {
@@ -125,10 +125,11 @@ const TierCard: React.FC<TierProps> = ({
 )
 
 const TierDetails: React.FC<{
-  tierData: Record<ChainId, IdoDetailInfo[]>
-}> = ({ tierData }) => {
+  currentPoolData: Pool
+}> = ({ currentPoolData }) => {
   const userTier = useSelector(selectUserTier)
   const userNextTier = useSelector(selectUserNextTier)
+  const { index: tierData } = currentPoolData
   const nextTier = userNextTier.reduce((s: { [key: number]: Tier }, e: Tier) => {
     const tmps = s
     tmps[e.tier] = e

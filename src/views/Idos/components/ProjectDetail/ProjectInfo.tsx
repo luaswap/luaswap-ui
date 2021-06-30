@@ -18,18 +18,19 @@ interface ProjectInfoProps {
 }
 
 const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
-  const { projectDetail, links = [] } = currentPoolData
+  const { projectDetail, links } = currentPoolData
 
   return (
     <StyledWrapper flexDirection="column">
       <Flex>
-        {links.map((item) => {
-          return (
-            <Button mr="10px" variant="tertiary" as="a" href={item.link} target="__blank">
-              {item.label}
-            </Button>
-          )
-        })}
+        {Array.isArray(links) &&
+          links.map((item) => {
+            return (
+              <Button mr="10px" variant="tertiary" as="a" href={item.link} target="__blank">
+                {item.label}
+              </Button>
+            )
+          })}
       </Flex>
       <Text mt="20px">{projectDetail}</Text>
     </StyledWrapper>

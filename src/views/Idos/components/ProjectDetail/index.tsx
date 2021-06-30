@@ -70,9 +70,9 @@ const ProjectDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const idoDetailInfo = await luaIdoContract.methods.IDOs(0).call()
+        const contractIdoDetail = await luaIdoContract.methods.IDOs(0).call()
         const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
-        setIdoDetail(mappingIdoResponse(idoDetailInfo))
+        setIdoDetail(mappingIdoResponse(contractIdoDetail))
         setTotalCommited(getFullDisplayBalance(commitedAmount))
         setLoading(false)
       } catch (error) {
@@ -107,7 +107,7 @@ const ProjectDetail = () => {
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Tier Infomation
             </Heading>
-            <TierDetails tierData={currentPoolData.index} />
+            <TierDetails currentPoolData={currentPoolData} />
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Project Detail
             </Heading>

@@ -1,10 +1,10 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import Web3 from 'web3'
 import axios from 'axios'
-import { IsTomoChain } from 'utils/wallet'
 import { IdoState } from 'state/types'
-import { API_ETH, API_TOMO } from 'config'
+import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
 import { fetchIdosInformation } from './fetchIdosData'
 
@@ -15,15 +15,25 @@ const initialState: IdoState = {
     isLoading: true,
     data: [],
   },
+  closedPools: {
+    isLoading: true,
+    data: [],
+  },
   currentPool: {
     isLoading: true,
-    data: {},
+    data: {
+      id: null,
+      img: null,
+      name: null,
+      description: null,
+      openAt: null,
+      closeAt: null,
+      claimAt: null,
+      status: null,
+      projectDetail: null,
+      links: [],
+    },
   },
-}
-
-interface CallBackFunction {
-  onSuccess: () => void
-  onError: () => void
 }
 
 export const idosSlice = createSlice({
@@ -35,6 +45,9 @@ export const idosSlice = createSlice({
     },
     setOpenPools: (state, action) => {
       state.openPools.data = action.payload
+    },
+    setClosedPools: (state, action) => {
+      state.closedPools.data = action.payload
     },
     setCurrentPool: (state, action) => {
       state.currentPool.data = action.payload
@@ -50,6 +63,12 @@ export const idosSlice = createSlice({
     },
     fetchOpenPoolsEnds: (state) => {
       state.openPools.isLoading = false
+    },
+    fetchClosedPoolsStarts: (state) => {
+      state.closedPools.isLoading = true
+    },
+    fetchClosedPoolsEnds: (state) => {
+      state.closedPools.isLoading = false
     },
     fetchCurrentPoolStarts: (state) => {
       state.currentPool.isLoading = true
@@ -71,6 +90,9 @@ export const {
   fetchCurrentPoolEnds,
   fetchOpenPoolsEnds,
   fetchOpenPoolsStarts,
+  fetchClosedPoolsEnds,
+  fetchClosedPoolsStarts,
+  setClosedPools,
 } = idosSlice.actions
 
 export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
@@ -92,6 +114,17 @@ export const fetchPools = () => async (dispatch, getState) => {
   }
 }
 
+export const fetchClosedPools = () => async (dispatch, getState) => {
+  try {
+    dispatch(fetchClosedPoolsStarts())
+    const { data } = await axios.get(`https://api.luaswap.org/api/ido/pools/open`)
+    dispatch(setClosedPools(data))
+    dispatch(fetchClosedPoolsEnds())
+  } catch (error) {
+    dispatch(fetchClosedPoolsEnds())
+  }
+}
+
 export const fetchPool = (id: string) => async (dispatch, getState) => {
   try {
     dispatch(fetchCurrentPoolStarts())
@@ -104,10 +137,12 @@ export const fetchPool = (id: string) => async (dispatch, getState) => {
 }
 
 // Selector
-export const selectIdoState = (state) => state.idos
-export const selectOpenPools = (state) => selectIdoState(state).openPools.data
-export const selectLoadingStatus = (state) => selectIdoState(state).isLoading
-export const selectLoadingOpenPools = (state) => selectIdoState(state).openPools.isLoading
-export const selectLoadingCurrentPool = (state) => selectIdoState(state).currentPool.isLoading
-export const selectCurrentPool = (state): Pool => selectIdoState(state).currentPool.data
-export const selectPool = (index) => (state) => selectIdoState(state).openPools[index]
+export const selectIdoState = (state: RootState): IdoState => state.idos
+export const selectOpenPools = (state: RootState): Pool[] => selectIdoState(state).openPools.data
+export const selectClosedPools = (state: RootState): Pool[] => selectIdoState(state).closedPools.data
+export const selectLoadingStatus = (state: RootState): boolean => selectIdoState(state).isLoading
+export const selectLoadingOpenPools = (state: RootState): boolean => selectIdoState(state).openPools.isLoading
+export const selectLoadingClosedPools = (state: RootState): boolean => selectIdoState(state).closedPools.isLoading
+export const selectLoadingCurrentPool = (state: RootState): boolean => selectIdoState(state).currentPool.isLoading
+export const selectCurrentPool = (state: RootState): Pool => selectIdoState(state).currentPool.data
+export const selectPool = (index: number) => (state: RootState) => selectIdoState(state).openPools[index]
