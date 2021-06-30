@@ -96,7 +96,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
 
   // const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
   const addLiquidityUrl = farm.addLiquidityLink
-  const pairLink = farm.pairLink
+  const { pairLink } = farm
   const lpAddress = farm.lpAddresses[chainId]
   const isPromotedFarm = farm.token.symbol === 'CAKE'
 

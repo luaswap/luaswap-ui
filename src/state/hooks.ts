@@ -9,7 +9,7 @@ import useRefresh from 'hooks/useRefresh'
 import { setDefaultFarmData, fetchFarms, setBlock } from './actions'
 import { State, Farm, ProfileState, FarmsState, IdoState, BlockfolioState } from './types'
 import { fetchProfile } from './profile'
-import { fetchAllIdoData } from './ido'
+import { fetchAllIdoData, fetchPools } from './ido'
 
 export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()
@@ -45,7 +45,7 @@ export const useFetchIdoData = () => {
   const { chainId } = useWeb3React()
 
   useEffect(() => {
-    dispatch(fetchAllIdoData(chainId, web3))
+    dispatch(fetchPools())
   }, [chainId, web3, dispatch])
 }
 

@@ -1,15 +1,15 @@
 import BigNumber from 'bignumber.js'
 import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constants/types'
-import { IdoDetail } from './ido/fetchIdosData'
+import { Pool as PoolIdoDetail } from 'views/Idos/types'
 
 export type TranslatableText =
   | string
   | {
-    key: string
-    data?: {
-      [key: string]: string | number
+      key: string
+      data?: {
+        [key: string]: string | number
+      }
     }
-  }
 
 export interface Farm extends FarmConfig {
   tokenAmountMc?: BigNumber
@@ -46,9 +46,17 @@ export interface Pool extends PoolConfig {
   }
 }
 
+export interface Tier {
+  addQuantityLua: number
+  addQuantityTomo: number
+  tier: number
+}
+
 export interface Profile {
   totalLuaLock: string
   luaUnlockAble: string
+  userTier: number | null
+  nextTier: Tier[]
 }
 
 // Slices states
@@ -97,6 +105,7 @@ export interface ProfileState {
 export interface IdoState {
   idos: IdoDetail[]
   isLoading: boolean
+  openPools: PoolIdoDetail[]
 }
 
 export type TeamResponse = {
@@ -282,7 +291,7 @@ export interface PredictionsState {
 // Blockfolio
 export interface BlockfolioState {
   isLoading: boolean
-  wallets: WalletProps[]
+  wallets: WalletProps
 }
 
 export interface WalletProps {
@@ -326,4 +335,19 @@ export interface State {
   collectibles: CollectiblesState
   blockfolio: BlockfolioState
   idos: IdoState
+}
+export interface IdoDetail {
+  claimAt: string
+  closeAt: string
+  creator: string
+  idoToken: string
+  maxAmountPay: string
+  minAmountPay: string
+  openAt: string
+  payToken: string
+  swappedAmountIDO: string
+  swappedAmountPay: string
+  totalAmountIDO: string
+  totalAmountPay: string
+  totalCommittedAmount: string
 }

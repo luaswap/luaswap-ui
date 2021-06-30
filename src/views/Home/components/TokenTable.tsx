@@ -1,14 +1,14 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { LinkExternal, Text } from 'common-uikitstrungdao'
 
 import { ApiDetailType } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
-import Spacer from 'components/Spacer'
+import TokenLogo from './TokenLogo'
 
 interface TableProps {
-  tag: string,
-  network?: string,
+  tag: string
+  network?: string
   columns: Array<string[]>
   data: ApiDetailType[]
 }
@@ -60,27 +60,33 @@ const TokenIcon = styled.img`
   margin-right: 10px;
 `
 const TokenName = styled.span``
-const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
-
+const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
-
+  
   const renderContent = (row, type: string) => {
     switch (type) {
       case 'balance':        
         return (
+          parseFloat(row.usd) > 0 &&
           <tr key={row.amount}>
             <StyleTd>
               <CellInner>
-                <TokenIcon src={row.imgs[0]} alt={row.tokenName}  />
+                <TokenLogo address={row.address} url={row.imgs[0]} name={row.tokenName}  />
                 <LinkExternal href={row.link}>
                   <TokenName>{row.tokenName}</TokenName>
                 </LinkExternal>
               </CellInner>
             </StyleTd>
-            <StyleTd><Text>{parseFloat(row.quantity).toFixed(2)} {row.symbol} </Text></StyleTd>
+            <StyleTd>
+              <Text>
+                {parseFloat(row.quantity).toFixed(4)} {row.symbol}
+              </Text>
+            </StyleTd>
             {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
-            <StyleTd><Text> {row.usd}</Text></StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.usd).toFixed(2)}</Text>
+            </StyleTd>
           </tr>
         )
       case 'luaswapliquidity':
@@ -95,21 +101,52 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
                 </LinkExternal>
               </CellInner>
             </StyleTd>
-            <StyleTd><Text>{row.balance} </Text></StyleTd>
-            <StyleTd><Text> {row.poolSharePercent}</Text></StyleTd>
-            <StyleTd><Text> {row.usd}</Text></StyleTd>
+            <StyleTd>
+              <Text>{row.balance} </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.poolSharePercent}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.usd}</Text>
+            </StyleTd>
           </tr>
         )
       case 'LuaSafe':
         return (
           <tr key={row.amount}>
             <StyleTd>
-              <Text>{`${row.address.substring(0, 6)}...${row.address.substring(row.address.length - 4, row.address.length)}`}</Text>
+              <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
+                row.address.length - 4,
+                row.address.length,
+              )}`}</Text>
             </StyleTd>
-            <StyleTd><Text>{row.token} </Text></StyleTd>
-            <StyleTd><Text> {parseFloat(row.quantity).toFixed(2)}</Text></StyleTd>
-            <StyleTd><Text> {row.apy}</Text></StyleTd>
-            <StyleTd><Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text></StyleTd>
+            <StyleTd>
+              <Text>{row.token} </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.quantity).toFixed(2)}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.apy}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text>
+            </StyleTd>
+          </tr>
+        )
+      case 'LuaFarm':
+        return (
+          <tr key={row.stakeAmount}>
+            <StyleTd>
+              <Text>{row.pair}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text>{parseFloat(row.stakeAmount).toFixed(2)} </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.pendingReward).toFixed(2)}</Text>
+            </StyleTd>
           </tr>
         )
       default:
@@ -117,17 +154,17 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
     }
   }
   return (
-
     <TableContainer>
-      <Text fontSize="16px" marginBottom="15px">
-        {network}
-      </Text>
       <TableWrapper ref={tableWrapperEl}>
         <StyledTable>
           <TableHead>
             <tr>
               {columns.map((i) => {
-                return <th key={i[1]}><Text> {i[0]} </Text></th>
+                return (
+                  <th key={i[1]}>
+                    <Text> {i[0]} </Text>
+                  </th>
+                )
               })}
             </tr>
           </TableHead>
@@ -140,16 +177,6 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
       </TableWrapper>
     </TableContainer>
   )
-}
-
-const ImageExists = (url) => {
-
-    const http = new XMLHttpRequest()
-
-    http.open('HEAD', url, false)
-    http.send()
-
-    return http.status !== 404
 }
 
 export default TokenTable

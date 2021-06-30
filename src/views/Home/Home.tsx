@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
-import { Heading, Text, BaseLayout, Input, Progress, Flex, useModal, ChevronDownIcon, Box, Skeleton } from 'common-uikitstrungdao'
+import { Heading, Text, BaseLayout, Progress, Flex, useModal, Box, Skeleton } from 'common-uikitstrungdao'
 
-import { API_BLOCKFOLIO } from 'config'
+// import { API_BLOCKFOLIO } from 'config'
 import { useAppDispatch } from 'state'
 import { useWallet } from 'state/hooks'
 import { DataApiType } from 'state/types'
@@ -13,6 +13,7 @@ import { setWallet } from 'state/blockfolio'
 // import { fetchWallet } from 'state/portfolio'
 import { useTranslation } from 'contexts/Localization'
 import PageHeader from 'components/PageHeader'
+import UnlockButton from 'components/UnlockButton'
 import Page from 'components/layout/Page'
 import CardValue from './components/CardValue'
 import DataModal from './components/DataModal'
@@ -25,6 +26,7 @@ import AccountLoading from './components/Loading/AccountLoading'
 import NetworkLoading from './components/Loading/NetworkLoading'
 
 
+
 const initialState: DataApiType = {
   totalInUSD: 0,
   tomochain: {
@@ -32,15 +34,15 @@ const initialState: DataApiType = {
     name: '',
     totalInUSD: '0',
     detailsHeader: [],
-    details: []
+    details: [],
   },
   ethereum: {
     tag: '',
     name: '',
     totalInUSD: '0',
     detailsHeader: [],
-    details: []
-  }
+    details: [],
+  },
 }
 const initialNetwork = {
   tomochain: {
@@ -52,7 +54,7 @@ const initialNetwork = {
     balance: initialState.ethereum,
     liquidity: initialState.ethereum,
     luasafe: initialState.ethereum,
-  }
+  },
 }
 const initialInUSD = {
   balance: 0,
@@ -63,7 +65,7 @@ const initialInUSD = {
   tLuasafe: 0,
   eBalance: 0,
   eLiquidity: 0,
-  eLuasafe: 0
+  eLuasafe: 0,
 }
 
 const Cards = styled(BaseLayout)`
@@ -103,10 +105,9 @@ const FlexNetwork = styled(Flex)`
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
 `
-const StyleInput = styled(Input)`
-  border-radius: 10px;
-  margin-right: 30px;
-  height: 55px;
+const Image = styled.img`
+  max-width: 32px;
+  margin-right: 10px;
 `
 const IconWrapper = styled.div`
   width: 30px;
@@ -122,7 +123,6 @@ const IconWrapper = styled.div`
 
 const Home: React.FC = () => {
   const { account } = useWeb3React()
-  // const [objWallet, setObjWallet] = useState<WalletProps>(defaultWalletObj)
   const [dataWallet, setDataWallet] = useState<DataApiType>(initialState)
   const [dataLiquidity, setDataLiquidity] = useState<DataApiType>(initialState)
   const [dataLuasafe, setDataLuasafe] = useState<DataApiType>(initialState)
@@ -131,22 +131,21 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const { wallets } = useWallet()
+  const walletActived = Object.values(wallets).find(w => w.isActive)
   const dispatch = useAppDispatch()
 
   const { t } = useTranslation()
   useEffect(() => {
     if (account) {
-      if (wallets.length < 1) {
         const w = {
           address: account,
-          isConnected: true,
-          isActive: true
+          isActive: true,
+          isConnected: true
         }
         dispatch(setWallet(w))
-      }
     }
-  }, [dispatch, account, wallets.length])
-
+  }, [dispatch, account])
+  
   useEffect(() => {    
     const fetchBlockfolio = async (address: string) => {
       const tBalance = axios.get(`${'http://localhost:8020/tomochain/balance/'}${address}`)
@@ -161,7 +160,7 @@ const Home: React.FC = () => {
         await Promise.all([tBalance, tLiquidity, tLuasafe, eBalance, eLiquidity, eLuasafe])
       setIsLoading(false)
       // Return normalized token names
-      // console.log(tBalanceResult.data,tLiquidityResult.data,tLuasafeResult.data,eBalanceResult.data,eLiquidityResult.data, eLuasafeResult.data)
+      
       const eb = eBalanceResult.data.totalInUSD.replace(/,/g, '')
       const tb = tBalanceResult.data.totalInUSD.replace(/,/g, '')
       const eli = eLiquidityResult.data.totalInUSD.replace(/,/g, '')
@@ -170,7 +169,8 @@ const Home: React.FC = () => {
       const tlu = tLuasafeResult.data.totalInUSD.replace(/,/g, '')
 
       const usdData = {
-        balance: parseFloat(tb) + parseFloat(tli) + parseFloat(tlu) + parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
+        balance:
+          parseFloat(tb) + parseFloat(tli) + parseFloat(tlu) + parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
         tomoNetwork: parseFloat(tb) + parseFloat(tli) + parseFloat(tlu),
         ethNetwork: parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
         tBalance: parseFloat(tb),
@@ -178,28 +178,28 @@ const Home: React.FC = () => {
         tLuasafe: parseFloat(tlu),
         eBalance: parseFloat(eb),
         eLiquidity: parseFloat(eli),
-        eLuasafe: parseFloat(elu)
+        eLuasafe: parseFloat(elu),
       }
       settotalInUSD(usdData)
 
       const wallet = {
         totalInUSD: parseFloat(eb) + parseFloat(tb),
         tomochain: tBalanceResult.data,
-        ethereum: eBalanceResult.data
+        ethereum: eBalanceResult.data,
       }
       setDataWallet(wallet)
 
       const liquidity = {
         totalInUSD: parseFloat(eli) + parseFloat(tli),
         tomochain: tLiquidityResult.data,
-        ethereum: eLiquidityResult.data
+        ethereum: eLiquidityResult.data,
       }
       setDataLiquidity(liquidity)
 
       const luasafe = {
         totalInUSD: parseFloat(elu) + parseFloat(tlu),
         tomochain: tLuasafeResult.data,
-        ethereum: eLuasafeResult.data
+        ethereum: eLuasafeResult.data,
       }
       setDataLuasafe(luasafe)
 
@@ -215,17 +215,17 @@ const Home: React.FC = () => {
           totalInUSD: parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
           balance: eBalanceResult.data,
           liquidity: eLiquidityResult.data,
-          luasafe: eLuasafeResult.data
-        }
+          luasafe: eLuasafeResult.data,
+        },
       }
       // @ts-ignore
       setDataNetwork(network)
       // return { wallet, liquidity, luasafe, network }
     }
-    if (account)
-      fetchBlockfolio(account)
-      
-  }, [account])
+    
+    if (walletActived) fetchBlockfolio(walletActived.address)
+    
+  }, [walletActived])
 
   const [onPresentWallet] = useModal(<DataModal data={dataWallet} />)
   const [onPresentLiquidity] = useModal(<DataModal data={dataLiquidity} />)
@@ -238,7 +238,7 @@ const Home: React.FC = () => {
   const [onEthWallet] = useModal(<NetworkModal data={dataNetwork.ethereum.balance} />)
   const [onEthLiquidity] = useModal(<NetworkModal data={dataNetwork.ethereum.liquidity} />)
   const [onEthLuasafe] = useModal(<NetworkModal data={dataNetwork.ethereum.luasafe} />)
-  console.log(isLoading)
+
   return (
     <>
       <PageHeader>
@@ -250,7 +250,7 @@ const Home: React.FC = () => {
         </Heading>
       </PageHeader>
       <Page>
-        {wallets.length > 0 || account ?
+        {Object.keys(wallets).length > 0 || account ? (
           <>
             <Flex justifyContent="space-between">
               <div>
@@ -263,7 +263,7 @@ const Home: React.FC = () => {
                   : <Skeleton width="120px" height="30px" mt="20px"/>
                 }
               </div>
-              <AddressManage />
+              <AddressManage data={ wallets }/>
             </Flex>
             {!isLoading ?
               <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px">Account Overview</Text>
@@ -318,9 +318,7 @@ const Home: React.FC = () => {
                       <CardNetwork>
                         <FlexNetwork >
                           <Flex alignItems="center">
-                            <IconWrapper>
-                              <WalletIcon />
-                            </IconWrapper>
+                            <Image src="/images/network/eth.png"/>
                             <Text> Ethereum</Text>
                           </Flex>
                           <CardValue value={dataInUSD.ethNetwork} decimals={2} prefix="$" lineHeight="1.5" fontSize="20px" />
@@ -360,9 +358,7 @@ const Home: React.FC = () => {
                       <CardNetwork>
                         <FlexNetwork>
                           <Flex alignItems="center">
-                            <IconWrapper>
-                              <WalletIcon />
-                            </IconWrapper>
+                            <Image src="/images/network/tomochain.png"/>
                             <Text> TomoChain</Text>
                           </Flex>
                           <CardValue value={dataInUSD.tomoNetwork} decimals={2} prefix="$" lineHeight="1.5" fontSize="20px" />
@@ -403,10 +399,10 @@ const Home: React.FC = () => {
               : <NetworkLoading/>
             }
           </>
-          : <InPutAddress />
-        }
-      </Page >
-
+        ) : (
+          <InPutAddress />
+        )}
+      </Page>
     </>
   )
 }

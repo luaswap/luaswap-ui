@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Modal } from '@pancakeswap/uikit'
+import { Modal, TabMenu, Tab, Text } from 'common-uikitstrungdao'
 // import { WalletTokenBalance } from 'config/constants/types'
 import { DataApiType } from 'state/types'
 import TokenTable from './TokenTable'
@@ -10,10 +10,9 @@ const StyleOverFlow = styled.div`
   max-height: 400px;
   overflow-y: auto;
 `
-const Line = styled.hr`
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  margin-top: 0;
-  margin-bottom: 10px;
+const Image = styled.img`
+  max-width: 30px;
+  margin-right: 10px;
 `
 interface DataModalProps {
   data: DataApiType
@@ -21,24 +20,43 @@ interface DataModalProps {
 }
 
 const DataModal: React.FC<DataModalProps> = ({ onDismiss, data }) => {
+  const [activeTab, setActiveTab] = useState(0)
   return (
     <Modal title="Wallet" onDismiss={onDismiss}>
+      <TabMenu
+        activeIndex={activeTab}
+        onItemClick={(index: number) => setActiveTab(index)}
+        innerStyle={{width: "100%"}}
+        wrapperStyle={{
+          padding: '0px',
+          width: '100%'
+        }}
+      >
+        <Tab style={{width: "100%"}}>
+          <Image alt="TomoChain" src="/images/network/eth.png"/>
+          Ethereum
+        </Tab>
+        <Tab style={{width: "100%"}}>
+          <Image alt="TomoChain" src="/images/network/tomochain.png"/>
+          TomoChain
+        </Tab>
+      </TabMenu>
       <StyleOverFlow>
-        {data.ethereum.details.length > 0 &&
+        <Spacer size="md" />
+        {(activeTab === 0 && data.ethereum.details.length > 0) && (
           <TokenTable
             data={data.ethereum.details}
             columns={data.ethereum.detailsHeader}
             tag={data.ethereum.tag}
-            network="Ethereum" />
-        }
-        <Spacer size="md" />
-        {data.tomochain.details.length > 0 &&
+          />
+        )}
+        {(activeTab === 1 && data.tomochain.details.length > 0) && (
           <TokenTable
             data={data.tomochain.details}
             columns={data.tomochain.detailsHeader}
             tag={data.tomochain.tag}
-            network="TomoChain" />
-        }
+          />
+        )}
       </StyleOverFlow>
     </Modal>
   )

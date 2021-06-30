@@ -2,24 +2,7 @@
 import Web3 from 'web3'
 import { getLuaIdoContract } from 'utils/contractHelpers'
 import { getFullDisplayBalance } from 'utils/formatBalance'
-import BigNumber from 'bignumber.js'
-import { isEmptyAddress } from 'utils/addressHelpers'
-
-export interface IdoDetail {
-  claimAt: string
-  closeAt: string
-  creator: string
-  idoToken: string
-  maxAmountPay: string
-  minAmountPay: string
-  openAt: string
-  payToken: string
-  swappedAmountIDO: string
-  swappedAmountPay: string
-  totalAmountIDO: string
-  totalAmountPay: string
-  totalCommittedAmount: string
-}
+import { IdoDetail } from '../types'
 
 export const mappingIdoResponse = ({
   claimAt,

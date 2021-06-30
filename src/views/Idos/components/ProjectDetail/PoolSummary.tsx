@@ -13,7 +13,7 @@ import {
   Progress,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
-import { IdoDetail } from 'state/ido/fetchIdosData'
+import { IdoDetail } from 'state/types'
 
 const IconWrapper = styled.a`
   color: #212121;
@@ -58,7 +58,6 @@ interface PoolSummaryProps {
 
 const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
   const { totalAmountIDO, totalAmountPay, totalCommittedAmount } = idoDetail
-  console.log(idoDetail, 'ido detail ?')
   const rate = useMemo(() => {
     return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(2)
   }, [totalAmountIDO, totalAmountPay])

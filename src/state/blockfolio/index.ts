@@ -4,7 +4,7 @@ import { BlockfolioState } from 'state/types'
 
 const initialState: BlockfolioState = {
   isLoading: false,
-  wallets: []
+  wallets: {},
 }
 
 export const blockfolioSlice = createSlice({
@@ -12,24 +12,42 @@ export const blockfolioSlice = createSlice({
   initialState,
   reducers: {
     setWallet: (state, action) => {
-      if (state.wallets.length > 0) {
-        state.wallets.forEach((element, index) => {
-          if (element.address !== action.payload.address) {
-            state.wallets.push(action.payload)
-          } else{
-            state.wallets[index] = action.payload
-          }
-        })
-      } else {
-        state.wallets.push(action.payload)
-      }      
+      // console.log(Object.keys(state.wallets))
+      Object.keys(state.wallets).forEach(key => {
+        // console.log(key)
+        state.wallets[key] = {
+          ...state.wallets[key],
+          isActive: false
+        }
+      })
+      console.log(Object.values(state.wallets))
+      state.wallets[action.payload.address] = action.payload
     },
-    // setActive: (state, action){
-      
-    // }
-  }  
+    addWalletFromInput: (state, action) => {
+      state.wallets[action.payload.address] = action.payload
+    },
+    setWalletActive: (state, action) => {
+      Object.keys(state.wallets).forEach(key => {
+        console.log(key !== action.payload)
+        if(key !== action.payload){
+          state.wallets[key] = {
+            ...state.wallets[key],
+            isActive: false
+          }
+        } else {
+          state.wallets[action.payload] = {
+            ...state.wallets[action.payload],
+            isActive: true
+          }
+        }
+      })      
+    },
+    resetWallet: (state, action) => {
+      state.wallets = action.payload
+    }
+  },
 })
 // // Actions
-export const { setWallet } = blockfolioSlice.actions
+export const { setWallet, addWalletFromInput, setWalletActive, resetWallet } = blockfolioSlice.actions
 
 export default blockfolioSlice.reducer

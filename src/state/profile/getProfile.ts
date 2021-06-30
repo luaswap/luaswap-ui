@@ -27,9 +27,9 @@ const getProfile = async (address: string, chainId: number) => {
   return { totalLuaLock: formatLuaLock, luaUnlockAble: formatLuaUnlockable }
 }
 
-const doUnlockLua = async () => {
-  // const luaContract = useLuaTokenContract(LUA.address)
-  // await luaContract.unlock()
+export const getTierData = async (account: string) => {
+  const { data = {} } = await axios.get(`https://api.luaswap.org/api/ido/tier/${account}`)
+  return data
 }
 
 export default getProfile

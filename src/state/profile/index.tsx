@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ProfileState, Profile } from 'state/types'
 import type { AppDispatch } from 'state'
-import getProfile from './getProfile'
+import getProfile, { getTierData } from './getProfile'
 
 const initialState: ProfileState = {
   isInitialized: false,
@@ -11,6 +11,8 @@ const initialState: ProfileState = {
   data: {
     luaUnlockAble: '0',
     totalLuaLock: '0',
+    userTier: null,
+    nextTier: [],
   },
 }
 
@@ -22,11 +24,21 @@ export const profileSlice = createSlice({
       state.isLoading = true
     },
     profileFetchSucceeded: (_state, action) => {
-      const { totalLuaLock, luaUnlockAble } = action.payload
+      const { totalLuaLock, luaUnlockAble, tier } = action.payload
       _state.isLoading = false
       _state.data = {
+        ..._state.data,
         totalLuaLock,
         luaUnlockAble,
+      }
+    },
+    profileTierFetchSucceeded: (_state, action) => {
+      const { tier, nextTiers } = action.payload
+      _state.isLoading = false
+      _state.data = {
+        ..._state.data,
+        userTier: tier,
+        nextTier: nextTiers,
       }
     },
     profileFetchFailed: (state) => {
@@ -44,14 +56,22 @@ export const profileSlice = createSlice({
 })
 
 // Actions
-export const { profileFetchStart, profileFetchSucceeded, profileFetchFailed, profileClear, unlockLuaStatus } =
-  profileSlice.actions
+export const {
+  profileFetchStart,
+  profileFetchSucceeded,
+  profileFetchFailed,
+  profileTierFetchSucceeded,
+  profileClear,
+  unlockLuaStatus,
+} = profileSlice.actions
 
 // Thunks
 // TODO: this should be an AsyncThunk
 export const fetchProfile = (address: string, chainId: number) => async (dispatch: AppDispatch) => {
   try {
     dispatch(profileFetchStart())
+    const tierResponse = await getTierData(address)
+    dispatch(profileTierFetchSucceeded(tierResponse))
     const response = await getProfile(address, chainId)
     dispatch(profileFetchSucceeded(response))
   } catch (error) {
@@ -60,3 +80,7 @@ export const fetchProfile = (address: string, chainId: number) => async (dispatc
 }
 
 export default profileSlice.reducer
+
+// Selectors
+export const selectUserData = (state) => state.profile.data
+export const selectUserTier = (state) => selectUserData(state).userTier
