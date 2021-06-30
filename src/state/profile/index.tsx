@@ -84,3 +84,4 @@ export default profileSlice.reducer
 // Selectors
 export const selectUserData = (state) => state.profile.data
 export const selectUserTier = (state) => selectUserData(state).userTier
+export const selectUserNextTier = (state) => selectUserData(state).nextTier
