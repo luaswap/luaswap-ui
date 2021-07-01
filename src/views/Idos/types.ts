@@ -1,4 +1,4 @@
-export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim'
+export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim' | null
 
 export type ChainId = '89' | '1' | '88'
 
@@ -40,6 +40,12 @@ export interface Pool {
   openAt: number
   closeAt: number
   claimAt: number
-  index: Record<ChainId, IdoDetailInfo[]>
+  index?: Record<ChainId, IdoDetailInfo[]>
   status: number
+  projectDetail: string
+  links: {
+    label: string
+    icon: string
+    link: string
+  }[]
 }

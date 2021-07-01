@@ -42,6 +42,18 @@ export const depositIdo = async (luaIdoContract, account, amount) => {
     })
 }
 
+export const claimRewardIdo = async (luaIdoContract, account, amount) => {
+  const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
+  return luaIdoContract.methods
+    .userClaim('0', account, amount)
+    .send({
+      from: account,
+    })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
 export const sousStake = async (sousChefContract, amount, decimals = 18, account) => {
   return sousChefContract.methods
     .deposit(new BigNumber(amount).times(BIG_TEN.pow(decimals)).toString())

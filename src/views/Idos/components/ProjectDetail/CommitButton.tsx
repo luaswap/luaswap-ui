@@ -3,12 +3,13 @@ import { Button } from 'common-uikitstrungdao'
 
 interface CommitButtonProps {
   onClick(): any
+  symbol: string
 }
 
-const CommitButton: React.FC<CommitButtonProps> = ({ onClick, ...props }) => {
+const CommitButton: React.FC<CommitButtonProps> = ({ onClick, symbol, ...props }) => {
   return (
     <Button mb="15px" variant="primary" onClick={onClick} {...props}>
-      Commit your USDT
+      Commit your {symbol}
     </Button>
   )
 }

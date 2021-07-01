@@ -14,6 +14,8 @@ import {
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { IdoDetail } from 'state/types'
+import { Pool } from 'views/Idos/types'
+import usePoolStatus from '../../hooks/usePoolStatus'
 
 const IconWrapper = styled.a`
   color: #212121;
@@ -54,21 +56,42 @@ const CardWrapper = styled(Card)`
 
 interface PoolSummaryProps {
   idoDetail: IdoDetail | null
+  currentPoolData: Pool
 }
 
-const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
-  const { totalAmountIDO, totalAmountPay, totalCommittedAmount } = idoDetail
+const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData }) => {
+  const { totalAmountIDO, totalAmountPay, totalCommittedAmount, swappedAmountPay } = idoDetail
+  const { img, description, name, index } = currentPoolData
+  // Todo: we should change this code when deploy to test ENV
+  const { idoToken, payToken } = index['89'][0]
+  const [poolStatus] = usePoolStatus(idoDetail)
   const rate = useMemo(() => {
     return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(2)
   }, [totalAmountIDO, totalAmountPay])
 
-  const progressPercentage = useMemo(() => {
+  const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
       return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
     }
 
     return 0
   }, [totalCommittedAmount, totalAmountPay])
+
+  const totalSwapAmountPercentage = useMemo(() => {
+    if (swappedAmountPay && totalAmountPay) {
+      return new BigNumber(swappedAmountPay).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
+    }
+
+    return 0
+  }, [swappedAmountPay, totalAmountPay])
+
+  const isPoolInProgress = useMemo(() => {
+    if (poolStatus === 'open' || poolStatus === 'not open') {
+      return true
+    }
+
+    return false
+  }, [poolStatus])
   return (
     <CardWrapper>
       <CardBody
@@ -78,11 +101,11 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
       >
         <Flex mb="15px" alignItems="center">
           <ImageContainer>
-            <img src="https://i.ibb.co/YtdXYjg/cross.jpg" alt="img" style={{ width: '100%', height: '100%' }} />
+            <img src={img} alt="img" style={{ width: '100%', height: '100%' }} />
           </ImageContainer>
           <PoolInfoBlock>
             <Text fontSize="24px" bold>
-              Solana
+              {name}
             </Text>
             <Flex marginBottom="5px" alignItems="center">
               <IconWrapper href="google.com" target="__blank">
@@ -100,17 +123,16 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
             </Flex>
           </PoolInfoBlock>
         </Flex>
-        <Text>
-          Next-generation dynamic AMM DEX that extends its defi functionality, becoming a permissionless one-stop
-          cross-chain asset market.
-        </Text>
+        <Text>{description}</Text>
         <Link href="google.com" mb="15px">
           Learn more
         </Link>
         <Flex justifyContent="space-between" mb="10px">
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
-            <Text>1 ETH = {rate} BBANK</Text>
+            <Text>
+              1 {payToken.symbol} = {rate} {idoToken.symbol}
+            </Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>
@@ -121,12 +143,27 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
             <Text>Private</Text>
           </Flex>
         </Flex>
-        <Progress variant="round" primaryStep={progressPercentage} />
+        <Flex flexDirection="column">
+          {isPoolInProgress ? (
+            <Text mb="10px" color="primary">
+              Commited Progress
+            </Text>
+          ) : (
+            <Text mb="10px" color="primary">
+              Swap Progress
+            </Text>
+          )}
+          <Progress
+            variant="round"
+            primaryStep={isPoolInProgress && totalCommitedPercentage}
+            secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
+          />
+        </Flex>
         <Flex justifyContent="space-between" mt="10px">
-          <Text color="secondary">
-            {totalCommittedAmount} ETH/{totalAmountPay} ETH
+          <Text>
+            {isPoolInProgress ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay} {payToken.symbol}
           </Text>
-          <Text color="secondary">{progressPercentage}%</Text>
+          <Text color="secondary">{isPoolInProgress ? totalCommitedPercentage : totalSwapAmountPercentage}%</Text>
         </Flex>
       </CardBody>
     </CardWrapper>

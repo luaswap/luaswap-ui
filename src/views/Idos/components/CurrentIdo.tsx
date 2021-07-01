@@ -15,6 +15,10 @@ interface CurrentIdoProps {
 }
 
 const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools }) => {
+  if (openPools.length === 0) {
+    return null
+  }
+
   return (
     <IdoLayout>
       <Text fontSize="20px" textAlign="center">

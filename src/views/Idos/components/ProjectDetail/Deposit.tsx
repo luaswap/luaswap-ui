@@ -6,12 +6,13 @@ import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import { IdoDetail } from 'state/types'
 import useDepositIdo from 'hooks/useDepositIdo'
+import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import ModalInput from 'components/ModalInput'
+import { Pool } from 'views/Idos/types'
 import { getDecimalAmount } from 'utils/formatBalance'
 import { getUtcDateString } from 'utils/formatTime'
 import ActionButton from './ActionButton'
-import useSecondsUntilCurrent from '../../hooks/useSecondsUntilCurrent'
-import { PoolStatus } from '../../types'
+import usePoolStatus from '../../hooks/usePoolStatus'
 import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
@@ -25,35 +26,23 @@ const CardWrapper = styled(Card)`
 interface DepositProps {
   idoDetail: IdoDetail | null
   totalCommited: string
+  currentPoolData: Pool
 }
 
-const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
+const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited, currentPoolData }) => {
   const { account } = useWeb3React()
   const [value, setValue] = useState('0')
   const { toastSuccess, toastError } = useToast()
   const { onDeposit } = useDepositIdo()
-  const { maxAmountPay, claimAt, openAt, closeAt } = idoDetail
+  const { onClaimReward } = useClaimRewardIdo()
+  const { maxAmountPay, claimAt, totalCommittedAmount } = idoDetail
+  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(idoDetail)
+  const { index } = currentPoolData
+  // Todo: we should change this code when deploy to test ENV
+  const { payToken } = index['89'][0]
   const maxAmountAllowed = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommited)).toString()
   }, [maxAmountPay, totalCommited])
-
-  const openAtSeconds = useSecondsUntilCurrent(openAt)
-  const closedAtSeconds = useSecondsUntilCurrent(closeAt)
-  const claimAtSeconds = useSecondsUntilCurrent(claimAt)
-  /* Variable to check if pool is open or not based on openAt and closeAt timestamp received from smart contract */
-  const poolStatus: PoolStatus = useMemo(() => {
-    /* If open time > 0 and closed time > 0 -> the Pool is not open yet */
-    if (openAtSeconds > 0 && closedAtSeconds > 0) {
-      return 'not open'
-    }
-    if (openAtSeconds <= 0 && closedAtSeconds > 0) {
-      return 'open'
-    }
-    if (openAtSeconds <= 0 && closedAtSeconds <= 0 && claimAtSeconds > 0) {
-      return 'claim'
-    }
-    return 'closed'
-  }, [openAtSeconds, closedAtSeconds, claimAtSeconds])
 
   const handleSelectMax = useCallback(() => {
     setValue(maxAmountAllowed)
@@ -75,9 +64,34 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
     }
   }, [onDeposit, value, toastError, toastSuccess])
 
-  const onHandleClaim = useCallback(() => {
-    console.log('claming')
-  }, [])
+  const onHandleClaim = useCallback(async () => {
+    try {
+      // TODO: In here we assume that user claim equal amount of token that they commited
+      const claimableAmount = getDecimalAmount(new BigNumber(totalCommited)).toString()
+      await onClaimReward(claimableAmount)
+      toastSuccess('Claim reward Successfully')
+    } catch (error) {
+      toastError('Fail to claim reward')
+    }
+  }, [onClaimReward, toastError, toastSuccess, totalCommited])
+
+  const isPoolInProgress = useMemo(() => {
+    if (poolStatus === 'open' || poolStatus === 'not open') {
+      return true
+    }
+
+    return false
+  }, [poolStatus])
+
+  const isClaimable = useMemo(() => {
+    const comparedNum = new BigNumber(totalCommittedAmount).comparedTo(0)
+
+    if (comparedNum === 1) {
+      return true
+    }
+
+    return false
+  }, [totalCommittedAmount])
 
   return (
     <CardWrapper>
@@ -96,14 +110,20 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
             poolStatus={poolStatus}
             claimAtSeconds={claimAtSeconds}
           />
-          <ActionButton poolStatus={poolStatus} onCommit={onHandleCommit} onClaim={onHandleClaim} />
-          {account && (
+          <ActionButton
+            poolStatus={poolStatus}
+            onCommit={onHandleCommit}
+            onClaim={onHandleClaim}
+            disabled={!isClaimable}
+            symbol={payToken.symbol}
+          />
+          {account && isPoolInProgress && (
             <ModalInput
               value={value}
               onSelectMax={handleSelectMax}
               onChange={handleChange}
               max={maxAmountAllowed}
-              symbol="USDT"
+              symbol={payToken.symbol}
               inputTitle="Deposit"
             />
           )}
