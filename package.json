@@ -87,5 +87,9 @@
     "prettier": "^2.3.0",
     "source-map-explorer": "^2.5.2",
     "ts-node": "^9.1.1"
+  },
+  "volta": {
+    "node": "14.17.1",
+    "yarn": "1.22.10"
   }
 }
