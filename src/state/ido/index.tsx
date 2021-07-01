@@ -1,9 +1,9 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import Web3 from 'web3'
 import axios from 'axios'
-import { IdoState } from 'state/types'
+import { IdoDetail, IdoState } from 'state/types'
 import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
 import { fetchIdosInformation } from './fetchIdosData'
@@ -40,16 +40,16 @@ export const idosSlice = createSlice({
   name: 'idos',
   initialState,
   reducers: {
-    setIdosData: (state, action) => {
+    setIdosData: (state, action: PayloadAction<IdoDetail[]>) => {
       state.idos = action.payload
     },
-    setOpenPools: (state, action) => {
+    setOpenPools: (state, action: PayloadAction<Pool[]>) => {
       state.openPools.data = action.payload
     },
-    setClosedPools: (state, action) => {
+    setClosedPools: (state, action: PayloadAction<Pool[]>) => {
       state.closedPools.data = action.payload
     },
-    setCurrentPool: (state, action) => {
+    setCurrentPool: (state, action: PayloadAction<Pool>) => {
       state.currentPool.data = action.payload
     },
     fetchIdoStats: (state) => {
