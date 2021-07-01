@@ -1,9 +1,8 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { LinkExternal, Text } from 'common-uikitstrungdao'
 
 import { ApiDetailType } from 'state/types'
-import { useTranslation } from 'contexts/Localization'
 import TokenLogo from './TokenLogo'
 
 interface TableProps {
@@ -62,7 +61,6 @@ const TokenIcon = styled.img`
 const TokenName = styled.span``
 const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-  const { t } = useTranslation()
   
   const renderContent = (row, type: string) => {
     switch (type) {

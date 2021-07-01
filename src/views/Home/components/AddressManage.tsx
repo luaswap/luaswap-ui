@@ -25,6 +25,14 @@ const StyleTextBox = styled.div`
   display: flex;
   align-items: center;
 `
+const FlexAddress = styled(Flex)`
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  :hover{
+    background-color: ${({ theme }) => theme.colors.cardBorder};
+  }
+`
 const StyleWalletManage = styled.div`
   position: absolute;
   min-width: 300px;
@@ -97,17 +105,16 @@ const AddressManage: React.FC<AddressManageProps> = ({data}) => {
     <Flex position="relative">
       <StyleTextBox onClick={() => setIsOpen(!isOpen)}>
         {filterWalletActived.length > 0 &&
-          <Flex>
+          <FlexAddress>
             <IconWrapper>
               <WalletIcon />
             </IconWrapper>
-            <Text
-              style={{ cursor: "pointer" }}>
+            <Text>
               {`${filterWalletActived[0].address.substring(0, 8)}...${filterWalletActived[0].address.substring(filterWalletActived[0].address.length - 6, filterWalletActived[0].address.length)}`}
             </Text>
-          </Flex>
-        }
-        <ChevronDownIcon />
+            <ChevronDownIcon />
+          </FlexAddress>
+        }        
       </StyleTextBox>
       {isOpen && (
         <StyleWalletManage ref={ref}>

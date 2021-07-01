@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Modal, TabMenu, Tab, Text } from 'common-uikitstrungdao'
-// import { WalletTokenBalance } from 'config/constants/types'
+import { Modal, TabMenu, Tab } from 'common-uikitstrungdao'
 import { DataApiType } from 'state/types'
 import TokenTable from './TokenTable'
 import Spacer from '../../../components/Spacer'

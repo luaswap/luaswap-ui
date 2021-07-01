@@ -1,14 +1,11 @@
 import React, { useCallback, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import Web3 from 'web3'
 import styled from 'styled-components'
 import { Modal, Flex, Input, Button, Text, Box } from 'common-uikitstrungdao'
 
 import { useWallet } from 'state/hooks'
 import { useAppDispatch } from 'state'
-import { WalletProps } from 'state/types'
-import { setWallet, addWalletFromInput, setWalletActive } from 'state/blockfolio'
-import UnlockButton from 'components/UnlockButton'
+import { addWalletFromInput, setWalletActive } from 'state/blockfolio'
 import WalletIcon from './Icon/WalletIcon'
 
 interface AddressModalProps {
@@ -49,7 +46,6 @@ const StyleButton = styled(Button)`
   white-space: nowrap;
 `
 const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {
-  const { account } = useWeb3React()
   const [val, setVal] = useState('')
   const [msg, setMsg] = useState('')
   const dispatch = useAppDispatch()

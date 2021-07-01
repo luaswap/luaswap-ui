@@ -146,7 +146,7 @@ const Home: React.FC = () => {
       const tLiquidity = axios.get(`${API_BLOCKFOLIO}/tomochain/luaswapliquidity/${address}`)
       const tLuasafe = axios.get(`${API_BLOCKFOLIO}tomochain/luasafe/${address}`)
       const tLuafarm = axios.get(`${API_BLOCKFOLIO}tomochain/luafarm/${address}`)
-      const tMasternode = axios.get(`${API_BLOCKFOLIO}tomochain/staking/${address}`)
+      // const tMasternode = axios.get(`${API_BLOCKFOLIO}tomochain/tomomaster/${address}`)
 
       const eBalance = axios.get(`${API_BLOCKFOLIO}ethereum/balance/${address}`)
       const eLiquidity = axios.get(`${API_BLOCKFOLIO}ethereum/luaswapliquidity/${address}`)
@@ -154,8 +154,8 @@ const Home: React.FC = () => {
       const eLuafarm = axios.get(`${API_BLOCKFOLIO}ethereum/luafarm/${address}`)
       
       setIsLoading(true)
-      const [tBalanceResult, tLiquidityResult, tLuasafeResult, eBalanceResult, eLiquidityResult, eLuasafeResult] =
-        await Promise.all([tBalance, tLiquidity, tLuasafe, eBalance, eLiquidity, eLuasafe])
+      const [tBalanceResult, tLiquidityResult, tLuasafeResult, tLuafarmResult, eBalanceResult, eLiquidityResult, eLuasafeResult, eLuafarmResult] =
+        await Promise.all([tBalance, tLiquidity, tLuasafe, tLuafarm, eBalance, eLiquidity, eLuasafe, eLuafarm])
       setIsLoading(false)
       // Return normalized token names
       // console.log(tMasternodeResult)
@@ -264,7 +264,7 @@ const Home: React.FC = () => {
               <AddressManage data={ wallets }/>
             </Flex>
             {!isLoading ?
-              <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px">Account Overview</Text>
+              <Text fontWeight="500" mb="18px" mt="50px" color="text" fontSize="20px">Account Overview</Text>
             : <Skeleton width="150px" height="20px" mb="18px" mt="50px"/>
             }
             <Cards>
@@ -310,7 +310,7 @@ const Home: React.FC = () => {
             {!isLoading ? 
               (dataInUSD.ethNetwork > 0 || dataInUSD.tomoNetwork > 0) &&
                 <>
-                  <Text fontWeight="500" mb="18px" mt="50px" color="secondary" fontSize="20px"> Network</Text>
+                  <Text fontWeight="500" mb="18px" mt="50px" color="text" fontSize="20px"> Network</Text>
                   <Cards>
                     {dataInUSD.ethNetwork > 0 &&
                       <CardNetwork>
