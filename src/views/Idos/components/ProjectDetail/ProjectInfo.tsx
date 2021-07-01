@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactMarkdown from 'react-markdown'
 import { Flex, Button, Text } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { Pool } from 'views/Idos/types'
