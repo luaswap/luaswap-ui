@@ -3,7 +3,7 @@ import { useTranslation } from 'contexts/Localization'
 import { useSelector } from 'react-redux'
 import { Route, useRouteMatch, Link } from 'react-router-dom'
 import { ButtonMenu, ButtonMenuItem, Flex } from 'common-uikitstrungdao'
-import { selectOpenPools, selectLoadingOpenPools } from 'state/ido'
+import { selectOpenPools, selectLoadingOpenPools, selectClosedPools } from 'state/ido'
 import PageLoader from 'components/PageLoader'
 import Page from 'components/layout/Page'
 import Hero from './components/Hero'
@@ -14,6 +14,7 @@ const Idos = () => {
   const { t } = useTranslation()
   const { path, url, isExact } = useRouteMatch()
   const openPools = useSelector(selectOpenPools)
+  const closedPools = useSelector(selectClosedPools)
   const isLoading = useSelector(selectLoadingOpenPools)
 
   return (
@@ -38,7 +39,7 @@ const Idos = () => {
               <CurrentIdo openPools={openPools} />
             </Route>
             <Route path={`${path}/history`}>
-              <PastIdo />
+              <PastIdo closedPools={closedPools} />
             </Route>
           </Page>
         </>
