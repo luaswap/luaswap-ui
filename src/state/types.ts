@@ -301,7 +301,6 @@ export interface PredictionsState {
 }
 // Blockfolio
 export interface BlockfolioState {
-  isLoading: boolean
   wallets: WalletProps
 }
 

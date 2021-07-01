@@ -61,80 +61,86 @@ const TokenIcon = styled.img`
 const TokenName = styled.span``
 const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-  
+
   const renderContent = (row, type: string) => {
     switch (type) {
-      case 'balance':        
+      case 'balance':
         return (
-          parseFloat(row.usd) > 0 &&
-          <tr key={row.amount}>
-            <StyleTd>
-              <CellInner>
-                <TokenLogo address={row.address} url={row.imgs[0]} name={row.tokenName}  />
-                <LinkExternal href={row.link}>
-                  <TokenName>{row.tokenName}</TokenName>
-                </LinkExternal>
-              </CellInner>
-            </StyleTd>
-            <StyleTd>
-              <Text>
-                {parseFloat(row.quantity).toFixed(4)} {row.symbol}
-              </Text>
-            </StyleTd>
-            {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
-            <StyleTd>
-              <Text> {parseFloat(row.usd).toFixed(2)}</Text>
-            </StyleTd>
-          </tr>
+          parseFloat(row.usd) > 0 && (
+            <tr key={row.amount}>
+              <StyleTd>
+                <CellInner>
+                  <TokenLogo address={row.address} url={row.imgs[0]} name={row.tokenName} />
+                  <LinkExternal href={row.link}>
+                    <TokenName>{row.tokenName}</TokenName>
+                  </LinkExternal>
+                </CellInner>
+              </StyleTd>
+              <StyleTd>
+                <Text>
+                  {parseFloat(row.quantity).toFixed(4)} {row.symbol}
+                </Text>
+              </StyleTd>
+              {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
+              <StyleTd>
+                <Text> {parseFloat(row.usd).toFixed(2)}</Text>
+              </StyleTd>
+            </tr>
+          )
         )
       case 'luaswapliquidity':
         return (
-          <tr key={row.amount}>
-            <StyleTd>
-              <CellInner>
-                <TokenIcon src={row.imgs[0]} alt={row.token0.symbol} />
-                <TokenIcon src={row.imgs[1]} alt={row.token1.symbol} />
-                <LinkExternal href={row.link}>
-                  <TokenName>{row.tokenName}</TokenName>
-                </LinkExternal>
-              </CellInner>
-            </StyleTd>
-            <StyleTd>
-              <Text>{row.balance} </Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {row.poolSharePercent}</Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {row.usd}</Text>
-            </StyleTd>
-          </tr>
+          parseFloat(row.balance) > 0 && (
+            <tr key={row.amount}>
+              <StyleTd>
+                <CellInner>
+                  <TokenIcon src={row.imgs[0]} alt={row.token0.symbol} />
+                  <TokenIcon src={row.imgs[1]} alt={row.token1.symbol} />
+                  <LinkExternal href={row.link}>
+                    <TokenName>{row.tokenName}</TokenName>
+                  </LinkExternal>
+                </CellInner>
+              </StyleTd>
+              <StyleTd>
+                <Text>{row.balance} </Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {row.poolSharePercent}</Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {row.usd}</Text>
+              </StyleTd>
+            </tr>
+          )
         )
       case 'LuaSafe':
         return (
-          <tr key={row.amount}>
-            <StyleTd>
-              <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
-                row.address.length - 4,
-                row.address.length,
-              )}`}</Text>
-            </StyleTd>
-            <StyleTd>
-              <Text>{row.token} </Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {parseFloat(row.quantity).toFixed(2)}</Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {row.apy}</Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text>
-            </StyleTd>
-          </tr>
+          parseFloat(row.quantity) > 0 && (
+            <tr key={row.amount}>
+              <StyleTd>
+                <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
+                  row.address.length - 4,
+                  row.address.length,
+                )}`}</Text>
+              </StyleTd>
+              <StyleTd>
+                <Text>{row.token} </Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {parseFloat(row.quantity).toFixed(2)}</Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {row.apy}</Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text>
+              </StyleTd>
+            </tr>
+          )
         )
       case 'LuaFarm':
         return (
+          // parseFloat(row.stakeAmount) > 0 &&
           <tr key={row.stakeAmount}>
             <StyleTd>
               <Text>{row.pair}</Text>
