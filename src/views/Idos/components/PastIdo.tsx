@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Text } from 'common-uikitstrungdao'
+import { Pool } from '../types'
 import IdoLayout from './IdoLayout'
 import PoolDetail from './PoolDetail'
 
@@ -8,11 +10,20 @@ const Row = styled.div`
   margin: 0 auto;
 `
 
-const PastIdo = () => {
+interface PastIdoPools {
+  closedPools: Pool[]
+}
+
+const PastIdo: React.FC<PastIdoPools> = ({ closedPools }) => {
   return (
     <IdoLayout>
+      <Text fontSize="20px" textAlign="center">
+        Closed Pools
+      </Text>
       <Row>
-        <div>Closed</div>
+        {closedPools.map((pool) => {
+          return <PoolDetail pool={pool} />
+        })}
       </Row>
     </IdoLayout>
   )

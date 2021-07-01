@@ -15,6 +15,7 @@ import {
 import styled from 'styled-components'
 import { IdoDetail } from 'state/types'
 import { Pool } from 'views/Idos/types'
+import { calculateCommittedAmountPercentage, calculateSwapRate, calculateSwappedAmountPercentage } from './helper'
 import usePoolStatus from '../../hooks/usePoolStatus'
 
 const IconWrapper = styled.a`
@@ -66,12 +67,12 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData })
   const { idoToken, payToken } = index['89'][0]
   const [poolStatus] = usePoolStatus(idoDetail)
   const rate = useMemo(() => {
-    return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(2)
+    return calculateSwapRate(totalAmountIDO, totalAmountPay)
   }, [totalAmountIDO, totalAmountPay])
 
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
-      return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
+      return calculateCommittedAmountPercentage(totalCommittedAmount, totalAmountPay)
     }
 
     return 0
@@ -79,7 +80,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData })
 
   const totalSwapAmountPercentage = useMemo(() => {
     if (swappedAmountPay && totalAmountPay) {
-      return new BigNumber(swappedAmountPay).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
+      return calculateSwappedAmountPercentage(swappedAmountPay, totalAmountPay)
     }
 
     return 0
@@ -124,10 +125,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData })
           </PoolInfoBlock>
         </Flex>
         <Text>{description}</Text>
-        <Link href="google.com" mb="15px">
-          Learn more
-        </Link>
-        <Flex justifyContent="space-between" mb="10px">
+        <Flex justifyContent="space-between" mb="10px" mt="15px">
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
             <Text>

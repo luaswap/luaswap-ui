@@ -113,7 +113,7 @@ const ProjectDetail = () => {
             </Heading>
             <StyledFlex flexWrap="wrap">
               <ProjectInfo currentPoolData={currentPoolData} />
-              <PoolInformation />
+              <PoolInformation currentPoolData={currentPoolData} idoDetail={idoDetail} />
             </StyledFlex>
             <Steps />
           </>
