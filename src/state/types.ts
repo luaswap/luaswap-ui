@@ -348,13 +348,13 @@ export interface State {
   idos: IdoState
 }
 export interface IdoDetail {
-  claimAt: string
-  closeAt: string
+  claimAt: number
+  closeAt: number
+  openAt: number
   creator: string
   idoToken: string
   maxAmountPay: string
   minAmountPay: string
-  openAt: string
   payToken: string
   swappedAmountIDO: string
   swappedAmountPay: string

@@ -18,7 +18,6 @@ interface ProjectInfoProps {
 
 const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
   const { projectDetail, links } = currentPoolData
-
   return (
     <StyledWrapper flexDirection="column">
       <Flex>
@@ -31,7 +30,14 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
             )
           })}
       </Flex>
-      <Text mt="20px">{projectDetail}</Text>
+      <Text
+        mt="20px"
+        style={{
+          whiteSpace: 'pre-line',
+        }}
+      >
+        {projectDetail}
+      </Text>
     </StyledWrapper>
   )
 }

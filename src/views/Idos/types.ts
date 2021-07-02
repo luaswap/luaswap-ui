@@ -8,7 +8,7 @@ export interface TokenInfo {
   decimals: number
 }
 export interface IdoDetailInfo {
-  tier: string
+  tier: number
   creator: string
   idoToken: TokenInfo
   payToken: TokenInfo

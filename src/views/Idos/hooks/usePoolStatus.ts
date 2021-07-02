@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
-import { IdoDetail } from 'state/types'
-import { PoolStatus } from '../types'
+import { IdoDetailInfo, PoolStatus } from '../types'
 import useSecondsUntilCurrent from './useSecondsUntilCurrent'
 
-const usePoolStatus = ({ openAt, closeAt, claimAt }: IdoDetail): [s: PoolStatus, o: number, c: number, d: number] => {
+const usePoolStatus = ({
+  openAt,
+  closeAt,
+  claimAt,
+}: IdoDetailInfo): [s: PoolStatus, o: number, c: number, d: number] => {
   const [status, setStatus] = useState(null)
   const openAtSeconds = useSecondsUntilCurrent(openAt)
   const closedAtSeconds = useSecondsUntilCurrent(closeAt)

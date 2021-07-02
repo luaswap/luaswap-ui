@@ -9,8 +9,10 @@ import PageLoader from 'components/PageLoader'
 import { mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { useLuaIdoContract } from 'hooks/useContract'
 import useWeb3 from 'hooks/useWeb3'
+import useDeepMemo from 'hooks/useDeepMemo'
 import { IdoDetail } from 'state/types'
 import { fetchPool, selectCurrentPool, selectLoadingCurrentPool } from 'state/ido'
+import { selectUserTier } from 'state/profile'
 import { useAppDispatch } from 'state'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { useBlock } from 'state/hooks'
@@ -21,6 +23,7 @@ import PoolSummary from './PoolSummary'
 import ProjectInfo from './ProjectInfo'
 import PoolInformation from './PoolInformation'
 import TierDetails from './TierDetails'
+import { getIdoDataBasedOnChainIdAndTier } from '../helper'
 
 const Row = styled.div`
   max-width: 1200px;
@@ -56,34 +59,12 @@ interface ParamsType {
 }
 
 const ProjectDetail = () => {
-  const { chainId, account } = useWeb3React()
-  const web3 = useWeb3()
-  const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
-  const [loading, setLoading] = useState(true)
+  const { chainId } = useWeb3React()
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
-  const [totalCommited, setTotalCommited] = useState<string>('0')
-  const luaIdoContract = useLuaIdoContract(chainId)
   const currentPoolData = useSelector(selectCurrentPool)
+  const userTier = useSelector(selectUserTier)
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
-  const { currentBlock } = useBlock()
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const contractIdoDetail = await luaIdoContract.methods.IDOs(0).call()
-        const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
-        setIdoDetail(mappingIdoResponse(contractIdoDetail))
-        setTotalCommited(getFullDisplayBalance(commitedAmount))
-        setLoading(false)
-      } catch (error) {
-        setLoading(false)
-      }
-    }
-
-    if (account) {
-      fetchData()
-    }
-  }, [luaIdoContract, account, currentBlock, web3, id])
 
   useEffect(() => {
     if (id) {
@@ -91,18 +72,23 @@ const ProjectDetail = () => {
     }
   }, [id, dispatch])
 
+  const idoData = useDeepMemo(() => {
+    const { index } = currentPoolData
+    // TODO: Should based on current chain ID and user's tier
+    return getIdoDataBasedOnChainIdAndTier(index, '89', 1)
+  }, [currentPoolData, chainId, userTier])
+
   return (
     <Page>
       <Row>
-        {/* When we finish loading data from contract + data from API */}
-        {loading || isLoadingPool ? (
+        {isLoadingPool ? (
           <PageLoader />
         ) : (
           <>
             {' '}
             <StyledFlex mb="40px" flexWrap="wrap">
-              <PoolSummary idoDetail={idoDetail} currentPoolData={currentPoolData} />
-              <Deposit idoDetail={idoDetail} totalCommited={totalCommited} currentPoolData={currentPoolData} />
+              <PoolSummary currentPoolData={currentPoolData} idoData={idoData} />
+              <Deposit currentPoolData={currentPoolData} idoData={idoData} />
             </StyledFlex>
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Tier Infomation
@@ -113,7 +99,7 @@ const ProjectDetail = () => {
             </Heading>
             <StyledFlex flexWrap="wrap">
               <ProjectInfo currentPoolData={currentPoolData} />
-              <PoolInformation currentPoolData={currentPoolData} idoDetail={idoDetail} />
+              <PoolInformation currentPoolData={currentPoolData} idoData={idoData} />
             </StyledFlex>
             <Steps />
           </>

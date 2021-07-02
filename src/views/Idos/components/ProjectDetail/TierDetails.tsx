@@ -103,8 +103,8 @@ const TierCard: React.FC<TierProps> = ({
           {totalCommittedAmount} {payToken.symbol}
         </Text>
       </Flex>
-      {userTier === parseInt(tier) && (
-        <Button width="100%" mt="30px" disabled={userTier + 2 === parseInt(tier)}>
+      {userTier === tier && (
+        <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
           <Text bold>Your Tier. GET READY!</Text>
           <Image
             src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
@@ -115,7 +115,7 @@ const TierCard: React.FC<TierProps> = ({
           />
         </Button>
       )}
-      {userTier < parseInt(tier) && (
+      {userTier < tier && (
         <Button width="100%" mt="30px" variant="subtle">
           {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
         </Button>

@@ -8,12 +8,13 @@ import { IdoDetail } from 'state/types'
 import useDepositIdo from 'hooks/useDepositIdo'
 import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import ModalInput from 'components/ModalInput'
-import { Pool } from 'views/Idos/types'
+import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { getDecimalAmount } from 'utils/formatBalance'
 import { getUtcDateString } from 'utils/formatTime'
 import ActionButton from './ActionButton'
 import usePoolStatus from '../../hooks/usePoolStatus'
 import CountDown from './CountDown'
+import { getIdoDataBasedOnChainIdAndTier } from '../helper'
 
 const CardWrapper = styled(Card)`
   width: 100%;
@@ -24,25 +25,22 @@ const CardWrapper = styled(Card)`
   }
 `
 interface DepositProps {
-  idoDetail: IdoDetail | null
-  totalCommited: string
   currentPoolData: Pool
+  idoData: IdoDetailInfo
 }
 
-const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited, currentPoolData }) => {
+const Deposit: React.FC<DepositProps> = ({ currentPoolData, idoData }) => {
   const { account } = useWeb3React()
   const [value, setValue] = useState('0')
   const { toastSuccess, toastError } = useToast()
   const { onDeposit } = useDepositIdo()
   const { onClaimReward } = useClaimRewardIdo()
-  const { maxAmountPay, claimAt, totalCommittedAmount } = idoDetail
-  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(idoDetail)
-  const { index } = currentPoolData
   // Todo: we should change this code when deploy to test ENV
-  const { payToken } = index['89'][0]
+  const { maxAmountPay, claimAt, totalCommittedAmount, payToken } = idoData
+  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(idoData)
   const maxAmountAllowed = useMemo(() => {
-    return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommited)).toString()
-  }, [maxAmountPay, totalCommited])
+    return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommittedAmount)).toString()
+  }, [maxAmountPay, totalCommittedAmount])
 
   const handleSelectMax = useCallback(() => {
     setValue(maxAmountAllowed)
@@ -67,13 +65,13 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited, currentPool
   const onHandleClaim = useCallback(async () => {
     try {
       // TODO: In here we assume that user claim equal amount of token that they commited
-      const claimableAmount = getDecimalAmount(new BigNumber(totalCommited)).toString()
+      const claimableAmount = getDecimalAmount(new BigNumber(totalCommittedAmount)).toString()
       await onClaimReward(claimableAmount)
       toastSuccess('Claim reward Successfully')
     } catch (error) {
       toastError('Fail to claim reward')
     }
-  }, [onClaimReward, toastError, toastSuccess, totalCommited])
+  }, [onClaimReward, toastError, toastSuccess, totalCommittedAmount])
 
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open' || poolStatus === 'not open') {

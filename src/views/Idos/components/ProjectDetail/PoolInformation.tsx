@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react'
 import { TabMenu, Tab, Flex, Text } from 'common-uikitstrungdao'
 import styled from 'styled-components'
-import { Pool } from 'views/Idos/types'
+import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { getUtcDateString } from 'utils/formatTime'
 import { IdoDetail } from 'state/types'
-import { calculateSwapRate } from './helper'
+import { calculateSwapRate } from '../helper'
 
 const Row = styled.div`
   width: 100%;
@@ -16,20 +16,20 @@ const Row = styled.div`
 
 interface PoolInformationProps {
   currentPoolData: Pool
-  idoDetail: IdoDetail | null
+  idoData: IdoDetailInfo
 }
 
 interface PoolInfoTabProps {
   currentPoolData: Pool
-  idoDetail: IdoDetail | null
+  idoData: IdoDetailInfo
 }
 
 const TokenInfoTab = () => {
   return <Flex>Token tab</Flex>
 }
 
-const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, idoDetail }) => {
-  const { closeAt, openAt, totalAmountIDO } = idoDetail
+const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, idoData }) => {
+  const { closeAt, openAt, totalAmountIDO } = idoData
 
   return (
     <>
@@ -57,7 +57,7 @@ const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, idoDetail })
   )
 }
 
-const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, idoDetail }) => {
+const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, idoData }) => {
   const [index, setIndex] = useState<number>(0)
   const onChangeTab = useCallback((idx) => {
     setIndex(idx)
@@ -90,7 +90,7 @@ const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, idoD
           Token Information
         </Tab>
       </TabMenu>
-      {index === 0 ? <PoolInfoTab currentPoolData={currentPoolData} idoDetail={idoDetail} /> : <TokenInfoTab />}
+      {index === 0 ? <PoolInfoTab currentPoolData={currentPoolData} idoData={idoData} /> : <TokenInfoTab />}
     </Row>
   )
 }

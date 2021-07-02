@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { useWeb3React } from '@web3-react/core'
 import {
   Card,
   CardBody,
@@ -13,9 +13,13 @@ import {
   Progress,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
-import { IdoDetail } from 'state/types'
-import { Pool } from 'views/Idos/types'
-import { calculateCommittedAmountPercentage, calculateSwapRate, calculateSwappedAmountPercentage } from './helper'
+import { IdoDetailInfo, Pool } from 'views/Idos/types'
+import {
+  calculateCommittedAmountPercentage,
+  calculateSwapRate,
+  calculateSwappedAmountPercentage,
+  getIdoDataBasedOnChainIdAndTier,
+} from '../helper'
 import usePoolStatus from '../../hooks/usePoolStatus'
 
 const IconWrapper = styled.a`
@@ -56,20 +60,18 @@ const CardWrapper = styled(Card)`
 `
 
 interface PoolSummaryProps {
-  idoDetail: IdoDetail | null
   currentPoolData: Pool
+  idoData: IdoDetailInfo
 }
 
-const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail, currentPoolData }) => {
-  const { totalAmountIDO, totalAmountPay, totalCommittedAmount, swappedAmountPay } = idoDetail
-  const { img, description, name, index } = currentPoolData
-  // Todo: we should change this code when deploy to test ENV
-  const { idoToken, payToken } = index['89'][0]
-  const [poolStatus] = usePoolStatus(idoDetail)
+const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, idoData }) => {
+  const { img, description, name } = currentPoolData
+  const { idoToken, payToken, totalAmountIDO, totalAmountPay, totalCommittedAmount, swappedAmountPay } = idoData
+  const [poolStatus] = usePoolStatus(idoData)
+
   const rate = useMemo(() => {
     return calculateSwapRate(totalAmountIDO, totalAmountPay)
   }, [totalAmountIDO, totalAmountPay])
-
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
       return calculateCommittedAmountPercentage(totalCommittedAmount, totalAmountPay)
