@@ -5,6 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 
 interface ModalInputProps {
   max: string
+  min?: string
   symbol: string
   onSelectMax?: () => void
   onChange: (e: React.FormEvent<HTMLInputElement>) => void
@@ -58,6 +59,7 @@ const StyledErrorMessage = styled(Text)`
 
 const ModalInput: React.FC<ModalInputProps> = ({
   max,
+  min,
   symbol,
   onChange,
   onSelectMax,
@@ -91,7 +93,8 @@ const ModalInput: React.FC<ModalInputProps> = ({
             pattern="^[0-9]*[.,]?[0-9]*$"
             inputMode="decimal"
             step="any"
-            min="0"
+            min={min}
+            max={max}
             onChange={onChange}
             placeholder="0"
             value={value}

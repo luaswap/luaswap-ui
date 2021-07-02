@@ -14,6 +14,8 @@ import {
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
+import { formatPoolDetail } from 'utils/formatPoolData'
+import useDeepMemo from 'hooks/useDeepMemo'
 import {
   calculateCommittedAmountPercentage,
   calculateSwapRate,
@@ -21,6 +23,8 @@ import {
   getIdoDataBasedOnChainIdAndTier,
 } from '../helper'
 import usePoolStatus from '../../hooks/usePoolStatus'
+import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
+import { FormatPool } from '../../types'
 
 const IconWrapper = styled.a`
   color: #212121;
@@ -61,17 +65,17 @@ const CardWrapper = styled(Card)`
 
 interface PoolSummaryProps {
   currentPoolData: Pool
-  idoData: IdoDetailInfo
+  tierDataOfUser: IdoDetailInfo
 }
 
-const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, idoData }) => {
-  const { img, description, name } = currentPoolData
-  const { idoToken, payToken, totalAmountIDO, totalAmountPay, totalCommittedAmount, swappedAmountPay } = idoData
-  const [poolStatus] = usePoolStatus(idoData)
+const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, tierDataOfUser }) => {
+  const [poolStatus] = usePoolStatus(tierDataOfUser)
+  const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO, swappedAmountPay, payToken } =
+    useTotalDataFromAllPools(currentPoolData)
+  // const rate = useMemo(() => {
+  //   return calculateSwapRate(totalAmountIDO, totalAmountPay)
+  // }, [totalAmountIDO, totalAmountPay])
 
-  const rate = useMemo(() => {
-    return calculateSwapRate(totalAmountIDO, totalAmountPay)
-  }, [totalAmountIDO, totalAmountPay])
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
       return calculateCommittedAmountPercentage(totalCommittedAmount, totalAmountPay)
@@ -128,19 +132,19 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, idoData }) =
         </Flex>
         <Text>{description}</Text>
         <Flex justifyContent="space-between" mb="10px" mt="15px">
-          <Flex justifyContent="flex-start" flexDirection="column">
+          {/* <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
             <Text>
               1 {payToken.symbol} = {rate} {idoToken.symbol}
             </Text>
-          </Flex>
+          </Flex> */}
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>
             <Text>{totalAmountIDO}</Text>
           </Flex>
           <Flex justifyContent="flex-end" flexDirection="column">
             <Text color="primary">Access</Text>
-            <Text>Private</Text>
+            <Text textAlign="right">Public</Text>
           </Flex>
         </Flex>
         <Flex flexDirection="column">

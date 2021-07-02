@@ -6,16 +6,10 @@ import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/layout/Page'
 import PageLoader from 'components/PageLoader'
-import { mappingIdoResponse } from 'state/ido/fetchIdosData'
-import { useLuaIdoContract } from 'hooks/useContract'
-import useWeb3 from 'hooks/useWeb3'
 import useDeepMemo from 'hooks/useDeepMemo'
-import { IdoDetail } from 'state/types'
 import { fetchPool, selectCurrentPool, selectLoadingCurrentPool } from 'state/ido'
 import { selectUserTier } from 'state/profile'
 import { useAppDispatch } from 'state'
-import { getFullDisplayBalance } from 'utils/formatBalance'
-import { useBlock } from 'state/hooks'
 
 import Steps from './Steps'
 import Deposit from './Deposit'
@@ -60,6 +54,7 @@ interface ParamsType {
 
 const ProjectDetail = () => {
   const { chainId } = useWeb3React()
+  const [loading, setLoading] = useState(true)
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
   const currentPoolData = useSelector(selectCurrentPool)
@@ -69,10 +64,11 @@ const ProjectDetail = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchPool(id))
+      setLoading(false)
     }
   }, [id, dispatch])
 
-  const idoData = useDeepMemo(() => {
+  const tierDataOfUser = useDeepMemo(() => {
     const { index } = currentPoolData
     // TODO: Should based on current chain ID and user's tier
     return getIdoDataBasedOnChainIdAndTier(index, '89', 1)
@@ -81,14 +77,14 @@ const ProjectDetail = () => {
   return (
     <Page>
       <Row>
-        {isLoadingPool ? (
+        {loading || isLoadingPool ? (
           <PageLoader />
         ) : (
           <>
             {' '}
             <StyledFlex mb="40px" flexWrap="wrap">
-              <PoolSummary currentPoolData={currentPoolData} idoData={idoData} />
-              <Deposit currentPoolData={currentPoolData} idoData={idoData} />
+              <PoolSummary currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
+              <Deposit currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
             </StyledFlex>
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Tier Infomation
@@ -99,7 +95,7 @@ const ProjectDetail = () => {
             </Heading>
             <StyledFlex flexWrap="wrap">
               <ProjectInfo currentPoolData={currentPoolData} />
-              <PoolInformation currentPoolData={currentPoolData} idoData={idoData} />
+              <PoolInformation currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
             </StyledFlex>
             <Steps />
           </>

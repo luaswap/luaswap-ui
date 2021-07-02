@@ -99,7 +99,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   }, [totalCommittedAmount, totalAmountPay])
 
   return (
-    <Card ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />}>
+    <Card ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />} mb="24px">
       <CardBody style={{ height: '350px' }}>
         <Flex mb="15px" alignItems="center">
           <ImageContainer onClick={navigateToProjectDetail}>

@@ -28,7 +28,7 @@ const Idos = () => {
             <Flex mb="32px">
               <ButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="primary">
                 <ButtonMenuItem as={Link} to={`${url}`}>
-                  {t('Upcoming Pools')}
+                  {t('Opening Pools')}
                 </ButtonMenuItem>
                 <ButtonMenuItem as={Link} to={`${url}/history`}>
                   {t('Previous Pools')}

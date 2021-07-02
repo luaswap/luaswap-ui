@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { getUtcDateString } from 'utils/formatTime'
 import { IdoDetail } from 'state/types'
+import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 import { calculateSwapRate } from '../helper'
 
 const Row = styled.div`
@@ -16,48 +17,48 @@ const Row = styled.div`
 
 interface PoolInformationProps {
   currentPoolData: Pool
-  idoData: IdoDetailInfo
+  tierDataOfUser: IdoDetailInfo
 }
 
 interface PoolInfoTabProps {
   currentPoolData: Pool
-  idoData: IdoDetailInfo
+  tierDataOfUser: IdoDetailInfo
 }
 
 const TokenInfoTab = () => {
   return <Flex>Token tab</Flex>
 }
 
-const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, idoData }) => {
-  const { closeAt, openAt, totalAmountIDO } = idoData
+const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, tierDataOfUser }) => {
+  const { totalAmountIDO, openAt, closeAt } = useTotalDataFromAllPools(currentPoolData)
 
   return (
     <>
       <Flex justifyContent="space-between" mt="20px">
         <Text>Opens</Text>
-        <Text>{getUtcDateString(openAt)} UTC</Text>
+        <Text>{getUtcDateString(openAt)}</Text>
       </Flex>
       <Flex justifyContent="space-between" mt="20px">
         <Text>Closes</Text>
-        <Text>{getUtcDateString(closeAt)} UTC</Text>
+        <Text>{getUtcDateString(closeAt)}</Text>
       </Flex>
       <Flex justifyContent="space-between" mt="20px">
         <Text>Cap</Text>
         <Text>{totalAmountIDO}</Text>
       </Flex>
-      <Flex justifyContent="space-between" mt="20px">
+      {/* <Flex justifyContent="space-between" mt="20px">
         <Text>Swap Rate</Text>
         <Text>Thursday</Text>
       </Flex>
       <Flex justifyContent="space-between" mt="20px">
         <Text>Total Funds Swapped</Text>
         <Text>Thursday</Text>
-      </Flex>
+      </Flex> */}
     </>
   )
 }
 
-const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, idoData }) => {
+const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, tierDataOfUser }) => {
   const [index, setIndex] = useState<number>(0)
   const onChangeTab = useCallback((idx) => {
     setIndex(idx)
@@ -90,7 +91,11 @@ const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, idoD
           Token Information
         </Tab>
       </TabMenu>
-      {index === 0 ? <PoolInfoTab currentPoolData={currentPoolData} idoData={idoData} /> : <TokenInfoTab />}
+      {index === 0 ? (
+        <PoolInfoTab currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
+      ) : (
+        <TokenInfoTab />
+      )}
     </Row>
   )
 }

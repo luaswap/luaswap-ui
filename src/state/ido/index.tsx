@@ -3,7 +3,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import Web3 from 'web3'
 import axios from 'axios'
-import { IdoDetail, IdoState } from 'state/types'
+import { IdoDetail, IdoState, OpenPools } from 'state/types'
 import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
 import { fetchIdosInformation } from './fetchIdosData'
@@ -13,7 +13,10 @@ const initialState: IdoState = {
   idos: [],
   openPools: {
     isLoading: true,
-    data: [],
+    data: {
+      openingPools: [],
+      upcomingPools: [],
+    },
   },
   closedPools: {
     isLoading: true,
@@ -44,7 +47,10 @@ export const idosSlice = createSlice({
       state.idos = action.payload
     },
     setOpenPools: (state, action: PayloadAction<Pool[]>) => {
-      state.openPools.data = action.payload
+      const upcomingPools = action.payload.filter((pool) => pool.status === 1)
+      const openingPools = action.payload.filter((pool) => pool.status === 2)
+      state.openPools.data.openingPools = openingPools
+      state.openPools.data.upcomingPools = upcomingPools
     },
     setClosedPools: (state, action: PayloadAction<Pool[]>) => {
       state.closedPools.data = action.payload
@@ -138,7 +144,7 @@ export const fetchPool = (id: string) => async (dispatch, getState) => {
 
 // Selector
 export const selectIdoState = (state: RootState): IdoState => state.idos
-export const selectOpenPools = (state: RootState): Pool[] => selectIdoState(state).openPools.data
+export const selectOpenPools = (state: RootState): OpenPools => selectIdoState(state).openPools.data
 export const selectClosedPools = (state: RootState): Pool[] => selectIdoState(state).closedPools.data
 export const selectLoadingStatus = (state: RootState): boolean => selectIdoState(state).isLoading
 export const selectLoadingOpenPools = (state: RootState): boolean => selectIdoState(state).openPools.isLoading

@@ -24,7 +24,7 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
         {Array.isArray(links) &&
           links.map((item) => {
             return (
-              <Button mr="10px" variant="tertiary" as="a" href={item.link} target="__blank">
+              <Button mr="10px" variant="tertiary" as="a" href={item.link} target="__blank" key={item.label}>
                 {item.label}
               </Button>
             )

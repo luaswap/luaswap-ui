@@ -26,18 +26,18 @@ const CardWrapper = styled(Card)`
 `
 interface DepositProps {
   currentPoolData: Pool
-  idoData: IdoDetailInfo
+  tierDataOfUser: IdoDetailInfo
 }
 
-const Deposit: React.FC<DepositProps> = ({ currentPoolData, idoData }) => {
+const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser }) => {
   const { account } = useWeb3React()
   const [value, setValue] = useState('0')
   const { toastSuccess, toastError } = useToast()
   const { onDeposit } = useDepositIdo()
   const { onClaimReward } = useClaimRewardIdo()
   // Todo: we should change this code when deploy to test ENV
-  const { maxAmountPay, claimAt, totalCommittedAmount, payToken } = idoData
-  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(idoData)
+  const { maxAmountPay, claimAt, totalCommittedAmount, payToken, minAmountPay } = tierDataOfUser
+  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(tierDataOfUser)
   const maxAmountAllowed = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommittedAmount)).toString()
   }, [maxAmountPay, totalCommittedAmount])
@@ -121,6 +121,7 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, idoData }) => {
               onSelectMax={handleSelectMax}
               onChange={handleChange}
               max={maxAmountAllowed}
+              min={new BigNumber(minAmountPay).toString()}
               symbol={payToken.symbol}
               inputTitle="Deposit"
             />
