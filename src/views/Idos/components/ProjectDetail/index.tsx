@@ -67,13 +67,16 @@ const ProjectDetail = () => {
       setLoading(false)
     }
   }, [id, dispatch])
-
   const tierDataOfUser = useDeepMemo(() => {
     const { index } = currentPoolData
     // TODO: Should based on current chain ID and user's tier
     return getIdoDataBasedOnChainIdAndTier(index, '89', 1)
   }, [currentPoolData, chainId, userTier])
 
+  /**
+   * currentPoolData: all tier's information
+   * tierDataOfUser: The correct tier data for user (based on user's tier)
+   */
   return (
     <Page>
       <Row>

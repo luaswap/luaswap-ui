@@ -72,9 +72,6 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, tierDataOfUs
   const [poolStatus] = usePoolStatus(tierDataOfUser)
   const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO, swappedAmountPay, payToken } =
     useTotalDataFromAllPools(currentPoolData)
-  // const rate = useMemo(() => {
-  //   return calculateSwapRate(totalAmountIDO, totalAmountPay)
-  // }, [totalAmountIDO, totalAmountPay])
 
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {

@@ -9,7 +9,7 @@ import useRefresh from 'hooks/useRefresh'
 import { setDefaultFarmData, fetchFarms, setBlock } from './actions'
 import { State, Farm, ProfileState, FarmsState, IdoState, BlockfolioState } from './types'
 import { fetchProfile } from './profile'
-import { fetchAllIdoData, fetchPools } from './ido'
+import { fetchPools } from './ido'
 
 export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()

@@ -9,6 +9,7 @@ export interface TokenInfo {
 }
 export interface IdoDetailInfo {
   tier: number
+  addressIdoContract: string
   creator: string
   idoToken: TokenInfo
   payToken: TokenInfo

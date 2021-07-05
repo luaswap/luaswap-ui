@@ -120,8 +120,8 @@ export const getMasterchefContract = (web3?: Web3, chainId?: number) => {
 export const getLuaContract = (web3?: Web3, chainId?: number) => {
   return getContract(luaAbi, getLuaAddress(chainId), web3)
 }
-export const getLuaIdoContract = (web3?: Web3, chainId?: number) => {
-  return getContract(luaIdoAbi, getLuaIdoAddress(chainId), web3)
+export const getLuaIdoContract = (web3?: Web3, address?: string) => {
+  return getContract(luaIdoAbi, address, web3)
 }
 export const getClaimRefundContract = (web3?: Web3) => {
   return getContract(claimRefundAbi, getClaimRefundAddress(), web3)

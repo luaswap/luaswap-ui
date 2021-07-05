@@ -3,9 +3,9 @@ import { useWeb3React } from '@web3-react/core'
 import { useLuaIdoContract } from 'hooks/useContract'
 import { depositIdo } from 'utils/callHelpers'
 
-const useDepositIdo = () => {
-  const { account, chainId } = useWeb3React()
-  const luaIdoContract = useLuaIdoContract(chainId)
+const useDepositIdo = (contractAddress: string) => {
+  const { account } = useWeb3React()
+  const luaIdoContract = useLuaIdoContract(contractAddress)
 
   const handleDeposit = useCallback(
     async (amount: string) => {

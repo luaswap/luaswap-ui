@@ -6,7 +6,7 @@ import axios from 'axios'
 import { IdoDetail, IdoState, OpenPools } from 'state/types'
 import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
-import { fetchIdosInformation } from './fetchIdosData'
+// import { fetchIdosInformation } from './fetchIdosData'
 
 const initialState: IdoState = {
   isLoading: true,
@@ -101,10 +101,10 @@ export const {
   setClosedPools,
 } = idosSlice.actions
 
-export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
-  const idosInformation = await fetchIdosInformation(chainId, web3)
-  dispatch(setIdosData(idosInformation))
-}
+// export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
+//   const idosInformation = await fetchIdosInformation(chainId, web3)
+//   dispatch(setIdosData(idosInformation))
+// }
 
 export default idosSlice.reducer
 

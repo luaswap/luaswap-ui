@@ -12,17 +12,17 @@ interface CountDownProps {
 
 const TimerOpen = ({ openAtSeconds }) => {
   const timeUntilOpen = getTimePeriods(openAtSeconds)
-  return <Timer suffix="Open" timeUntil={timeUntilOpen} />
+  return <Timer suffix="Open in" timeUntil={timeUntilOpen} />
 }
 
 const TimerClose = ({ closedAtSeconds }) => {
   const timeUntilClosed = getTimePeriods(closedAtSeconds)
-  return <Timer suffix="Finish" timeUntil={timeUntilClosed} />
+  return <Timer suffix="Finish in" timeUntil={timeUntilClosed} />
 }
 
 const TimerClaim = ({ claimAtSeconds }) => {
   const timeUntilClaim = getTimePeriods(claimAtSeconds)
-  return <Timer suffix="Claim" timeUntil={timeUntilClaim} />
+  return <Timer suffix="Claim in" timeUntil={timeUntilClaim} />
 }
 
 const CountDown: React.FC<CountDownProps> = ({ openAtSeconds, closedAtSeconds, claimAtSeconds, poolStatus }) => {
