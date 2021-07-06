@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import useDeepMemo from 'hooks/useDeepMemo'
 import { formatPoolDetail } from 'utils/formatPoolData'
 import { FormatPool, Pool } from '../types'

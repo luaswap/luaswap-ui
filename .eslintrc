@@ -25,7 +25,7 @@
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-empty-function": 0,
-    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-unused-vars": 0,
     "radix": 0,
     "import/no-extraneous-dependencies": 0,
     "jsx-a11y/media-has-caption": 0

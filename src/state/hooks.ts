@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
@@ -15,7 +15,6 @@ export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()
   const web3 = useWeb3()
   const { chainId } = useWeb3React()
-  const { slowRefresh } = useRefresh()
   // useEffect(() => {
   //   const fetchPoolsPublicData = async () => {
   //     const blockNumber = await web3.eth.getBlockNumber()

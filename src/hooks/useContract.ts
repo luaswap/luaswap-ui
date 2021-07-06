@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import useWeb3 from 'hooks/useWeb3'
-import { Contract } from 'web3-eth-contract'
 import {
   getBep20Contract,
   getCakeContract,

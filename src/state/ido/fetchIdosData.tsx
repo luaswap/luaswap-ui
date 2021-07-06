@@ -1,6 +1,4 @@
 /* eslint-disable import/no-cycle */
-import Web3 from 'web3'
-import { getLuaIdoContract } from 'utils/contractHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { IdoDetail } from '../types'
 

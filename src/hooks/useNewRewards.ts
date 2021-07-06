@@ -1,4 +1,4 @@
-import { API_URL, API_ETH, API_TOMO } from 'config'
+import { API_URL, API_ETH } from 'config'
 import { getMasterchefContract } from 'utils/contractHelpers'
 import axios from 'axios'
 
