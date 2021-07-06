@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import {
   Card,
   CardBody,
@@ -14,18 +13,10 @@ import {
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
-import { formatPoolDetail } from 'utils/formatPoolData'
 import { IdoDetail } from 'state/types'
-import useDeepMemo from 'hooks/useDeepMemo'
-import {
-  calculateCommittedAmountPercentage,
-  calculateSwapRate,
-  calculateSwappedAmountPercentage,
-  getIdoDataBasedOnChainIdAndTier,
-} from '../helper'
+import { calculateCommittedAmountPercentage, calculateSwappedAmountPercentage } from '../helper'
 import usePoolStatus from '../../hooks/usePoolStatus'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
-import { FormatPool } from '../../types'
 
 const IconWrapper = styled.a`
   color: #212121;

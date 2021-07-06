@@ -79,24 +79,24 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
 
   const onHandleCommit = useCallback(async () => {
     try {
-      const commitedAmmount = getDecimalAmount(new BigNumber(value)).toString()
+      const commitedAmmount = getDecimalAmount(new BigNumber(value), payToken.decimals).toString()
       await onDeposit(commitedAmmount)
       toastSuccess('Deposit Successfully')
     } catch (error) {
       toastError('Fail to deposit')
     }
-  }, [onDeposit, value, toastError, toastSuccess])
+  }, [onDeposit, value, toastError, toastSuccess, payToken.decimals])
 
   const onHandleClaim = useCallback(async () => {
     try {
       // TODO: In here we assume that user claim equal amount of token that they commited
-      const claimableAmount = getDecimalAmount(new BigNumber(totalCommittedAmount)).toString()
+      const claimableAmount = getDecimalAmount(new BigNumber(totalCommittedAmount, payToken.decimals)).toString()
       await onClaimReward(claimableAmount)
       toastSuccess('Claim reward Successfully')
     } catch (error) {
       toastError('Fail to claim reward')
     }
-  }, [onClaimReward, toastError, toastSuccess, totalCommittedAmount])
+  }, [onClaimReward, toastError, toastSuccess, totalCommittedAmount, payToken.decimals])
 
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open' || poolStatus === 'not open') {

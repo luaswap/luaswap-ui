@@ -33,23 +33,6 @@ const StyledFlex = styled(Flex)`
     flex-wrap: nowrap;
   }
 `
-
-const defaultIdoDetail = {
-  claimAt: null,
-  closeAt: null,
-  creator: null,
-  idoToken: null,
-  maxAmountPay: null,
-  minAmountPay: null,
-  openAt: null,
-  payToken: null,
-  swappedAmountIDO: null,
-  swappedAmountPay: null,
-  totalAmountIDO: null,
-  totalAmountPay: null,
-  totalCommittedAmount: null,
-}
-
 interface ParamsType {
   id: string
 }
@@ -73,9 +56,8 @@ const ProjectDetail = () => {
   const tierDataOfUser = useDeepMemo(() => {
     const { index = [] } = currentPoolData
     // TODO: Should based on current chain ID and user's tier
-    return getIdoDataBasedOnChainIdAndTier(index, chainId, 1)
+    return getIdoDataBasedOnChainIdAndTier(index, chainId, userTier)
   }, [currentPoolData, chainId, userTier])
-
   const [idoDetailFromContract, totalUserCommittedFromContract] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
     tierDataOfUser.index,

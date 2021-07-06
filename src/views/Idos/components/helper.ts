@@ -44,6 +44,34 @@ export const getIdoSupportedNetwork = (idos: Record<string, IdoDetailInfo[]>): s
   return supportedNetworkName.join(',')
 }
 
+const DEFAULT_IDO = {
+  tier: 0,
+  addressIdoContract: '',
+  creator: '',
+  idoToken: {
+    address: '',
+    symbol: null,
+    decimals: null,
+  },
+  payToken: {
+    address: '',
+    symbol: null,
+    decimals: null,
+  },
+  totalAmountIDO: 0,
+  totalAmountPay: 0,
+  maxAmountPay: 0,
+  minAmountPay: 0,
+  claimAt: 0,
+  closeAt: 0,
+  openAt: 0,
+  swappedAmountIDO: 0,
+  swappedAmountPay: 0,
+  totalCommittedAmount: 0,
+  index: 0,
+  chainId: '',
+}
+
 export const getIdoDataBasedOnChainIdAndTier = (
   index: Record<number, IdoDetailInfo[]>,
   chainId: number,
@@ -51,33 +79,12 @@ export const getIdoDataBasedOnChainIdAndTier = (
 ): IdoDetailInfo => {
   const allIdos = lodashGet(index, chainId, [])
   if (allIdos.length === 0) {
-    return {
-      tier: 0,
-      addressIdoContract: '',
-      creator: '',
-      idoToken: {
-        address: '',
-        symbol: null,
-        decimals: null,
-      },
-      payToken: {
-        address: '',
-        symbol: null,
-        decimals: null,
-      },
-      totalAmountIDO: 0,
-      totalAmountPay: 0,
-      maxAmountPay: 0,
-      minAmountPay: 0,
-      claimAt: 0,
-      closeAt: 0,
-      openAt: 0,
-      swappedAmountIDO: 0,
-      swappedAmountPay: 0,
-      totalCommittedAmount: 0,
-      index: 0,
-      chainId: '',
-    }
+    return DEFAULT_IDO
   }
-  return lodashFind(allIdos, (ido) => ido.tier === userTier)
+
+  const result = lodashFind(allIdos, (ido) => ido.tier === userTier)
+
+  if (result) return result
+
+  return DEFAULT_IDO
 }

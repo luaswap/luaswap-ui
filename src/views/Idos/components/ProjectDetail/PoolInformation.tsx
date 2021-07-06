@@ -3,9 +3,7 @@ import { TabMenu, Tab, Flex, Text } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { getUtcDateString } from 'utils/formatTime'
-import { IdoDetail } from 'state/types'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
-import { calculateSwapRate } from '../helper'
 
 const Row = styled.div`
   width: 100%;
