@@ -75,7 +75,7 @@ export const getIdoDataBasedOnChainIdAndTier = (
       swappedAmountIDO: 0,
       swappedAmountPay: 0,
       totalCommittedAmount: 0,
-      index: '',
+      index: 0,
       chainId: '',
     }
   }

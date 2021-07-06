@@ -26,10 +26,10 @@ const defaultIdoDetail = {
 
 const useDataFromIdoContract = (
   contractAddress: string,
-  idoIndex: string,
+  idoIndex: number,
   idoIndexes: IdoDetailInfo[],
 ): [a: IdoDetail, b: string] => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const luaIdoContract = useLuaIdoContract(contractAddress)
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
   const [totalUserCommitted, setTotalUserCommitted] = useState<string>('0')
@@ -63,7 +63,7 @@ const useDataFromIdoContract = (
       fetchData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentBlock])
+  }, [currentBlock, chainId])
 
   return [idoDetail, totalUserCommitted]
 }

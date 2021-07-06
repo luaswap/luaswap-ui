@@ -23,7 +23,7 @@ export interface IdoDetailInfo {
   swappedAmountIDO: number
   swappedAmountPay: number
   totalCommittedAmount: number
-  index: string
+  index: number
   chainId: string
 }
 

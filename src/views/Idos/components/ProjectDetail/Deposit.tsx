@@ -44,8 +44,8 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
   const { account } = useWeb3React()
   const [value, setValue] = useState('0')
   const { toastSuccess, toastError } = useToast()
-  const { onDeposit } = useDepositIdo(tierDataOfUser.addressIdoContract)
-  const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract)
+  const { onDeposit } = useDepositIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
+  const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
   // Todo: we should change this code when deploy to test ENV
   const { maxAmountPay, totalCommittedAmount, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay } =

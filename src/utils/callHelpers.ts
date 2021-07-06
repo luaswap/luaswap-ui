@@ -29,10 +29,9 @@ export const stake = async (masterChefContract, pid, amount, account, chainId?) 
     })
 }
 
-// TODO: should change the index of the IDO contract
-export const depositIdo = async (luaIdoContract, account, amount) => {
+export const depositIdo = async (luaIdoContract, account, amount, idoIndex) => {
   return luaIdoContract.methods
-    .commit('0', amount)
+    .commit(idoIndex, amount)
     .send({
       from: account,
       value: amount,
@@ -42,10 +41,10 @@ export const depositIdo = async (luaIdoContract, account, amount) => {
     })
 }
 
-export const claimRewardIdo = async (luaIdoContract, account, amount) => {
+export const claimRewardIdo = async (luaIdoContract, account, amount, idoIndex) => {
   const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
   return luaIdoContract.methods
-    .userClaim('0', account, amount)
+    .userClaim(idoIndex, account, amount)
     .send({
       from: account,
     })
