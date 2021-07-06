@@ -39,9 +39,13 @@ export const getTierName = (tier: number) => {
 }
 
 export const getIdoSupportedNetwork = (idos: Record<string, IdoDetailInfo[]>): string => {
-  const supportedChainId = Object.keys(idos)
-  const supportedNetworkName = supportedChainId.map((chainId) => supportIdoNetwork[chainId])
-  return supportedNetworkName.join(',')
+  try {
+    const supportedChainId = Object.keys(idos)
+    const supportedNetworkName = supportedChainId.map((chainId) => supportIdoNetwork[chainId])
+    return supportedNetworkName.join(',')
+  } catch (error) {
+    return null
+  }
 }
 
 const DEFAULT_IDO = {
@@ -83,7 +87,6 @@ export const getIdoDataBasedOnChainIdAndTier = (
   }
 
   const result = lodashFind(allIdos, (ido) => ido.tier === userTier)
-
   if (result) return result
 
   return DEFAULT_IDO

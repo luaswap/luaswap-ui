@@ -11,3 +11,5 @@ export const supportIdoNetwork = {
   88: 'Tomo Mainnet',
   1: 'Ethereum',
 }
+
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'

@@ -53,6 +53,12 @@ export const claimRewardIdo = async (luaIdoContract, account, amount, idoIndex) 
     })
 }
 
+export const approveIdo = async (tokenContract, luaIdoAddress, account, chainId) => {
+  const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x7A120' } : { from: account }
+  const res = await tokenContract.methods.approve(luaIdoAddress, ethers.constants.MaxUint256).send(gasLimit)
+  return res
+}
+
 export const sousStake = async (sousChefContract, amount, decimals = 18, account) => {
   return sousChefContract.methods
     .deposit(new BigNumber(amount).times(BIG_TEN.pow(decimals)).toString())

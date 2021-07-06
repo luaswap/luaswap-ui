@@ -1,21 +1,24 @@
 import React, { useMemo, useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { Card, CardBody, Flex, Text, Mesage } from 'common-uikitstrungdao'
+import { Card, CardBody, Flex, Text } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import useDepositIdo from 'hooks/useDepositIdo'
+import { useApproveIdo } from 'hooks/useApproveIdo'
 import useDeepMemo from 'hooks/useDeepMemo'
 import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import ModalInput from 'components/ModalInput'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { IdoDetail } from 'state/types'
 import { selectUserTier } from 'state/profile'
+import { getERC20Contract } from 'utils/contractHelpers'
 import { getDecimalAmount } from 'utils/formatBalance'
 import ActionButton from './ActionButton'
 import usePoolStatus from '../../hooks/usePoolStatus'
-import { calculateSwapRate, getIdoSupportedNetwork, getTierName } from '../helper'
+import useIsApproved from '../../hooks/useIsApproved'
+import { calculateSwapRate, getTierName } from '../helper'
 import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
@@ -41,9 +44,13 @@ interface DepositProps {
 }
 
 const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, userTotalCommitted }) => {
-  const { account } = useWeb3React()
   const [value, setValue] = useState('0')
+  const [isRequestApproval, setIsRequestApproval] = useState(false)
   const { toastSuccess, toastError } = useToast()
+  const { account, library, chainId: cid } = useWeb3React()
+  const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
+  const [isApproved, fetchAllowanceData] = useIsApproved(paytokenContract, tierDataOfUser.addressIdoContract)
+  const { onApprove } = useApproveIdo(paytokenContract, tierDataOfUser.addressIdoContract)
   const { onDeposit } = useDepositIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
@@ -54,8 +61,6 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
   const maxAmountAllowed = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommittedAmount)).toString()
   }, [maxAmountPay, totalCommittedAmount])
-
-  const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
 
   const rate = useMemo(() => {
     return calculateSwapRate(totalAmountIDO, totalAmountPay)
@@ -76,6 +81,18 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
       setValue(e.currentTarget.value.replace(/,/g, '.'))
     }
   }, [])
+
+  const handleApprove = useCallback(async () => {
+    try {
+      setIsRequestApproval(true)
+      await onApprove()
+      fetchAllowanceData()
+      setIsRequestApproval(false)
+    } catch (e) {
+      setIsRequestApproval(false)
+      console.error(e)
+    }
+  }, [onApprove, fetchAllowanceData])
 
   const onHandleCommit = useCallback(async () => {
     try {
@@ -147,9 +164,6 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
         }}
       >
         <CardBody>
-          <Mesage variant="warning" mb="16px">
-            IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO
-          </Mesage>
           <Text bold fontSize="24px">
             JOIN IDO ON TOMOCHAIN
           </Text>
@@ -191,7 +205,7 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
           )}
           {isIdoAvailalbeOnChain && (
             <Flex justifyContent="center" alignItems="center" flexDirection="column">
-              {account && isPoolInProgress && (
+              {account && isPoolInProgress && isApproved && (
                 <ModalInput
                   value={value}
                   onSelectMax={handleSelectMax}
@@ -203,11 +217,15 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
                 />
               )}
               <ActionButton
+                isRequestApproval={isRequestApproval}
+                handleApprove={handleApprove}
+                isApproved={isApproved}
                 poolStatus={poolStatus}
                 onCommit={onHandleCommit}
                 onClaim={onHandleClaim}
                 disabled={!isClaimable}
                 symbol={payToken.symbol}
+                paytokenAddress={payToken.address}
               />
             </Flex>
           )}

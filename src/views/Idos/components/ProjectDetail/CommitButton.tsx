@@ -8,7 +8,7 @@ interface CommitButtonProps {
 
 const CommitButton: React.FC<CommitButtonProps> = ({ onClick, symbol, ...props }) => {
   return (
-    <Button mb="15px" mt="15px" variant="primary" onClick={onClick} {...props}>
+    <Button mb="15px" mt="15px" width="100%" variant="primary" onClick={onClick} {...props}>
       Commit your {symbol}
     </Button>
   )

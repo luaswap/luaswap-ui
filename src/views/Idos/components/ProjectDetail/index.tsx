@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Heading } from 'common-uikitstrungdao'
+import { Flex, Heading, Mesage } from 'common-uikitstrungdao'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -19,7 +19,7 @@ import ProjectInfo from './ProjectInfo'
 import PoolInformation from './PoolInformation'
 import TierDetails from './TierDetails'
 import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
-import { getIdoDataBasedOnChainIdAndTier } from '../helper'
+import { getIdoDataBasedOnChainIdAndTier, getIdoSupportedNetwork } from '../helper'
 
 const Row = styled.div`
   max-width: 1200px;
@@ -45,6 +45,7 @@ const ProjectDetail = () => {
   const currentPoolData = useSelector(selectCurrentPool)
   const userTier = useSelector(selectUserTier)
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
+  const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
 
   useEffect(() => {
     if (id) {
@@ -56,7 +57,7 @@ const ProjectDetail = () => {
   const tierDataOfUser = useDeepMemo(() => {
     const { index = [] } = currentPoolData
     // TODO: Should based on current chain ID and user's tier
-    return getIdoDataBasedOnChainIdAndTier(index, chainId, userTier)
+    return getIdoDataBasedOnChainIdAndTier(index, chainId, 1)
   }, [currentPoolData, chainId, userTier])
   const [idoDetailFromContract, totalUserCommittedFromContract] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
@@ -77,6 +78,9 @@ const ProjectDetail = () => {
         ) : (
           <>
             {' '}
+            <Mesage variant="warning" mb="16px">
+              IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO
+            </Mesage>
             <StyledFlex mb="40px" flexWrap="wrap">
               <PoolSummary
                 currentPoolData={currentPoolData}
