@@ -1,15 +1,20 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
-import { Heading, Text, BaseLayout, Input, Button, Flex, useModal, ChevronDownIcon } from 'common-uikitstrungdao'
+import { Text, Flex, useModal, ChevronDownIcon } from 'common-uikitstrungdao'
 
-// import { useWallet } from "state/hooks"
+import { useAppDispatch } from 'state'
+import { WalletProps } from 'state/types'
+import { setWalletActive } from 'state/blockfolio'
 import useOnClickOutside from 'hooks/useClickOutside'
 import AddressModal from './AddressModal'
 import WalletIcon from './Icon/WalletIcon'
-import LinkIcon from './Icon/LinkIcon'
-import CalendarIcon from './Icon/CalendarIcon'
-import PencilIcon from './Icon/PencilIcon'
+// import LinkIcon from './Icon/LinkIcon'
+// import CalendarIcon from './Icon/CalendarIcon'
+// import PencilIcon from './Icon/PencilIcon'
 
+interface AddressManageProps {
+  data: WalletProps
+}
 const Line = styled.hr`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   margin-top: 0;
@@ -20,6 +25,14 @@ const StyleTextBox = styled.div`
   display: flex;
   align-items: center;
 `
+const FlexAddress = styled(Flex)`
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  :hover {
+    background-color: ${({ theme }) => theme.colors.cardBorder};
+  }
+`
 const StyleWalletManage = styled.div`
   position: absolute;
   min-width: 300px;
@@ -29,6 +42,7 @@ const StyleWalletManage = styled.div`
   top: 100%;
   right: 0;
   border-radius: 15px;
+  z-index: 1;
 `
 const StyleBox = styled.div`
   padding-bottom: 10px;
@@ -37,12 +51,15 @@ const StyleBox = styled.div`
 const AddressBox = styled.div`
   display: flex;
   margin-bottom: 10px;
+  :hover {
+    text-decoration: underline;
+  }
 `
 const IconWrapper = styled.div`
   width: 30px;
   height: 30px;
-  background-color: #d9f9f0;
-  color: #00d897;
+  background-color: #fbf4bf;
+  color: ${({ theme }) => theme.colors.primary};
   text-align: center;
   line-height: 30px;
   border-radius: 50px;
@@ -65,83 +82,94 @@ const StyleAction = styled.div`
   }
 `
 
-const AddressManage: React.FC = () => {
+const AddressManage: React.FC<AddressManageProps> = ({ data }) => {
   const ref = useRef()
+  const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
-  // const wallets = useWallet()
-  // console.log(wallets)
-  const watched = '0x63ca3de924fa6c9bd5c1e61bb787ae804d504490'
-  const address = '0xe42BF6C707Ff70ADBCb5D3C41a18af9c7b59078d'
+  const filterWalletActived = Object.values(data).filter((w) => {
+    return w.isActive === true
+  })
+  const filterWalletConnected = Object.values(data).filter((w) => {
+    return w.isConnected === true
+  })
+  const filterWalletWatched = Object.values(data).filter((w) => {
+    return w.isConnected === false
+  })
+
+  const handleChangeWallet = (address) => {
+    dispatch(setWalletActive(address))
+    setIsOpen(false)
+  }
+
   const [onPresentAddress] = useModal(<AddressModal />)
   useOnClickOutside(ref, () => setIsOpen(false))
   return (
     <Flex position="relative">
       <StyleTextBox onClick={() => setIsOpen(!isOpen)}>
-        <Text mr="10px">WalletManage</Text>
-        <ChevronDownIcon />
+        {filterWalletActived.length > 0 && (
+          <FlexAddress>
+            <IconWrapper>
+              <WalletIcon />
+            </IconWrapper>
+            <Text>
+              {`${filterWalletActived[0].address.substring(0, 8)}...${filterWalletActived[0].address.substring(
+                filterWalletActived[0].address.length - 6,
+                filterWalletActived[0].address.length,
+              )}`}
+            </Text>
+            <ChevronDownIcon />
+          </FlexAddress>
+        )}
       </StyleTextBox>
       {isOpen && (
         <StyleWalletManage ref={ref}>
-          <StyleBox>
-            <Text pb="10px">Connected</Text>
-            <AddressBox>
-              <IconWrapper>
-                <WalletIcon />
-              </IconWrapper>
-              <Text style={{ cursor: 'pointer' }}>{`${address.substring(0, 6)}...${address.substring(
-                address.length - 4,
-                address.length,
-              )}`}</Text>
-              <StyleAction>
-                <PencilIcon />
-                <CalendarIcon />
-                <LinkIcon />
-              </StyleAction>
-            </AddressBox>
-            <AddressBox>
-              <IconWrapper>
-                <WalletIcon />
-              </IconWrapper>
-              <Text>{`${address.substring(0, 6)}...${address.substring(address.length - 4, address.length)}`}</Text>
-              <StyleAction>
-                <PencilIcon />
-                <CalendarIcon />
-                <LinkIcon />
-              </StyleAction>
-            </AddressBox>
-          </StyleBox>
-          <StyleBox>
-            <Text pb="10px">Watched</Text>
-            <AddressBox>
-              <IconWrapper>
-                <WalletIcon />
-              </IconWrapper>
-              <Text>{`${watched.substring(0, 6)}...${watched.substring(watched.length - 4, watched.length)}`}</Text>
-              <StyleAction>
-                <PencilIcon />
-                <CalendarIcon />
-                <LinkIcon />
-              </StyleAction>
-            </AddressBox>
-            <AddressBox>
-              <IconWrapper>
-                <WalletIcon />
-              </IconWrapper>
-              <Text>{`${watched.substring(0, 6)}...${watched.substring(watched.length - 4, watched.length)}`}</Text>
-              <StyleAction>
-                <PencilIcon />
-                <CalendarIcon />
-                <LinkIcon />
-              </StyleAction>
-            </AddressBox>
-          </StyleBox>
+          {filterWalletConnected.length > 0 && (
+            <StyleBox>
+              <Text pb="10px">Connected</Text>
+              {filterWalletConnected.map((w) => (
+                <AddressBox key={w.address}>
+                  <IconWrapper>
+                    <WalletIcon />
+                  </IconWrapper>
+                  <Text onClick={() => handleChangeWallet(w.address)} style={{ cursor: 'pointer' }}>
+                    {`${w.address.substring(0, 8)}...${w.address.substring(w.address.length - 6, w.address.length)}`}
+                  </Text>
+                  <StyleAction>
+                    {/* <PencilIcon /> */}
+                    {/* <CalendarIcon /> */}
+                    {/* <LinkIcon /> */}
+                  </StyleAction>
+                </AddressBox>
+              ))}
+            </StyleBox>
+          )}
+          {filterWalletWatched.length > 0 && (
+            <StyleBox>
+              <Text pb="10px">Watched</Text>
+              {filterWalletWatched.map((w) => (
+                <AddressBox key={w.address}>
+                  <IconWrapper>
+                    <WalletIcon />
+                  </IconWrapper>
+                  <Text onClick={() => handleChangeWallet(w.address)} style={{ cursor: 'pointer' }}>
+                    {`${w.address.substring(0, 8)}...${w.address.substring(w.address.length - 6, w.address.length)}`}
+                  </Text>
+                  <StyleAction>
+                    {/* <PencilIcon/> */}
+                    {/* <CalendarIcon /> */}
+                    {/* <LinkIcon /> */}
+                  </StyleAction>
+                </AddressBox>
+              ))}
+            </StyleBox>
+          )}
           <Line />
           <StyleBox style={{ cursor: 'pointer' }} onClick={onPresentAddress}>
             <Text>Manage Addresses</Text>
           </StyleBox>
-          <StyleBox>
+          {/* <StyleBox>
             <Text>Network Settings</Text>
-          </StyleBox>
+          </StyleBox>           */}
         </StyleWalletManage>
       )}
     </Flex>
