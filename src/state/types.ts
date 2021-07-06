@@ -353,14 +353,14 @@ export interface IdoDetail {
   openAt: number
   creator: string
   idoToken: string
-  maxAmountPay: string
-  minAmountPay: string
+  maxAmountPay: number
+  minAmountPay: number
   payToken: string
-  swappedAmountIDO: string
-  swappedAmountPay: string
-  totalAmountIDO: string
-  totalAmountPay: string
-  totalCommittedAmount: string
+  swappedAmountIDO: number
+  swappedAmountPay: number
+  totalAmountIDO: number
+  totalAmountPay: number
+  totalCommittedAmount: number
 }
 
 export interface OpenPools {

@@ -15,6 +15,7 @@ import {
 import styled from 'styled-components'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { formatPoolDetail } from 'utils/formatPoolData'
+import { IdoDetail } from 'state/types'
 import useDeepMemo from 'hooks/useDeepMemo'
 import {
   calculateCommittedAmountPercentage,
@@ -66,13 +67,14 @@ const CardWrapper = styled(Card)`
 interface PoolSummaryProps {
   currentPoolData: Pool
   tierDataOfUser: IdoDetailInfo
+  contractData: IdoDetail
 }
 
-const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, tierDataOfUser }) => {
+const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, tierDataOfUser, contractData }) => {
   const [poolStatus] = usePoolStatus(tierDataOfUser)
-  const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO, swappedAmountPay, payToken } =
-    useTotalDataFromAllPools(currentPoolData)
+  const { img, name, description, totalAmountIDO, payToken } = useTotalDataFromAllPools(currentPoolData)
 
+  const { totalCommittedAmount, totalAmountPay, swappedAmountPay } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
       return calculateCommittedAmountPercentage(totalCommittedAmount, totalAmountPay)

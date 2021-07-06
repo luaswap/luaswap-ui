@@ -6,15 +6,16 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import useDepositIdo from 'hooks/useDepositIdo'
+import useDeepMemo from 'hooks/useDeepMemo'
 import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import ModalInput from 'components/ModalInput'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
+import { IdoDetail } from 'state/types'
 import { selectUserTier } from 'state/profile'
 import { getDecimalAmount } from 'utils/formatBalance'
 import ActionButton from './ActionButton'
 import usePoolStatus from '../../hooks/usePoolStatus'
-import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
-import { calculateSwapRate } from '../helper'
+import { calculateSwapRate, getIdoSupportedNetwork, getTierName } from '../helper'
 import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
@@ -25,33 +26,46 @@ const CardWrapper = styled(Card)`
     margin-top: 0px;
   }
 `
+const FlexWrapper = styled(Flex)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 40%;
+  }
+`
+
 interface DepositProps {
   currentPoolData: Pool
   tierDataOfUser: IdoDetailInfo
+  contractData: IdoDetail
+  userTotalCommitted: string
 }
 
-const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser }) => {
+const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, userTotalCommitted }) => {
   const { account } = useWeb3React()
   const [value, setValue] = useState('0')
   const { toastSuccess, toastError } = useToast()
   const { onDeposit } = useDepositIdo(tierDataOfUser.addressIdoContract)
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract)
-  const [idoDetailFromContract, totalUserCommittedFromContract] = useDataFromIdoContract(
-    tierDataOfUser.addressIdoContract,
-    tierDataOfUser.index,
-  )
   const userTier = useSelector(selectUserTier)
   // Todo: we should change this code when deploy to test ENV
   const { maxAmountPay, totalCommittedAmount, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay } =
     tierDataOfUser
-  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(tierDataOfUser)
+  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const maxAmountAllowed = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommittedAmount)).toString()
   }, [maxAmountPay, totalCommittedAmount])
 
+  const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
+
   const rate = useMemo(() => {
     return calculateSwapRate(totalAmountIDO, totalAmountPay)
   }, [totalAmountIDO, totalAmountPay])
+
+  const isIdoAvailalbeOnChain = useDeepMemo(() => {
+    const { addressIdoContract, chainId } = tierDataOfUser
+
+    return !!addressIdoContract && !!chainId
+  }, [tierDataOfUser])
 
   const handleSelectMax = useCallback(() => {
     setValue(maxAmountAllowed)
@@ -103,12 +117,7 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser }) =>
   }, [totalCommittedAmount])
 
   return (
-    <Flex
-      flexDirection="column"
-      style={{
-        width: '40%',
-      }}
-    >
+    <FlexWrapper flexDirection="column">
       <CardWrapper
         style={{
           width: '100%',
@@ -138,12 +147,17 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser }) =>
         }}
       >
         <CardBody>
+          <Mesage variant="warning" mb="16px">
+            IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO
+          </Mesage>
           <Text bold fontSize="24px">
             JOIN IDO ON TOMOCHAIN
           </Text>
           <Flex justifyContent="space-between">
             <Text>Your Tier</Text>
-            <Text bold>Tier {userTier} - MOON</Text>
+            <Text bold>
+              Tier {userTier} - {getTierName(userTier)}
+            </Text>
           </Flex>
           <Flex justifyContent="space-between">
             <Text>Min commit</Text>
@@ -166,35 +180,40 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser }) =>
           <Flex justifyContent="space-between" mb="15px">
             <Text>Your committed</Text>
             <Text bold>
-              {totalUserCommittedFromContract} {payToken.symbol}
+              {userTotalCommitted} {payToken.symbol}
             </Text>
           </Flex>
-          <Flex justifyContent="center" alignItems="center" flexDirection="column">
-            {account && isPoolInProgress && (
-              <ModalInput
-                value={value}
-                onSelectMax={handleSelectMax}
-                onChange={handleChange}
-                max={maxAmountAllowed}
-                min={new BigNumber(minAmountPay).toString()}
+          {poolStatus === 'claim' && (
+            <Flex justifyContent="space-between" mb="15px">
+              <Text>You will receive</Text>
+              <Text bold>1 ETH</Text>
+            </Flex>
+          )}
+          {isIdoAvailalbeOnChain && (
+            <Flex justifyContent="center" alignItems="center" flexDirection="column">
+              {account && isPoolInProgress && (
+                <ModalInput
+                  value={value}
+                  onSelectMax={handleSelectMax}
+                  onChange={handleChange}
+                  max={maxAmountAllowed}
+                  min={new BigNumber(minAmountPay).toString()}
+                  symbol={payToken.symbol}
+                  inputTitle="Deposit"
+                />
+              )}
+              <ActionButton
+                poolStatus={poolStatus}
+                onCommit={onHandleCommit}
+                onClaim={onHandleClaim}
+                disabled={!isClaimable}
                 symbol={payToken.symbol}
-                inputTitle="Deposit"
               />
-            )}
-            <ActionButton
-              poolStatus={poolStatus}
-              onCommit={onHandleCommit}
-              onClaim={onHandleClaim}
-              disabled={!isClaimable}
-              symbol={payToken.symbol}
-            />
-            {/* <Mesage variant="danger" mb="16px">
-              IDO is on TomoChain, switch network to continue
-            </Mesage> */}
-          </Flex>
+            </Flex>
+          )}
         </CardBody>
       </CardWrapper>
-    </Flex>
+    </FlexWrapper>
   )
 }
 

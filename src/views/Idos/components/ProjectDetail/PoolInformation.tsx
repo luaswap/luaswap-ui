@@ -25,8 +25,29 @@ interface PoolInfoTabProps {
   tierDataOfUser: IdoDetailInfo
 }
 
-const TokenInfoTab = () => {
-  return <Flex>Token tab</Flex>
+interface TokenInfoTabProps {
+  tierDataOfUser: IdoDetailInfo
+  currentPoolData: Pool
+}
+
+const TokenInfoTab: React.FC<TokenInfoTabProps> = ({ tierDataOfUser, currentPoolData }) => {
+  const { totalAmountIDO, name, idoToken } = useTotalDataFromAllPools(currentPoolData)
+  return (
+    <>
+      <Flex justifyContent="space-between" mt="20px">
+        <Text>Name</Text>
+        <Text>{name}</Text>
+      </Flex>
+      <Flex justifyContent="space-between" mt="20px">
+        <Text>Token symbol</Text>
+        <Text>{idoToken.symbol}</Text>
+      </Flex>
+      <Flex justifyContent="space-between" mt="20px">
+        <Text>Total Supply</Text>
+        <Text>{totalAmountIDO}</Text>
+      </Flex>
+    </>
+  )
 }
 
 const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, tierDataOfUser }) => {
@@ -46,14 +67,6 @@ const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, tierDataOfUs
         <Text>Cap</Text>
         <Text>{totalAmountIDO}</Text>
       </Flex>
-      {/* <Flex justifyContent="space-between" mt="20px">
-        <Text>Swap Rate</Text>
-        <Text>Thursday</Text>
-      </Flex>
-      <Flex justifyContent="space-between" mt="20px">
-        <Text>Total Funds Swapped</Text>
-        <Text>Thursday</Text>
-      </Flex> */}
     </>
   )
 }
@@ -94,7 +107,7 @@ const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, tier
       {index === 0 ? (
         <PoolInfoTab currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
       ) : (
-        <TokenInfoTab />
+        <TokenInfoTab currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
       )}
     </Row>
   )

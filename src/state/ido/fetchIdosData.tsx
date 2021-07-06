@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import Web3 from 'web3'
 import { getLuaIdoContract } from 'utils/contractHelpers'
-import { getFullDisplayBalance } from 'utils/formatBalance'
+import { getBalanceNumber } from 'utils/formatBalance'
 import { IdoDetail } from '../types'
 
 // eslint-disable-next-line import/prefer-default-export
@@ -25,15 +25,15 @@ export const mappingIdoResponse = ({
     closeAt,
     creator,
     idoToken,
-    maxAmountPay: getFullDisplayBalance(maxAmountPay),
-    minAmountPay: getFullDisplayBalance(minAmountPay),
+    maxAmountPay: getBalanceNumber(maxAmountPay),
+    minAmountPay: getBalanceNumber(minAmountPay),
     openAt,
     payToken,
-    swappedAmountIDO: getFullDisplayBalance(swappedAmountIDO),
-    swappedAmountPay: getFullDisplayBalance(swappedAmountPay),
-    totalAmountIDO: getFullDisplayBalance(totalAmountIDO),
-    totalAmountPay: getFullDisplayBalance(totalAmountPay),
-    totalCommittedAmount: getFullDisplayBalance(totalCommittedAmount),
+    swappedAmountIDO: getBalanceNumber(swappedAmountIDO),
+    swappedAmountPay: getBalanceNumber(swappedAmountPay),
+    totalAmountIDO: getBalanceNumber(totalAmountIDO),
+    totalAmountPay: getBalanceNumber(totalAmountPay),
+    totalCommittedAmount: getBalanceNumber(totalCommittedAmount),
   }
 }
 

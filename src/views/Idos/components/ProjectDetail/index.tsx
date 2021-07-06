@@ -3,6 +3,7 @@ import { Flex, Heading } from 'common-uikitstrungdao'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+import lodashGet from 'lodash/get'
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/layout/Page'
 import PageLoader from 'components/PageLoader'
@@ -17,6 +18,7 @@ import PoolSummary from './PoolSummary'
 import ProjectInfo from './ProjectInfo'
 import PoolInformation from './PoolInformation'
 import TierDetails from './TierDetails'
+import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
 import { getIdoDataBasedOnChainIdAndTier } from '../helper'
 
 const Row = styled.div`
@@ -67,15 +69,23 @@ const ProjectDetail = () => {
       setLoading(false)
     }
   }, [id, dispatch])
+
   const tierDataOfUser = useDeepMemo(() => {
-    const { index } = currentPoolData
+    const { index = [] } = currentPoolData
     // TODO: Should based on current chain ID and user's tier
-    return getIdoDataBasedOnChainIdAndTier(index, '89', 1)
+    return getIdoDataBasedOnChainIdAndTier(index, chainId, 1)
   }, [currentPoolData, chainId, userTier])
+
+  const [idoDetailFromContract, totalUserCommittedFromContract] = useDataFromIdoContract(
+    tierDataOfUser.addressIdoContract,
+    tierDataOfUser.index,
+    lodashGet(currentPoolData, `index[${chainId}]`, []),
+  )
 
   /**
    * currentPoolData: all tier's information
    * tierDataOfUser: The correct tier data for user (based on user's tier)
+   * contractData: idos data fetch from contract
    */
   return (
     <Page>
@@ -86,8 +96,17 @@ const ProjectDetail = () => {
           <>
             {' '}
             <StyledFlex mb="40px" flexWrap="wrap">
-              <PoolSummary currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
-              <Deposit currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
+              <PoolSummary
+                currentPoolData={currentPoolData}
+                tierDataOfUser={tierDataOfUser}
+                contractData={idoDetailFromContract}
+              />
+              <Deposit
+                currentPoolData={currentPoolData}
+                tierDataOfUser={tierDataOfUser}
+                contractData={idoDetailFromContract}
+                userTotalCommitted={totalUserCommittedFromContract}
+              />
             </StyledFlex>
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Tier Infomation

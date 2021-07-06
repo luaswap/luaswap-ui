@@ -1,6 +1,6 @@
 export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim' | null
 
-export type ChainId = '89' | '1' | '88'
+export type ChainId = 89 | 1 | 88
 
 export interface TokenInfo {
   address: string
