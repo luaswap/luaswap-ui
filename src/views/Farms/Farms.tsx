@@ -109,7 +109,7 @@ const Farms: React.FC = () => {
   const dispatch = useAppDispatch()
   const ID = chainId === 88 ? 88 : 1
   const history = useHistory()
-
+  console.log(viewMode)
   useEffect(() => {
     if (account) {
       dispatch(fetchFarmUserDataAsync(account, chainId, web3))
