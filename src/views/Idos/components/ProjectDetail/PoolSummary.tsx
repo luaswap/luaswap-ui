@@ -95,11 +95,19 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
 
     return false
   }, [poolStatus])
+
+  const isPoolOpen = useMemo(() => {
+    if (poolStatus === 'not open') {
+      return false
+    }
+
+    return true
+  }, [poolStatus])
   return (
     <CardWrapper>
       <CardBody
         style={{
-          height: '235px',
+          height: 'auto',
         }}
       >
         <Flex mb="15px" alignItems="center">
@@ -146,7 +154,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
         {isAvailalbeOnCurrentNetwork && (
           <>
             <Flex flexDirection="column">
-              {isPoolInProgress ? (
+              {isPoolInProgress || !isPoolOpen ? (
                 <Text mb="10px" color="primary">
                   Commited Progress
                 </Text>
@@ -157,15 +165,18 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               )}
               <Progress
                 variant="round"
-                primaryStep={isPoolInProgress && totalCommitedPercentage}
+                primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
                 secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
               />
             </Flex>
             <Flex justifyContent="space-between" mt="10px">
               <Text>
-                {isPoolInProgress ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay} {payToken.symbol}
+                {isPoolInProgress || !isPoolOpen ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay}{' '}
+                {payToken.symbol}
               </Text>
-              <Text color="secondary">{isPoolInProgress ? totalCommitedPercentage : totalSwapAmountPercentage}%</Text>
+              <Text color="secondary">
+                {isPoolInProgress || !isPoolOpen ? totalCommitedPercentage : totalSwapAmountPercentage}%
+              </Text>
             </Flex>
           </>
         )}

@@ -167,6 +167,7 @@ const Deposit: React.FC<DepositProps> = ({
       <CardWrapper
         style={{
           width: '100%',
+          flex: 1,
         }}
       >
         <CardBody>
@@ -196,18 +197,19 @@ const Deposit: React.FC<DepositProps> = ({
                   1 {payToken.symbol} / {rate} {idoToken.symbol}
                 </Text>
               </Flex>
-              <Flex justifyContent="space-between" mb="15px">
+              <Flex justifyContent="space-between">
                 <Text>Your committed</Text>
                 <Text bold>
                   {userTotalCommitted} {payToken.symbol}
                 </Text>
               </Flex>
-              {poolStatus === 'claim' && (
-                <Flex justifyContent="space-between" mb="15px">
-                  <Text>You will receive</Text>
-                  <Text bold>1 ETH</Text>
-                </Flex>
-              )}
+              {poolStatus === 'claim' ||
+                (poolStatus === 'closed' && (
+                  <Flex justifyContent="space-between" mb="15px">
+                    <Text>You will receive</Text>
+                    <Text bold>1 {idoToken.symbol}</Text>
+                  </Flex>
+                ))}
               {isIdoAvailalbeOnChain && (
                 <Flex justifyContent="center" alignItems="center" flexDirection="column">
                   {account && isPoolInProgress && isApproved && (
