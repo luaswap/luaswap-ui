@@ -59,9 +59,15 @@ interface PoolSummaryProps {
   currentPoolData: Pool
   tierDataOfUser: IdoDetailInfo
   contractData: IdoDetail
+  isAvailalbeOnCurrentNetwork: boolean
 }
 
-const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, tierDataOfUser, contractData }) => {
+const PoolSummary: React.FC<PoolSummaryProps> = ({
+  currentPoolData,
+  tierDataOfUser,
+  contractData,
+  isAvailalbeOnCurrentNetwork,
+}) => {
   const [poolStatus] = usePoolStatus(tierDataOfUser)
   const { img, name, description, totalAmountIDO, payToken } = useTotalDataFromAllPools(currentPoolData)
 
@@ -83,7 +89,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, tierDataOfUs
   }, [swappedAmountPay, totalAmountPay])
 
   const isPoolInProgress = useMemo(() => {
-    if (poolStatus === 'open' || poolStatus === 'not open') {
+    if (poolStatus === 'open') {
       return true
     }
 
@@ -93,7 +99,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, tierDataOfUs
     <CardWrapper>
       <CardBody
         style={{
-          height: '350px',
+          height: '235px',
         }}
       >
         <Flex mb="15px" alignItems="center">
@@ -137,28 +143,32 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ currentPoolData, tierDataOfUs
             <Text textAlign="right">Public</Text>
           </Flex>
         </Flex>
-        <Flex flexDirection="column">
-          {isPoolInProgress ? (
-            <Text mb="10px" color="primary">
-              Commited Progress
-            </Text>
-          ) : (
-            <Text mb="10px" color="primary">
-              Swap Progress
-            </Text>
-          )}
-          <Progress
-            variant="round"
-            primaryStep={isPoolInProgress && totalCommitedPercentage}
-            secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
-          />
-        </Flex>
-        <Flex justifyContent="space-between" mt="10px">
-          <Text>
-            {isPoolInProgress ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay} {payToken.symbol}
-          </Text>
-          <Text color="secondary">{isPoolInProgress ? totalCommitedPercentage : totalSwapAmountPercentage}%</Text>
-        </Flex>
+        {isAvailalbeOnCurrentNetwork && (
+          <>
+            <Flex flexDirection="column">
+              {isPoolInProgress ? (
+                <Text mb="10px" color="primary">
+                  Commited Progress
+                </Text>
+              ) : (
+                <Text mb="10px" color="primary">
+                  Swap Progress
+                </Text>
+              )}
+              <Progress
+                variant="round"
+                primaryStep={isPoolInProgress && totalCommitedPercentage}
+                secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
+              />
+            </Flex>
+            <Flex justifyContent="space-between" mt="10px">
+              <Text>
+                {isPoolInProgress ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay} {payToken.symbol}
+              </Text>
+              <Text color="secondary">{isPoolInProgress ? totalCommitedPercentage : totalSwapAmountPercentage}%</Text>
+            </Flex>
+          </>
+        )}
       </CardBody>
     </CardWrapper>
   )

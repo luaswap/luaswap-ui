@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { Card, CardBody, Flex, Text } from 'common-uikitstrungdao'
+import { Card, CardBody, Flex, Text, Mesage } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -41,9 +41,15 @@ interface DepositProps {
   tierDataOfUser: IdoDetailInfo
   contractData: IdoDetail
   userTotalCommitted: string
+  isAvailalbeOnCurrentNetwork: boolean
 }
 
-const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, userTotalCommitted }) => {
+const Deposit: React.FC<DepositProps> = ({
+  currentPoolData,
+  tierDataOfUser,
+  userTotalCommitted,
+  isAvailalbeOnCurrentNetwork,
+}) => {
   const [value, setValue] = useState('0')
   const [isRequestApproval, setIsRequestApproval] = useState(false)
   const { toastSuccess, toastError } = useToast()
@@ -69,7 +75,7 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
   const isIdoAvailalbeOnChain = useDeepMemo(() => {
     const { addressIdoContract, chainId } = tierDataOfUser
 
-    return !!addressIdoContract && !!chainId
+    return !!addressIdoContract
   }, [tierDataOfUser])
 
   const handleSelectMax = useCallback(() => {
@@ -116,7 +122,7 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
   }, [onClaimReward, toastError, toastSuccess, totalCommittedAmount, payToken.decimals])
 
   const isPoolInProgress = useMemo(() => {
-    if (poolStatus === 'open' || poolStatus === 'not open') {
+    if (poolStatus === 'open') {
       return true
     }
 
@@ -164,57 +170,58 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
         }}
       >
         <CardBody>
-          <Text bold fontSize="24px">
-            JOIN IDO ON TOMOCHAIN
-          </Text>
-          <Flex justifyContent="space-between">
-            <Text>Your Tier</Text>
-            <Text bold>
-              Tier {userTier} - {getTierName(userTier)}
-            </Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text>Min commit</Text>
-            <Text bold>
-              {minAmountPay} {payToken.symbol}
-            </Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text>Max commit</Text>
-            <Text bold>
-              {maxAmountPay} {payToken.symbol}
-            </Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text>Price</Text>
-            <Text bold>
-              1 {payToken.symbol} / {rate} {idoToken.symbol}
-            </Text>
-          </Flex>
-          <Flex justifyContent="space-between" mb="15px">
-            <Text>Your committed</Text>
-            <Text bold>
-              {userTotalCommitted} {payToken.symbol}
-            </Text>
-          </Flex>
-          {poolStatus === 'claim' && (
-            <Flex justifyContent="space-between" mb="15px">
-              <Text>You will receive</Text>
-              <Text bold>1 ETH</Text>
-            </Flex>
-          )}
-          {isIdoAvailalbeOnChain && (
-            <Flex justifyContent="center" alignItems="center" flexDirection="column">
-              {account && isPoolInProgress && isApproved && (
-                <ModalInput
-                  value={value}
-                  onSelectMax={handleSelectMax}
-                  onChange={handleChange}
-                  max={maxAmountAllowed}
-                  min={new BigNumber(minAmountPay).toString()}
-                  symbol={payToken.symbol}
-                  inputTitle="Deposit"
-                />
+          {isAvailalbeOnCurrentNetwork ? (
+            <>
+              <Flex justifyContent="space-between">
+                <Text>Your Tier</Text>
+                <Text bold>
+                  Tier {userTier} - {getTierName(userTier)}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Text>Min commit</Text>
+                <Text bold>
+                  {minAmountPay} {payToken.symbol}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Text>Max commit</Text>
+                <Text bold>
+                  {maxAmountPay} {payToken.symbol}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Text>Price</Text>
+                <Text bold>
+                  1 {payToken.symbol} / {rate} {idoToken.symbol}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between" mb="15px">
+                <Text>Your committed</Text>
+                <Text bold>
+                  {userTotalCommitted} {payToken.symbol}
+                </Text>
+              </Flex>
+              {poolStatus === 'claim' && (
+                <Flex justifyContent="space-between" mb="15px">
+                  <Text>You will receive</Text>
+                  <Text bold>1 ETH</Text>
+                </Flex>
+              )}
+              {isIdoAvailalbeOnChain && (
+                <Flex justifyContent="center" alignItems="center" flexDirection="column">
+                  {account && isPoolInProgress && isApproved && (
+                    <ModalInput
+                      value={value}
+                      onSelectMax={handleSelectMax}
+                      onChange={handleChange}
+                      max={maxAmountAllowed}
+                      min={new BigNumber(minAmountPay).toString()}
+                      symbol={payToken.symbol}
+                      inputTitle="Deposit"
+                    />
+                  )}
+                </Flex>
               )}
               <ActionButton
                 isRequestApproval={isRequestApproval}
@@ -222,12 +229,15 @@ const Deposit: React.FC<DepositProps> = ({ currentPoolData, tierDataOfUser, user
                 isApproved={isApproved}
                 poolStatus={poolStatus}
                 onCommit={onHandleCommit}
+                isIdoAvailalbeOnChain={isIdoAvailalbeOnChain}
                 onClaim={onHandleClaim}
                 disabled={!isClaimable}
                 symbol={payToken.symbol}
                 paytokenAddress={payToken.address}
               />
-            </Flex>
+            </>
+          ) : (
+            <Mesage variant="warning">Switch to correct network to see pool&apos;s information</Mesage>
           )}
         </CardBody>
       </CardWrapper>

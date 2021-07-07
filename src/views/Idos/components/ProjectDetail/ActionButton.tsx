@@ -14,6 +14,7 @@ interface ActionButtonProps {
   disabled: boolean
   symbol: string
   isRequestApproval: boolean
+  isIdoAvailalbeOnChain: boolean
   handleApprove(): any
   isApproved: boolean
   paytokenAddress: string
@@ -29,9 +30,17 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   handleApprove,
   isRequestApproval,
   paytokenAddress,
+  isIdoAvailalbeOnChain,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const isNativeToken = paytokenAddress === ZERO_ADDRESS
+  if (!account) {
+    return <UnlockButton />
+  }
+
+  if (!isIdoAvailalbeOnChain) {
+    return null
+  }
 
   if (!isApproved && !isNativeToken) {
     return (
@@ -39,10 +48,6 @@ const ActionButton: React.FC<ActionButtonProps> = ({
         Approve Contract{' '}
       </Button>
     )
-  }
-
-  if (!account) {
-    return <UnlockButton />
   }
 
   if (poolStatus === 'closed') {

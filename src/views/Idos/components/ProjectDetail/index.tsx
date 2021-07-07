@@ -38,7 +38,7 @@ interface ParamsType {
 }
 
 const ProjectDetail = () => {
-  const { chainId } = useWeb3React()
+  const { chainId, account } = useWeb3React()
   const [loading, setLoading] = useState(true)
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
@@ -65,6 +65,14 @@ const ProjectDetail = () => {
     lodashGet(currentPoolData, `index[${chainId}]`, []),
   )
 
+  const isAvailalbeOnCurrentNetwork = useDeepMemo(() => {
+    if (!account || !currentPoolData.index) {
+      return false
+    }
+    const availalbeNetwork = Object.keys(currentPoolData.index)
+    return availalbeNetwork.includes(String(chainId))
+  }, [currentPoolData.index, chainId])
+
   /**
    * currentPoolData: all tier's information
    * tierDataOfUser: The correct tier data for user (based on user's tier)
@@ -78,20 +86,24 @@ const ProjectDetail = () => {
         ) : (
           <>
             {' '}
-            <Mesage variant="warning" mb="16px">
-              IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO
-            </Mesage>
+            {!isAvailalbeOnCurrentNetwork && account && (
+              <Mesage variant="warning" mb="16px">
+                IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO
+              </Mesage>
+            )}
             <StyledFlex mb="40px" flexWrap="wrap">
               <PoolSummary
                 currentPoolData={currentPoolData}
                 tierDataOfUser={tierDataOfUser}
                 contractData={idoDetailFromContract}
+                isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
               <Deposit
                 currentPoolData={currentPoolData}
                 tierDataOfUser={tierDataOfUser}
                 contractData={idoDetailFromContract}
                 userTotalCommitted={totalUserCommittedFromContract}
+                isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
             </StyledFlex>
             <Heading as="h2" scale="lg" mb="24px" mt="50px">

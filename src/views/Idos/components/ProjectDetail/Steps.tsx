@@ -47,20 +47,11 @@ const IfoSteps: React.FC = () => {
         return (
           <CardBody>
             <Heading as="h4" color="primary" mb="16px">
-              {t('Activate your Profile')}
+              {t('Connect to your wallet')}
             </Heading>
             <Text color="textSubtle" small mb="16px">
-              {t('You will need to activate and register only one time to participate in all the IDO projects')}
+              {t('You will need to connect to your wallet to participate in all the IDO projects')}
             </Text>
-            {isStepValid ? (
-              <Text color="success" bold>
-                {t('Profile Active!')}
-              </Text>
-            ) : (
-              <Button as={Link} href="/profile">
-                {t('Activate your Profile')}
-              </Button>
-            )}
           </CardBody>
         )
       case 1:
