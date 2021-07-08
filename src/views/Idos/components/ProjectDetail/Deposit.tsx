@@ -243,7 +243,7 @@ const Deposit: React.FC<DepositProps> = ({
                       min={new BigNumber(minAmountPay).toString()}
                       symbol={payToken.symbol}
                       inputTitle="Amount"
-                      secondaryTitle="Available Deposit"
+                      secondaryTitle="Available Balance"
                       showWarning={false}
                     />
                   )}

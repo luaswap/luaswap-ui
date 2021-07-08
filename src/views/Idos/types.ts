@@ -41,7 +41,7 @@ export interface Pool {
   openAt: number
   closeAt: number
   claimAt: number
-  index?: Record<ChainId, IdoDetailInfo[]>
+  index?: Record<string, IdoDetailInfo[]>
   status: number
   projectDetail: string
   links: {

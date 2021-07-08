@@ -3,7 +3,6 @@ import { Flex, Heading, Mesage } from 'common-uikitstrungdao'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import lodashGet from 'lodash/get'
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/layout/Page'
 import PageLoader from 'components/PageLoader'
@@ -67,7 +66,7 @@ const ProjectDetail = () => {
   const [idoDetailFromContract, totalUserCommittedFromContract] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
     tierDataOfUser.index,
-    lodashGet(currentPoolData, `index`, []),
+    currentPoolData.index,
   )
 
   const isAvailalbeOnCurrentNetwork = useDeepMemo(() => {

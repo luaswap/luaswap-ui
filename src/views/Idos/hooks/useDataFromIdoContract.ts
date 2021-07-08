@@ -5,11 +5,11 @@ import { mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { IdoDetail } from 'state/types'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { formatIdoContract } from 'utils/formatPoolData'
-import makeBatchRequest from 'utils/makeBatchRequest'
 import { getWeb3BasedOnChainId } from 'utils/web3'
-import useWeb3 from 'hooks/useWeb3'
+import { getLuaIdoContract } from 'utils/contractHelpers'
+import makeBatchRequest from 'utils/makeBatchRequest'
 import { useBlock } from 'state/hooks'
-import { ChainId, IdoDetailInfo } from '../types'
+import { IdoDetailInfo } from '../types'
 
 const defaultIdoDetail = {
   claimAt: null,
@@ -30,55 +30,70 @@ const defaultIdoDetail = {
 /**
  * This hook fetch live data from contract IDO based on current blocknumber
  * @param contractAddress Ido contract address
- * @param idoIndex Index of the current IDO in contract
- * @param idoIndexes List of indexes for each Tier in this IDO
+ * @param idoIndex Index of the current IDO in contract (based on chain id and user tier)
+ * @param idoIndexes List of idos for each chain id in this IDO
  * @returns Data of the current IDO on contract and amount of committed token of current User
  */
 const useDataFromIdoContract = (
   contractAddress: string,
   idoIndex: number,
-  idoIndexes,
+  idoIndexes: Record<string, IdoDetailInfo[]>,
 ): [idoData: IdoDetail, commitedAmount: string] => {
   const { account, chainId } = useWeb3React()
-  // const web3 = useWeb3()
+  // Current Lua Ido contract based on log in chainid
   const luaIdoContract = useLuaIdoContract(contractAddress)
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
-  const [list, setList] = useState([])
   const [totalUserCommitted, setTotalUserCommitted] = useState<string>('0')
   const { currentBlock } = useBlock()
   useEffect(() => {
     const fetchData = async () => {
-      const idosOfAllTiers = {}
-      const allTiersData = []
+      const idosOfEachChainId = {}
       try {
         /**
-         * Get data of all idos of all chainid
+         * We loop through every index and get all idos info in each index
+         * @returns {
+         *  Chainid: []Promise<Idos>
+         * }
          */
         Object.keys(idoIndexes).forEach((idoChainId) => {
           const idosOfCurrentChainId = []
           idoIndexes[idoChainId].forEach((ido) => {
-            const contractIdoDetail = luaIdoContract.methods.IDOs(ido.index).call
+            // We will get new contract based on addressIdoContract received from API
+            const luaContractAddress = ido.addressIdoContract
+            const web3 = getWeb3BasedOnChainId(Number(idoChainId))
+            const currentLuaIdoContract = getLuaIdoContract(web3, luaContractAddress)
+            const contractIdoDetail = currentLuaIdoContract.methods.IDOs(ido.index).call
             idosOfCurrentChainId.push(contractIdoDetail)
           })
-          idosOfAllTiers[idoChainId] = idosOfCurrentChainId
+          idosOfEachChainId[idoChainId] = idosOfCurrentChainId
         })
-        Object.keys(idosOfAllTiers).forEach(async (idoChainId) => {
-          const web3 = getWeb3BasedOnChainId(Number(idoChainId))
-          const readIdosDataFromChainId = async (cid: string, w3) => {
-            const idos = idosOfAllTiers[cid]
-            const dataList = await makeBatchRequest(idos, w3)
-            const mappedContractIdoList = dataList.map((ido) => mappingIdoResponse(ido))
-            const allTiersDataFromContract = formatIdoContract(mappedContractIdoList)
-
-            return allTiersDataFromContract
-          }
-          const result = await readIdosDataFromChainId(idoChainId, web3)
-          console.log(result, 'result receive from contract')
-        })
-        // const dataList = await makeBatchRequest(idosOfAllTiers, web3)
-        // const dataList = await Promise.all(idosOfAllTiers)
-        const mappedContractIdoList = [].map((ido) => mappingIdoResponse(ido))
-        const allTiersDataFromContract = formatIdoContract(mappedContractIdoList)
+        /**
+         * We map through all the idos in each chain id and use web3 provider of that chainid to fetch data
+         * from IDO contract
+         * @param chainids - Array of all available chain ids for this project
+         * @returns Total data of all chain ids for this project
+         */
+        const processMultipleChainid = async (chainids) => {
+          const generatedResponse = []
+          await Promise.all(
+            chainids.map(async (cid) => {
+              try {
+                const web3 = getWeb3BasedOnChainId(Number(cid))
+                // idos here is all idos of a single chain id
+                const idos = idosOfEachChainId[cid]
+                const dataList = await makeBatchRequest(idos, web3)
+                const mappedContractIdoList = dataList.map((ido) => mappingIdoResponse(ido))
+                const allTiersDataFromContract = formatIdoContract(mappedContractIdoList)
+                generatedResponse.push(allTiersDataFromContract)
+              } catch (error) {
+                console.log(error)
+              }
+            }),
+          )
+          return generatedResponse
+        }
+        const chainIdsIdos = await processMultipleChainid(Object.keys(idosOfEachChainId))
+        const allTiersDataFromContract = formatIdoContract(chainIdsIdos)
         setIdoDetail(allTiersDataFromContract)
         /**
          * Get total committed amount of current user
