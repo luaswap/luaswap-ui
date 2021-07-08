@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'contexts/Localization'
 import { useSelector } from 'react-redux'
 import { Route, useRouteMatch, Link } from 'react-router-dom'
 import { ButtonMenu, ButtonMenuItem, Flex } from 'common-uikitstrungdao'
-import { selectOpenPools, selectLoadingOpenPools, selectClosedPools } from 'state/ido'
+import { selectOpenPools, selectLoadingOpenPools, selectClosedPools, fetchPools } from 'state/ido'
+import { useAppDispatch } from 'state'
 import PageLoader from 'components/PageLoader'
 import Page from 'components/layout/Page'
 import Hero from './components/Hero'
@@ -13,13 +14,20 @@ import PastIdo from './components/PastIdo'
 const Idos = () => {
   const { t } = useTranslation()
   const { path, url, isExact } = useRouteMatch()
+  const dispatch = useAppDispatch()
+  const [isLoading, setIsLoading] = useState(true)
   const openPools = useSelector(selectOpenPools)
   const closedPools = useSelector(selectClosedPools)
-  const isLoading = useSelector(selectLoadingOpenPools)
+  const isLoadingOpenPools = useSelector(selectLoadingOpenPools)
+
+  useEffect(() => {
+    dispatch(fetchPools())
+    setIsLoading(false)
+  }, [dispatch])
 
   return (
     <>
-      {isLoading ? (
+      {isLoadingOpenPools || isLoading ? (
         <PageLoader />
       ) : (
         <>

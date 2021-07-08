@@ -5,8 +5,11 @@ import { mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { IdoDetail } from 'state/types'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { formatIdoContract } from 'utils/formatPoolData'
+import makeBatchRequest from 'utils/makeBatchRequest'
+import { getWeb3BasedOnChainId } from 'utils/web3'
+import useWeb3 from 'hooks/useWeb3'
 import { useBlock } from 'state/hooks'
-import { IdoDetailInfo } from '../types'
+import { ChainId, IdoDetailInfo } from '../types'
 
 const defaultIdoDetail = {
   claimAt: null,
@@ -34,26 +37,47 @@ const defaultIdoDetail = {
 const useDataFromIdoContract = (
   contractAddress: string,
   idoIndex: number,
-  idoIndexes: IdoDetailInfo[],
+  idoIndexes,
 ): [idoData: IdoDetail, commitedAmount: string] => {
   const { account, chainId } = useWeb3React()
+  // const web3 = useWeb3()
   const luaIdoContract = useLuaIdoContract(contractAddress)
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
+  const [list, setList] = useState([])
   const [totalUserCommitted, setTotalUserCommitted] = useState<string>('0')
   const { currentBlock } = useBlock()
   useEffect(() => {
     const fetchData = async () => {
-      const idosOfAllTiers = []
+      const idosOfAllTiers = {}
+      const allTiersData = []
       try {
         /**
-         * Get data of all idos of current chainid
+         * Get data of all idos of all chainid
          */
-        idoIndexes.forEach((ido) => {
-          const contractIdoDetail = luaIdoContract.methods.IDOs(ido.index).call()
-          idosOfAllTiers.push(contractIdoDetail)
+        Object.keys(idoIndexes).forEach((idoChainId) => {
+          const idosOfCurrentChainId = []
+          idoIndexes[idoChainId].forEach((ido) => {
+            const contractIdoDetail = luaIdoContract.methods.IDOs(ido.index).call
+            idosOfCurrentChainId.push(contractIdoDetail)
+          })
+          idosOfAllTiers[idoChainId] = idosOfCurrentChainId
         })
-        const dataList = await Promise.all(idosOfAllTiers)
-        const mappedContractIdoList = dataList.map((ido) => mappingIdoResponse(ido))
+        Object.keys(idosOfAllTiers).forEach(async (idoChainId) => {
+          const web3 = getWeb3BasedOnChainId(Number(idoChainId))
+          const readIdosDataFromChainId = async (cid: string, w3) => {
+            const idos = idosOfAllTiers[cid]
+            const dataList = await makeBatchRequest(idos, w3)
+            const mappedContractIdoList = dataList.map((ido) => mappingIdoResponse(ido))
+            const allTiersDataFromContract = formatIdoContract(mappedContractIdoList)
+
+            return allTiersDataFromContract
+          }
+          const result = await readIdosDataFromChainId(idoChainId, web3)
+          console.log(result, 'result receive from contract')
+        })
+        // const dataList = await makeBatchRequest(idosOfAllTiers, web3)
+        // const dataList = await Promise.all(idosOfAllTiers)
+        const mappedContractIdoList = [].map((ido) => mappingIdoResponse(ido))
         const allTiersDataFromContract = formatIdoContract(mappedContractIdoList)
         setIdoDetail(allTiersDataFromContract)
         /**

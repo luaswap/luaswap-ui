@@ -8,7 +8,7 @@ import { useWeb3React } from '@web3-react/core'
 import Page from 'components/layout/Page'
 import PageLoader from 'components/PageLoader'
 import useDeepMemo from 'hooks/useDeepMemo'
-import { fetchPool, selectCurrentPool, selectLoadingCurrentPool } from 'state/ido'
+import { fetchPool, selectCurrentPool, selectLoadingCurrentPool, setDefaultCurrentPool } from 'state/ido'
 import { selectUserTier } from 'state/profile'
 import { useAppDispatch } from 'state'
 
@@ -52,6 +52,10 @@ const ProjectDetail = () => {
       dispatch(fetchPool(id))
       setLoading(false)
     }
+
+    return () => {
+      dispatch(setDefaultCurrentPool())
+    }
   }, [id, dispatch])
 
   const tierDataOfUser = useDeepMemo(() => {
@@ -59,10 +63,11 @@ const ProjectDetail = () => {
     // TODO: Should based on current chain ID and user's tier
     return getIdoDataBasedOnChainIdAndTier(index, chainId, 1)
   }, [currentPoolData, chainId, userTier])
+
   const [idoDetailFromContract, totalUserCommittedFromContract] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
     tierDataOfUser.index,
-    lodashGet(currentPoolData, `index[${chainId}]`, []),
+    lodashGet(currentPoolData, `index`, []),
   )
 
   const isAvailalbeOnCurrentNetwork = useDeepMemo(() => {

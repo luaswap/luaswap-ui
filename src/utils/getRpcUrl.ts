@@ -7,7 +7,7 @@ export const RPC_URL: { [chainId in ChainId]: string } = {
   5: '',
   42: '',
   88: 'https://rpc.tomochain.com',
-  89: '',
+  89: 'https://testnet.tomochain.com',
   99: '',
 }
 

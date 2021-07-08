@@ -15,14 +15,7 @@ export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()
   const web3 = useWeb3()
   const { chainId } = useWeb3React()
-  // useEffect(() => {
-  //   const fetchPoolsPublicData = async () => {
-  //     const blockNumber = await web3.eth.getBlockNumber()
-  //     dispatch(fetchPoolsPublicDataAsync(blockNumber))
-  //   }
-  //   fetchPoolsPublicData()
-  //   dispatch(fetchPoolsStakingLimitsAsync())
-  // }, [dispatch, slowRefresh, web3])
+
   useEffect(() => {
     dispatch(setDefaultFarmData(chainId))
     dispatch(fetchFarms(chainId, web3))

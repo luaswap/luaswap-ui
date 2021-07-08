@@ -7,6 +7,19 @@ import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
 // import { fetchIdosInformation } from './fetchIdosData'
 
+const defaultCurrentPool = {
+  id: null,
+  img: null,
+  name: null,
+  description: null,
+  openAt: null,
+  closeAt: null,
+  claimAt: null,
+  status: null,
+  projectDetail: null,
+  links: [],
+}
+
 const initialState: IdoState = {
   isLoading: true,
   idos: [],
@@ -23,18 +36,7 @@ const initialState: IdoState = {
   },
   currentPool: {
     isLoading: true,
-    data: {
-      id: null,
-      img: null,
-      name: null,
-      description: null,
-      openAt: null,
-      closeAt: null,
-      claimAt: null,
-      status: null,
-      projectDetail: null,
-      links: [],
-    },
+    data: defaultCurrentPool,
   },
 }
 
@@ -56,6 +58,9 @@ export const idosSlice = createSlice({
     },
     setCurrentPool: (state, action: PayloadAction<Pool>) => {
       state.currentPool.data = action.payload
+    },
+    setDefaultCurrentPool: (state) => {
+      state.currentPool.data = defaultCurrentPool
     },
     fetchIdoStats: (state) => {
       state.isLoading = true
@@ -98,6 +103,7 @@ export const {
   fetchClosedPoolsEnds,
   fetchClosedPoolsStarts,
   setClosedPools,
+  setDefaultCurrentPool,
 } = idosSlice.actions
 
 // export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
