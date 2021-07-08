@@ -29,12 +29,13 @@ export const stake = async (masterChefContract, pid, amount, account, chainId?) 
     })
 }
 
-export const depositIdo = async (luaIdoContract, account, amount, idoIndex) => {
+export const depositIdo = async (luaIdoContract, account, amount, idoIndex, isNativeToken) => {
+  // If pay token is native token, we will send amount or else we wont'
   return luaIdoContract.methods
     .commit(idoIndex, amount)
     .send({
       from: account,
-      // value: amount,
+      ...(isNativeToken && { value: amount }),
     })
     .on('transactionHash', (tx) => {
       return tx.transactionHash

@@ -24,11 +24,18 @@ const defaultIdoDetail = {
   totalCommittedAmount: null,
 }
 
+/**
+ * This hook fetch live data from contract IDO based on current blocknumber
+ * @param contractAddress Ido contract address
+ * @param idoIndex Index of the current IDO in contract
+ * @param idoIndexes List of indexes for each Tier in this IDO
+ * @returns Data of the current IDO on contract and amount of committed token of current User
+ */
 const useDataFromIdoContract = (
   contractAddress: string,
   idoIndex: number,
   idoIndexes: IdoDetailInfo[],
-): [a: IdoDetail, b: string] => {
+): [idoData: IdoDetail, commitedAmount: string] => {
   const { account, chainId } = useWeb3React()
   const luaIdoContract = useLuaIdoContract(contractAddress)
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)

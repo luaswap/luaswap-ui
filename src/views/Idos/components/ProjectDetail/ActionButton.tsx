@@ -16,6 +16,7 @@ interface ActionButtonProps {
   symbol: string
   isRequestContractAction: boolean
   isIdoAvailalbeOnChain: boolean
+  isUserDepositMinimumAmount: boolean
   handleApprove(): any
   isApproved: boolean
   paytokenAddress: string
@@ -32,6 +33,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   isApproved,
   handleApprove,
   isRequestContractAction,
+  isUserDepositMinimumAmount,
   paytokenAddress,
   isIdoAvailalbeOnChain,
   maxAmountAllowedLeft,
@@ -75,18 +77,20 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   if (poolStatus === 'open') {
     const isMaxAmountEqualZero = maxAmountAllowedLeft === '0'
     let isDepositAmountTooLarge = false
+    const isDepositAmountInvalid = !depositAmount || depositAmount === '0'
 
     if (new BigNumber(depositAmount).comparedTo(maxAmountAllowedLeft) > 0) {
       isDepositAmountTooLarge = true
     }
-
     return (
       <CommitButton
         onClick={onCommit}
         symbol={symbol}
         isLoading={isRequestContractAction}
         endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
-        disabled={isMaxAmountEqualZero || isDepositAmountTooLarge || !depositAmount}
+        disabled={
+          isMaxAmountEqualZero || isDepositAmountTooLarge || isDepositAmountInvalid || !isUserDepositMinimumAmount
+        }
       />
     )
   }

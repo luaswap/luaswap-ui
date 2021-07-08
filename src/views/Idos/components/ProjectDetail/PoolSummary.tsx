@@ -61,14 +61,17 @@ interface PoolSummaryProps {
   contractData: IdoDetail
   isAvailalbeOnCurrentNetwork: boolean
 }
-
+/**
+ * In Pool summary component, we get live data from contract
+ * and fixed data from API
+ */
 const PoolSummary: React.FC<PoolSummaryProps> = ({
   currentPoolData,
   tierDataOfUser,
   contractData,
   isAvailalbeOnCurrentNetwork,
 }) => {
-  const [poolStatus] = usePoolStatus(tierDataOfUser)
+  const [poolStatus] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken } = useTotalDataFromAllPools(currentPoolData)
 
   const { totalCommittedAmount, totalAmountPay, swappedAmountPay } = contractData
@@ -87,7 +90,6 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
 
     return 0
   }, [swappedAmountPay, totalAmountPay])
-
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open') {
       return true

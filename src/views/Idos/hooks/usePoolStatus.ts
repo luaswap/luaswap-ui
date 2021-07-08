@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { IdoDetailInfo, Pool, PoolStatus } from '../types'
 import useSecondsUntilCurrent from './useSecondsUntilCurrent'
 
+/**
+ * Get pool's current status based on timestamp
+ */
 const usePoolStatus = ({
   openAt,
   closeAt,
@@ -24,6 +27,7 @@ const usePoolStatus = ({
       setStatus('closed')
     }
   }, [openAtSeconds, closedAtSeconds, claimAtSeconds])
+
   return [status, openAtSeconds, closedAtSeconds, claimAtSeconds]
 }
 

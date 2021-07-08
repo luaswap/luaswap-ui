@@ -57,7 +57,11 @@ const Deposit: React.FC<DepositProps> = ({
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
   const [isApproved, fetchAllowanceData] = useIsApproved(paytokenContract, tierDataOfUser.addressIdoContract)
   const { onApprove } = useApproveIdo(paytokenContract, tierDataOfUser.addressIdoContract)
-  const { onDeposit } = useDepositIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
+  const { onDeposit } = useDepositIdo(
+    tierDataOfUser.addressIdoContract,
+    tierDataOfUser.index,
+    tierDataOfUser.payToken.address,
+  )
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
 
@@ -71,14 +75,14 @@ const Deposit: React.FC<DepositProps> = ({
     return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
   }, [maxAmountPay, userTotalCommitted])
 
-  const isUserDepositMaximumAmount = useMemo(() => {
-    const flag = new BigNumber(maxAmountPay).comparedTo(userTotalCommitted)
-    if (flag === 0) {
-      return true
+  const isUserDepositMinimumAmount = useMemo(() => {
+    const flag = new BigNumber(userTotalCommitted).plus(new BigNumber(value)).comparedTo(new BigNumber(minAmountPay))
+    if (flag < 0) {
+      return false
     }
 
-    return false
-  }, [maxAmountPay, userTotalCommitted])
+    return true
+  }, [value, userTotalCommitted, minAmountPay])
 
   const rate = useMemo(() => {
     return calculateSwapRate(totalAmountIDO, totalAmountPay)
@@ -247,6 +251,7 @@ const Deposit: React.FC<DepositProps> = ({
               )}
               <ActionButton
                 isRequestContractAction={isRequestContractAction}
+                isUserDepositMinimumAmount={isUserDepositMinimumAmount}
                 handleApprove={handleApprove}
                 isApproved={isApproved}
                 poolStatus={poolStatus}
