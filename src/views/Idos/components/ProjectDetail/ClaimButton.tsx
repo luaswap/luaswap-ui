@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Button } from 'common-uikitstrungdao'
 
 interface ClaimButtonProps {
   onClick(): any
   disabled: boolean
+  isLoading: boolean
+  endIcon: ReactNode
 }
 
 const ClaimButton: React.FC<ClaimButtonProps> = ({ onClick, disabled, ...props }) => {

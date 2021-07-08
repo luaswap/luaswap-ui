@@ -1,6 +1,7 @@
 import React, { LegacyRef, ReactElement } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { Button } from 'common-uikitstrungdao'
+import BigNumber from 'bignumber.js'
+import { Button, AutoRenewIcon } from 'common-uikitstrungdao'
 import UnlockButton from 'components/UnlockButton'
 import { ZERO_ADDRESS } from 'config/constants/idos'
 import CommitButton from './CommitButton'
@@ -13,11 +14,13 @@ interface ActionButtonProps {
   onClaim(): any
   disabled: boolean
   symbol: string
-  isRequestApproval: boolean
+  isRequestContractAction: boolean
   isIdoAvailalbeOnChain: boolean
   handleApprove(): any
   isApproved: boolean
   paytokenAddress: string
+  maxAmountAllowedLeft: string
+  depositAmount: string
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -28,9 +31,11 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   disabled,
   isApproved,
   handleApprove,
-  isRequestApproval,
+  isRequestContractAction,
   paytokenAddress,
   isIdoAvailalbeOnChain,
+  maxAmountAllowedLeft,
+  depositAmount,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const isNativeToken = paytokenAddress === ZERO_ADDRESS
@@ -44,18 +49,46 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 
   if (!isApproved && !isNativeToken) {
     return (
-      <Button mt="8px" width="100%" disabled={isRequestApproval} onClick={handleApprove}>
+      <Button
+        mt="8px"
+        width="100%"
+        onClick={handleApprove}
+        isLoading={isRequestContractAction}
+        endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
+      >
         Approve Contract{' '}
       </Button>
     )
   }
 
   if (poolStatus === 'closed') {
-    return <ClaimButton onClick={onClaim} disabled={disabled} />
+    return (
+      <ClaimButton
+        onClick={onClaim}
+        disabled={disabled}
+        isLoading={isRequestContractAction}
+        endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
+      />
+    )
   }
 
   if (poolStatus === 'open') {
-    return <CommitButton onClick={onCommit} symbol={symbol} />
+    const isMaxAmountEqualZero = maxAmountAllowedLeft === '0'
+    let isDepositAmountTooLarge = false
+
+    if (new BigNumber(depositAmount).comparedTo(maxAmountAllowedLeft) > 0) {
+      isDepositAmountTooLarge = true
+    }
+
+    return (
+      <CommitButton
+        onClick={onCommit}
+        symbol={symbol}
+        isLoading={isRequestContractAction}
+        endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
+        disabled={isMaxAmountEqualZero || isDepositAmountTooLarge || !depositAmount}
+      />
+    )
   }
 
   return null

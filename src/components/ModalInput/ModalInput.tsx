@@ -13,6 +13,8 @@ interface ModalInputProps {
   value: string
   addLiquidityUrl?: string
   inputTitle?: string
+  secondaryTitle?: string
+  showWarning?: boolean
 }
 
 const getBoxShadow = ({ isWarning = false, theme }) => {
@@ -66,6 +68,8 @@ const ModalInput: React.FC<ModalInputProps> = ({
   value,
   addLiquidityUrl,
   inputTitle,
+  secondaryTitle = 'Balance',
+  showWarning = true,
 }) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
@@ -83,10 +87,10 @@ const ModalInput: React.FC<ModalInputProps> = ({
 
   return (
     <div style={{ position: 'relative' }}>
-      <StyledTokenInput isWarning={isBalanceZero}>
+      <StyledTokenInput isWarning={isBalanceZero && showWarning}>
         <Flex justifyContent="space-between" pl="16px">
           <Text fontSize="14px">{inputTitle}</Text>
-          <Text fontSize="14px">{t('Balance: %balance%', { balance: displayBalance(max) })}</Text>
+          <Text fontSize="14px">{`${secondaryTitle}: ${displayBalance(max)}`}</Text>
         </Flex>
         <Flex alignItems="flex-end" justifyContent="space-around">
           <StyledInput

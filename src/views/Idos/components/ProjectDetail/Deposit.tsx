@@ -51,7 +51,7 @@ const Deposit: React.FC<DepositProps> = ({
   isAvailalbeOnCurrentNetwork,
 }) => {
   const [value, setValue] = useState('0')
-  const [isRequestApproval, setIsRequestApproval] = useState(false)
+  const [isRequestContractAction, setIsRequestContractAction] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
@@ -60,27 +60,39 @@ const Deposit: React.FC<DepositProps> = ({
   const { onDeposit } = useDepositIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
-  // Todo: we should change this code when deploy to test ENV
+
+  // Data we receive from API
   const { maxAmountPay, totalCommittedAmount, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay } =
     tierDataOfUser
+
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
-  const maxAmountAllowed = useMemo(() => {
-    return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommittedAmount)).toString()
-  }, [maxAmountPay, totalCommittedAmount])
+
+  const maxAmountAllowedLeft = useMemo(() => {
+    return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
+  }, [maxAmountPay, userTotalCommitted])
+
+  const isUserDepositMaximumAmount = useMemo(() => {
+    const flag = new BigNumber(maxAmountPay).comparedTo(userTotalCommitted)
+    if (flag === 0) {
+      return true
+    }
+
+    return false
+  }, [maxAmountPay, userTotalCommitted])
 
   const rate = useMemo(() => {
     return calculateSwapRate(totalAmountIDO, totalAmountPay)
   }, [totalAmountIDO, totalAmountPay])
 
   const isIdoAvailalbeOnChain = useDeepMemo(() => {
-    const { addressIdoContract, chainId } = tierDataOfUser
+    const { addressIdoContract } = tierDataOfUser
 
     return !!addressIdoContract
   }, [tierDataOfUser])
 
   const handleSelectMax = useCallback(() => {
-    setValue(maxAmountAllowed)
-  }, [maxAmountAllowed])
+    setValue(maxAmountAllowedLeft)
+  }, [maxAmountAllowedLeft])
 
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget.validity.valid) {
@@ -90,34 +102,40 @@ const Deposit: React.FC<DepositProps> = ({
 
   const handleApprove = useCallback(async () => {
     try {
-      setIsRequestApproval(true)
+      setIsRequestContractAction(true)
       await onApprove()
       fetchAllowanceData()
-      setIsRequestApproval(false)
+      setIsRequestContractAction(false)
     } catch (e) {
-      setIsRequestApproval(false)
+      setIsRequestContractAction(false)
       console.error(e)
     }
   }, [onApprove, fetchAllowanceData])
 
   const onHandleCommit = useCallback(async () => {
     try {
+      setIsRequestContractAction(true)
       const commitedAmmount = getDecimalAmount(new BigNumber(value), payToken.decimals).toString()
       await onDeposit(commitedAmmount)
       toastSuccess('Deposit Successfully')
+      setIsRequestContractAction(false)
     } catch (error) {
+      setIsRequestContractAction(false)
       toastError('Fail to deposit')
     }
   }, [onDeposit, value, toastError, toastSuccess, payToken.decimals])
 
   const onHandleClaim = useCallback(async () => {
     try {
+      setIsRequestContractAction(false)
       // TODO: In here we assume that user claim equal amount of token that they commited
       const claimableAmount = getDecimalAmount(new BigNumber(totalCommittedAmount, payToken.decimals)).toString()
       await onClaimReward(claimableAmount)
+      setIsRequestContractAction(false)
       toastSuccess('Claim reward Successfully')
     } catch (error) {
       toastError('Fail to claim reward')
+      setIsRequestContractAction(false)
     }
   }, [onClaimReward, toastError, toastSuccess, totalCommittedAmount, payToken.decimals])
 
@@ -197,7 +215,7 @@ const Deposit: React.FC<DepositProps> = ({
                   1 {payToken.symbol} / {rate} {idoToken.symbol}
                 </Text>
               </Flex>
-              <Flex justifyContent="space-between">
+              <Flex justifyContent="space-between" mb="14px">
                 <Text>Your committed</Text>
                 <Text bold>
                   {userTotalCommitted} {payToken.symbol}
@@ -217,16 +235,18 @@ const Deposit: React.FC<DepositProps> = ({
                       value={value}
                       onSelectMax={handleSelectMax}
                       onChange={handleChange}
-                      max={maxAmountAllowed}
+                      max={maxAmountAllowedLeft}
                       min={new BigNumber(minAmountPay).toString()}
                       symbol={payToken.symbol}
-                      inputTitle="Deposit"
+                      inputTitle="Amount"
+                      secondaryTitle="Available Deposit"
+                      showWarning={false}
                     />
                   )}
                 </Flex>
               )}
               <ActionButton
-                isRequestApproval={isRequestApproval}
+                isRequestContractAction={isRequestContractAction}
                 handleApprove={handleApprove}
                 isApproved={isApproved}
                 poolStatus={poolStatus}
@@ -236,6 +256,8 @@ const Deposit: React.FC<DepositProps> = ({
                 disabled={!isClaimable}
                 symbol={payToken.symbol}
                 paytokenAddress={payToken.address}
+                maxAmountAllowedLeft={maxAmountAllowedLeft}
+                depositAmount={value}
               />
             </>
           ) : (

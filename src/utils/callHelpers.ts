@@ -34,7 +34,7 @@ export const depositIdo = async (luaIdoContract, account, amount, idoIndex) => {
     .commit(idoIndex, amount)
     .send({
       from: account,
-      value: amount,
+      // value: amount,
     })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
