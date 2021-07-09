@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import useWeb3 from 'hooks/useWeb3'
-import { Contract } from 'web3-eth-contract'
 import {
   getBep20Contract,
   getCakeContract,
@@ -94,9 +93,9 @@ export const useLuaContract = (chainId: number) => {
   return useMemo(() => getLuaContract(web3, chainId), [web3, chainId])
 }
 
-export const useLuaIdoContract = (chainId: number) => {
+export const useLuaIdoContract = (address: string) => {
   const web3 = useWeb3()
-  return useMemo(() => getLuaIdoContract(web3, chainId), [web3, chainId])
+  return useMemo(() => getLuaIdoContract(web3, address), [web3, address])
 }
 
 export const useSousChef = (id) => {

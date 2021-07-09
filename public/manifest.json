@@ -1,11 +1,11 @@
 {
-  "short_name": "PancakeSwap",
-  "name": "PancakeSwap",
-  "description": "Farm CAKE with Pancake LP Tokens",
+  "short_name": "LuaSwap",
+  "name": "LuaSwap",
+  "description": "Farm LUA with LUA LP Tokens",
   "icons": [
     {
-      "src": "favicon.ico",
-      "type": "image/x-icon",
+      "src": "favicon.png",
+      "type": "image/png",
       "sizes": "256x256"
     }
   ],

@@ -19,6 +19,7 @@ import {
 } from 'common-uikitstrungdao'
 import useDeepMemo from 'hooks/useDeepMemo'
 import { formatPoolDetail } from 'utils/formatPoolData'
+import { formatCardStatus, formatCardColor } from 'utils/idoHelpers'
 import { Pool, FormatPool } from '../../types'
 
 const PoolInfoBlock = styled.div`
@@ -61,27 +62,34 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
   const navigateToProjectDetail = useCallback(() => {
-    history.push(`${path}/project/1`)
-  }, [history, path])
+    history.push(`${path}/project/${pool.id}`)
+  }, [history, path, pool.id])
 
-  const { img, name, description, totalCommittedAmount, totalAmountPay, totalAmountIDO, status } =
-    useDeepMemo<FormatPool>(() => {
-      const { img: _img, name: _name, description: _description, status: _status, index } = pool
-      const poolInfoChainId = Object.keys(index).map((id) => {
-        return formatPoolDetail(index[id])
-      })
-
-      const totalPoolData = formatPoolDetail(poolInfoChainId)
-
-      return {
-        img: _img,
-        name: _name,
-        description: _description,
-        status: _status,
-        ...totalPoolData,
-      }
-    }, [pool, chainId])
-
+  const {
+    img,
+    name,
+    description,
+    totalCommittedAmount,
+    totalAmountPay,
+    totalAmountIDO,
+    status,
+    payToken,
+    minAmountPay,
+    maxAmountPay,
+  } = useDeepMemo<FormatPool>(() => {
+    const { img: _img, name: _name, description: _description, status: _status, index: _index } = pool
+    const poolInfoChainId = Object.keys(_index).map((id) => {
+      return formatPoolDetail(_index[id])
+    })
+    const totalPoolData = formatPoolDetail(poolInfoChainId)
+    return {
+      img: _img,
+      name: _name,
+      description: _description,
+      status: _status,
+      ...totalPoolData,
+    }
+  }, [pool, chainId])
   const progressPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
       return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
@@ -91,7 +99,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   }, [totalCommittedAmount, totalAmountPay])
 
   return (
-    <Card ribbon={<CardRibbon variantColor="primary" text="Opening" />}>
+    <Card ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />} mb="24px">
       <CardBody style={{ height: '350px' }}>
         <Flex mb="15px" alignItems="center">
           <ImageContainer onClick={navigateToProjectDetail}>
@@ -142,11 +150,15 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
         <Flex mt="10px" justifyContent="space-between">
           <Flex flexDirection="column">
             <Text color="primary">Min allocation</Text>
-            <Text>100 LNFT</Text>
+            <Text>
+              {minAmountPay} {payToken.symbol}
+            </Text>
           </Flex>
           <Flex flexDirection="column">
             <Text color="primary">Max allocation</Text>
-            <Text>1000 LNFT</Text>
+            <Text textAlign="right">
+              {maxAmountPay} {payToken.symbol}
+            </Text>
           </Flex>
         </Flex>
       </CardBody>

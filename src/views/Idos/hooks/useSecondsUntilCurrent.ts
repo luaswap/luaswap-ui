@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { timestampAndCurrentDifference } from 'utils/formatTime'
 import useInterval from './useInterval'
 
+/**
+ * Counting how many seconds left until specific timestamp
+ */
 const useSecondsUntilCurrent = (timestamp) => {
   const [numberOfSeconds, setNumberOfSeconds] = useState(timestampAndCurrentDifference(timestamp))
 

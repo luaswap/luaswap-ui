@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import { LinkExternal, Text } from 'common-uikitstrungdao'
 
 import { ApiDetailType } from 'state/types'
-import { useTranslation } from 'contexts/Localization'
-import Spacer from 'components/Spacer'
+import TokenLogo from './TokenLogo'
 
 interface TableProps {
   tag: string
@@ -60,78 +59,97 @@ const TokenIcon = styled.img`
   margin-right: 10px;
 `
 const TokenName = styled.span``
-const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
+const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-  const { t } = useTranslation()
 
   const renderContent = (row, type: string) => {
-    console.log(row, type)
     switch (type) {
       case 'balance':
         return (
-          <tr key={row.amount}>
-            <StyleTd>
-              <CellInner>
-                <TokenIcon src={row.imgs[0]} alt={row.tokenName} />
-                <LinkExternal href={row.link}>
-                  <TokenName>{row.tokenName}</TokenName>
-                </LinkExternal>
-              </CellInner>
-            </StyleTd>
-            <StyleTd>
-              <Text>
-                {parseFloat(row.quantity).toFixed(2)} {row.symbol}{' '}
-              </Text>
-            </StyleTd>
-            {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
-            <StyleTd>
-              <Text> {row.usd}</Text>
-            </StyleTd>
-          </tr>
+          parseFloat(row.usd) > 0 && (
+            <tr key={row.amount}>
+              <StyleTd>
+                <CellInner>
+                  <TokenLogo address={row.address} url={row.imgs[0]} name={row.tokenName} />
+                  <LinkExternal href={row.link}>
+                    <TokenName>{row.tokenName}</TokenName>
+                  </LinkExternal>
+                </CellInner>
+              </StyleTd>
+              <StyleTd>
+                <Text>
+                  {parseFloat(row.quantity).toFixed(4)} {row.symbol}
+                </Text>
+              </StyleTd>
+              {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
+              <StyleTd>
+                <Text> {parseFloat(row.usd).toFixed(2)}</Text>
+              </StyleTd>
+            </tr>
+          )
         )
       case 'luaswapliquidity':
         return (
-          <tr key={row.amount}>
-            <StyleTd>
-              <CellInner>
-                <TokenIcon src={row.imgs[0]} alt={row.token0.symbol} />
-                <TokenIcon src={row.imgs[1]} alt={row.token1.symbol} />
-                <LinkExternal href={row.link}>
-                  <TokenName>{row.tokenName}</TokenName>
-                </LinkExternal>
-              </CellInner>
-            </StyleTd>
-            <StyleTd>
-              <Text>{row.balance} </Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {row.poolSharePercent}</Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {row.usd}</Text>
-            </StyleTd>
-          </tr>
+          parseFloat(row.balance) > 0 && (
+            <tr key={row.amount}>
+              <StyleTd>
+                <CellInner>
+                  <TokenIcon src={row.imgs[0]} alt={row.token0.symbol} />
+                  <TokenIcon src={row.imgs[1]} alt={row.token1.symbol} />
+                  <LinkExternal href={row.link}>
+                    <TokenName>{row.tokenName}</TokenName>
+                  </LinkExternal>
+                </CellInner>
+              </StyleTd>
+              <StyleTd>
+                <Text>{row.balance} </Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {row.poolSharePercent}</Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {row.usd}</Text>
+              </StyleTd>
+            </tr>
+          )
         )
       case 'LuaSafe':
         return (
-          <tr key={row.amount}>
+          parseFloat(row.quantity) > 0 && (
+            <tr key={row.amount}>
+              <StyleTd>
+                <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
+                  row.address.length - 4,
+                  row.address.length,
+                )}`}</Text>
+              </StyleTd>
+              <StyleTd>
+                <Text>{row.token} </Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {parseFloat(row.quantity).toFixed(2)}</Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {row.apy}</Text>
+              </StyleTd>
+              <StyleTd>
+                <Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text>
+              </StyleTd>
+            </tr>
+          )
+        )
+      case 'LuaFarm':
+        return (
+          // parseFloat(row.stakeAmount) > 0 &&
+          <tr key={row.stakeAmount}>
             <StyleTd>
-              <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
-                row.address.length - 4,
-                row.address.length,
-              )}`}</Text>
+              <Text>{row.pair}</Text>
             </StyleTd>
             <StyleTd>
-              <Text>{row.token} </Text>
+              <Text>{parseFloat(row.stakeAmount).toFixed(2)} </Text>
             </StyleTd>
             <StyleTd>
-              <Text> {parseFloat(row.quantity).toFixed(2)}</Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {row.apy}</Text>
-            </StyleTd>
-            <StyleTd>
-              <Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text>
+              <Text> {parseFloat(row.pendingReward).toFixed(2)}</Text>
             </StyleTd>
           </tr>
         )
@@ -141,9 +159,6 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag, network }) => {
   }
   return (
     <TableContainer>
-      <Text fontSize="16px" marginBottom="15px">
-        {network}
-      </Text>
       <TableWrapper ref={tableWrapperEl}>
         <StyledTable>
           <TableHead>

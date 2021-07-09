@@ -105,7 +105,18 @@ export interface ProfileState {
 export interface IdoState {
   idos: IdoDetail[]
   isLoading: boolean
-  openPools: PoolIdoDetail[]
+  openPools: {
+    isLoading: boolean
+    data: OpenPools
+  }
+  closedPools: {
+    isLoading: boolean
+    data: PoolIdoDetail[]
+  }
+  currentPool: {
+    isLoading: boolean
+    data: PoolIdoDetail
+  }
 }
 
 export type TeamResponse = {
@@ -290,8 +301,7 @@ export interface PredictionsState {
 }
 // Blockfolio
 export interface BlockfolioState {
-  isLoading: boolean
-  wallets: WalletProps[]
+  wallets: WalletProps
 }
 
 export interface WalletProps {
@@ -337,17 +347,22 @@ export interface State {
   idos: IdoState
 }
 export interface IdoDetail {
-  claimAt: string
-  closeAt: string
+  claimAt: number
+  closeAt: number
+  openAt: number
   creator: string
   idoToken: string
-  maxAmountPay: string
-  minAmountPay: string
-  openAt: string
+  maxAmountPay: number
+  minAmountPay: number
   payToken: string
-  swappedAmountIDO: string
-  swappedAmountPay: string
-  totalAmountIDO: string
-  totalAmountPay: string
-  totalCommittedAmount: string
+  swappedAmountIDO: number
+  swappedAmountPay: number
+  totalAmountIDO: number
+  totalAmountPay: number
+  totalCommittedAmount: number
+}
+
+export interface OpenPools {
+  openingPools: PoolIdoDetail[]
+  upcomingPools: PoolIdoDetail[]
 }

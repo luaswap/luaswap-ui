@@ -1,16 +1,18 @@
 import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import { selectUserTier } from 'state/profile'
+import { selectUserNextTier, selectUserTier } from 'state/profile'
 
 import { Card, CardBody, Text, Flex, Image, Button } from 'common-uikitstrungdao'
 import { selectPool } from 'state/ido'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
-import { IdoDetailInfo } from 'views/Idos/types'
+import { ChainId, IdoDetailInfo, Pool } from 'views/Idos/types'
+import { Tier } from 'state/types'
 
 interface TierProps {
   data: IdoDetailInfo
   userTier: number
+  nextTier: { [key: number]: Tier }
 }
 
 const ImageContainer = styled.span`
@@ -25,7 +27,7 @@ const ImageContainer = styled.span`
   margin-right: 10px;
 `
 
-const TierCard = styled(Card)`
+const TierCardContainer = styled(Card)`
   width: 100%;
   margin-bottom: 15px;
 
@@ -40,27 +42,28 @@ const TIER_INFO = {
     name: 'Earth',
     description: 'For every user, who holds less than 100 LUA or 100 TOMO',
     icon: 'https://image.flaticon.com/icons/png/512/921/921490.png',
-    CTA: 'Buy 100 LUA to play with me on ground',
+    CTA: (lua) => (lua ? `Buy ${lua} LUA to JOIN IDO` : `Buy LUA to JOIN IDO`),
   },
   '2': {
     name: 'Moon',
     description: 'For every user, who holds from 100 LUA and 10.000 LUA',
     icon: 'https://image.flaticon.com/icons/png/512/740/740860.png',
-    CTA: 'Buy more 1000 LUA to fly to the Moon',
+    CTA: (lua) => (lua ? `Buy more ${lua} LUA to fly to the Moon` : `Buy more LUA to fly to the Moon`),
   },
   '3': {
     name: 'Galaxy',
     description: 'For every user, who holds more than than 10.000 LUA',
     icon: 'https://image.flaticon.com/icons/png/512/3919/3919942.png',
-    CTA: 'Buy 10.000 LUA to BREAK BORDER TOGETHER',
+    CTA: (lua) => (lua ? `Buy more ${lua} LUA to BREAK BORDER TOGETHER` : `Buy more LUA to BREAK BORDER TOGETHER`),
   },
 }
 
-const Tier: React.FC<TierProps> = ({
+const TierCard: React.FC<TierProps> = ({
   data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken, payToken },
   userTier,
+  nextTier,
 }) => (
-  <TierCard>
+  <TierCardContainer>
     <CardBody style={{ height: '400px' }}>
       <Flex mb="15px" alignItems="center">
         <ImageContainer>
@@ -100,8 +103,8 @@ const Tier: React.FC<TierProps> = ({
           {totalCommittedAmount} {payToken.symbol}
         </Text>
       </Flex>
-      {userTier + 2 === parseInt(tier) && (
-        <Button width="100%" mt="30px" disabled={userTier + 2 === parseInt(tier)}>
+      {userTier === tier && (
+        <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
           <Text bold>Your Tier. GET READY!</Text>
           <Image
             src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
@@ -112,41 +115,44 @@ const Tier: React.FC<TierProps> = ({
           />
         </Button>
       )}
-      {userTier + 2 < parseInt(tier) && (
+      {userTier < tier && (
         <Button width="100%" mt="30px" variant="subtle">
-          {TIER_INFO[tier].CTA}
+          {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
         </Button>
       )}
     </CardBody>
-  </TierCard>
+  </TierCardContainer>
 )
 
 const TierDetails: React.FC<{
-  index: string
-}> = ({ index }) => {
+  currentPoolData: Pool
+}> = ({ currentPoolData }) => {
   const userTier = useSelector(selectUserTier)
-
-  console.log(userTier)
-
-  const pool = useSelector(selectPool(index))
+  const userNextTier = useSelector(selectUserNextTier)
+  const { index: tierData } = currentPoolData
+  const nextTier = userNextTier.reduce((s: { [key: number]: Tier }, e: Tier) => {
+    const tmps = s
+    tmps[e.tier] = e
+    return tmps
+  }, {})
 
   const tiersss: IdoDetailInfo[] = useMemo(() => {
-    if (pool) {
-      const chainIds = Object.keys(pool.index)
-      let result: IdoDetailInfo[] = pool.index[chainIds[0]]
+    if (tierData) {
+      const chainIds = Object.keys(tierData)
+      let result: IdoDetailInfo[] = tierData[chainIds[0]]
       for (let i = 1; i < chainIds.length; i++) {
-        result = formatPoolTotalTierByChainID(result, pool.index[chainIds[i]])
+        result = formatPoolTotalTierByChainID(result, tierData[chainIds[i]])
       }
 
       return result
     }
     return []
-  }, [pool])
+  }, [tierData])
 
   return (
     <Flex flexWrap="wrap" justifyContent="space-between">
       {tiersss.map((e: IdoDetailInfo, i: number) => (
-        <Tier data={e} key={e.tier} userTier={userTier} />
+        <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
       ))}
     </Flex>
   )

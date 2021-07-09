@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { connectorLocalStorageKey, ConnectorNames } from '@pancakeswap/uikit'
 import { injected } from 'utils/web3React'

@@ -1,6 +1,6 @@
-export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim'
+export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim' | null
 
-export type ChainId = '89' | '1' | '88'
+export type ChainId = 89 | 1 | 88
 
 export interface TokenInfo {
   address: string
@@ -8,7 +8,8 @@ export interface TokenInfo {
   decimals: number
 }
 export interface IdoDetailInfo {
-  tier: string
+  tier: number
+  addressIdoContract: string
   creator: string
   idoToken: TokenInfo
   payToken: TokenInfo
@@ -22,7 +23,7 @@ export interface IdoDetailInfo {
   swappedAmountIDO: number
   swappedAmountPay: number
   totalCommittedAmount: number
-  index: string
+  index: number
   chainId: string
 }
 
@@ -40,6 +41,12 @@ export interface Pool {
   openAt: number
   closeAt: number
   claimAt: number
-  index: Record<ChainId, IdoDetailInfo[]>
+  index?: Record<string, IdoDetailInfo[]>
   status: number
+  projectDetail: string
+  links: {
+    label: string
+    icon: string
+    link: string
+  }[]
 }

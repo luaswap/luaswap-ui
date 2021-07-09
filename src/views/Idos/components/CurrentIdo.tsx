@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text } from 'common-uikitstrungdao'
 import styled from 'styled-components'
+import { OpenPools } from 'state/types'
 import PoolDetail from './PoolDetail'
 import IdoLayout from './IdoLayout'
 import { Pool } from '../types'
@@ -11,26 +12,28 @@ const Row = styled.div`
 `
 
 interface CurrentIdoProps {
-  openPools: Pool[]
+  openPools: OpenPools
 }
 
-const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools }) => {
+const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upcomingPools } }) => {
   return (
     <IdoLayout>
       <Text fontSize="20px" textAlign="center">
         Opening Pools
       </Text>
       <Row>
-        {openPools.map((pool) => {
+        {openingPools.map((pool) => {
           return <PoolDetail pool={pool} />
         })}
       </Row>
-      {/* <Text fontSize="20px" textAlign="center">
+      <Text fontSize="20px" textAlign="center">
         Upcoming Pools
       </Text>
       <Row>
-        <PoolDetail status="Opening" />
-      </Row> */}
+        {upcomingPools.map((pool) => {
+          return <PoolDetail pool={pool} />
+        })}
+      </Row>
     </IdoLayout>
   )
 }

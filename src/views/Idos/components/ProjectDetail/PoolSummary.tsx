@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import {
   Card,
   CardBody,
@@ -13,7 +12,11 @@ import {
   Progress,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
+import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { IdoDetail } from 'state/types'
+import { calculateCommittedAmountPercentage, calculateSwappedAmountPercentage } from '../helper'
+import usePoolStatus from '../../hooks/usePoolStatus'
+import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
 const IconWrapper = styled.a`
   color: #212121;
@@ -53,36 +56,69 @@ const CardWrapper = styled(Card)`
 `
 
 interface PoolSummaryProps {
-  idoDetail: IdoDetail | null
+  currentPoolData: Pool
+  tierDataOfUser: IdoDetailInfo
+  contractData: IdoDetail
+  isAvailalbeOnCurrentNetwork: boolean
 }
+/**
+ * In Pool summary component, we get live data from contract
+ * and fixed data from API
+ */
+const PoolSummary: React.FC<PoolSummaryProps> = ({
+  currentPoolData,
+  tierDataOfUser,
+  contractData,
+  isAvailalbeOnCurrentNetwork,
+}) => {
+  const [poolStatus] = usePoolStatus(currentPoolData)
+  const { img, name, description, totalAmountIDO, payToken } = useTotalDataFromAllPools(currentPoolData)
 
-const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
-  const { totalAmountIDO, totalAmountPay, totalCommittedAmount } = idoDetail
-  const rate = useMemo(() => {
-    return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(2)
-  }, [totalAmountIDO, totalAmountPay])
-
-  const progressPercentage = useMemo(() => {
+  const { totalCommittedAmount, totalAmountPay, swappedAmountPay } = contractData
+  const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
-      return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
+      return calculateCommittedAmountPercentage(totalCommittedAmount, totalAmountPay)
     }
 
     return 0
   }, [totalCommittedAmount, totalAmountPay])
+
+  const totalSwapAmountPercentage = useMemo(() => {
+    if (swappedAmountPay && totalAmountPay) {
+      return calculateSwappedAmountPercentage(swappedAmountPay, totalAmountPay)
+    }
+
+    return 0
+  }, [swappedAmountPay, totalAmountPay])
+  const isPoolInProgress = useMemo(() => {
+    if (poolStatus === 'open') {
+      return true
+    }
+
+    return false
+  }, [poolStatus])
+
+  const isPoolOpen = useMemo(() => {
+    if (poolStatus === 'not open') {
+      return false
+    }
+
+    return true
+  }, [poolStatus])
   return (
     <CardWrapper>
       <CardBody
         style={{
-          height: '350px',
+          height: 'auto',
         }}
       >
         <Flex mb="15px" alignItems="center">
           <ImageContainer>
-            <img src="https://i.ibb.co/YtdXYjg/cross.jpg" alt="img" style={{ width: '100%', height: '100%' }} />
+            <img src={img} alt="img" style={{ width: '100%', height: '100%' }} />
           </ImageContainer>
           <PoolInfoBlock>
             <Text fontSize="24px" bold>
-              Solana
+              {name}
             </Text>
             <Flex marginBottom="5px" alignItems="center">
               <IconWrapper href="google.com" target="__blank">
@@ -100,34 +136,52 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({ idoDetail }) => {
             </Flex>
           </PoolInfoBlock>
         </Flex>
-        <Text>
-          Next-generation dynamic AMM DEX that extends its defi functionality, becoming a permissionless one-stop
-          cross-chain asset market.
-        </Text>
-        <Link href="google.com" mb="15px">
-          Learn more
-        </Link>
-        <Flex justifyContent="space-between" mb="10px">
-          <Flex justifyContent="flex-start" flexDirection="column">
+        <Text>{description}</Text>
+        <Flex justifyContent="space-between" mb="10px" mt="15px">
+          {/* <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
-            <Text>1 ETH = {rate} BBANK</Text>
-          </Flex>
+            <Text>
+              1 {payToken.symbol} = {rate} {idoToken.symbol}
+            </Text>
+          </Flex> */}
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>
             <Text>{totalAmountIDO}</Text>
           </Flex>
           <Flex justifyContent="flex-end" flexDirection="column">
             <Text color="primary">Access</Text>
-            <Text>Private</Text>
+            <Text textAlign="right">Public</Text>
           </Flex>
         </Flex>
-        <Progress variant="round" primaryStep={progressPercentage} />
-        <Flex justifyContent="space-between" mt="10px">
-          <Text color="secondary">
-            {totalCommittedAmount} ETH/{totalAmountPay} ETH
-          </Text>
-          <Text color="secondary">{progressPercentage}%</Text>
-        </Flex>
+        {isAvailalbeOnCurrentNetwork && (
+          <>
+            <Flex flexDirection="column">
+              {isPoolInProgress || !isPoolOpen ? (
+                <Text mb="10px" color="primary">
+                  Commited Progress
+                </Text>
+              ) : (
+                <Text mb="10px" color="primary">
+                  Swap Progress
+                </Text>
+              )}
+              <Progress
+                variant="round"
+                primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
+                secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
+              />
+            </Flex>
+            <Flex justifyContent="space-between" mt="10px">
+              <Text>
+                {isPoolInProgress || !isPoolOpen ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay}{' '}
+                {payToken.symbol}
+              </Text>
+              <Text color="secondary">
+                {isPoolInProgress || !isPoolOpen ? totalCommitedPercentage : totalSwapAmountPercentage}%
+              </Text>
+            </Flex>
+          </>
+        )}
       </CardBody>
     </CardWrapper>
   )

@@ -1,17 +1,24 @@
 import React, { useMemo, useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { Card, CardBody, Flex, Text } from 'common-uikitstrungdao'
+import { Card, CardBody, Flex, Text, Mesage } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
-import { IdoDetail } from 'state/types'
 import useDepositIdo from 'hooks/useDepositIdo'
+import { useApproveIdo } from 'hooks/useApproveIdo'
+import useDeepMemo from 'hooks/useDeepMemo'
+import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import ModalInput from 'components/ModalInput'
+import { IdoDetailInfo, Pool } from 'views/Idos/types'
+import { IdoDetail } from 'state/types'
+import { selectUserTier } from 'state/profile'
+import { getERC20Contract } from 'utils/contractHelpers'
 import { getDecimalAmount } from 'utils/formatBalance'
-import { getUtcDateString } from 'utils/formatTime'
 import ActionButton from './ActionButton'
-import useSecondsUntilCurrent from '../../hooks/useSecondsUntilCurrent'
-import { PoolStatus } from '../../types'
+import usePoolStatus from '../../hooks/usePoolStatus'
+import useIsApproved from '../../hooks/useIsApproved'
+import { calculateSwapRate, getTierName } from '../helper'
 import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
@@ -22,42 +29,74 @@ const CardWrapper = styled(Card)`
     margin-top: 0px;
   }
 `
+const FlexWrapper = styled(Flex)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 40%;
+  }
+`
+
 interface DepositProps {
-  idoDetail: IdoDetail | null
-  totalCommited: string
+  currentPoolData: Pool
+  tierDataOfUser: IdoDetailInfo
+  contractData: IdoDetail
+  userTotalCommitted: string
+  isAvailalbeOnCurrentNetwork: boolean
 }
 
-const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
-  const { account } = useWeb3React()
+const Deposit: React.FC<DepositProps> = ({
+  currentPoolData,
+  tierDataOfUser,
+  userTotalCommitted,
+  isAvailalbeOnCurrentNetwork,
+}) => {
   const [value, setValue] = useState('0')
+  const [isRequestContractAction, setIsRequestContractAction] = useState(false)
   const { toastSuccess, toastError } = useToast()
-  const { onDeposit } = useDepositIdo()
-  const { maxAmountPay, claimAt, openAt, closeAt } = idoDetail
-  const maxAmountAllowed = useMemo(() => {
-    return new BigNumber(maxAmountPay).minus(new BigNumber(totalCommited)).toString()
-  }, [maxAmountPay, totalCommited])
+  const { account, library, chainId: cid } = useWeb3React()
+  const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
+  const [isApproved, fetchAllowanceData] = useIsApproved(paytokenContract, tierDataOfUser.addressIdoContract)
+  const { onApprove } = useApproveIdo(paytokenContract, tierDataOfUser.addressIdoContract)
+  const { onDeposit } = useDepositIdo(
+    tierDataOfUser.addressIdoContract,
+    tierDataOfUser.index,
+    tierDataOfUser.payToken.address,
+  )
+  const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
+  const userTier = useSelector(selectUserTier)
 
-  const openAtSeconds = useSecondsUntilCurrent(openAt)
-  const closedAtSeconds = useSecondsUntilCurrent(closeAt)
-  const claimAtSeconds = useSecondsUntilCurrent(claimAt)
-  /* Variable to check if pool is open or not based on openAt and closeAt timestamp received from smart contract */
-  const poolStatus: PoolStatus = useMemo(() => {
-    /* If open time > 0 and closed time > 0 -> the Pool is not open yet */
-    if (openAtSeconds > 0 && closedAtSeconds > 0) {
-      return 'not open'
+  // Data we receive from API
+  const { maxAmountPay, totalCommittedAmount, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay } =
+    tierDataOfUser
+
+  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
+
+  const maxAmountAllowedLeft = useMemo(() => {
+    return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
+  }, [maxAmountPay, userTotalCommitted])
+
+  const isUserDepositMinimumAmount = useMemo(() => {
+    const flag = new BigNumber(userTotalCommitted).plus(new BigNumber(value)).comparedTo(new BigNumber(minAmountPay))
+    if (flag < 0) {
+      return false
     }
-    if (openAtSeconds <= 0 && closedAtSeconds > 0) {
-      return 'open'
-    }
-    if (openAtSeconds <= 0 && closedAtSeconds <= 0 && claimAtSeconds > 0) {
-      return 'claim'
-    }
-    return 'closed'
-  }, [openAtSeconds, closedAtSeconds, claimAtSeconds])
+
+    return true
+  }, [value, userTotalCommitted, minAmountPay])
+
+  const rate = useMemo(() => {
+    return calculateSwapRate(totalAmountIDO, totalAmountPay)
+  }, [totalAmountIDO, totalAmountPay])
+
+  const isIdoAvailalbeOnChain = useDeepMemo(() => {
+    const { addressIdoContract } = tierDataOfUser
+
+    return !!addressIdoContract
+  }, [tierDataOfUser])
 
   const handleSelectMax = useCallback(() => {
-    setValue(maxAmountAllowed)
-  }, [maxAmountAllowed])
+    setValue(maxAmountAllowedLeft)
+  }, [maxAmountAllowedLeft])
 
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget.validity.valid) {
@@ -65,55 +104,173 @@ const Deposit: React.FC<DepositProps> = ({ idoDetail, totalCommited }) => {
     }
   }, [])
 
+  const handleApprove = useCallback(async () => {
+    try {
+      setIsRequestContractAction(true)
+      await onApprove()
+      fetchAllowanceData()
+      setIsRequestContractAction(false)
+    } catch (e) {
+      setIsRequestContractAction(false)
+      console.error(e)
+    }
+  }, [onApprove, fetchAllowanceData])
+
   const onHandleCommit = useCallback(async () => {
     try {
-      const commitedAmmount = getDecimalAmount(new BigNumber(value)).toString()
+      setIsRequestContractAction(true)
+      const commitedAmmount = getDecimalAmount(new BigNumber(value), payToken.decimals).toString()
       await onDeposit(commitedAmmount)
       toastSuccess('Deposit Successfully')
+      setIsRequestContractAction(false)
     } catch (error) {
+      setIsRequestContractAction(false)
       toastError('Fail to deposit')
     }
-  }, [onDeposit, value, toastError, toastSuccess])
+  }, [onDeposit, value, toastError, toastSuccess, payToken.decimals])
 
-  const onHandleClaim = useCallback(() => {
-    console.log('claming')
-  }, [])
+  const onHandleClaim = useCallback(async () => {
+    try {
+      setIsRequestContractAction(false)
+      // TODO: In here we assume that user claim equal amount of token that they commited
+      const claimableAmount = getDecimalAmount(new BigNumber(totalCommittedAmount, payToken.decimals)).toString()
+      await onClaimReward(claimableAmount)
+      setIsRequestContractAction(false)
+      toastSuccess('Claim reward Successfully')
+    } catch (error) {
+      toastError('Fail to claim reward')
+      setIsRequestContractAction(false)
+    }
+  }, [onClaimReward, toastError, toastSuccess, totalCommittedAmount, payToken.decimals])
+
+  const isPoolInProgress = useMemo(() => {
+    if (poolStatus === 'open') {
+      return true
+    }
+
+    return false
+  }, [poolStatus])
+
+  const isClaimable = useMemo(() => {
+    const comparedNum = new BigNumber(totalCommittedAmount).comparedTo(0)
+
+    if (comparedNum === 1) {
+      return true
+    }
+
+    return false
+  }, [totalCommittedAmount])
 
   return (
-    <CardWrapper>
-      <CardBody
+    <FlexWrapper flexDirection="column">
+      <CardWrapper
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '350px',
+          width: '100%',
+        }}
+        mb="24px"
+      >
+        <CardBody
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Flex justifyContent="center" alignItems="center" flexDirection="column">
+            <CountDown
+              openAtSeconds={openAtSeconds}
+              closedAtSeconds={closedAtSeconds}
+              poolStatus={poolStatus}
+              claimAtSeconds={claimAtSeconds}
+            />
+          </Flex>
+        </CardBody>
+      </CardWrapper>
+      <CardWrapper
+        style={{
+          width: '100%',
+          flex: 1,
         }}
       >
-        <Flex justifyContent="center" alignItems="center" flexDirection="column">
-          <CountDown
-            openAtSeconds={openAtSeconds}
-            closedAtSeconds={closedAtSeconds}
-            poolStatus={poolStatus}
-            claimAtSeconds={claimAtSeconds}
-          />
-          <ActionButton poolStatus={poolStatus} onCommit={onHandleCommit} onClaim={onHandleClaim} />
-          {account && (
-            <ModalInput
-              value={value}
-              onSelectMax={handleSelectMax}
-              onChange={handleChange}
-              max={maxAmountAllowed}
-              symbol="USDT"
-              inputTitle="Deposit"
-            />
+        <CardBody>
+          {isAvailalbeOnCurrentNetwork ? (
+            <>
+              <Flex justifyContent="space-between">
+                <Text>Your Tier</Text>
+                <Text bold>
+                  Tier {userTier} - {getTierName(userTier)}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Text>Min commit</Text>
+                <Text bold>
+                  {minAmountPay} {payToken.symbol}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Text>Max commit</Text>
+                <Text bold>
+                  {maxAmountPay} {payToken.symbol}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Text>Price</Text>
+                <Text bold>
+                  1 {payToken.symbol} / {rate} {idoToken.symbol}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between" mb="14px">
+                <Text>Your committed</Text>
+                <Text bold>
+                  {userTotalCommitted} {payToken.symbol}
+                </Text>
+              </Flex>
+              {poolStatus === 'claim' ||
+                (poolStatus === 'closed' && (
+                  <Flex justifyContent="space-between" mb="15px">
+                    <Text>You will receive</Text>
+                    <Text bold>1 {idoToken.symbol}</Text>
+                  </Flex>
+                ))}
+              {isIdoAvailalbeOnChain && (
+                <Flex justifyContent="center" alignItems="center" flexDirection="column">
+                  {account && isPoolInProgress && isApproved && (
+                    <ModalInput
+                      value={value}
+                      onSelectMax={handleSelectMax}
+                      onChange={handleChange}
+                      max={maxAmountAllowedLeft}
+                      min={new BigNumber(minAmountPay).toString()}
+                      symbol={payToken.symbol}
+                      inputTitle="Amount"
+                      secondaryTitle="Available Balance"
+                      showWarning={false}
+                    />
+                  )}
+                </Flex>
+              )}
+              <ActionButton
+                isRequestContractAction={isRequestContractAction}
+                isUserDepositMinimumAmount={isUserDepositMinimumAmount}
+                handleApprove={handleApprove}
+                isApproved={isApproved}
+                poolStatus={poolStatus}
+                onCommit={onHandleCommit}
+                isIdoAvailalbeOnChain={isIdoAvailalbeOnChain}
+                onClaim={onHandleClaim}
+                disabled={!isClaimable}
+                symbol={payToken.symbol}
+                paytokenAddress={payToken.address}
+                maxAmountAllowedLeft={maxAmountAllowedLeft}
+                depositAmount={value}
+              />
+            </>
+          ) : (
+            <Mesage variant="warning">Switch to correct network to see pool&apos;s information</Mesage>
           )}
-          <Text textAlign="center" mt="10px">
-            Deposit USDT to commit the slots, Unspent USDT can be withdrawn when IDO finishes. Token can be claimed
-            after {getUtcDateString(claimAt)}
-          </Text>
-        </Flex>
-      </CardBody>
-    </CardWrapper>
+        </CardBody>
+      </CardWrapper>
+    </FlexWrapper>
   )
 }
 
