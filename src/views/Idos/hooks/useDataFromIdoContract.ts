@@ -105,9 +105,7 @@ const useDataFromIdoContract = (
       }
     }
 
-    if (account) {
-      fetchData()
-    }
+    fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentBlock, chainId])
 

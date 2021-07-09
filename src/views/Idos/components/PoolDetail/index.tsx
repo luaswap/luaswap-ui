@@ -100,7 +100,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
 
   return (
     <Card ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />} mb="24px">
-      <CardBody style={{ height: '350px' }}>
+      <CardBody style={{ height: '300px' }}>
         <Flex mb="15px" alignItems="center">
           <ImageContainer onClick={navigateToProjectDetail}>
             <Image src={img} alt="img" width={60} height={60} />
@@ -147,20 +147,6 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
           </Flex>
         </Flex>
         <Progress variant="round" primaryStep={progressPercentage} />
-        <Flex mt="10px" justifyContent="space-between">
-          <Flex flexDirection="column">
-            <Text color="primary">Min allocation</Text>
-            <Text>
-              {minAmountPay} {payToken.symbol}
-            </Text>
-          </Flex>
-          <Flex flexDirection="column">
-            <Text color="primary">Max allocation</Text>
-            <Text textAlign="right">
-              {maxAmountPay} {payToken.symbol}
-            </Text>
-          </Flex>
-        </Flex>
       </CardBody>
     </Card>
   )

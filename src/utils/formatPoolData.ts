@@ -45,7 +45,7 @@ export const formatPoolTotalTierByChainID = (
   allTierPool2: IdoDetailInfo[],
 ): IdoDetailInfo[] => {
   return allTierPool1.map((e) => {
-    const e2 = allTierPool2.find((p) => e2.tier === e.tier)
+    const e2 = allTierPool2.find((p) => p.tier === e.tier)
     if (e2) {
       return {
         ...e,

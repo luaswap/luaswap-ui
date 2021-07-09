@@ -38,6 +38,12 @@ const TierCardContainer = styled(Card)`
 `
 
 const TIER_INFO = {
+  '0': {
+    name: 'Hell',
+    description: 'For every user, who holds less than 100 LUA or 100 TOMO',
+    icon: 'https://image.flaticon.com/icons/png/512/921/921490.png',
+    CTA: (lua) => (lua ? `Buy ${lua} LUA to JOIN IDO` : `Buy LUA to JOIN IDO`),
+  },
   '1': {
     name: 'Earth',
     description: 'For every user, who holds less than 100 LUA or 100 TOMO',
@@ -59,7 +65,7 @@ const TIER_INFO = {
 }
 
 const TierCard: React.FC<TierProps> = ({
-  data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken, payToken },
+  data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
   userTier,
   nextTier,
 }) => (
@@ -67,7 +73,7 @@ const TierCard: React.FC<TierProps> = ({
     <CardBody style={{ height: '400px' }}>
       <Flex mb="15px" alignItems="center">
         <ImageContainer>
-          <Image src={TIER_INFO[tier].icon} alt="img" width={60} height={60} />
+          <Image src={TIER_INFO[tier]?.icon} alt="img" width={60} height={60} />
         </ImageContainer>
         <div>
           <Text fontSize="24px" bold>
@@ -148,7 +154,7 @@ const TierDetails: React.FC<{
     }
     return []
   }, [tierData])
-
+  console.log(tiersss, 'data ?')
   return (
     <Flex flexWrap="wrap" justifyContent="space-between">
       {tiersss.map((e: IdoDetailInfo, i: number) => (
