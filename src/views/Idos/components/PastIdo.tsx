@@ -12,9 +12,10 @@ const Row = styled.div`
 
 interface PastIdoPools {
   closedPools: Pool[]
+  isLoadingState: boolean
 }
 
-const PastIdo: React.FC<PastIdoPools> = ({ closedPools }) => {
+const PastIdo: React.FC<PastIdoPools> = ({ closedPools, isLoadingState }) => {
   return (
     <IdoLayout>
       <Text fontSize="20px" textAlign="center">

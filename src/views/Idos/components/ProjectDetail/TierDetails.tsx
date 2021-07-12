@@ -3,10 +3,9 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { selectUserNextTier, selectUserTier } from 'state/profile'
 
-import { Card, CardBody, Text, Flex, Image, Button } from 'common-uikitstrungdao'
-import { selectPool } from 'state/ido'
+import { Card, CardBody, Text, Flex, Image, Button, Mesage } from 'common-uikitstrungdao'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
-import { ChainId, IdoDetailInfo, Pool } from 'views/Idos/types'
+import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { Tier } from 'state/types'
 
 interface TierProps {
@@ -122,7 +121,7 @@ const TierCard: React.FC<TierProps> = ({
         </Button>
       )}
       {userTier < tier && (
-        <Button width="100%" mt="30px" variant="subtle">
+        <Button width="100%" mt="30px" variant="subtle" as="a" href="https://app.luaswap.org/#/swap" target="__blank">
           {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
         </Button>
       )}
@@ -154,13 +153,17 @@ const TierDetails: React.FC<{
     }
     return []
   }, [tierData])
-  console.log(tiersss, 'data ?')
   return (
-    <Flex flexWrap="wrap" justifyContent="space-between">
-      {tiersss.map((e: IdoDetailInfo, i: number) => (
-        <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
-      ))}
-    </Flex>
+    <>
+      <Mesage variant="warning" mb="16px">
+        If you dont have any LUA or TOMO in your wallet, you will be in Tier 0
+      </Mesage>
+      <Flex flexWrap="wrap" justifyContent="space-between">
+        {tiersss.map((e: IdoDetailInfo, i: number) => (
+          <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
+        ))}
+      </Flex>
+    </>
   )
 }
 
