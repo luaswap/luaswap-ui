@@ -121,7 +121,15 @@ const TierCard: React.FC<TierProps> = ({
         </Button>
       )}
       {userTier < tier && (
-        <Button width="100%" mt="30px" variant="subtle" as="a" href="https://app.luaswap.org/#/swap" target="__blank">
+        <Button
+          width="100%"
+          mt="30px"
+          variant="subtle"
+          style={{ textAlign: 'center' }}
+          as="a"
+          href="https://app.luaswap.org/#/swap"
+          target="__blank"
+        >
           {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
         </Button>
       )}
@@ -155,14 +163,18 @@ const TierDetails: React.FC<{
   }, [tierData])
   return (
     <>
-      <Mesage variant="warning" mb="16px">
-        If you dont have any LUA or TOMO in your wallet, you will be in Tier 0
-      </Mesage>
       <Flex flexWrap="wrap" justifyContent="space-between">
         {tiersss.map((e: IdoDetailInfo, i: number) => (
           <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
         ))}
       </Flex>
+      <br />
+      <Text textAlign="center">
+        If you dont have any LUA or TOMO in your wallet, you will be in Tier 0.
+        <br />
+        You still have a chance to buy token by commit your fund. You will receive your fund if token sold out for Tier
+        1, 2, 3
+      </Text>
     </>
   )
 }
