@@ -5,8 +5,7 @@ import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useWeb3 from 'hooks/useWeb3'
-import useRefresh from 'hooks/useRefresh'
-import { setDefaultFarmData, fetchFarms, setBlock } from './actions'
+import { setBlock } from './actions'
 import { State, Farm, ProfileState, FarmsState, IdoState, BlockfolioState } from './types'
 import { fetchProfile } from './profile'
 import { fetchPools } from './ido'
@@ -15,11 +14,6 @@ export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()
   const web3 = useWeb3()
   const { chainId } = useWeb3React()
-
-  useEffect(() => {
-    dispatch(setDefaultFarmData(chainId))
-    dispatch(fetchFarms(chainId, web3))
-  }, [chainId, dispatch, web3])
 
   useEffect(() => {
     const interval = setInterval(async () => {
