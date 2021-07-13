@@ -66,6 +66,7 @@ const DEFAULT_IDO = {
   totalAmountPay: 0,
   maxAmountPay: 0,
   minAmountPay: 0,
+  projectId: '',
   claimAt: 0,
   closeAt: 0,
   openAt: 0,

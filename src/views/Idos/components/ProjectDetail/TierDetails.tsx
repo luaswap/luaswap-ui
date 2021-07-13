@@ -33,6 +33,9 @@ const TierCardContainer = styled(Card)`
   ${({ theme }) => theme.mediaQueries.md} {
     width: calc(33.33% - 16px);
     margin-bottom: 0;
+    &:not(:last-of-type) {
+      margin-right: 25px;
+    }
   }
 `
 
@@ -76,14 +79,14 @@ const TierCard: React.FC<TierProps> = ({
         </ImageContainer>
         <div>
           <Text fontSize="24px" bold>
-            {TIER_INFO[tier].name}
+            {TIER_INFO[tier]?.name}
           </Text>
           <Text fontSize="15px" bold>
             Tier {tier}
           </Text>
         </div>
       </Flex>
-      <Text mb="20px">{TIER_INFO[tier].description}</Text>
+      <Text mb="20px">{TIER_INFO[tier]?.description}</Text>
       <Flex justifyContent="space-between">
         <Text>Total {idoToken.symbol}</Text>
         <Text bold>
@@ -163,7 +166,7 @@ const TierDetails: React.FC<{
   }, [tierData])
   return (
     <>
-      <Flex flexWrap="wrap" justifyContent="space-between">
+      <Flex flexWrap="nowrap" justifyContent="space-between">
         {tiersss.map((e: IdoDetailInfo, i: number) => (
           <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
         ))}
@@ -173,7 +176,7 @@ const TierDetails: React.FC<{
         If you dont have any LUA or TOMO in your wallet, you will be in Tier 0.
         <br />
         You still have a chance to buy token by commit your fund. You will receive your fund if token sold out for Tier
-        1, 2, 3
+        1, 2, 3, 4
       </Text>
     </>
   )

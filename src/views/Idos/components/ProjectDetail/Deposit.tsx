@@ -2,6 +2,7 @@ import React, { useMemo, useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { Card, CardBody, Flex, Text, Mesage } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
+import axios, { AxiosResponse } from 'axios'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
@@ -64,10 +65,18 @@ const Deposit: React.FC<DepositProps> = ({
   )
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
-
   // Data we receive from API
-  const { maxAmountPay, totalCommittedAmount, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay } =
-    tierDataOfUser
+  const {
+    maxAmountPay,
+    totalCommittedAmount,
+    payToken,
+    minAmountPay,
+    idoToken,
+    totalAmountIDO,
+    totalAmountPay,
+    index,
+    projectId,
+  } = tierDataOfUser
 
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
 
@@ -116,32 +125,58 @@ const Deposit: React.FC<DepositProps> = ({
     }
   }, [onApprove, fetchAllowanceData])
 
+  const getClaimProof = useCallback(
+    async (poolId, poolIndex) => {
+      const response = await axios.get(
+        `https://api.luaswap.org/api/ido/pools/claim-info/${poolId}/${cid}/${poolIndex}/${1}/${account}`,
+      )
+      return response.data
+    },
+    [account, cid],
+  )
+
+  const getCommitProof = useCallback(
+    async (poolId, poolIndex, amount) => {
+      const response = await axios.get(
+        `https://api.luaswap.org/api/ido/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${1}/${account}/${amount}`,
+      )
+      return response.data
+    },
+    [account, cid],
+  )
+
   const onHandleCommit = useCallback(async () => {
     try {
       setIsRequestContractAction(true)
       const commitedAmmount = getDecimalAmount(new BigNumber(value), payToken.decimals).toString()
-      await onDeposit(commitedAmmount)
+      const response = await getCommitProof(projectId, index, commitedAmmount)
+      const { s, v, r, deadline } = response.proof
+      const proofS = [v, r, s, deadline]
+      await onDeposit(commitedAmmount, proofS)
       toastSuccess('Deposit Successfully')
       setIsRequestContractAction(false)
     } catch (error) {
       setIsRequestContractAction(false)
       toastError('Fail to deposit')
     }
-  }, [onDeposit, value, toastError, toastSuccess, payToken.decimals])
+  }, [onDeposit, value, toastError, toastSuccess, payToken.decimals, getCommitProof, index, projectId])
 
   const onHandleClaim = useCallback(async () => {
     try {
       setIsRequestContractAction(false)
-      // TODO: In here we assume that user claim equal amount of token that they commited
-      const claimableAmount = getDecimalAmount(new BigNumber(totalCommittedAmount, payToken.decimals)).toString()
-      await onClaimReward(claimableAmount)
+      const response = await getClaimProof(projectId, index)
+      const { s, v, r, deadline } = response.proof
+      const { finalPay } = response
+      const proofS = [v, r, s, deadline]
+      const claimableAmount = getDecimalAmount(new BigNumber(finalPay, payToken.decimals)).toString()
+      await onClaimReward(claimableAmount, proofS)
       setIsRequestContractAction(false)
       toastSuccess('Claim reward Successfully')
     } catch (error) {
       toastError('Fail to claim reward')
       setIsRequestContractAction(false)
     }
-  }, [onClaimReward, toastError, toastSuccess, totalCommittedAmount, payToken.decimals])
+  }, [onClaimReward, toastError, toastSuccess, payToken.decimals, projectId, index, getClaimProof])
 
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open') {
@@ -264,6 +299,9 @@ const Deposit: React.FC<DepositProps> = ({
                 maxAmountAllowedLeft={maxAmountAllowedLeft}
                 depositAmount={value}
               />
+              {/* <button onClick={() => onHandleClaim()}>
+                Mock claim reward
+              </button> */}
             </>
           ) : (
             <Mesage variant="warning">Switch to correct network to see pool&apos;s information</Mesage>

@@ -8,8 +8,8 @@ const useClaimRewardIdo = (contractAddress: string, idoIndex: number) => {
   const luaIdoContract = useLuaIdoContract(contractAddress)
 
   const handleClaimReward = useCallback(
-    async (amount: string) => {
-      const txHash = await claimRewardIdo(luaIdoContract, account, amount, idoIndex)
+    async (amount: string, proofS) => {
+      const txHash = await claimRewardIdo(luaIdoContract, account, amount, idoIndex, proofS)
     },
     [account, luaIdoContract, idoIndex],
   )
