@@ -42,6 +42,7 @@ interface DepositProps {
   tierDataOfUser: IdoDetailInfo
   contractData: IdoDetail
   userTotalCommitted: string
+  totalAmountUserSwapped: string
   isAvailalbeOnCurrentNetwork: boolean
 }
 
@@ -50,8 +51,10 @@ const Deposit: React.FC<DepositProps> = ({
   tierDataOfUser,
   userTotalCommitted,
   isAvailalbeOnCurrentNetwork,
+  totalAmountUserSwapped,
 }) => {
   const [value, setValue] = useState('0')
+  const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
   const [isRequestContractAction, setIsRequestContractAction] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
@@ -66,17 +69,8 @@ const Deposit: React.FC<DepositProps> = ({
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
   // Data we receive from API
-  const {
-    maxAmountPay,
-    totalCommittedAmount,
-    payToken,
-    minAmountPay,
-    idoToken,
-    totalAmountIDO,
-    totalAmountPay,
-    index,
-    projectId,
-  } = tierDataOfUser
+  const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
+    tierDataOfUser
 
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
 
@@ -137,11 +131,18 @@ const Deposit: React.FC<DepositProps> = ({
 
   useEffect(() => {
     const fetchReceiveIdoAmount = async () => {
-      const { finalPay } = await getClaimProof(projectId, index)
-      const receivedIdoAmount = new BigNumber(finalPay).multipliedBy(totalAmountIDO).dividedBy(totalAmountPay)
-      console.log(receivedIdoAmount.toString(), 'received amount ')
+      try {
+        const { finalPay } = await getClaimProof(projectId, index)
+        const receivedIdoAmount = new BigNumber(finalPay)
+          .multipliedBy(totalAmountIDO)
+          .dividedBy(totalAmountPay)
+          .toString()
+        setIdoReceivedAmount(receivedIdoAmount)
+      } catch (error) {
+        console.log(error)
+      }
     }
-
+    // We only fetch the IDO token that user received when pool status is
     if (poolStatus === 'closed') {
       fetchReceiveIdoAmount()
     }
@@ -199,14 +200,14 @@ const Deposit: React.FC<DepositProps> = ({
   }, [poolStatus])
 
   const isClaimable = useMemo(() => {
-    const comparedNum = new BigNumber(totalCommittedAmount).comparedTo(0)
+    const comparedNum = new BigNumber(userTotalCommitted).comparedTo(0)
 
     if (comparedNum === 1) {
       return true
     }
 
     return false
-  }, [totalCommittedAmount])
+  }, [userTotalCommitted])
 
   return (
     <FlexWrapper flexDirection="column">
@@ -276,7 +277,9 @@ const Deposit: React.FC<DepositProps> = ({
                 (poolStatus === 'closed' && (
                   <Flex justifyContent="space-between" mb="15px">
                     <Text>You will receive</Text>
-                    <Text bold>1 {idoToken.symbol}</Text>
+                    <Text bold>
+                      {idoReceivedAmount} {idoToken.symbol}
+                    </Text>
                   </Flex>
                 ))}
               {isIdoAvailalbeOnChain && (
@@ -311,9 +314,9 @@ const Deposit: React.FC<DepositProps> = ({
                 maxAmountAllowedLeft={maxAmountAllowedLeft}
                 depositAmount={value}
               />
-              {/* <button onClick={() => onHandleClaim()}>
-                Mock claim reward
-              </button> */}
+              {poolStatus === 'closed' && totalAmountUserSwapped !== '0' && userTotalCommitted === '0' && (
+                <Mesage variant="warning">You have claimed all your reward</Mesage>
+              )}
             </>
           ) : (
             <Mesage variant="warning">Switch to correct network to see pool&apos;s information</Mesage>

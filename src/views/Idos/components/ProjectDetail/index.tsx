@@ -63,7 +63,7 @@ const ProjectDetail = () => {
     return getIdoDataBasedOnChainIdAndTier(index, chainId, userTier)
   }, [currentPoolData, chainId, userTier])
 
-  const [idoDetailFromContract, totalUserCommittedFromContract] = useDataFromIdoContract(
+  const [idoDetailFromContract, totalUserCommittedFromContract, totalAmountUserSwapped] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
     tierDataOfUser.index,
     currentPoolData.index,
@@ -105,6 +105,7 @@ const ProjectDetail = () => {
               <Deposit
                 currentPoolData={currentPoolData}
                 tierDataOfUser={tierDataOfUser}
+                totalAmountUserSwapped={totalAmountUserSwapped}
                 contractData={idoDetailFromContract}
                 userTotalCommitted={totalUserCommittedFromContract}
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
