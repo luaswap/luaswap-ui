@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { Card, CardBody, Flex, Text, Mesage } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
@@ -128,21 +128,34 @@ const Deposit: React.FC<DepositProps> = ({
   const getClaimProof = useCallback(
     async (poolId, poolIndex) => {
       const response = await axios.get(
-        `https://api.luaswap.org/api/ido/pools/claim-info/${poolId}/${cid}/${poolIndex}/${1}/${account}`,
+        `https://api.luaswap.org/api/ido/pools/claim-info/${poolId}/${cid}/${poolIndex}/${userTier}/${account}`,
       )
       return response.data
     },
-    [account, cid],
+    [account, cid, userTier],
   )
+
+  useEffect(() => {
+    const fetchReceiveIdoAmount = async () => {
+      const { finalPay } = await getClaimProof(projectId, index)
+      const receivedIdoAmount = new BigNumber(finalPay).multipliedBy(totalAmountIDO).dividedBy(totalAmountPay)
+      console.log(receivedIdoAmount.toString(), 'received amount ')
+    }
+
+    if (poolStatus === 'closed') {
+      fetchReceiveIdoAmount()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolStatus, getClaimProof, projectId, index])
 
   const getCommitProof = useCallback(
     async (poolId, poolIndex, amount) => {
       const response = await axios.get(
-        `https://api.luaswap.org/api/ido/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${1}/${account}/${amount}`,
+        `https://api.luaswap.org/api/ido/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${userTier}/${account}/${amount}`,
       )
       return response.data
     },
-    [account, cid],
+    [account, cid, userTier],
   )
 
   const onHandleCommit = useCallback(async () => {
@@ -168,15 +181,14 @@ const Deposit: React.FC<DepositProps> = ({
       const { s, v, r, deadline } = response.proof
       const { finalPay } = response
       const proofS = [v, r, s, deadline]
-      const claimableAmount = getDecimalAmount(new BigNumber(finalPay, payToken.decimals)).toString()
-      await onClaimReward(claimableAmount, proofS)
+      await onClaimReward(finalPay, proofS)
       setIsRequestContractAction(false)
       toastSuccess('Claim reward Successfully')
     } catch (error) {
       toastError('Fail to claim reward')
       setIsRequestContractAction(false)
     }
-  }, [onClaimReward, toastError, toastSuccess, payToken.decimals, projectId, index, getClaimProof])
+  }, [onClaimReward, toastError, toastSuccess, projectId, index, getClaimProof])
 
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open') {
@@ -254,7 +266,7 @@ const Deposit: React.FC<DepositProps> = ({
                   1 {payToken.symbol} / {rate} {idoToken.symbol}
                 </Text>
               </Flex>
-              <Flex justifyContent="space-between" mb="14px">
+              <Flex justifyContent="space-between">
                 <Text>Your committed</Text>
                 <Text bold>
                   {userTotalCommitted} {payToken.symbol}

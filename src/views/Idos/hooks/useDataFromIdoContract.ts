@@ -48,6 +48,7 @@ const useDataFromIdoContract = (
   useEffect(() => {
     const fetchData = async () => {
       const idosOfEachChainId = {}
+      const idoIndexMap = {}
       try {
         /**
          * We loop through every index and get all idos info in each index
@@ -58,12 +59,15 @@ const useDataFromIdoContract = (
         Object.keys(idoIndexes).forEach((idoChainId) => {
           const idosOfCurrentChainId = []
           idoIndexes[idoChainId].forEach((ido) => {
-            // We will get new contract based on addressIdoContract received from API
-            const luaContractAddress = ido.addressIdoContract
-            const web3 = getWeb3BasedOnChainId(Number(idoChainId))
-            const currentLuaIdoContract = getLuaIdoContract(web3, luaContractAddress)
-            const contractIdoDetail = currentLuaIdoContract.methods.IDOs(ido.index).call
-            idosOfCurrentChainId.push(contractIdoDetail)
+            if (!idoIndexMap[ido.index]) {
+              // We will get new contract based on addressIdoContract received from API
+              const luaContractAddress = ido.addressIdoContract
+              const web3 = getWeb3BasedOnChainId(Number(idoChainId))
+              const currentLuaIdoContract = getLuaIdoContract(web3, luaContractAddress)
+              const contractIdoDetail = currentLuaIdoContract.methods.IDOs(ido.index).call
+              idosOfCurrentChainId.push(contractIdoDetail)
+              idoIndexMap[ido.index] = true
+            }
           })
           idosOfEachChainId[idoChainId] = idosOfCurrentChainId
         })

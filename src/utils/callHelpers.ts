@@ -43,7 +43,7 @@ export const depositIdo = async (luaIdoContract, account, amount, idoIndex, isNa
 }
 
 export const claimRewardIdo = async (luaIdoContract, account, amount, idoIndex, proofS) => {
-  const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
+  // const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
   return luaIdoContract.methods
     .userClaim(idoIndex, account, amount, proofS)
     .send({

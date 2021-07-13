@@ -6,7 +6,6 @@ import { claimRewardIdo } from 'utils/callHelpers'
 const useClaimRewardIdo = (contractAddress: string, idoIndex: number) => {
   const { account } = useWeb3React()
   const luaIdoContract = useLuaIdoContract(contractAddress)
-
   const handleClaimReward = useCallback(
     async (amount: string, proofS) => {
       const txHash = await claimRewardIdo(luaIdoContract, account, amount, idoIndex, proofS)

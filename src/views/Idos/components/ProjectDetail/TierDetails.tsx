@@ -70,75 +70,81 @@ const TierCard: React.FC<TierProps> = ({
   data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
   userTier,
   nextTier,
-}) => (
-  <TierCardContainer>
-    <CardBody style={{ height: '400px' }}>
-      <Flex mb="15px" alignItems="center">
-        <ImageContainer>
-          <Image src={TIER_INFO[tier]?.icon} alt="img" width={60} height={60} />
-        </ImageContainer>
-        <div>
-          <Text fontSize="24px" bold>
-            {TIER_INFO[tier]?.name}
+}) => {
+  if (tier === 0) {
+    return null
+  }
+
+  return (
+    <TierCardContainer>
+      <CardBody style={{ height: '400px' }}>
+        <Flex mb="15px" alignItems="center">
+          <ImageContainer>
+            <Image src={TIER_INFO[tier]?.icon} alt="img" width={60} height={60} />
+          </ImageContainer>
+          <div>
+            <Text fontSize="24px" bold>
+              {TIER_INFO[tier]?.name}
+            </Text>
+            <Text fontSize="15px" bold>
+              Tier {tier}
+            </Text>
+          </div>
+        </Flex>
+        <Text mb="20px">{TIER_INFO[tier]?.description}</Text>
+        <Flex justifyContent="space-between">
+          <Text>Total {idoToken.symbol}</Text>
+          <Text bold>
+            {totalAmountIDO} {idoToken.symbol}
           </Text>
-          <Text fontSize="15px" bold>
-            Tier {tier}
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text>Funds to raise</Text>
+          <Text bold>
+            {totalAmountPay} {payToken.symbol}
           </Text>
-        </div>
-      </Flex>
-      <Text mb="20px">{TIER_INFO[tier]?.description}</Text>
-      <Flex justifyContent="space-between">
-        <Text>Total {idoToken.symbol}</Text>
-        <Text bold>
-          {totalAmountIDO} {idoToken.symbol}
-        </Text>
-      </Flex>
-      <Flex justifyContent="space-between">
-        <Text>Funds to raise</Text>
-        <Text bold>
-          {totalAmountPay} {payToken.symbol}
-        </Text>
-      </Flex>
-      <Flex justifyContent="space-between">
-        <Text>Price per {idoToken.symbol}</Text>
-        <Text bold>
-          {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
-        </Text>
-      </Flex>
-      <Flex justifyContent="space-between">
-        <Text>Total committed</Text>
-        <Text bold>
-          {totalCommittedAmount} {payToken.symbol}
-        </Text>
-      </Flex>
-      {userTier === tier && (
-        <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
-          <Text bold>Your Tier. GET READY!</Text>
-          <Image
-            src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
-            alt="img"
-            width={40}
-            height={40}
-            ml="20px"
-          />
-        </Button>
-      )}
-      {userTier < tier && (
-        <Button
-          width="100%"
-          mt="30px"
-          variant="subtle"
-          style={{ textAlign: 'center' }}
-          as="a"
-          href="https://app.luaswap.org/#/swap"
-          target="__blank"
-        >
-          {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
-        </Button>
-      )}
-    </CardBody>
-  </TierCardContainer>
-)
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text>Price per {idoToken.symbol}</Text>
+          <Text bold>
+            {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
+          </Text>
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text>Total committed</Text>
+          <Text bold>
+            {totalCommittedAmount} {payToken.symbol}
+          </Text>
+        </Flex>
+        {userTier === tier && (
+          <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
+            <Text bold>Your Tier. GET READY!</Text>
+            <Image
+              src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
+              alt="img"
+              width={40}
+              height={40}
+              ml="20px"
+            />
+          </Button>
+        )}
+        {userTier < tier && (
+          <Button
+            width="100%"
+            mt="30px"
+            variant="subtle"
+            style={{ textAlign: 'center' }}
+            as="a"
+            href="https://app.luaswap.org/#/swap"
+            target="__blank"
+          >
+            {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
+          </Button>
+        )}
+      </CardBody>
+    </TierCardContainer>
+  )
+}
 
 const TierDetails: React.FC<{
   currentPoolData: Pool
