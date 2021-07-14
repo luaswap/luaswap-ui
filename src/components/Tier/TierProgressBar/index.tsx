@@ -31,27 +31,12 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
     hasStepZero = true,
     text = null,
   } = props;
+
   const safePercent = getSafePercent(percent);
-  console.log(safePercent)
 
   return (
 
     <div className={styles.RSPBprogressBar} style={{ background: unfilledBackground, width, height }}>
-      {
-        /* {children} */
-        React.Children.map(children, (step: any, index: number) => {
-          const position = stepPositions.length > 0
-            ? stepPositions[index]
-            : getStepPosition(React.Children.count(children), index, hasStepZero);
-            return React.cloneElement(step, {
-              accomplished: position <= safePercent,
-              position,
-              index,
-            });
-
-        })
-      }
-      
       <div
         className={styles.RSPBprogression}
         style={{
@@ -59,6 +44,23 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
           width: `${safePercent}%`,
         }}
       />
+
+      {
+        children
+        // React.Children.map(children, (step: any, index: number) => {
+
+        //   const position = stepPositions.length > 0
+        //     ? stepPositions[index]
+        //     : getStepPosition(React.Children.count(children), index, hasStepZero);
+        //     console.log(`position ${position}`)
+        //   return React.cloneElement(step, {
+        //     accomplished: position <= safePercent,
+        //     position,
+        //     index,
+        //   });
+
+        // })
+      }
     </div>
   )
 }

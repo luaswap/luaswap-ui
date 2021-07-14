@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Transition } from 'react-transition-group';
 import  {transitions}  from './transitions';
 import { getSafePercent } from '../utils';
 import styles from '../styles.module.scss'
 
+type childrenProps = {
+
+    accomplished: boolean,
+    transitionState: string,
+    index: number,
+    position: number,
+  
+}
 
 type TierStepProps = {
-  accomplished: boolean,
-  position: number,
-  index: number,
-
+  accomplished?: boolean,
+  position?: number,
+  index?: number,
+  children: React.FC<childrenProps> 
   transition?: 'scale' | 'rotate' | 'skew',
   transitionDuration?: number,
 };
 
 
-const TierStep : React.FC<TierStepProps> = (props) => {
+const TierStep: React.FC<TierStepProps> = (props) => {
   const {
     accomplished,
     position,
@@ -35,7 +43,6 @@ const TierStep : React.FC<TierStepProps> = (props) => {
     <Transition in={accomplished} timeout={transitionDuration}>
       {(state) => {
         if (transition) {
-     
           style = {
             ...style,
             ...transitions[transition][state],
@@ -44,14 +51,13 @@ const TierStep : React.FC<TierStepProps> = (props) => {
 
         return (
           <div className={styles.RSPBstep} style={style}>
-            {children}
-{/*            
             {children({
               accomplished,
               position: safePosition,
               transitionState: state,
               index,
-            })} */}
+            })
+            }
           </div>
         );
       }}

@@ -21,6 +21,7 @@ import WalletIcon from './components/Icon/WalletIcon'
 import PoolIcon from './components/Icon/PoolIcon'
 import AccountLoading from './components/Loading/AccountLoading'
 import NetworkLoading from './components/Loading/NetworkLoading'
+import Tier from '../../components/Tier'
 
 const initialState: DataApiType = {
   totalInUSD: 0,
@@ -247,6 +248,7 @@ const Home: React.FC = () => {
           Get unique access to opportunities in open finance.
         </Heading>
       </PageHeader>
+      
       <Page>
         {Object.keys(wallets).length > 0 || account ? (
           <>
@@ -261,12 +263,14 @@ const Home: React.FC = () => {
                   : <Skeleton width="120px" height="30px" mt="20px"/>
                 }
               </div>
+              
               <AddressManage data={ wallets }/>
             </Flex>
             {!isLoading ?
               <Text fontWeight="500" mb="18px" mt="50px" color="text" fontSize="20px">Account Overview</Text>
             : <Skeleton width="150px" height="20px" mb="18px" mt="50px"/>
             }
+            <Tier/>
             <Cards>
               {!isLoading ? 
                 <Card onClick={onPresentWallet}>
