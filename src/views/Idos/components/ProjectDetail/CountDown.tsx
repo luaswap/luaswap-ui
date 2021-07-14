@@ -22,7 +22,7 @@ const TimerClose = ({ closedAtSeconds }) => {
 
 const TimerClaim = ({ claimAtSeconds }) => {
   const timeUntilClaim = getTimePeriods(claimAtSeconds)
-  return <Timer suffix="Claim time" timeUntil={timeUntilClaim} />
+  return <Timer suffix="Claim in" timeUntil={timeUntilClaim} />
 }
 
 const CountDown: React.FC<CountDownProps> = ({ openAtSeconds, closedAtSeconds, claimAtSeconds, poolStatus }) => {

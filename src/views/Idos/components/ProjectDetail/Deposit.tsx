@@ -15,7 +15,7 @@ import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { IdoDetail } from 'state/types'
 import { selectUserTier } from 'state/profile'
 import { getERC20Contract } from 'utils/contractHelpers'
-import { getDecimalAmount } from 'utils/formatBalance'
+import { getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
 import ActionButton from './ActionButton'
 import usePoolStatus from '../../hooks/usePoolStatus'
 import useIsApproved from '../../hooks/useIsApproved'
@@ -71,9 +71,7 @@ const Deposit: React.FC<DepositProps> = ({
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
-
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
-
   const maxAmountAllowedLeft = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
   }, [maxAmountPay, userTotalCommitted])
@@ -86,7 +84,6 @@ const Deposit: React.FC<DepositProps> = ({
 
     return true
   }, [value, userTotalCommitted, minAmountPay])
-
   const rate = useMemo(() => {
     return calculateSwapRate(totalAmountIDO, totalAmountPay)
   }, [totalAmountIDO, totalAmountPay])
@@ -133,12 +130,10 @@ const Deposit: React.FC<DepositProps> = ({
     const fetchReceiveIdoAmount = async () => {
       try {
         const { finalPay } = await getClaimProof(projectId, index)
-        const receivedIdoAmount = new BigNumber(finalPay)
-          .multipliedBy(totalAmountIDO)
-          .dividedBy(totalAmountPay)
-          .toString()
-        setIdoReceivedAmount(receivedIdoAmount)
+        const receivedIdoAmount = new BigNumber(finalPay).multipliedBy(totalAmountIDO).dividedBy(totalAmountPay)
+        setIdoReceivedAmount(getFullDisplayBalance(receivedIdoAmount))
       } catch (error) {
+        setIdoReceivedAmount('0')
         console.log(error)
       }
     }
@@ -177,7 +172,7 @@ const Deposit: React.FC<DepositProps> = ({
 
   const onHandleClaim = useCallback(async () => {
     try {
-      setIsRequestContractAction(false)
+      setIsRequestContractAction(true)
       const response = await getClaimProof(projectId, index)
       const { s, v, r, deadline } = response.proof
       const { finalPay } = response
@@ -209,31 +204,41 @@ const Deposit: React.FC<DepositProps> = ({
     return false
   }, [userTotalCommitted])
 
+  const isClaimed = useMemo(() => {
+    if (poolStatus === 'closed' && totalAmountUserSwapped !== '0' && userTotalCommitted === '0') {
+      return true
+    }
+
+    return false
+  }, [poolStatus, totalAmountUserSwapped, userTotalCommitted])
+
   return (
     <FlexWrapper flexDirection="column">
-      <CardWrapper
-        style={{
-          width: '100%',
-        }}
-        mb="24px"
-      >
-        <CardBody
+      {poolStatus !== 'closed' && (
+        <CardWrapper
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: '100%',
           }}
+          mb="24px"
         >
-          <Flex justifyContent="center" alignItems="center" flexDirection="column">
-            <CountDown
-              openAtSeconds={openAtSeconds}
-              closedAtSeconds={closedAtSeconds}
-              poolStatus={poolStatus}
-              claimAtSeconds={claimAtSeconds}
-            />
-          </Flex>
-        </CardBody>
-      </CardWrapper>
+          <CardBody
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Flex justifyContent="center" alignItems="center" flexDirection="column">
+              <CountDown
+                openAtSeconds={openAtSeconds}
+                closedAtSeconds={closedAtSeconds}
+                poolStatus={poolStatus}
+                claimAtSeconds={claimAtSeconds}
+              />
+            </Flex>
+          </CardBody>
+        </CardWrapper>
+      )}
       <CardWrapper
         style={{
           width: '100%',
@@ -310,13 +315,12 @@ const Deposit: React.FC<DepositProps> = ({
                 onClaim={onHandleClaim}
                 disabled={!isClaimable}
                 symbol={payToken.symbol}
+                isClaimed={isClaimed}
                 paytokenAddress={payToken.address}
                 maxAmountAllowedLeft={maxAmountAllowedLeft}
                 depositAmount={value}
               />
-              {poolStatus === 'closed' && totalAmountUserSwapped !== '0' && userTotalCommitted === '0' && (
-                <Mesage variant="warning">You have claimed all your reward</Mesage>
-              )}
+              {isClaimed && <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>}
             </>
           ) : (
             <Mesage variant="warning">Switch to correct network to see pool&apos;s information</Mesage>

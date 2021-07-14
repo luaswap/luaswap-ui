@@ -3,13 +3,22 @@ import { IdoDetailInfo } from 'views/Idos/types'
 
 // eslint-disable-next-line import/prefer-default-export
 export const formatPoolDetail = (allTierPool: IdoDetailInfo[]): IdoDetailInfo => {
+  const mappedIndex = {}
+
   return allTierPool.reduce(
     (accumulate, currentItem) => {
+      if (!mappedIndex[currentItem.index]) {
+        mappedIndex[currentItem.index] = true
+        return {
+          ...accumulate,
+          totalCommittedAmount: accumulate.totalCommittedAmount + currentItem.totalCommittedAmount,
+          totalAmountPay: accumulate.totalAmountPay + currentItem.totalAmountPay,
+          totalAmountIDO: accumulate.totalAmountIDO + currentItem.totalAmountIDO,
+          swappedAmountIDO: accumulate.swappedAmountIDO + currentItem.swappedAmountIDO,
+        }
+      }
       return {
         ...accumulate,
-        totalCommittedAmount: accumulate.totalCommittedAmount + currentItem.totalCommittedAmount,
-        totalAmountPay: accumulate.totalAmountPay + currentItem.totalAmountPay,
-        totalAmountIDO: accumulate.totalAmountIDO + currentItem.totalAmountIDO,
       }
     },
     {
@@ -17,6 +26,7 @@ export const formatPoolDetail = (allTierPool: IdoDetailInfo[]): IdoDetailInfo =>
       totalCommittedAmount: 0,
       totalAmountPay: 0,
       totalAmountIDO: 0,
+      swappedAmountIDO: 0,
     },
   )
 }
@@ -29,6 +39,7 @@ export const formatIdoContract = (allTierPool: IdoDetail[]): IdoDetail => {
         totalCommittedAmount: accumulate.totalCommittedAmount + currentItem.totalCommittedAmount,
         totalAmountPay: accumulate.totalAmountPay + currentItem.totalAmountPay,
         totalAmountIDO: accumulate.totalAmountIDO + currentItem.totalAmountIDO,
+        swappedAmountIDO: accumulate.swappedAmountIDO + currentItem.swappedAmountIDO,
       }
     },
     {
@@ -36,6 +47,7 @@ export const formatIdoContract = (allTierPool: IdoDetail[]): IdoDetail => {
       totalCommittedAmount: 0,
       totalAmountPay: 0,
       totalAmountIDO: 0,
+      swappedAmountIDO: 0,
     },
   )
 }

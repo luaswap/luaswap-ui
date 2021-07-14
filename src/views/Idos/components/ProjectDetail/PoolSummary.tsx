@@ -72,7 +72,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   isAvailalbeOnCurrentNetwork,
 }) => {
   const [poolStatus] = usePoolStatus(currentPoolData)
-  const { img, name, description, totalAmountIDO, payToken } = useTotalDataFromAllPools(currentPoolData)
+  const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
 
   const { totalCommittedAmount, totalAmountPay, swappedAmountPay } = contractData
   const totalCommitedPercentage = useMemo(() => {
@@ -84,12 +84,12 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   }, [totalCommittedAmount, totalAmountPay])
 
   const totalSwapAmountPercentage = useMemo(() => {
-    if (swappedAmountPay && totalAmountPay) {
-      return calculateSwappedAmountPercentage(swappedAmountPay, totalAmountPay)
+    if (swappedAmountPay && totalAmountIDO) {
+      return calculateSwappedAmountPercentage(swappedAmountPay, totalAmountIDO)
     }
 
     return 0
-  }, [swappedAmountPay, totalAmountPay])
+  }, [swappedAmountPay, totalAmountIDO])
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open') {
       return true
@@ -171,8 +171,15 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
         </Flex>
         <Flex justifyContent="space-between" mt="10px">
           <Text>
-            {isPoolInProgress || !isPoolOpen ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay}{' '}
-            {payToken?.symbol}
+            {isPoolInProgress || !isPoolOpen ? (
+              <>
+                {totalCommittedAmount} / {totalAmountPay} {payToken?.symbol}
+              </>
+            ) : (
+              <>
+                {swappedAmountPay} / {totalAmountIDO} {idoToken?.symbol}
+              </>
+            )}
           </Text>
           <Text color="secondary">
             {isPoolInProgress || !isPoolOpen

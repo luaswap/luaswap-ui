@@ -25,10 +25,10 @@ export const calculateCommittedAmountPercentage = (
 
 export const calculateSwappedAmountPercentage = (
   swappedAmountPay: string | number,
-  totalAmountPay: string | number,
+  totalAmountIDO: string | number,
 ): number => {
-  if (swappedAmountPay && totalAmountPay) {
-    return new BigNumber(swappedAmountPay).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
+  if (swappedAmountPay && totalAmountIDO) {
+    return new BigNumber(swappedAmountPay).dividedBy(new BigNumber(totalAmountIDO)).multipliedBy(100).toNumber()
   }
 
   return 0

@@ -21,6 +21,7 @@ import useDeepMemo from 'hooks/useDeepMemo'
 import { formatPoolDetail } from 'utils/formatPoolData'
 import { formatCardStatus, formatCardColor } from 'utils/idoHelpers'
 import { Pool, FormatPool } from '../../types'
+import usePoolStatus from '../../hooks/usePoolStatus'
 
 const PoolInfoBlock = styled.div`
   display: flex;
@@ -61,10 +62,10 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
+  const [poolStatus] = usePoolStatus(pool)
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
   }, [history, path, pool.id])
-
   const {
     img,
     name,
@@ -72,6 +73,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
     totalCommittedAmount,
     totalAmountPay,
     totalAmountIDO,
+    swappedAmountIDO,
     status,
     payToken,
     minAmountPay,
@@ -90,13 +92,18 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
       ...totalPoolData,
     }
   }, [pool, chainId])
+
   const progressPercentage = useMemo(() => {
+    if (poolStatus === 'closed') {
+      return new BigNumber(swappedAmountIDO).dividedBy(new BigNumber(totalAmountIDO)).multipliedBy(100).toNumber()
+    }
+
     if (totalCommittedAmount && totalAmountPay) {
       return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
     }
 
     return 0
-  }, [totalCommittedAmount, totalAmountPay])
+  }, [totalCommittedAmount, totalAmountPay, poolStatus, swappedAmountIDO, totalAmountIDO])
 
   return (
     <Card

@@ -22,6 +22,7 @@ interface ActionButtonProps {
   paytokenAddress: string
   maxAmountAllowedLeft: string
   depositAmount: string
+  isClaimed: boolean
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -38,6 +39,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   isIdoAvailalbeOnChain,
   maxAmountAllowedLeft,
   depositAmount,
+  isClaimed,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const isNativeToken = paytokenAddress === ZERO_ADDRESS
@@ -45,7 +47,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     return <UnlockButton />
   }
 
-  if (!isIdoAvailalbeOnChain) {
+  if (!isIdoAvailalbeOnChain || isClaimed) {
     return null
   }
 
