@@ -29,10 +29,10 @@ export const stake = async (masterChefContract, pid, amount, account, chainId?) 
     })
 }
 
-export const depositIdo = async (luaIdoContract, account, amount, idoIndex, isNativeToken) => {
+export const depositIdo = async (luaIdoContract, account, amount, idoIndex, isNativeToken, proofS) => {
   // If pay token is native token, we will send amount or else we wont'
   return luaIdoContract.methods
-    .commit(idoIndex, amount)
+    .commit(idoIndex, amount, proofS)
     .send({
       from: account,
       ...(isNativeToken && { value: amount }),
@@ -42,10 +42,10 @@ export const depositIdo = async (luaIdoContract, account, amount, idoIndex, isNa
     })
 }
 
-export const claimRewardIdo = async (luaIdoContract, account, amount, idoIndex) => {
-  const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
+export const claimRewardIdo = async (luaIdoContract, account, amount, idoIndex, proofS) => {
+  // const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
   return luaIdoContract.methods
-    .userClaim(idoIndex, account, amount)
+    .userClaim(idoIndex, account, amount, proofS)
     .send({
       from: account,
     })

@@ -60,10 +60,10 @@ const ProjectDetail = () => {
   const tierDataOfUser = useDeepMemo(() => {
     const { index = [] } = currentPoolData
     // TODO: Should based on current chain ID and user's tier
-    return getIdoDataBasedOnChainIdAndTier(index, chainId, 1)
+    return getIdoDataBasedOnChainIdAndTier(index, chainId, userTier)
   }, [currentPoolData, chainId, userTier])
 
-  const [idoDetailFromContract, totalUserCommittedFromContract] = useDataFromIdoContract(
+  const [idoDetailFromContract, totalUserCommittedFromContract, totalAmountUserSwapped] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
     tierDataOfUser.index,
     currentPoolData.index,
@@ -105,6 +105,7 @@ const ProjectDetail = () => {
               <Deposit
                 currentPoolData={currentPoolData}
                 tierDataOfUser={tierDataOfUser}
+                totalAmountUserSwapped={totalAmountUserSwapped}
                 contractData={idoDetailFromContract}
                 userTotalCommitted={totalUserCommittedFromContract}
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}

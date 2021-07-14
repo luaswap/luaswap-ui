@@ -10,8 +10,8 @@ const useDepositIdo = (contractAddress: string, idoIndex: number, payTokenAddres
   const isNativeToken = payTokenAddress === ZERO_ADDRESS
 
   const handleDeposit = useCallback(
-    async (amount: string) => {
-      const txHash = await depositIdo(luaIdoContract, account, amount, idoIndex, isNativeToken)
+    async (amount: string, proofS) => {
+      const txHash = await depositIdo(luaIdoContract, account, amount, idoIndex, isNativeToken, proofS)
       console.info(txHash)
     },
     [account, luaIdoContract, idoIndex, isNativeToken],

@@ -24,6 +24,7 @@ export interface IdoDetailInfo {
   swappedAmountPay: number
   totalCommittedAmount: number
   index: number
+  projectId: string
   chainId: string
 }
 

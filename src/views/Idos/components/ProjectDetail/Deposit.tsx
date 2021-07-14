@@ -1,7 +1,8 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { Card, CardBody, Flex, Text, Mesage } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
+import axios, { AxiosResponse } from 'axios'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
@@ -41,6 +42,7 @@ interface DepositProps {
   tierDataOfUser: IdoDetailInfo
   contractData: IdoDetail
   userTotalCommitted: string
+  totalAmountUserSwapped: string
   isAvailalbeOnCurrentNetwork: boolean
 }
 
@@ -49,8 +51,10 @@ const Deposit: React.FC<DepositProps> = ({
   tierDataOfUser,
   userTotalCommitted,
   isAvailalbeOnCurrentNetwork,
+  totalAmountUserSwapped,
 }) => {
   const [value, setValue] = useState('0')
+  const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
   const [isRequestContractAction, setIsRequestContractAction] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
@@ -64,9 +68,8 @@ const Deposit: React.FC<DepositProps> = ({
   )
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
-
   // Data we receive from API
-  const { maxAmountPay, totalCommittedAmount, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay } =
+  const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
 
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
@@ -116,32 +119,77 @@ const Deposit: React.FC<DepositProps> = ({
     }
   }, [onApprove, fetchAllowanceData])
 
+  const getClaimProof = useCallback(
+    async (poolId, poolIndex) => {
+      const response = await axios.get(
+        `https://api.luaswap.org/api/ido/pools/claim-info/${poolId}/${cid}/${poolIndex}/${userTier}/${account}`,
+      )
+      return response.data
+    },
+    [account, cid, userTier],
+  )
+
+  useEffect(() => {
+    const fetchReceiveIdoAmount = async () => {
+      try {
+        const { finalPay } = await getClaimProof(projectId, index)
+        const receivedIdoAmount = new BigNumber(finalPay)
+          .multipliedBy(totalAmountIDO)
+          .dividedBy(totalAmountPay)
+          .toString()
+        setIdoReceivedAmount(receivedIdoAmount)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    // We only fetch the IDO token that user received when pool status is
+    if (poolStatus === 'closed') {
+      fetchReceiveIdoAmount()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolStatus, getClaimProof, projectId, index])
+
+  const getCommitProof = useCallback(
+    async (poolId, poolIndex, amount) => {
+      const response = await axios.get(
+        `https://api.luaswap.org/api/ido/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${userTier}/${account}/${amount}`,
+      )
+      return response.data
+    },
+    [account, cid, userTier],
+  )
+
   const onHandleCommit = useCallback(async () => {
     try {
       setIsRequestContractAction(true)
       const commitedAmmount = getDecimalAmount(new BigNumber(value), payToken.decimals).toString()
-      await onDeposit(commitedAmmount)
+      const response = await getCommitProof(projectId, index, commitedAmmount)
+      const { s, v, r, deadline } = response.proof
+      const proofS = [v, r, s, deadline]
+      await onDeposit(commitedAmmount, proofS)
       toastSuccess('Deposit Successfully')
       setIsRequestContractAction(false)
     } catch (error) {
       setIsRequestContractAction(false)
       toastError('Fail to deposit')
     }
-  }, [onDeposit, value, toastError, toastSuccess, payToken.decimals])
+  }, [onDeposit, value, toastError, toastSuccess, payToken.decimals, getCommitProof, index, projectId])
 
   const onHandleClaim = useCallback(async () => {
     try {
       setIsRequestContractAction(false)
-      // TODO: In here we assume that user claim equal amount of token that they commited
-      const claimableAmount = getDecimalAmount(new BigNumber(totalCommittedAmount, payToken.decimals)).toString()
-      await onClaimReward(claimableAmount)
+      const response = await getClaimProof(projectId, index)
+      const { s, v, r, deadline } = response.proof
+      const { finalPay } = response
+      const proofS = [v, r, s, deadline]
+      await onClaimReward(finalPay, proofS)
       setIsRequestContractAction(false)
       toastSuccess('Claim reward Successfully')
     } catch (error) {
       toastError('Fail to claim reward')
       setIsRequestContractAction(false)
     }
-  }, [onClaimReward, toastError, toastSuccess, totalCommittedAmount, payToken.decimals])
+  }, [onClaimReward, toastError, toastSuccess, projectId, index, getClaimProof])
 
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open') {
@@ -152,14 +200,14 @@ const Deposit: React.FC<DepositProps> = ({
   }, [poolStatus])
 
   const isClaimable = useMemo(() => {
-    const comparedNum = new BigNumber(totalCommittedAmount).comparedTo(0)
+    const comparedNum = new BigNumber(userTotalCommitted).comparedTo(0)
 
     if (comparedNum === 1) {
       return true
     }
 
     return false
-  }, [totalCommittedAmount])
+  }, [userTotalCommitted])
 
   return (
     <FlexWrapper flexDirection="column">
@@ -219,7 +267,7 @@ const Deposit: React.FC<DepositProps> = ({
                   1 {payToken.symbol} / {rate} {idoToken.symbol}
                 </Text>
               </Flex>
-              <Flex justifyContent="space-between" mb="14px">
+              <Flex justifyContent="space-between">
                 <Text>Your committed</Text>
                 <Text bold>
                   {userTotalCommitted} {payToken.symbol}
@@ -229,7 +277,9 @@ const Deposit: React.FC<DepositProps> = ({
                 (poolStatus === 'closed' && (
                   <Flex justifyContent="space-between" mb="15px">
                     <Text>You will receive</Text>
-                    <Text bold>1 {idoToken.symbol}</Text>
+                    <Text bold>
+                      {idoReceivedAmount} {idoToken.symbol}
+                    </Text>
                   </Flex>
                 ))}
               {isIdoAvailalbeOnChain && (
@@ -264,6 +314,9 @@ const Deposit: React.FC<DepositProps> = ({
                 maxAmountAllowedLeft={maxAmountAllowedLeft}
                 depositAmount={value}
               />
+              {poolStatus === 'closed' && totalAmountUserSwapped !== '0' && userTotalCommitted === '0' && (
+                <Mesage variant="warning">You have claimed all your reward</Mesage>
+              )}
             </>
           ) : (
             <Mesage variant="warning">Switch to correct network to see pool&apos;s information</Mesage>

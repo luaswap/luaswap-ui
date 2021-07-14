@@ -153,35 +153,34 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <Text textAlign="right">Public</Text>
           </Flex>
         </Flex>
-        {isAvailalbeOnCurrentNetwork && (
-          <>
-            <Flex flexDirection="column">
-              {isPoolInProgress || !isPoolOpen ? (
-                <Text mb="10px" color="primary">
-                  Commited Progress
-                </Text>
-              ) : (
-                <Text mb="10px" color="primary">
-                  Swap Progress
-                </Text>
-              )}
-              <Progress
-                variant="round"
-                primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
-                secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
-              />
-            </Flex>
-            <Flex justifyContent="space-between" mt="10px">
-              <Text>
-                {isPoolInProgress || !isPoolOpen ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay}{' '}
-                {payToken.symbol}
-              </Text>
-              <Text color="secondary">
-                {isPoolInProgress || !isPoolOpen ? totalCommitedPercentage : totalSwapAmountPercentage}%
-              </Text>
-            </Flex>
-          </>
-        )}
+        <Flex flexDirection="column">
+          {isPoolInProgress || !isPoolOpen ? (
+            <Text mb="10px" color="primary">
+              Commited Progress
+            </Text>
+          ) : (
+            <Text mb="10px" color="primary">
+              Swap Progress
+            </Text>
+          )}
+          <Progress
+            variant="round"
+            primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
+            secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
+          />
+        </Flex>
+        <Flex justifyContent="space-between" mt="10px">
+          <Text>
+            {isPoolInProgress || !isPoolOpen ? totalCommittedAmount : swappedAmountPay}/{totalAmountPay}{' '}
+            {payToken?.symbol}
+          </Text>
+          <Text color="secondary">
+            {isPoolInProgress || !isPoolOpen
+              ? totalCommitedPercentage.toFixed(2)
+              : totalSwapAmountPercentage.toFixed(2)}
+            %
+          </Text>
+        </Flex>
       </CardBody>
     </CardWrapper>
   )

@@ -38,16 +38,18 @@ const useDataFromIdoContract = (
   contractAddress: string,
   idoIndex: number,
   idoIndexes: Record<string, IdoDetailInfo[]>,
-): [idoData: IdoDetail, commitedAmount: string] => {
+): [idoData: IdoDetail, commitedAmount: string, totalAmountUserSwapped: string] => {
   const { account, chainId } = useWeb3React()
   // Current Lua Ido contract based on log in chainid
   const luaIdoContract = useLuaIdoContract(contractAddress)
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
   const [totalUserCommitted, setTotalUserCommitted] = useState<string>('0')
+  const [totalAmountUserSwapped, setTotalAmountUserSwapped] = useState<string>('0')
   const { currentBlock } = useBlock()
   useEffect(() => {
     const fetchData = async () => {
       const idosOfEachChainId = {}
+      const idoIndexMap = {}
       try {
         /**
          * We loop through every index and get all idos info in each index
@@ -58,12 +60,15 @@ const useDataFromIdoContract = (
         Object.keys(idoIndexes).forEach((idoChainId) => {
           const idosOfCurrentChainId = []
           idoIndexes[idoChainId].forEach((ido) => {
-            // We will get new contract based on addressIdoContract received from API
-            const luaContractAddress = ido.addressIdoContract
-            const web3 = getWeb3BasedOnChainId(Number(idoChainId))
-            const currentLuaIdoContract = getLuaIdoContract(web3, luaContractAddress)
-            const contractIdoDetail = currentLuaIdoContract.methods.IDOs(ido.index).call
-            idosOfCurrentChainId.push(contractIdoDetail)
+            if (!idoIndexMap[ido.index]) {
+              // We will get new contract based on addressIdoContract received from API
+              const luaContractAddress = ido.addressIdoContract
+              const web3 = getWeb3BasedOnChainId(Number(idoChainId))
+              const currentLuaIdoContract = getLuaIdoContract(web3, luaContractAddress)
+              const contractIdoDetail = currentLuaIdoContract.methods.IDOs(ido.index).call
+              idosOfCurrentChainId.push(contractIdoDetail)
+              idoIndexMap[ido.index] = true
+            }
           })
           idosOfEachChainId[idoChainId] = idosOfCurrentChainId
         })
@@ -99,19 +104,19 @@ const useDataFromIdoContract = (
          * Get total committed amount of current user
          */
         const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, idoIndex).call()
+        const swappedIdoAmount = await luaIdoContract.methods.userSwappedAmountIDO(account, idoIndex).call()
         setTotalUserCommitted(getFullDisplayBalance(commitedAmount))
+        setTotalAmountUserSwapped(getFullDisplayBalance(swappedIdoAmount))
       } catch (error) {
         console.log(error, 'error to fetch data from contract')
       }
     }
 
-    if (account) {
-      fetchData()
-    }
+    fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentBlock, chainId])
 
-  return [idoDetail, totalUserCommitted]
+  return [idoDetail, totalUserCommitted, totalAmountUserSwapped]
 }
 
 export default useDataFromIdoContract

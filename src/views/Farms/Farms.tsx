@@ -16,7 +16,7 @@ import { NUMBER_BLOCKS_PER_YEAR } from 'config'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { IsTomoChain } from 'utils/wallet'
 import { latinise } from 'utils/latinise'
-import { fetchFarmUserDataAsync } from 'state/actions'
+import { fetchFarms, fetchFarmUserDataAsync, setDefaultFarmData } from 'state/actions'
 import PageHeader from 'components/PageHeader'
 import FarmCard from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
@@ -109,8 +109,9 @@ const Farms: React.FC = () => {
   const dispatch = useAppDispatch()
   const ID = chainId === 88 ? 88 : 1
   const history = useHistory()
-  console.log(viewMode)
   useEffect(() => {
+    dispatch(setDefaultFarmData(chainId))
+    dispatch(fetchFarms(chainId, web3))
     if (account) {
       dispatch(fetchFarmUserDataAsync(account, chainId, web3))
     }
