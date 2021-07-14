@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Flex, PocketWatchIcon, Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 
@@ -18,7 +18,7 @@ const Timer: React.FC<Props> = ({ suffix, timeUntil }) => {
   const { t } = useTranslation()
 
   return (
-    <Flex justifyContent="center" mb="16px">
+    <Flex justifyContent="center">
       <>
         <PocketWatchIcon width="48px" mr="16px" />
         <Flex alignItems="center">

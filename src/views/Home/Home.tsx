@@ -22,6 +22,7 @@ import WalletIcon from './components/Icon/WalletIcon'
 import PoolIcon from './components/Icon/PoolIcon'
 import AccountLoading from './components/Loading/AccountLoading'
 import NetworkLoading from './components/Loading/NetworkLoading'
+import Tier from '../../components/Tier'
 
 const initialState: DataApiType = {
   totalInUSD: 0,
@@ -301,6 +302,7 @@ const Home: React.FC = () => {
           Get unique access to opportunities in open finance.
         </Heading>
       </PageHeader>
+      
       <Page>
         {Object.keys(wallets).length > 0 || account ? (
           <>

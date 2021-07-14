@@ -1,8 +1,10 @@
 import React from 'react'
 import { Text } from 'common-uikitstrungdao'
 import styled from 'styled-components'
+import { OpenPools } from 'state/types'
 import PoolDetail from './PoolDetail'
 import IdoLayout from './IdoLayout'
+import PageLoading from './PageLoading'
 import { Pool } from '../types'
 
 const Row = styled.div`
@@ -11,30 +13,37 @@ const Row = styled.div`
 `
 
 interface CurrentIdoProps {
-  openPools: Pool[]
+  openPools: OpenPools
+  isLoadingState: boolean
 }
 
-const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools }) => {
-  if (openPools.length === 0) {
-    return null
-  }
-
+const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upcomingPools }, isLoadingState }) => {
   return (
     <IdoLayout>
       <Text fontSize="20px" textAlign="center">
         Opening Pools
       </Text>
       <Row>
-        {openPools.map((pool) => {
-          return <PoolDetail pool={pool} />
-        })}
+        {isLoadingState ? (
+          <PageLoading />
+        ) : (
+          openingPools.map((pool) => {
+            return <PoolDetail pool={pool} />
+          })
+        )}
       </Row>
-      {/* <Text fontSize="20px" textAlign="center">
+      <Text fontSize="20px" textAlign="center">
         Upcoming Pools
       </Text>
       <Row>
-        <PoolDetail status="Opening" />
-      </Row> */}
+        {isLoadingState ? (
+          <PageLoading />
+        ) : (
+          upcomingPools.map((pool) => {
+            return <PoolDetail pool={pool} />
+          })
+        )}
+      </Row>
     </IdoLayout>
   )
 }

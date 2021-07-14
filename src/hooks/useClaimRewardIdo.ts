@@ -3,15 +3,14 @@ import { useWeb3React } from '@web3-react/core'
 import { useLuaIdoContract } from 'hooks/useContract'
 import { claimRewardIdo } from 'utils/callHelpers'
 
-const useClaimRewardIdo = () => {
-  const { account, chainId } = useWeb3React()
-  const luaIdoContract = useLuaIdoContract(chainId)
-
+const useClaimRewardIdo = (contractAddress: string, idoIndex: number) => {
+  const { account } = useWeb3React()
+  const luaIdoContract = useLuaIdoContract(contractAddress)
   const handleClaimReward = useCallback(
-    async (amount: string) => {
-      const txHash = await claimRewardIdo(luaIdoContract, account, amount)
+    async (amount: string, proofS) => {
+      const txHash = await claimRewardIdo(luaIdoContract, account, amount, idoIndex, proofS)
     },
-    [account, luaIdoContract],
+    [account, luaIdoContract, idoIndex],
   )
 
   return { onClaimReward: handleClaimReward }

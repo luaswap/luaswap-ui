@@ -1,19 +1,34 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import Web3 from 'web3'
 import axios from 'axios'
-import { IdoDetail, IdoState } from 'state/types'
+import { IdoDetail, IdoState, OpenPools } from 'state/types'
 import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
-import { fetchIdosInformation } from './fetchIdosData'
+// import { fetchIdosInformation } from './fetchIdosData'
+
+const defaultCurrentPool = {
+  id: null,
+  img: null,
+  name: null,
+  description: null,
+  openAt: null,
+  closeAt: null,
+  claimAt: null,
+  status: null,
+  projectDetail: null,
+  links: [],
+}
 
 const initialState: IdoState = {
   isLoading: true,
   idos: [],
   openPools: {
     isLoading: true,
-    data: [],
+    data: {
+      openingPools: [],
+      upcomingPools: [],
+    },
   },
   closedPools: {
     isLoading: true,
@@ -21,18 +36,7 @@ const initialState: IdoState = {
   },
   currentPool: {
     isLoading: true,
-    data: {
-      id: null,
-      img: null,
-      name: null,
-      description: null,
-      openAt: null,
-      closeAt: null,
-      claimAt: null,
-      status: null,
-      projectDetail: null,
-      links: [],
-    },
+    data: defaultCurrentPool,
   },
 }
 
@@ -44,13 +48,19 @@ export const idosSlice = createSlice({
       state.idos = action.payload
     },
     setOpenPools: (state, action: PayloadAction<Pool[]>) => {
-      state.openPools.data = action.payload
+      const upcomingPools = action.payload.filter((pool) => pool.status === 1)
+      const openingPools = action.payload.filter((pool) => pool.status === 2)
+      state.openPools.data.openingPools = openingPools
+      state.openPools.data.upcomingPools = upcomingPools
     },
     setClosedPools: (state, action: PayloadAction<Pool[]>) => {
       state.closedPools.data = action.payload
     },
     setCurrentPool: (state, action: PayloadAction<Pool>) => {
       state.currentPool.data = action.payload
+    },
+    setDefaultCurrentPool: (state) => {
+      state.currentPool.data = defaultCurrentPool
     },
     fetchIdoStats: (state) => {
       state.isLoading = true
@@ -93,12 +103,13 @@ export const {
   fetchClosedPoolsEnds,
   fetchClosedPoolsStarts,
   setClosedPools,
+  setDefaultCurrentPool,
 } = idosSlice.actions
 
-export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
-  const idosInformation = await fetchIdosInformation(chainId, web3)
-  dispatch(setIdosData(idosInformation))
-}
+// export const fetchAllIdoData = (chainId: number, web3: Web3) => async (dispatch, getState) => {
+//   const idosInformation = await fetchIdosInformation(chainId, web3)
+//   dispatch(setIdosData(idosInformation))
+// }
 
 export default idosSlice.reducer
 
@@ -138,7 +149,7 @@ export const fetchPool = (id: string) => async (dispatch, getState) => {
 
 // Selector
 export const selectIdoState = (state: RootState): IdoState => state.idos
-export const selectOpenPools = (state: RootState): Pool[] => selectIdoState(state).openPools.data
+export const selectOpenPools = (state: RootState): OpenPools => selectIdoState(state).openPools.data
 export const selectClosedPools = (state: RootState): Pool[] => selectIdoState(state).closedPools.data
 export const selectLoadingStatus = (state: RootState): boolean => selectIdoState(state).isLoading
 export const selectLoadingOpenPools = (state: RootState): boolean => selectIdoState(state).openPools.isLoading

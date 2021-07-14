@@ -18,20 +18,26 @@ interface ProjectInfoProps {
 
 const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
   const { projectDetail, links } = currentPoolData
-
   return (
     <StyledWrapper flexDirection="column">
       <Flex>
         {Array.isArray(links) &&
           links.map((item) => {
             return (
-              <Button mr="10px" variant="tertiary" as="a" href={item.link} target="__blank">
+              <Button mr="10px" variant="tertiary" as="a" href={item.link} target="__blank" key={item.label}>
                 {item.label}
               </Button>
             )
           })}
       </Flex>
-      <Text mt="20px">{projectDetail}</Text>
+      <Text
+        mt="20px"
+        style={{
+          whiteSpace: 'pre-line',
+        }}
+      >
+        {projectDetail}
+      </Text>
     </StyledWrapper>
   )
 }

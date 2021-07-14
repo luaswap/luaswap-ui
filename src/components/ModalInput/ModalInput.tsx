@@ -5,6 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 
 interface ModalInputProps {
   max: string
+  min?: string
   symbol: string
   onSelectMax?: () => void
   onChange: (e: React.FormEvent<HTMLInputElement>) => void
@@ -12,6 +13,8 @@ interface ModalInputProps {
   value: string
   addLiquidityUrl?: string
   inputTitle?: string
+  secondaryTitle?: string
+  showWarning?: boolean
 }
 
 const getBoxShadow = ({ isWarning = false, theme }) => {
@@ -58,12 +61,15 @@ const StyledErrorMessage = styled(Text)`
 
 const ModalInput: React.FC<ModalInputProps> = ({
   max,
+  min,
   symbol,
   onChange,
   onSelectMax,
   value,
   addLiquidityUrl,
   inputTitle,
+  secondaryTitle = 'Balance',
+  showWarning = true,
 }) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
@@ -80,18 +86,19 @@ const ModalInput: React.FC<ModalInputProps> = ({
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      <StyledTokenInput isWarning={isBalanceZero}>
+    <div style={{ position: 'relative', width: '100%' }}>
+      <StyledTokenInput isWarning={isBalanceZero && showWarning}>
         <Flex justifyContent="space-between" pl="16px">
           <Text fontSize="14px">{inputTitle}</Text>
-          <Text fontSize="14px">{t('Balance: %balance%', { balance: displayBalance(max) })}</Text>
+          <Text fontSize="14px">{`${secondaryTitle}: ${displayBalance(max)}`}</Text>
         </Flex>
         <Flex alignItems="flex-end" justifyContent="space-around">
           <StyledInput
             pattern="^[0-9]*[.,]?[0-9]*$"
             inputMode="decimal"
             step="any"
-            min="0"
+            min={min}
+            max={max}
             onChange={onChange}
             placeholder="0"
             value={value}
@@ -102,7 +109,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
           <Text fontSize="16px">{symbol}</Text>
         </Flex>
       </StyledTokenInput>
-      {isBalanceZero && (
+      {isBalanceZero && addLiquidityUrl && (
         <StyledErrorMessage fontSize="14px" color="failure">
           {t('No tokens to stake')}:{' '}
           <Link fontSize="14px" bold={false} href={addLiquidityUrl} external color="failure">
