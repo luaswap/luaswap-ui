@@ -66,7 +66,7 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
     switch (type) {
       case 'balance':
         return (
-          parseFloat(row.usd) > 0 && (
+          parseFloat(row.amountUsd) > 0 && (
             <tr key={row.amount}>
               <StyleTd>
                 <CellInner>
@@ -83,7 +83,7 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
               </StyleTd>
               {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
               <StyleTd>
-                <Text> {parseFloat(row.usd).toFixed(2)}</Text>
+                <Text> {row.usd}</Text>
               </StyleTd>
             </tr>
           )
@@ -150,6 +150,29 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
             </StyleTd>
             <StyleTd>
               <Text> {parseFloat(row.pendingReward).toFixed(2)}</Text>
+            </StyleTd>
+          </tr>
+        )
+      case 'staking':
+        return (
+          <tr key={row.stakeAmount}>
+            <StyleTd>
+              <Text>{`${row.masterNodeName.substring(0, 6)}...${row.masterNodeName.substring(
+                row.masterNodeName.length - 4,
+                row.masterNodeName.length,
+              )}`}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text>{`${row.masterNodeAddress.substring(0, 6)}...${row.masterNodeAddress.substring(
+                row.masterNodeAddress.length - 4,
+                row.masterNodeAddress.length,
+              )}`}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text>{parseFloat(row.amount).toFixed(2)} </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.usd).toFixed(2)}</Text>
             </StyleTd>
           </tr>
         )

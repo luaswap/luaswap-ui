@@ -805,5 +805,7 @@
   "Wallet": "Wallet",
   "Liquidity Pool": "Liquidity Pool",
   "LuaSafe": "LuaSafe",
+  "LuaFarm": "LuaFarm",
+  "Masternode": "Masternode",
   "No data": "No data"
 }
