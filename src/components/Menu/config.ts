@@ -17,6 +17,16 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     icon: 'IfoIcon',
     href: '/idos',
   },
+  {
+    label: t('Exchange'),
+    icon: 'TradeIcon',
+    href: 'https://app.luaswap.org/#/swap',
+  },
+  {
+    label: t('Liquidity'),
+    icon: 'PredictionsIcon',
+    href: 'https://app.luaswap.org/#/pool',
+  },
 ]
 
 export default config
