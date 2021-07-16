@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Heading } from 'common-uikitstrungdao'
+import { Flex, Heading, Mesage } from 'common-uikitstrungdao'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/layout/Page'
 import PageLoader from 'components/PageLoader'
-import { mappingIdoResponse } from 'state/ido/fetchIdosData'
-import { useLuaIdoContract } from 'hooks/useContract'
-import useWeb3 from 'hooks/useWeb3'
-import { IdoDetail } from 'state/types'
-import { fetchPool, selectCurrentPool, selectLoadingCurrentPool } from 'state/ido'
+import useDeepMemo from 'hooks/useDeepMemo'
+import { fetchPool, selectCurrentPool, selectLoadingCurrentPool, setDefaultCurrentPool } from 'state/ido'
+import { selectUserTier } from 'state/profile'
 import { useAppDispatch } from 'state'
-import { getFullDisplayBalance } from 'utils/formatBalance'
-import { useBlock } from 'state/hooks'
 
 import Steps from './Steps'
 import Deposit from './Deposit'
@@ -21,6 +17,8 @@ import PoolSummary from './PoolSummary'
 import ProjectInfo from './ProjectInfo'
 import PoolInformation from './PoolInformation'
 import TierDetails from './TierDetails'
+import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
+import { getIdoDataBasedOnChainIdAndTier, getIdoSupportedNetwork } from '../helper'
 
 const Row = styled.div`
   max-width: 1200px;
@@ -34,75 +32,84 @@ const StyledFlex = styled(Flex)`
     flex-wrap: nowrap;
   }
 `
-
-const defaultIdoDetail = {
-  claimAt: null,
-  closeAt: null,
-  creator: null,
-  idoToken: null,
-  maxAmountPay: null,
-  minAmountPay: null,
-  openAt: null,
-  payToken: null,
-  swappedAmountIDO: null,
-  swappedAmountPay: null,
-  totalAmountIDO: null,
-  totalAmountPay: null,
-  totalCommittedAmount: null,
-}
-
 interface ParamsType {
   id: string
 }
 
 const ProjectDetail = () => {
   const { chainId, account } = useWeb3React()
-  const web3 = useWeb3()
-  const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
   const [loading, setLoading] = useState(true)
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
-  const [totalCommited, setTotalCommited] = useState<string>('0')
-  const luaIdoContract = useLuaIdoContract(chainId)
   const currentPoolData = useSelector(selectCurrentPool)
+  const userTier = useSelector(selectUserTier)
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
-  const { currentBlock } = useBlock()
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const contractIdoDetail = await luaIdoContract.methods.IDOs(0).call()
-        const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
-        setIdoDetail(mappingIdoResponse(contractIdoDetail))
-        setTotalCommited(getFullDisplayBalance(commitedAmount))
-        setLoading(false)
-      } catch (error) {
-        setLoading(false)
-      }
-    }
-
-    if (account) {
-      fetchData()
-    }
-  }, [luaIdoContract, account, currentBlock, web3, id])
+  const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
 
   useEffect(() => {
     if (id) {
       dispatch(fetchPool(id))
+      setLoading(false)
+    }
+
+    return () => {
+      dispatch(setDefaultCurrentPool())
     }
   }, [id, dispatch])
 
+  const tierDataOfUser = useDeepMemo(() => {
+    const { index = [] } = currentPoolData
+    // TODO: Should based on current chain ID and user's tier
+    return getIdoDataBasedOnChainIdAndTier(index, chainId, userTier)
+  }, [currentPoolData, chainId, userTier])
+
+  const [idoDetailFromContract, totalUserCommittedFromContract, totalAmountUserSwapped] = useDataFromIdoContract(
+    tierDataOfUser.addressIdoContract,
+    tierDataOfUser.index,
+    currentPoolData.index,
+  )
+
+  const isAvailalbeOnCurrentNetwork = useDeepMemo(() => {
+    if (!account || !currentPoolData.index) {
+      return false
+    }
+    const availalbeNetwork = Object.keys(currentPoolData.index)
+    return availalbeNetwork.includes(String(chainId))
+  }, [currentPoolData.index, chainId])
+
+  /**
+   * currentPoolData: all tier's information
+   * tierDataOfUser: The correct tier data for user (based on user's tier)
+   * contractData: idos data fetch from contract
+   */
   return (
     <Page>
       <Row>
-        {/* When we finish loading data from contract + data from API */}
         {loading || isLoadingPool ? (
           <PageLoader />
         ) : (
           <>
             {' '}
+            {!isAvailalbeOnCurrentNetwork && account && (
+              <Mesage variant="warning" mb="16px">
+                IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO
+              </Mesage>
+            )}
             <StyledFlex mb="40px" flexWrap="wrap">
-              <PoolSummary idoDetail={idoDetail} currentPoolData={currentPoolData} />
-              <Deposit idoDetail={idoDetail} totalCommited={totalCommited} currentPoolData={currentPoolData} />
+              <PoolSummary
+                currentPoolData={currentPoolData}
+                tierDataOfUser={tierDataOfUser}
+                contractData={idoDetailFromContract}
+                isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
+              />
+              <Deposit
+                currentPoolData={currentPoolData}
+                tierDataOfUser={tierDataOfUser}
+                totalAmountUserSwapped={totalAmountUserSwapped}
+                contractData={idoDetailFromContract}
+                userTotalCommitted={totalUserCommittedFromContract}
+                isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
+              />
             </StyledFlex>
             <Heading as="h2" scale="lg" mb="24px" mt="50px">
               Tier Infomation
@@ -113,7 +120,7 @@ const ProjectDetail = () => {
             </Heading>
             <StyledFlex flexWrap="wrap">
               <ProjectInfo currentPoolData={currentPoolData} />
-              <PoolInformation currentPoolData={currentPoolData} idoDetail={idoDetail} />
+              <PoolInformation currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
             </StyledFlex>
             <Steps />
           </>

@@ -107,7 +107,7 @@ export interface IdoState {
   isLoading: boolean
   openPools: {
     isLoading: boolean
-    data: PoolIdoDetail[]
+    data: OpenPools
   }
   closedPools: {
     isLoading: boolean
@@ -347,17 +347,22 @@ export interface State {
   idos: IdoState
 }
 export interface IdoDetail {
-  claimAt: string
-  closeAt: string
+  claimAt: number
+  closeAt: number
+  openAt: number
   creator: string
   idoToken: string
-  maxAmountPay: string
-  minAmountPay: string
-  openAt: string
+  maxAmountPay: number
+  minAmountPay: number
   payToken: string
-  swappedAmountIDO: string
-  swappedAmountPay: string
-  totalAmountIDO: string
-  totalAmountPay: string
-  totalCommittedAmount: string
+  swappedAmountIDO: number
+  swappedAmountPay: number
+  totalAmountIDO: number
+  totalAmountPay: number
+  totalCommittedAmount: number
+}
+
+export interface OpenPools {
+  openingPools: PoolIdoDetail[]
+  upcomingPools: PoolIdoDetail[]
 }

@@ -21,6 +21,7 @@ import useDeepMemo from 'hooks/useDeepMemo'
 import { formatPoolDetail } from 'utils/formatPoolData'
 import { formatCardStatus, formatCardColor } from 'utils/idoHelpers'
 import { Pool, FormatPool } from '../../types'
+import usePoolStatus from '../../hooks/usePoolStatus'
 
 const PoolInfoBlock = styled.div`
   display: flex;
@@ -61,10 +62,10 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
+  const [poolStatus] = usePoolStatus(pool)
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
   }, [history, path, pool.id])
-
   const {
     img,
     name,
@@ -72,6 +73,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
     totalCommittedAmount,
     totalAmountPay,
     totalAmountIDO,
+    swappedAmountIDO,
     status,
     payToken,
     minAmountPay,
@@ -90,17 +92,28 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
       ...totalPoolData,
     }
   }, [pool, chainId])
+
   const progressPercentage = useMemo(() => {
+    if (poolStatus === 'closed') {
+      return new BigNumber(swappedAmountIDO).dividedBy(new BigNumber(totalAmountIDO)).multipliedBy(100).toNumber()
+    }
+
     if (totalCommittedAmount && totalAmountPay) {
       return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
     }
 
     return 0
-  }, [totalCommittedAmount, totalAmountPay])
+  }, [totalCommittedAmount, totalAmountPay, poolStatus, swappedAmountIDO, totalAmountIDO])
 
   return (
-    <Card ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />}>
-      <CardBody style={{ height: '350px' }}>
+    <Card
+      ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />}
+      mb="24px"
+      style={{
+        width: '475px',
+      }}
+    >
+      <CardBody style={{ height: '300px' }}>
         <Flex mb="15px" alignItems="center">
           <ImageContainer onClick={navigateToProjectDetail}>
             <Image src={img} alt="img" width={60} height={60} />
@@ -147,20 +160,6 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
           </Flex>
         </Flex>
         <Progress variant="round" primaryStep={progressPercentage} />
-        <Flex mt="10px" justifyContent="space-between">
-          <Flex flexDirection="column">
-            <Text color="primary">Min allocation</Text>
-            <Text>
-              {minAmountPay} {payToken.symbol}
-            </Text>
-          </Flex>
-          <Flex flexDirection="column">
-            <Text color="primary">Max allocation</Text>
-            <Text textAlign="right">
-              {maxAmountPay} {payToken.symbol}
-            </Text>
-          </Flex>
-        </Flex>
       </CardBody>
     </Card>
   )

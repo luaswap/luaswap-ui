@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 import every from 'lodash/every'
 import {
   Stepper,
@@ -13,7 +14,7 @@ import {
   Link,
   OpenNewIcon,
 } from 'common-uikitstrungdao'
-import { BASE_ADD_LIQUIDITY_URL } from 'config'
+import { selectUserTier } from 'state/profile'
 import { useTranslation } from 'contexts/Localization'
 import Container from 'components/layout/Container'
 
@@ -30,6 +31,7 @@ const Wrapper = styled(Container)`
 
 const IfoSteps: React.FC = () => {
   const { t } = useTranslation()
+  const userTier = useSelector(selectUserTier)
   const stepsValidationStatus = [{}, {}, {}, {}]
 
   const getStatusProp = (index: number): StepStatus => {
@@ -47,20 +49,11 @@ const IfoSteps: React.FC = () => {
         return (
           <CardBody>
             <Heading as="h4" color="primary" mb="16px">
-              {t('Activate your Profile')}
+              {t('Connect to your wallet')}
             </Heading>
             <Text color="textSubtle" small mb="16px">
-              {t('You will need to activate and register only one time to participate in all the IDO projects')}
+              {t('You will need to connect to your wallet to participate in all the IDO projects')}
             </Text>
-            {isStepValid ? (
-              <Text color="success" bold>
-                {t('Profile Active!')}
-              </Text>
-            ) : (
-              <Button as={Link} href="/profile">
-                {t('Activate your Profile')}
-              </Button>
-            )}
           </CardBody>
         )
       case 1:
@@ -69,12 +62,12 @@ const IfoSteps: React.FC = () => {
             <Heading as="h4" color="primary" mb="16px">
               {t('Guarantee your spot')}
             </Heading>
-            <Text color="textSubtle" small>
-              {t('Check your tier level here and secure your spot 72 hours before the IDO starts')} <br />
+            <Text color="textSubtle" small mb="16px">
+              Buy more LUA or TOMO to have a better tier level
             </Text>
-            <Button as={Link} external endIcon={<OpenNewIcon color="white" />} mt="16px">
-              {t('Check your tier')}
-            </Button>
+            <Text color="textSubtle" small>
+              Your Tier: {userTier}
+            </Text>
           </CardBody>
         )
       case 2:

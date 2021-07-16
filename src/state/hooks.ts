@@ -1,33 +1,19 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useWeb3 from 'hooks/useWeb3'
-import useRefresh from 'hooks/useRefresh'
-import { setDefaultFarmData, fetchFarms, setBlock } from './actions'
+import { setBlock } from './actions'
 import { State, Farm, ProfileState, FarmsState, IdoState, BlockfolioState } from './types'
 import { fetchProfile } from './profile'
-import { fetchAllIdoData, fetchPools } from './ido'
+import { fetchPools } from './ido'
 
 export const useFetchPublicData = () => {
   const dispatch = useAppDispatch()
   const web3 = useWeb3()
   const { chainId } = useWeb3React()
-  const { slowRefresh } = useRefresh()
-  // useEffect(() => {
-  //   const fetchPoolsPublicData = async () => {
-  //     const blockNumber = await web3.eth.getBlockNumber()
-  //     dispatch(fetchPoolsPublicDataAsync(blockNumber))
-  //   }
-  //   fetchPoolsPublicData()
-  //   dispatch(fetchPoolsStakingLimitsAsync())
-  // }, [dispatch, slowRefresh, web3])
-  useEffect(() => {
-    dispatch(setDefaultFarmData(chainId))
-    dispatch(fetchFarms(chainId, web3))
-  }, [chainId, dispatch, web3])
 
   useEffect(() => {
     const interval = setInterval(async () => {

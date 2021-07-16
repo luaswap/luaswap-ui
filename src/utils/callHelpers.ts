@@ -29,29 +29,35 @@ export const stake = async (masterChefContract, pid, amount, account, chainId?) 
     })
 }
 
-// TODO: should change the index of the IDO contract
-export const depositIdo = async (luaIdoContract, account, amount) => {
+export const depositIdo = async (luaIdoContract, account, amount, idoIndex, isNativeToken, proofS) => {
+  // If pay token is native token, we will send amount or else we wont'
   return luaIdoContract.methods
-    .commit('0', amount)
+    .commit(idoIndex, amount, proofS)
     .send({
       from: account,
-      value: amount,
+      ...(isNativeToken && { value: amount }),
     })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })
 }
 
-export const claimRewardIdo = async (luaIdoContract, account, amount) => {
-  const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
+export const claimRewardIdo = async (luaIdoContract, account, amount, idoIndex, proofS) => {
+  // const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, 0).call()
   return luaIdoContract.methods
-    .userClaim('0', account, amount)
+    .userClaim(idoIndex, account, amount, proofS)
     .send({
       from: account,
     })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })
+}
+
+export const approveIdo = async (tokenContract, luaIdoAddress, account, chainId) => {
+  const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x7A120' } : { from: account }
+  const res = await tokenContract.methods.approve(luaIdoAddress, ethers.constants.MaxUint256).send(gasLimit)
+  return res
 }
 
 export const sousStake = async (sousChefContract, amount, decimals = 18, account) => {
