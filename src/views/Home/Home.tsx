@@ -193,8 +193,8 @@ const Home: React.FC = () => {
       const elu = eLuasafeResult.data.totalInUSD.replace(/,/g, '')
       const tlu = tLuasafeResult.data.totalInUSD.replace(/,/g, '')
       const tma = tMasternodeResult.data.totalInUSD
-      const tfarm = tLuafarmResult.data.stakeAmount ? tLuafarmResult.data.stakeAmount : 0
-      const efarm = eLuafarmResult.data.stakeAmount ? eLuafarmResult.data.stakeAmount : 0
+      // const tfarm = tLuafarmResult.data.stakeAmount ? tLuafarmResult.data.stakeAmount : 0
+      // const efarm = eLuafarmResult.data.stakeAmount ? eLuafarmResult.data.stakeAmount : 0
 
       const usdData = {
         balance:
@@ -210,12 +210,12 @@ const Home: React.FC = () => {
         tBalance: parseFloat(tb),
         tLiquidity: parseFloat(tli),
         tLuasafe: parseFloat(tlu),
-        tLuafarm: parseFloat(tfarm),
+        // tLuafarm: parseFloat(tfarm),
         tMasternode: parseFloat(tma),
         eBalance: parseFloat(eb),
         eLiquidity: parseFloat(eli),
         eLuasafe: parseFloat(elu),
-        eLuafarm: parseFloat(efarm),
+        // eLuafarm: parseFloat(efarm),
       }
       settotalInUSD(usdData)
 
@@ -234,7 +234,7 @@ const Home: React.FC = () => {
       setDataLiquidity(liquidity)
 
       const luafarm = {
-        totalInUSD: 1,
+        totalInUSD: 0,
         tomochain: tLuafarmResult.data,
         ethereum: eLuafarmResult.data,
       }
@@ -276,7 +276,7 @@ const Home: React.FC = () => {
 
     if (walletActived) fetchBlockfolio(walletActived.address)
   }, [walletActived])
-
+  console.log(dataLuafarm)
   const [onPresentWallet] = useModal(<DataModal data={dataWallet} />)
   const [onPresentLiquidity] = useModal(<DataModal data={dataLiquidity} />)
   const [onPresentLuasafe] = useModal(<DataModal data={dataLuasafe} />)
@@ -351,28 +351,7 @@ const Home: React.FC = () => {
               ) : (
                 <AccountLoading />
               )}
-              {!isLoading ? (
-                dataLuafarm.totalInUSD > 0 && (
-                  <Card onClick={onPresentLuafarm}>
-                    <Flex alignItems="center">
-                      <IconWrapper>
-                        <PoolIcon />
-                      </IconWrapper>
-                      <Text> {t('LuaFarm')} </Text>
-                    </Flex>
-                    <CardValue
-                      value={dataLuafarm.totalInUSD}
-                      prefix="LP"
-                      position="after"
-                      decimals={4}
-                      lineHeight="1.5"
-                      fontSize="20px"
-                    />
-                  </Card>
-                )
-              ) : (
-                <AccountLoading />
-              )}
+
               {!isLoading ? (
                 dataLuasafe.totalInUSD > 0 && (
                   <Card onClick={onPresentLuasafe}>
@@ -410,6 +389,28 @@ const Home: React.FC = () => {
                       lineHeight="1.5"
                       fontSize="20px"
                     />
+                  </Card>
+                )
+              ) : (
+                <AccountLoading />
+              )}
+              {!isLoading ? (
+                dataLuafarm && (
+                  <Card onClick={onPresentLuafarm}>
+                    <Flex alignItems="center">
+                      <IconWrapper>
+                        <PoolIcon />
+                      </IconWrapper>
+                      <Text> {t('LuaFarm')} </Text>
+                    </Flex>
+                    {/* <CardValue
+                      value={dataLuafarm.totalInUSD}
+                      prefix="LP"
+                      position="after"
+                      decimals={4}
+                      lineHeight="1.5"
+                      fontSize="20px"
+                    /> */}
                   </Card>
                 )
               ) : (

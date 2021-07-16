@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Modal } from '@pancakeswap/uikit'
+import { Modal } from 'common-uikitstrungdao'
 import { ApiNetworkType } from 'state/types'
 import TokenTable from './TokenTable'
 

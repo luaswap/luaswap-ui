@@ -115,28 +115,28 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
         )
       case 'LuaSafe':
         return (
-          parseFloat(row.quantity) > 0 && (
-            <tr key={row.amount}>
-              <StyleTd>
-                <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
-                  row.address.length - 4,
-                  row.address.length,
-                )}`}</Text>
-              </StyleTd>
-              <StyleTd>
-                <Text>{row.token} </Text>
-              </StyleTd>
-              <StyleTd>
-                <Text> {parseFloat(row.quantity).toFixed(2)}</Text>
-              </StyleTd>
-              <StyleTd>
-                <Text> {row.apy}</Text>
-              </StyleTd>
-              <StyleTd>
-                <Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text>
-              </StyleTd>
-            </tr>
-          )
+          // parseFloat(row.quantity) > 0 && (
+          <tr key={row.amount}>
+            <StyleTd>
+              <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
+                row.address.length - 4,
+                row.address.length,
+              )}`}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text>{row.token} </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.quantity).toFixed(2)}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.apy}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {parseFloat(row.luaEstimate).toFixed(2)}</Text>
+            </StyleTd>
+          </tr>
+          // )
         )
       case 'LuaFarm':
         return (
@@ -155,18 +155,22 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
         )
       case 'staking':
         return (
-          <tr key={row.stakeAmount}>
+          <tr key={row.masterNodeAddress}>
             <StyleTd>
-              <Text>{`${row.masterNodeName.substring(0, 6)}...${row.masterNodeName.substring(
-                row.masterNodeName.length - 4,
-                row.masterNodeName.length,
-              )}`}</Text>
+              <LinkExternal href={`https://master.tomochain.com/candidate/${row.masterNodeName}`}>
+                <Text>{`${row.masterNodeName.substring(0, 6)}...${row.masterNodeName.substring(
+                  row.masterNodeName.length - 4,
+                  row.masterNodeName.length,
+                )}`}</Text>
+              </LinkExternal>
             </StyleTd>
             <StyleTd>
-              <Text>{`${row.masterNodeAddress.substring(0, 6)}...${row.masterNodeAddress.substring(
-                row.masterNodeAddress.length - 4,
-                row.masterNodeAddress.length,
-              )}`}</Text>
+              <LinkExternal href={`https://master.tomochain.com/voter/${row.masterNodeAddress}`}>
+                <Text>{`${row.masterNodeAddress.substring(0, 6)}...${row.masterNodeAddress.substring(
+                  row.masterNodeAddress.length - 4,
+                  row.masterNodeAddress.length,
+                )}`}</Text>
+              </LinkExternal>
             </StyleTd>
             <StyleTd>
               <Text>{parseFloat(row.amount).toFixed(2)} </Text>
@@ -196,9 +200,13 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
             </tr>
           </TableHead>
           <TableBody>
-            {data.map((row) => {
-              return renderContent(row, tag)
-            })}
+            {data.length > 0 ? (
+              data.map((row) => {
+                return renderContent(row, tag)
+              })
+            ) : (
+              <Text style={{ color: '#afafaf', fontSize: 20 }}> No data</Text>
+            )}
           </TableBody>
         </StyledTable>
       </TableWrapper>

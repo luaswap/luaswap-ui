@@ -35,7 +35,6 @@ const Menu = (props) => {
 
     return 0
   }, [luaPrice])
-
   useEffect(() => {
     if (queryChainId) {
       // const option = walletOptions.find(opts => opts.chainId === queryChainId)

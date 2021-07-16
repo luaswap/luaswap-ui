@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { connectorLocalStorageKey, ConnectorNames } from '@pancakeswap/uikit'
+import { connectorLocalStorageKey, ConnectorNames } from 'common-uikitstrungdao'
 import { injected } from 'utils/web3React'
 import useAuth from 'hooks/useAuth'
 
