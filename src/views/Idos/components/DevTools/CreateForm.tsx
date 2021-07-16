@@ -1,7 +1,7 @@
 import React from 'react'
-import { Input, Button, Box, Text, Flex } from 'common-uikitstrungdao'
 import { useForm } from 'react-hook-form'
 import { useWeb3React } from '@web3-react/core'
+import { Input, Button, Box, Text, Flex } from 'common-uikitstrungdao'
 import { getLuaIdoContract } from 'utils/contractHelpers'
 import useWeb3 from 'hooks/useWeb3'
 import useToast from 'hooks/useToast'

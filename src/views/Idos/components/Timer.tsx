@@ -1,5 +1,5 @@
-import React from 'react'
-import { Flex, PocketWatchIcon, Text } from '@pancakeswap/uikit'
+import React, { useMemo } from 'react'
+import { Flex, PocketWatchIcon, Text } from 'common-uikitstrungdao'
 import { useTranslation } from 'contexts/Localization'
 
 interface Props {

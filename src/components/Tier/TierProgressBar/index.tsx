@@ -1,25 +1,21 @@
 import React from 'react'
 
 // import { Step } from '../step';
-import { getSafePercent, getStepPosition } from '../utils';
+import { getSafePercent, getStepPosition } from '../utils'
 import styles from '../styles.module.scss'
 
-
 interface ProgressBarProps {
-  percent: number,
-  stepPositions?: Array<number>,
-  unfilledBackground?: string,
-  filledBackground?: string,
-  width?: number,
-  height?: number,
-  hasStepZero?: boolean,
-  text?: string,
+  percent: number
+  stepPositions?: Array<number>
+  unfilledBackground?: string
+  filledBackground?: string
+  width?: number
+  height?: number
+  hasStepZero?: boolean
+  text?: string
 }
 
-
 const ProgressBar: React.FC<ProgressBarProps> = (props) => {
-
-
   const {
     percent,
     children,
@@ -30,12 +26,11 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
     height = null,
     hasStepZero = true,
     text = null,
-  } = props;
+  } = props
 
-  const safePercent = getSafePercent(percent);
+  const safePercent = getSafePercent(percent)
 
   return (
-
     <div className={styles.RSPBprogressBar} style={{ background: unfilledBackground, width, height }}>
       <div
         className={styles.RSPBprogression}
@@ -64,4 +59,4 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
     </div>
   )
 }
-export default ProgressBar;
+export default ProgressBar

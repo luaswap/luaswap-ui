@@ -5,7 +5,7 @@ import { ChainId } from '@luaswap/sdk'
 import getRpcUrl from './getRpcUrl'
 
 /**
- * Prompt the user to add BSC as a network on Metamask, or switch to BSC if the wallet is on a different network
+ * Prompt the user to add a network as a network on Metamask, or switch to other network if the wallet is on a different network
  * @returns {boolean} true if the setup succeeded, false otherwise
  */
 export const connectNetwork = async (options) => {
@@ -30,7 +30,7 @@ export const connectNetwork = async (options) => {
       return false
     }
   } else {
-    console.error("Can't setup the BSC network on metamask because window.ethereum is undefined")
+    console.error(`Can't setup the ${chainName} network on metamask because window.ethereum is undefined`)
     return false
   }
 }

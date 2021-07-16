@@ -32,20 +32,20 @@ const DataModal: React.FC<DataModalProps> = ({ onDismiss, data }) => {
         }}
       >
         <Tab style={{ width: '100%' }}>
-          <Image alt="TomoChain" src={`${process.env.PUBLIC_URL}/images/network/eth.png}`} />
+          <Image alt="TomoChain" src="/images/network/eth.png" />
           Ethereum
         </Tab>
         <Tab style={{ width: '100%' }}>
-          <Image alt="TomoChain" src={`${process.env.PUBLIC_URL}/images/network/tomochain.png`} />
+          <Image alt="TomoChain" src="/images/network/tomochain.png" />
           TomoChain
         </Tab>
       </TabMenu>
       <StyleOverFlow>
         <Spacer size="md" />
-        {activeTab === 0 && data.ethereum.details.length > 0 && (
+        {activeTab === 0 && (
           <TokenTable data={data.ethereum.details} columns={data.ethereum.detailsHeader} tag={data.ethereum.tag} />
         )}
-        {activeTab === 1 && data.tomochain.details.length > 0 && (
+        {activeTab === 1 && (
           <TokenTable data={data.tomochain.details} columns={data.tomochain.detailsHeader} tag={data.tomochain.tag} />
         )}
       </StyleOverFlow>

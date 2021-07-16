@@ -1,6 +1,6 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { ConnectorNames } from '@pancakeswap/uikit'
+import { ConnectorNames } from 'common-uikitstrungdao'
 import Web3 from 'web3'
 
 const POLLING_INTERVAL = 12000

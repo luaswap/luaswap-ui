@@ -3,7 +3,7 @@ import { Route, useRouteMatch, useHistory } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useAppDispatch } from 'state'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Text } from '@pancakeswap/uikit'
+import { Image, Heading, RowType, Text } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -42,7 +42,6 @@ const ControlContainer = styled.div`
     margin-bottom: 0;
   }
 `
-
 const ToggleWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -223,10 +222,10 @@ const Farms: React.FC = () => {
       </div>
     )
   }
-
+  const isImage = true
   return (
     <>
-      <PageHeader>
+      <PageHeader background="url(/images/farm-bg.png)" isImage={isImage}>
         <Heading as="h1" scale="xxl" color="secondary" mb="24px">
           {t('Farms')}
         </Heading>
