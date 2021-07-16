@@ -137,7 +137,7 @@ const Deposit: React.FC<DepositProps> = ({
         console.log(error)
       }
     }
-    // We only fetch the IDO token that user received when pool status is
+    // We only fetch the IDO token that user can claimed when pool status is closed
     if (poolStatus === 'closed') {
       fetchReceiveIdoAmount()
     }
@@ -245,7 +245,11 @@ const Deposit: React.FC<DepositProps> = ({
           flex: 1,
         }}
       >
-        <CardBody>
+        <CardBody
+          style={{
+            height: '100%',
+          }}
+        >
           {isAvailalbeOnCurrentNetwork ? (
             <>
               <Flex justifyContent="space-between">

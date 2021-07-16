@@ -32,4 +32,10 @@ export const getTierData = async (account: string) => {
   return data
 }
 
+export const postLoginDetail = async (account: string) => {
+  await axios.post('https://api.luaswap.org/api/ido/users/login', {
+    user: account,
+  })
+}
+
 export default getProfile

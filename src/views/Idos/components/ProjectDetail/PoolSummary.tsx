@@ -106,9 +106,12 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   }, [totalCommittedAmount, totalAmountPay])
 
   const totalPayTokenCommited = useMemo(() => {
-    return new BigNumber(totalCommittedAmount).plus(new BigNumber(swappedAmountPay)).toString()
-  }, [totalCommittedAmount, swappedAmountPay])
+    if (totalCommittedAmount !== null && swappedAmountPay !== null) {
+      return new BigNumber(totalCommittedAmount).plus(new BigNumber(swappedAmountPay)).toFixed(3)
+    }
 
+    return '0'
+  }, [totalCommittedAmount, swappedAmountPay])
   const totalSwapAmountPercentage = useMemo(() => {
     if (swappedAmountPay && totalAmountIDO) {
       return calculateSwappedAmountPercentage(swappedAmountPay, totalAmountIDO)
@@ -220,8 +223,8 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           </Text>
           <Text color="secondary">
             {isPoolInProgress || !isPoolOpen
-              ? totalCommitedPercentage.toFixed(2)
-              : totalSwapAmountPercentage.toFixed(2)}
+              ? totalCommitedPercentage.toFixed(3)
+              : totalSwapAmountPercentage.toFixed(3)}
             %
           </Text>
         </Flex>
