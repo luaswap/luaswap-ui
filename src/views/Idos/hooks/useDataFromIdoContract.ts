@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useLuaIdoContract } from 'hooks/useContract'
 import { mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { IdoDetail } from 'state/types'
-import { getFullDisplayBalance } from 'utils/formatBalance'
+import { getBalanceAmount } from 'utils/formatBalance'
 import { formatIdoContract } from 'utils/formatPoolData'
 import { getWeb3BasedOnChainId } from 'utils/web3'
 import { getLuaIdoContract } from 'utils/contractHelpers'
@@ -105,8 +105,8 @@ const useDataFromIdoContract = (
          */
         const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, idoIndex).call()
         const swappedIdoAmount = await luaIdoContract.methods.userSwappedAmountIDO(account, idoIndex).call()
-        setTotalUserCommitted(getFullDisplayBalance(commitedAmount))
-        setTotalAmountUserSwapped(getFullDisplayBalance(swappedIdoAmount))
+        setTotalUserCommitted(getBalanceAmount(commitedAmount).toString())
+        setTotalAmountUserSwapped(getBalanceAmount(swappedIdoAmount).toString())
       } catch (error) {
         console.log(error, 'error to fetch data from contract')
       }

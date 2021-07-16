@@ -430,7 +430,7 @@ const Home: React.FC = () => {
                       <CardNetwork>
                         <FlexNetwork>
                           <Flex alignItems="center">
-                            <Image src="/images/network/eth.png" />
+                            <Image src={`${process.env.PUBLIC_URL}/images/network/eth.png`} />
                             <Text> Ethereum</Text>
                           </Flex>
                           <CardValue
@@ -530,7 +530,7 @@ const Home: React.FC = () => {
                       <CardNetwork>
                         <FlexNetwork>
                           <Flex alignItems="center">
-                            <Image src="/images/network/tomochain.png" />
+                            <Image src={`${process.env.PUBLIC_URL}/images/network/tomochain.png`} />
                             <Text> TomoChain</Text>
                           </Flex>
                           <CardValue

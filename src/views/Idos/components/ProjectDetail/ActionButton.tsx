@@ -51,7 +51,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     return null
   }
 
-  if (!isApproved && !isNativeToken) {
+  if (!isApproved && !isNativeToken && poolStatus !== 'closed') {
     return (
       <Button
         mt="8px"

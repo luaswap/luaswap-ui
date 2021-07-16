@@ -92,3 +92,27 @@ export const getIdoDataBasedOnChainIdAndTier = (
 
   return DEFAULT_IDO
 }
+
+export const mapProjectStatus = (status: string) => {
+  if (status === 'closed') {
+    return 'Closed'
+  }
+
+  if (status === 'not open') {
+    return 'Pending'
+  }
+
+  return 'Opening'
+}
+
+export const generateColorForStatusBar = (status: string) => {
+  if (status === 'closed') {
+    return '#ffbfbf'
+  }
+
+  if (status === 'open') {
+    return '#31D0AA'
+  }
+
+  return '#afafaf1a'
+}

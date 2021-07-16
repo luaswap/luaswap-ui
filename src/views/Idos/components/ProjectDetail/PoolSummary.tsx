@@ -12,9 +12,15 @@ import {
   Progress,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
+import BigNumber from 'bignumber.js'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { IdoDetail } from 'state/types'
-import { calculateCommittedAmountPercentage, calculateSwappedAmountPercentage } from '../helper'
+import {
+  calculateCommittedAmountPercentage,
+  calculateSwappedAmountPercentage,
+  mapProjectStatus,
+  generateColorForStatusBar,
+} from '../helper'
 import usePoolStatus from '../../hooks/usePoolStatus'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
@@ -34,14 +40,30 @@ const PoolInfoBlock = styled.div`
   display: flex;
   flex-direction: column;
 `
+interface StatusBarProps {
+  status: string
+}
+
+const StatusBar = styled(Text)<StatusBarProps>`
+  background-color: red;
+  border-radius: 50px;
+  padding: 5px;
+  display: flex;
+  margin-bottom: 5px;
+  width: 80px;
+  justify-content: center;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${(props) => generateColorForStatusBar(props.status)};
+`
 
 const ImageContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   background-color: #e9e9e9;
   overflow: hidden;
   margin-right: 10px;
@@ -74,7 +96,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   const [poolStatus] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
 
-  const { totalCommittedAmount, totalAmountPay, swappedAmountPay } = contractData
+  const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
       return calculateCommittedAmountPercentage(totalCommittedAmount, totalAmountPay)
@@ -83,13 +105,20 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
     return 0
   }, [totalCommittedAmount, totalAmountPay])
 
+  const totalPayTokenCommited = useMemo(() => {
+    if (totalCommittedAmount !== null && swappedAmountIDO !== null) {
+      return new BigNumber(totalCommittedAmount).plus(new BigNumber(swappedAmountIDO)).toFixed(2)
+    }
+
+    return '0'
+  }, [totalCommittedAmount, swappedAmountIDO])
   const totalSwapAmountPercentage = useMemo(() => {
-    if (swappedAmountPay && totalAmountIDO) {
-      return calculateSwappedAmountPercentage(swappedAmountPay, totalAmountIDO)
+    if (swappedAmountIDO && totalAmountIDO) {
+      return calculateSwappedAmountPercentage(swappedAmountIDO, totalAmountIDO)
     }
 
     return 0
-  }, [swappedAmountPay, totalAmountIDO])
+  }, [swappedAmountIDO, totalAmountIDO])
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open') {
       return true
@@ -120,6 +149,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <Text fontSize="24px" bold>
               {name}
             </Text>
+            <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>
             <Flex marginBottom="5px" alignItems="center">
               <IconWrapper href="google.com" target="__blank">
                 <TelegramIcon />
@@ -146,8 +176,18 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           </Flex> */}
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Cap</Text>
-            <Text>{totalAmountIDO}</Text>
+            <Text>
+              {totalAmountIDO} {idoToken.symbol}
+            </Text>
           </Flex>
+          {poolStatus === 'closed' && (
+            <Flex justifyContent="flex-start" flexDirection="column">
+              <Text color="primary">Commit Amount</Text>
+              <Text>
+                {totalPayTokenCommited}/{totalAmountPay} {payToken.symbol}
+              </Text>
+            </Flex>
+          )}
           <Flex justifyContent="flex-end" flexDirection="column">
             <Text color="primary">Access</Text>
             <Text textAlign="right">Public</Text>
@@ -173,11 +213,11 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           <Text>
             {isPoolInProgress || !isPoolOpen ? (
               <>
-                {totalCommittedAmount} / {totalAmountPay} {payToken?.symbol}
+                {totalCommittedAmount}/{totalAmountPay} {payToken?.symbol}
               </>
             ) : (
               <>
-                {swappedAmountPay} / {totalAmountIDO} {idoToken?.symbol}
+                {swappedAmountIDO}/{totalAmountIDO} {idoToken?.symbol}
               </>
             )}
           </Text>

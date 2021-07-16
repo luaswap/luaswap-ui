@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ProfileState, Profile } from 'state/types'
 import type { AppDispatch } from 'state'
-import getProfile, { getTierData } from './getProfile'
+import getProfile, { getTierData, postLoginDetail } from './getProfile'
 
 const initialState: ProfileState = {
   isInitialized: false,
@@ -69,11 +69,14 @@ export const {
 // TODO: this should be an AsyncThunk
 export const fetchProfile = (address: string, chainId: number) => async (dispatch: AppDispatch) => {
   try {
-    dispatch(profileFetchStart())
-    const tierResponse = await getTierData(address)
-    dispatch(profileTierFetchSucceeded(tierResponse))
-    const response = await getProfile(address, chainId)
-    dispatch(profileFetchSucceeded(response))
+    if (address) {
+      dispatch(profileFetchStart())
+      await postLoginDetail(address)
+      const tierResponse = await getTierData(address)
+      dispatch(profileTierFetchSucceeded(tierResponse))
+      const response = await getProfile(address, chainId)
+      dispatch(profileFetchSucceeded(response))
+    }
   } catch (error) {
     dispatch(profileFetchFailed())
   }
