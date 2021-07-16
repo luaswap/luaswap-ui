@@ -302,7 +302,7 @@ const Home: React.FC = () => {
           Get unique access to opportunities in open finance.
         </Heading>
       </PageHeader>
-      
+
       <Page>
         {Object.keys(wallets).length > 0 || account ? (
           <>
@@ -430,7 +430,7 @@ const Home: React.FC = () => {
                       <CardNetwork>
                         <FlexNetwork>
                           <Flex alignItems="center">
-                            <Image src="/images/network/eth.png" />
+                            <Image src={`${process.env.PUBLIC_URL}/images/network/eth.png`} />
                             <Text> Ethereum</Text>
                           </Flex>
                           <CardValue
@@ -530,7 +530,7 @@ const Home: React.FC = () => {
                       <CardNetwork>
                         <FlexNetwork>
                           <Flex alignItems="center">
-                            <Image src="/images/network/tomochain.png" />
+                            <Image src={`${process.env.PUBLIC_URL}/images/network/tomochain.png`} />
                             <Text> TomoChain</Text>
                           </Flex>
                           <CardValue
