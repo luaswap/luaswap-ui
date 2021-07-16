@@ -277,7 +277,6 @@ const Home: React.FC = () => {
 
     if (walletActived) fetchBlockfolio(walletActived.address)
   }, [walletActived])
-  console.log(dataLuafarm)
   const [onPresentWallet] = useModal(<DataModal data={dataWallet} />)
   const [onPresentLiquidity] = useModal(<DataModal data={dataLiquidity} />)
   const [onPresentLuasafe] = useModal(<DataModal data={dataLuasafe} />)
