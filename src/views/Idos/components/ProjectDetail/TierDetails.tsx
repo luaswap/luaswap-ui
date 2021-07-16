@@ -172,7 +172,7 @@ const TierDetails: React.FC<{
   }, [tierData])
   return (
     <>
-      <Flex flexWrap="nowrap" justifyContent="space-between">
+      <Flex flexWrap="wrap" justifyContent="space-between">
         {tiersss.map((e: IdoDetailInfo, i: number) => (
           <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
         ))}

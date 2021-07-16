@@ -96,7 +96,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   const [poolStatus] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
 
-  const { totalCommittedAmount, totalAmountPay, swappedAmountPay } = contractData
+  const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
       return calculateCommittedAmountPercentage(totalCommittedAmount, totalAmountPay)
@@ -106,19 +106,19 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   }, [totalCommittedAmount, totalAmountPay])
 
   const totalPayTokenCommited = useMemo(() => {
-    if (totalCommittedAmount !== null && swappedAmountPay !== null) {
-      return new BigNumber(totalCommittedAmount).plus(new BigNumber(swappedAmountPay)).toFixed(3)
+    if (totalCommittedAmount !== null && swappedAmountIDO !== null) {
+      return new BigNumber(totalCommittedAmount).plus(new BigNumber(swappedAmountIDO)).toFixed(2)
     }
 
     return '0'
-  }, [totalCommittedAmount, swappedAmountPay])
+  }, [totalCommittedAmount, swappedAmountIDO])
   const totalSwapAmountPercentage = useMemo(() => {
-    if (swappedAmountPay && totalAmountIDO) {
-      return calculateSwappedAmountPercentage(swappedAmountPay, totalAmountIDO)
+    if (swappedAmountIDO && totalAmountIDO) {
+      return calculateSwappedAmountPercentage(swappedAmountIDO, totalAmountIDO)
     }
 
     return 0
-  }, [swappedAmountPay, totalAmountIDO])
+  }, [swappedAmountIDO, totalAmountIDO])
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open') {
       return true
@@ -217,14 +217,14 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               </>
             ) : (
               <>
-                {swappedAmountPay}/{totalAmountIDO} {idoToken?.symbol}
+                {swappedAmountIDO}/{totalAmountIDO} {idoToken?.symbol}
               </>
             )}
           </Text>
           <Text color="secondary">
             {isPoolInProgress || !isPoolOpen
-              ? totalCommitedPercentage.toFixed(3)
-              : totalSwapAmountPercentage.toFixed(3)}
+              ? totalCommitedPercentage.toFixed(2)
+              : totalSwapAmountPercentage.toFixed(2)}
             %
           </Text>
         </Flex>

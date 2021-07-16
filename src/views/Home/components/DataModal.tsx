@@ -25,36 +25,28 @@ const DataModal: React.FC<DataModalProps> = ({ onDismiss, data }) => {
       <TabMenu
         activeIndex={activeTab}
         onItemClick={(index: number) => setActiveTab(index)}
-        innerStyle={{width: "100%"}}
+        innerStyle={{ width: '100%' }}
         wrapperStyle={{
           padding: '0px',
-          width: '100%'
+          width: '100%',
         }}
       >
-        <Tab style={{width: "100%"}}>
-          <Image alt="TomoChain" src="/images/network/eth.png"/>
+        <Tab style={{ width: '100%' }}>
+          <Image alt="TomoChain" src={`${process.env.PUBLIC_URL}/images/network/eth.png}`} />
           Ethereum
         </Tab>
-        <Tab style={{width: "100%"}}>
-          <Image alt="TomoChain" src="/images/network/tomochain.png"/>
+        <Tab style={{ width: '100%' }}>
+          <Image alt="TomoChain" src={`${process.env.PUBLIC_URL}/images/network/tomochain.png`} />
           TomoChain
         </Tab>
       </TabMenu>
       <StyleOverFlow>
         <Spacer size="md" />
-        {(activeTab === 0 && data.ethereum.details.length > 0) && (
-          <TokenTable
-            data={data.ethereum.details}
-            columns={data.ethereum.detailsHeader}
-            tag={data.ethereum.tag}
-          />
+        {activeTab === 0 && data.ethereum.details.length > 0 && (
+          <TokenTable data={data.ethereum.details} columns={data.ethereum.detailsHeader} tag={data.ethereum.tag} />
         )}
-        {(activeTab === 1 && data.tomochain.details.length > 0) && (
-          <TokenTable
-            data={data.tomochain.details}
-            columns={data.tomochain.detailsHeader}
-            tag={data.tomochain.tag}
-          />
+        {activeTab === 1 && data.tomochain.details.length > 0 && (
+          <TokenTable data={data.tomochain.details} columns={data.tomochain.detailsHeader} tag={data.tomochain.tag} />
         )}
       </StyleOverFlow>
     </Modal>
