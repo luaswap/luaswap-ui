@@ -9,7 +9,7 @@ const Row = styled.div`
   width: 100%;
   margin-bottom: 40px;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 40%;
+    width: 45%;
   }
 `
 

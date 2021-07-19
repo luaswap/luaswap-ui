@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { selectUserNextTier, selectUserTier } from 'state/profile'
 
-import { Card, CardBody, Text, Flex, Image, Button, Mesage } from 'common-uikitstrungdao'
+import { Card, CardBody, Text, Flex, Image, Button, Mesage, Box } from 'common-uikitstrungdao'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { Tier } from 'state/types'
@@ -24,6 +24,13 @@ const ImageContainer = styled.span`
   background-color: #e9e9e9;
   overflow: hidden;
   margin-right: 10px;
+`
+
+const CardBodyWrapper = styled(CardBody)`
+  height: 400px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 `
 
 const TierCardContainer = styled(Card)`
@@ -62,7 +69,7 @@ const TIER_INFO = {
     name: 'Galaxy',
     description: 'For every user, who holds more than than 10.000 LUA',
     icon: 'https://image.flaticon.com/icons/png/512/3919/3919942.png',
-    CTA: (lua) => (lua ? `Buy more ${lua} LUA to BREAK BORDER TOGETHER` : `Buy more LUA to BREAK BORDER TOGETHER`),
+    CTA: (lua) => (lua ? `Buy more ${lua} LUA to BREAK BORDER` : `Buy more LUA to BREAK BORDER`),
   },
 }
 
@@ -77,71 +84,76 @@ const TierCard: React.FC<TierProps> = ({
 
   return (
     <TierCardContainer>
-      <CardBody style={{ height: '400px' }}>
-        <Flex mb="15px" alignItems="center">
-          <ImageContainer>
-            <Image src={TIER_INFO[tier]?.icon} alt="img" width={60} height={60} />
-          </ImageContainer>
-          <div>
-            <Text fontSize="24px" bold>
-              {TIER_INFO[tier]?.name}
+      <CardBodyWrapper>
+        <Box>
+          <Flex mb="15px" alignItems="center">
+            <ImageContainer>
+              <Image src={TIER_INFO[tier]?.icon} alt="img" width={60} height={60} />
+            </ImageContainer>
+            <div>
+              <Text fontSize="24px" bold>
+                {TIER_INFO[tier]?.name}
+              </Text>
+              <Text fontSize="15px" bold>
+                Tier {tier}
+              </Text>
+            </div>
+          </Flex>
+          <Text mb="20px">{TIER_INFO[tier]?.description}</Text>
+          <Flex justifyContent="space-between">
+            <Text>Total {idoToken.symbol}</Text>
+            <Text bold>
+              {totalAmountIDO} {idoToken.symbol}
             </Text>
-            <Text fontSize="15px" bold>
-              Tier {tier}
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Funds to raise</Text>
+            <Text bold>
+              {totalAmountPay} {payToken.symbol}
             </Text>
-          </div>
-        </Flex>
-        <Text mb="20px">{TIER_INFO[tier]?.description}</Text>
-        <Flex justifyContent="space-between">
-          <Text>Total {idoToken.symbol}</Text>
-          <Text bold>
-            {totalAmountIDO} {idoToken.symbol}
-          </Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Funds to raise</Text>
-          <Text bold>
-            {totalAmountPay} {payToken.symbol}
-          </Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Price per {idoToken.symbol}</Text>
-          <Text bold>
-            {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
-          </Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Total committed</Text>
-          <Text bold>
-            {totalCommittedAmount} {payToken.symbol}
-          </Text>
-        </Flex>
-        {userTier === tier && (
-          <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
-            <Text bold>Your Tier. GET READY!</Text>
-            <Image
-              src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
-              alt="img"
-              width={40}
-              height={40}
-              ml="20px"
-            />
-          </Button>
-        )}
-        {userTier < tier && (
-          <Button
-            width="100%"
-            mt="30px"
-            variant="subtle"
-            style={{ textAlign: 'center' }}
-            as="a"
-            href="https://app.luaswap.org/#/swap"
-            target="__blank"
-          >
-            {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
-          </Button>
-        )}
-      </CardBody>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Price per {idoToken.symbol}</Text>
+            <Text bold>
+              {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
+            </Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Total committed</Text>
+            <Text bold>
+              {totalCommittedAmount} {payToken.symbol}
+            </Text>
+          </Flex>
+        </Box>
+        <Box>
+          {userTier === tier && (
+            <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
+              <Text bold>Your Tier. GET READY!</Text>
+              <Image
+                src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
+                alt="img"
+                width={40}
+                height={40}
+                ml="20px"
+              />
+            </Button>
+          )}
+
+          {userTier < tier && (
+            <Button
+              width="100%"
+              mt="30px"
+              variant="subtle"
+              style={{ textAlign: 'center' }}
+              as="a"
+              href="https://app.luaswap.org/#/swap"
+              target="__blank"
+            >
+              {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
+            </Button>
+          )}
+        </Box>
+      </CardBodyWrapper>
     </TierCardContainer>
   )
 }

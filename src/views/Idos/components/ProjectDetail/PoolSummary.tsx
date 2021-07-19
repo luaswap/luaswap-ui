@@ -217,7 +217,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               </>
             ) : (
               <>
-                {swappedAmountIDO}/{totalAmountIDO} {idoToken?.symbol}
+                {swappedAmountIDO ? swappedAmountIDO.toFixed(2) : '0'}/{totalAmountIDO} {idoToken?.symbol}
               </>
             )}
           </Text>

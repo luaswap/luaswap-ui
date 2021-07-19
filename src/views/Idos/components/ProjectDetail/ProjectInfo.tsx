@@ -7,7 +7,7 @@ const StyledWrapper = styled(Flex)`
   width: 100%;
   margin-bottom: 40px;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 60%;
+    width: 55%;
     margin-right: 24px;
   }
 `
