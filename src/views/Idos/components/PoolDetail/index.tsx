@@ -31,7 +31,7 @@ const PoolInfoBlock = styled.div`
 const CardWrapper = styled(Card)`
   width: 100%;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: '475px';
+    width: 475px;
   }
 `
 
