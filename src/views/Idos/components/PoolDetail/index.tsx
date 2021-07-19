@@ -28,6 +28,13 @@ const PoolInfoBlock = styled.div`
   flex-direction: column;
 `
 
+const CardWrapper = styled(Card)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: '475px';
+  }
+`
+
 const IconWrapper = styled.a`
   color: #212121;
   margin: 0 3px;
@@ -106,12 +113,9 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   }, [totalCommittedAmount, totalAmountPay, poolStatus, swappedAmountIDO, totalAmountIDO])
 
   return (
-    <Card
+    <CardWrapper
       ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />}
       mb="24px"
-      style={{
-        width: '475px',
-      }}
     >
       <CardBody style={{ height: '300px' }}>
         <Flex mb="15px" alignItems="center">
@@ -161,7 +165,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
         </Flex>
         <Progress variant="round" primaryStep={progressPercentage} />
       </CardBody>
-    </Card>
+    </CardWrapper>
   )
 }
 

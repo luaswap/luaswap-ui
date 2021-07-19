@@ -34,7 +34,7 @@ const TierCardContainer = styled(Card)`
     width: calc(33.33% - 16px);
     margin-bottom: 0;
     &:not(:last-of-type) {
-      margin-right: 25px;
+      margin-right: 20px;
     }
   }
 `

@@ -167,7 +167,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           </PoolInfoBlock>
         </Flex>
         <Text>{description}</Text>
-        <Flex justifyContent="space-between" mb="10px" mt="15px">
+        <Flex justifyContent="space-between" mb="10px" mt="15px" alignItems="flex-start">
           {/* <Flex justifyContent="flex-start" flexDirection="column">
             <Text color="primary">Swap rate</Text>
             <Text>

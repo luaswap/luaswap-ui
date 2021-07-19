@@ -32,6 +32,16 @@ const StyledFlex = styled(Flex)`
     flex-wrap: nowrap;
   }
 `
+
+const StyledHeading = styled(Heading)`
+  margin-bottom: 14px;
+  margin-top: 20px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-bottom: 24px;
+    margin-top: 30px;
+  }
+`
+
 interface ParamsType {
   id: string
 }
@@ -114,9 +124,9 @@ const ProjectDetail = () => {
               Tier Infomation
             </Heading>
             <TierDetails currentPoolData={currentPoolData} />
-            <Heading as="h2" scale="lg" mb="24px" mt="50px">
+            <StyledHeading as="h2" scale="lg">
               Project Detail
-            </Heading>
+            </StyledHeading>
             <StyledFlex flexWrap="wrap">
               <ProjectInfo currentPoolData={currentPoolData} />
               <PoolInformation currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />

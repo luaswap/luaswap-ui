@@ -20,11 +20,11 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
   const { projectDetail, links } = currentPoolData
   return (
     <StyledWrapper flexDirection="column">
-      <Flex>
+      <Flex flexWrap="wrap">
         {Array.isArray(links) &&
           links.map((item) => {
             return (
-              <Button mr="10px" variant="tertiary" as="a" href={item.link} target="__blank" key={item.label}>
+              <Button mr="10px" mt="10px" variant="tertiary" as="a" href={item.link} target="__blank" key={item.label}>
                 {item.label}
               </Button>
             )

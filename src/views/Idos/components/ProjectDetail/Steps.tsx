@@ -74,12 +74,10 @@ const IfoSteps: React.FC = () => {
         return (
           <CardBody>
             <Heading as="h4" color="primary" mb="16px">
-              {t('Execute your right')}
+              {t('Your right')}
             </Heading>
             <Text color="textSubtle" small>
-              {t(
-                'When the IDO is live, you can execute your right to buy tokens. Please commit the amount between min and max value. If you are not in any of tiers, you may have change to participate',
-              )}
+              {t('When the IDO is live, you can buy tokens. Please commit the amount between min and max value.')}
             </Text>
           </CardBody>
         )
