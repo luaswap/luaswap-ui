@@ -22,6 +22,9 @@ export const getMasterChefAddress = (chainId?) => {
 export const getLuaAddress = (chainId?) => {
   return getAddress(addresses.lua, chainId)
 }
+export const getxLuaAddress = (chainId?) => {
+  return getAddress(addresses.xlua, chainId)
+}
 export const getMulticallAddress = (chainId?) => {
   return getAddress(addresses.multiCall, chainId)
 }

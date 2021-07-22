@@ -16,6 +16,7 @@ import EasterEgg from './components/EasterEgg'
 const Home = lazy(() => import('./views/Home'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Farms = lazy(() => import('./views/Farms'))
+const LuaSafe = lazy(() => import('./views/LuaSafe'))
 const Idos = lazy(() => import('./views/Idos'))
 
 // This config is required for number formatting
@@ -41,6 +42,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/farms">
               <Farms />
+            </Route>
+            <Route path="/luasafe">
+              <LuaSafe />
             </Route>
             <Route path="/idos">
               <Idos />
