@@ -22,10 +22,10 @@ const Hero = () => {
     <Box mb="24px">
       <StyledHero>
         <Container>
-          <StyledHeading fontSize="48px" mb="12px" textAlign="center">
+          <StyledHeading fontSize="48px" mb="12px" textAlign="center" color="#FFFFFF">
             {t('Decentralize your way of investing')}
           </StyledHeading>
-          <Text bold fontSize="32px" textAlign="center">
+          <Text bold fontSize="32px" textAlign="center" color="#FEF5E3">
             {t('Subscribe to upcoming pools')}
           </Text>
         </Container>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Heading, Mesage } from 'common-uikitstrungdao'
+import { Flex, Heading, Mesage, Text, Box } from 'common-uikitstrungdao'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -15,13 +15,15 @@ import Steps from './Steps'
 import Deposit from './Deposit'
 import PoolSummary from './PoolSummary'
 import ProjectInfo from './ProjectInfo'
+import PoolInfo from './PoolInfo'
+import TokenInfo from './TokenInfo'
 import PoolInformation from './PoolInformation'
 import TierDetails from './TierDetails'
 import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
 import { getIdoDataBasedOnChainIdAndTier, getIdoSupportedNetwork } from '../helper'
 
 const Row = styled.div`
-  max-width: 1200px;
+  max-width: 1600px;
   padding-left: 24px;
   padding-right: 24px;
   margin: 0 auto;
@@ -101,7 +103,7 @@ const ProjectDetail = () => {
             {' '}
             {!isAvailalbeOnCurrentNetwork && account && (
               <Mesage variant="warning" mb="16px">
-                IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO
+                <Text>IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO</Text>
               </Mesage>
             )}
             <StyledFlex mb="40px" flexWrap="wrap">
@@ -120,16 +122,31 @@ const ProjectDetail = () => {
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
             </StyledFlex>
-            <Heading as="h2" scale="lg" mb="24px" mt="50px">
+            <Heading as="h2" scale="lg" mb="24px" mt="50px" color="#D8D8D8">
               Tier Infomation
             </Heading>
             <TierDetails currentPoolData={currentPoolData} />
-            <StyledHeading as="h2" scale="lg">
-              Project Detail
-            </StyledHeading>
             <StyledFlex flexWrap="wrap">
-              <ProjectInfo currentPoolData={currentPoolData} />
-              <PoolInformation currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
+              <Box width="65%" mr="24px">
+                <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+                  Project Detail
+                </StyledHeading>
+                <ProjectInfo currentPoolData={currentPoolData} />
+              </Box>
+              <Box width="15%" mr="24px">
+                <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+                  Pool info
+                </StyledHeading>
+                <PoolInfo currentPoolData={currentPoolData} />
+              </Box>
+              <Box width="15%">
+                <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+                  Token info
+                </StyledHeading>
+                <TokenInfo currentPoolData={currentPoolData} />
+              </Box>
+
+              {/* <PoolInformation currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} /> */}
             </StyledFlex>
             <Steps />
           </>

@@ -4,8 +4,9 @@ import styled from 'styled-components'
 
 const CardWrapper = styled(Card)`
   width: 300px;
+  margin-bottom: 24px;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 475px;
+    width: 600px;
   }
 `
 

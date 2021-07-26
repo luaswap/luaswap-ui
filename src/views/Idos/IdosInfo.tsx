@@ -34,10 +34,10 @@ const Idos = () => {
         <Hero />
         <Flex mb="32px" alignItems="center" justifyContent="center">
           <SecondaryButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="primary">
-            <SecondaryMenuItem as={Link} to={`${url}`}>
+            <SecondaryMenuItem as={Link} to={`${url}`} pt="24px" pb="24px">
               OPENING POOLS
             </SecondaryMenuItem>
-            <SecondaryMenuItem as={Link} to={`${url}/history`}>
+            <SecondaryMenuItem as={Link} to={`${url}/history`} pt="24px" pb="24px">
               PREVIOUS POOLS
             </SecondaryMenuItem>
           </SecondaryButtonMenu>

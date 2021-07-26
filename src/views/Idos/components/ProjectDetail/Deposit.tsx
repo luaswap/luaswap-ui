@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
-import { Card, CardBody, Flex, Text, Mesage } from 'common-uikitstrungdao'
+import { Card, CardBody, Flex, Text, Mesage, Box } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import axios, { AxiosResponse } from 'axios'
 import { useSelector } from 'react-redux'
@@ -23,17 +23,28 @@ import { calculateSwapRate, getTierName } from '../helper'
 import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
-  width: 100%;
+  width: 65%;
   margin-top: 24px;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 40%;
     margin-top: 0px;
   }
 `
+const BlockTimerWrapper = styled(Box)`
+  width: 35%;
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-top: 0px;
+  }
+`
+
 const FlexWrapper = styled(Flex)`
   width: 100%;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 40%;
+    width: 45%;
   }
 `
 
@@ -213,41 +224,16 @@ const Deposit: React.FC<DepositProps> = ({
   }, [poolStatus, totalAmountUserSwapped, userTotalCommitted])
 
   return (
-    <FlexWrapper flexDirection="column">
-      {poolStatus !== 'closed' && (
-        <CardWrapper
-          style={{
-            width: '100%',
-          }}
-          mb="24px"
-        >
-          <CardBody
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Flex justifyContent="center" alignItems="center" flexDirection="column">
-              <CountDown
-                openAtSeconds={openAtSeconds}
-                closedAtSeconds={closedAtSeconds}
-                poolStatus={poolStatus}
-                claimAtSeconds={claimAtSeconds}
-              />
-            </Flex>
-          </CardBody>
-        </CardWrapper>
-      )}
-      <CardWrapper
-        style={{
-          width: '100%',
-          flex: 1,
-        }}
-      >
+    <FlexWrapper flexDirection="row">
+      <CardWrapper mr="24px">
         <CardBody
           style={{
             height: '100%',
+            ...(!isAvailalbeOnCurrentNetwork && {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }),
           }}
         >
           {isAvailalbeOnCurrentNetwork ? (
@@ -327,10 +313,22 @@ const Deposit: React.FC<DepositProps> = ({
               {isClaimed && <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>}
             </>
           ) : (
-            <Mesage variant="warning">Switch to correct network to see pool&apos;s information</Mesage>
+            <Flex alignItems="center" justifyContent="center">
+              <Text color="#606060" textAlign="center">
+                Switch to correct network to see pool&apos;s information
+              </Text>
+            </Flex>
           )}
         </CardBody>
       </CardWrapper>
+      <BlockTimerWrapper>
+        <CountDown
+          openAtSeconds={openAtSeconds}
+          closedAtSeconds={closedAtSeconds}
+          poolStatus={poolStatus}
+          claimAtSeconds={claimAtSeconds}
+        />
+      </BlockTimerWrapper>
     </FlexWrapper>
   )
 }

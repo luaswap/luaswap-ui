@@ -10,6 +10,7 @@ import {
   WorldIcon,
   TelegramIcon,
   Progress,
+  Box,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
@@ -25,16 +26,10 @@ import usePoolStatus from '../../hooks/usePoolStatus'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
 const IconWrapper = styled.a`
-  color: #212121;
-  margin: 0 3px;
-  display: flex !important;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
+  margin-right: 14px;
+  border-right: 1px solid #606060;
+  padding-right: 14px;
   cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.background};
 `
 const PoolInfoBlock = styled.div`
   display: flex;
@@ -53,7 +48,7 @@ const StatusBar = styled(Text)<StatusBarProps>`
   width: 80px;
   justify-content: center;
   align-items: center;
-  color: ${({ theme }) => theme.colors.text};
+  color: white;
   background-color: ${(props) => generateColorForStatusBar(props.status)};
 `
 
@@ -69,10 +64,22 @@ const ImageContainer = styled.div`
   margin-right: 10px;
 `
 
+const CapColumnWrapper = styled(Flex)`
+  width: 15%;
+`
+
+const AccessColumnWrapper = styled(Flex)`
+  width: 15%;
+`
+
+const ProcessColumnWrapper = styled(Flex)`
+  width: 70%;
+`
+
 const CardWrapper = styled(Card)`
   width: 100%;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 60%;
+    width: 55%;
     margin-right: 24px;
   }
 `
@@ -141,92 +148,79 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           height: 'auto',
         }}
       >
-        <Flex mb="15px" alignItems="center">
-          <ImageContainer>
-            <img src={img} alt="img" style={{ width: '100%', height: '100%' }} />
-          </ImageContainer>
-          <PoolInfoBlock>
-            <Text fontSize="24px" bold>
-              {name}
-            </Text>
-            <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>
-            <Flex marginBottom="5px" alignItems="center">
-              <IconWrapper href="google.com" target="__blank">
-                <TelegramIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <TwitterIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <MediumIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <WorldIcon />
-              </IconWrapper>
-            </Flex>
-          </PoolInfoBlock>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Flex mb="15px" alignItems="center">
+            <ImageContainer>
+              <img src={img} alt="img" style={{ width: '100%', height: '100%' }} />
+            </ImageContainer>
+            <PoolInfoBlock>
+              <Text fontSize="24px" bold>
+                {name}
+              </Text>
+              <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>
+            </PoolInfoBlock>
+          </Flex>
+          <Flex marginBottom="5px" alignItems="center">
+            <IconWrapper href="google.com" target="__blank">
+              <TelegramIcon />
+            </IconWrapper>
+            <IconWrapper>
+              <TwitterIcon />
+            </IconWrapper>
+            <IconWrapper>
+              <MediumIcon />
+            </IconWrapper>
+            <IconWrapper>
+              <WorldIcon />
+            </IconWrapper>
+          </Flex>
         </Flex>
         <Text>{description}</Text>
-        <Flex justifyContent="space-between" mb="10px" mt="15px" alignItems="flex-start">
-          {/* <Flex justifyContent="flex-start" flexDirection="column">
-            <Text color="primary">Swap rate</Text>
-            <Text>
-              1 {payToken.symbol} = {rate} {idoToken.symbol}
-            </Text>
-          </Flex> */}
-          <Flex justifyContent="flex-start" flexDirection="column">
-            <Text color="primary">Cap</Text>
-            <Text>
+        <Flex justifyContent="flex-start" mb="10px" mt="15px" alignItems="flex-start">
+          <CapColumnWrapper alignItems="flex-start" flexDirection="column">
+            <Text>Cap</Text>
+            <Text color="primary" bold fontSize="18px">
               {totalAmountIDO} {idoToken.symbol}
             </Text>
-          </Flex>
-          {poolStatus === 'closed' && (
-            <Flex justifyContent="flex-start" flexDirection="column">
-              <Text color="primary">Commit Amount</Text>
-              <Text>
-                {totalPayTokenCommited}/{totalAmountPay} {payToken.symbol}
+          </CapColumnWrapper>
+          <AccessColumnWrapper alignItems="flex-start" flexDirection="column">
+            <Text>Access</Text>
+            <Text color="primary" bold fontSize="18px">
+              Public
+            </Text>
+          </AccessColumnWrapper>
+          <ProcessColumnWrapper flexDirection="column">
+            <Flex justifyContent="space-between" mb="3px">
+              <Box>
+                {isPoolInProgress || !isPoolOpen ? (
+                  <Flex justifyContent="flex-start" flexDirection="row">
+                    <Text>Commit Process</Text>
+                    <Text color="primary" bold fontSize="18px">
+                      &nbsp;{totalCommittedAmount}/{totalAmountPay} {payToken?.symbol}
+                    </Text>
+                  </Flex>
+                ) : (
+                  <Flex justifyContent="flex-start" flexDirection="row">
+                    <Text>Swap Process</Text>
+                    <Text color="primary" bold fontSize="18px">
+                      &nbsp;{swappedAmountIDO ? swappedAmountIDO.toFixed(2) : '0'}/{totalAmountIDO} {idoToken?.symbol}
+                    </Text>
+                  </Flex>
+                )}
+              </Box>
+              <Text color="primary" bold fontSize="18px">
+                {isPoolInProgress || !isPoolOpen
+                  ? totalCommitedPercentage.toFixed(2)
+                  : totalSwapAmountPercentage.toFixed(2)}
+                %
               </Text>
             </Flex>
-          )}
-          <Flex justifyContent="flex-end" flexDirection="column">
-            <Text color="primary">Access</Text>
-            <Text textAlign="right">Public</Text>
-          </Flex>
-        </Flex>
-        <Flex flexDirection="column">
-          {isPoolInProgress || !isPoolOpen ? (
-            <Text mb="10px" color="primary">
-              Commited Progress
-            </Text>
-          ) : (
-            <Text mb="10px" color="primary">
-              Swap Progress
-            </Text>
-          )}
-          <Progress
-            variant="round"
-            primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
-            secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
-          />
-        </Flex>
-        <Flex justifyContent="space-between" mt="10px">
-          <Text>
-            {isPoolInProgress || !isPoolOpen ? (
-              <>
-                {totalCommittedAmount}/{totalAmountPay} {payToken?.symbol}
-              </>
-            ) : (
-              <>
-                {swappedAmountIDO ? swappedAmountIDO.toFixed(2) : '0'}/{totalAmountIDO} {idoToken?.symbol}
-              </>
-            )}
-          </Text>
-          <Text color="secondary">
-            {isPoolInProgress || !isPoolOpen
-              ? totalCommitedPercentage.toFixed(2)
-              : totalSwapAmountPercentage.toFixed(2)}
-            %
-          </Text>
+            <Progress
+              variant="round"
+              primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
+              secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
+            />
+          </ProcessColumnWrapper>
         </Flex>
       </CardBody>
     </CardWrapper>
