@@ -15,6 +15,7 @@ import {
   WorldIcon,
   TelegramIcon,
   Progress,
+  SecondaryButton,
   Image,
 } from 'common-uikitstrungdao'
 import useDeepMemo from 'hooks/useDeepMemo'
@@ -31,21 +32,15 @@ const PoolInfoBlock = styled.div`
 const CardWrapper = styled(Card)`
   width: 100%;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 475px;
+    width: 100%;
   }
 `
 
 const IconWrapper = styled.a`
-  color: #212121;
-  margin: 0 3px;
-  display: flex !important;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
+  margin-right: 14px;
+  border-right: 1px solid #606060;
+  padding-right: 14px;
   cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.background};
 `
 
 const ImageContainer = styled.span`
@@ -113,54 +108,51 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   }, [totalCommittedAmount, totalAmountPay, poolStatus, swappedAmountIDO, totalAmountIDO])
 
   return (
-    <CardWrapper
-      ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />}
-      mb="24px"
-    >
+    <CardWrapper mb="24px">
       <CardBody style={{ height: '300px' }}>
-        <Flex mb="15px" alignItems="center">
-          <ImageContainer onClick={navigateToProjectDetail}>
-            <Image src={img} alt="img" width={60} height={60} />
-          </ImageContainer>
-          <PoolInfoBlock>
-            <Text
-              fontSize="24px"
-              bold
-              onClick={navigateToProjectDetail}
-              style={{
-                cursor: 'pointer',
-              }}
-            >
-              {name}
-            </Text>
-            <Flex marginBottom="5px" alignItems="center">
-              <IconWrapper href="google.com" target="__blank">
-                <TelegramIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <TwitterIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <MediumIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <WorldIcon />
-              </IconWrapper>
-            </Flex>
-          </PoolInfoBlock>
-        </Flex>
-        <Text>{description}</Text>
-        <Link href="google.com" mb="15px">
-          Learn more
-        </Link>
-        <Flex justifyContent="space-between" mb="10px">
-          <Flex justifyContent="flex-start" flexDirection="column">
-            <Text color="primary">Cap</Text>
-            <Text>{totalAmountIDO}</Text>
+        <Flex alignItems="flex-start" justifyContent="space-between">
+          <Flex mb="15px" alignItems="center">
+            <ImageContainer onClick={navigateToProjectDetail}>
+              <Image src={img} alt="img" width={60} height={60} />
+            </ImageContainer>
+            <PoolInfoBlock>
+              <Text
+                fontSize="24px"
+                bold
+                onClick={navigateToProjectDetail}
+                style={{
+                  cursor: 'pointer',
+                }}
+              >
+                {name}
+              </Text>
+              <Flex marginBottom="5px" alignItems="center">
+                <IconWrapper href="google.com" target="__blank">
+                  <TelegramIcon />
+                </IconWrapper>
+                <IconWrapper>
+                  <TwitterIcon />
+                </IconWrapper>
+                <IconWrapper>
+                  <MediumIcon />
+                </IconWrapper>
+                <IconWrapper>
+                  <WorldIcon />
+                </IconWrapper>
+              </Flex>
+            </PoolInfoBlock>
           </Flex>
-          <Flex justifyContent="flex-end" flexDirection="column">
-            <Text color="primary">Access</Text>
-            <Text>Private</Text>
+          <SecondaryButton>LEARN MORE</SecondaryButton>
+        </Flex>
+        <Text color="#C3C3C3">{description}</Text>
+        <Flex justifyContent="space-between" mb="10px">
+          <Flex justifyContent="flex-start" flexDirection="row">
+            <Text color="#8B8B8B" mr="5px">
+              Cap:{' '}
+            </Text>
+            <Text color="primary" fontWeight="600">
+              {totalAmountIDO}
+            </Text>
           </Flex>
         </Flex>
         <Progress variant="round" primaryStep={progressPercentage} />

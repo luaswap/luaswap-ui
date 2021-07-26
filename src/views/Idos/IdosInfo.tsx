@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'contexts/Localization'
 import { useSelector } from 'react-redux'
 import { Route, useRouteMatch, Link } from 'react-router-dom'
-import { ButtonMenu, ButtonMenuItem, Flex } from 'common-uikitstrungdao'
+import { ButtonMenu, ButtonMenuItem, Flex, SecondaryButtonMenu, SecondaryMenuItem } from 'common-uikitstrungdao'
 import { selectOpenPools, selectLoadingOpenPools, selectClosedPools, fetchPools } from 'state/ido'
 import { useAppDispatch } from 'state'
 import Page from 'components/layout/Page'
@@ -30,27 +30,25 @@ const Idos = () => {
 
   return (
     <>
-      <>
+      <Page>
         <Hero />
-        <Page>
-          <Flex mb="32px">
-            <ButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="primary">
-              <ButtonMenuItem as={Link} to={`${url}`}>
-                {t('Opening Pools')}
-              </ButtonMenuItem>
-              <ButtonMenuItem as={Link} to={`${url}/history`}>
-                {t('Previous Pools')}
-              </ButtonMenuItem>
-            </ButtonMenu>
-          </Flex>
-          <Route exact path={`${path}`}>
-            <CurrentIdo openPools={openPools} isLoadingState={isLoadingState} />
-          </Route>
-          <Route path={`${path}/history`}>
-            <PastIdo closedPools={closedPools} isLoadingState={isLoadingState} />
-          </Route>
-        </Page>
-      </>
+        <Flex mb="32px" alignItems="center" justifyContent="center">
+          <SecondaryButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="primary">
+            <SecondaryMenuItem as={Link} to={`${url}`}>
+              OPENING POOLS
+            </SecondaryMenuItem>
+            <SecondaryMenuItem as={Link} to={`${url}/history`}>
+              PREVIOUS POOLS
+            </SecondaryMenuItem>
+          </SecondaryButtonMenu>
+        </Flex>
+        <Route exact path={`${path}`}>
+          <CurrentIdo openPools={openPools} isLoadingState={isLoadingState} />
+        </Route>
+        <Route path={`${path}/history`}>
+          <PastIdo closedPools={closedPools} isLoadingState={isLoadingState} />
+        </Route>
+      </Page>
     </>
   )
 }
