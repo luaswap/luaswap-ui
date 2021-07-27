@@ -180,7 +180,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           <CapColumnWrapper alignItems="flex-start" flexDirection="column">
             <Text>Cap</Text>
             <Text color="primary" bold fontSize="18px">
-              {totalAmountIDO} {idoToken.symbol}
+              {totalAmountIDO} {idoToken?.symbol}
             </Text>
           </CapColumnWrapper>
           <AccessColumnWrapper alignItems="flex-start" flexDirection="column">

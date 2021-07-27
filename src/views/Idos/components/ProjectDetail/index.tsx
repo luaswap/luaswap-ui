@@ -37,10 +37,9 @@ const StyledFlex = styled(Flex)`
 
 const StyledHeading = styled(Heading)`
   margin-bottom: 14px;
-  margin-top: 20px;
+  margin-top: 40px;
   ${({ theme }) => theme.mediaQueries.lg} {
-    margin-bottom: 24px;
-    margin-top: 30px;
+    margin-top: 40px;
   }
 `
 
@@ -122,13 +121,13 @@ const ProjectDetail = () => {
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
             </StyledFlex>
-            <Heading as="h2" scale="lg" mb="24px" mt="50px" color="#D8D8D8">
+            <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               Tier Infomation
             </Heading>
             <TierDetails currentPoolData={currentPoolData} />
             <StyledFlex flexWrap="wrap">
               <Box width="65%" mr="24px">
-                <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+                <StyledHeading as="h2" scale="lg" color="#D8D8D8" mb="14px">
                   Project Detail
                 </StyledHeading>
                 <ProjectInfo currentPoolData={currentPoolData} />
@@ -145,9 +144,10 @@ const ProjectDetail = () => {
                 </StyledHeading>
                 <TokenInfo currentPoolData={currentPoolData} />
               </Box>
-
-              {/* <PoolInformation currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} /> */}
             </StyledFlex>
+            <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
+              How to LuaStarts
+            </Heading>
             <Steps />
           </>
         )}

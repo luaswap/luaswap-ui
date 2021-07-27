@@ -23,21 +23,23 @@ import { calculateSwapRate, getTierName } from '../helper'
 import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
-  width: 65%;
+  width: 100%;
   margin-top: 24px;
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${({ theme }) => theme.mediaQueries.xl} {
     margin-top: 0px;
+    width: 60%;
   }
 `
 const BlockTimerWrapper = styled(Box)`
-  width: 35%;
+  width: 100%;
   margin-top: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${({ theme }) => theme.mediaQueries.xl} {
     margin-top: 0px;
+    width: 35%;
   }
 `
 
@@ -313,7 +315,8 @@ const Deposit: React.FC<DepositProps> = ({
               {isClaimed && <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>}
             </>
           ) : (
-            <Flex alignItems="center" justifyContent="center">
+            <Flex alignItems="center" justifyContent="center" flexDirection="column">
+              <img src={`${process.env.PUBLIC_URL}/images/empty.svg`} alt="empty" />
               <Text color="#606060" textAlign="center">
                 Switch to correct network to see pool&apos;s information
               </Text>
