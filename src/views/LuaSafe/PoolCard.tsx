@@ -65,22 +65,22 @@ const PoolCard: React.FC<PoolCardProps> = ({ pool }) => {
         </Flex>
       </CardHeader>
       <CardBody>
-        <Flex justifyContent="space-between">
+        <Flex justifyContent="space-between" mt="10px">
           <Text>LP Token</Text>
           <Text>{pool.lpBalance.toFixed(9)}</Text>
         </Flex>
-        <Flex justifyContent="space-between">
+        <Flex justifyContent="space-between" mt="10px">
           <Text>{pool.token0Symbol}</Text>
           <Text>{pool.token0Balance.toFixed(4)}</Text>
         </Flex>
-        <Flex justifyContent="space-between">
+        <Flex justifyContent="space-between" mt="10px">
           <Text>{pool.token1Symbol}</Text>
           <Text>{pool.token1Balance.toFixed(5)}</Text>
         </Flex>
         <Button
           disabled={!new BigNumber(pool.lpBalance).isGreaterThan(0)}
           onClick={onPresentConvert}
-          mt="8px"
+          mt="20px"
           width="100%"
         >
           Convert

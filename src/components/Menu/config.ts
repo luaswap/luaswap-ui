@@ -1,5 +1,5 @@
 import { MenuEntry } from 'common-uikitstrungdao'
-import { ContextApi } from 'contexts/Localization/types'
+import { ContextApi } from '../../contexts/Localization/types'
 
 const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
   {
@@ -14,7 +14,7 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
   },
   {
     label: t('LuaSafe'),
-    icon: 'FarmIcon',
+    icon: 'PoolIcon',
     href: '/luasafe',
   },
   {

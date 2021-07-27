@@ -68,7 +68,7 @@ const StylePools = styled(BaseLayout)`
   margin-bottom: 32px;
   margin-top: 40px;
   & > div {
-    grid-column: span 4;
+    grid-column: span 6;
     width: 100%;
     text-align: center;
     background-color: ${({ theme }) => theme.colors.backgroundAlt};
@@ -76,7 +76,7 @@ const StylePools = styled(BaseLayout)`
 
   ${({ theme }) => theme.mediaQueries.sm} {
     & > div {
-      grid-column: span 8;
+      grid-column: span 6;
     }
   }
 
