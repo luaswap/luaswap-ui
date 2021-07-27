@@ -95,7 +95,40 @@ export const unstake = async (masterChefContract, pid, amount, account, chainId?
       return tx.transactionHash
     })
 }
+// Stake Lua Confirm
+export const enter = async (xLuaContract, amount, account, chainId) => {
+  const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x7A120' } : { from: account }
+  return xLuaContract.methods
+    .enter(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+    .send(gasLimit)
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+// Stake Withdraw
+export const leave = async (xLuaContract, amount, account, chainId) => {
+  const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x7A120' } : { from: account }
+  return xLuaContract.methods
+    .leave(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+    .send(gasLimit)
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
 
+// Lua Convert
+export const luaConvert = async (contract, token0, token1, account, chainId) => {
+  const gasLimit = chainId === 88 ? { from: account, gasLimit: '0x1E8480' } : { from: account }
+  return (
+    contract &&
+    contract.methods
+      .convert(token0, token1)
+      .send(gasLimit)
+      .on('transactionHash', (tx) => {
+        return tx.transactionHash
+      })
+  )
+}
 export const sousUnstake = async (sousChefContract, amount, decimals, account) => {
   return sousChefContract.methods
     .withdraw(new BigNumber(amount).times(BIG_TEN.pow(decimals)).toString())

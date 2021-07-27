@@ -25,6 +25,9 @@ export const getLuaAddress = (chainId?) => {
 export const getxLuaAddress = (chainId?) => {
   return getAddress(addresses.xlua, chainId)
 }
+export const getMakerAddress = (chainId?) => {
+  return getAddress(addresses.maker, chainId)
+}
 export const getMulticallAddress = (chainId?) => {
   return getAddress(addresses.multiCall, chainId)
 }

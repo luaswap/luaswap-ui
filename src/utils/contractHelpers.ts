@@ -45,6 +45,8 @@ import lotteryTicketAbi from 'config/abi/lotteryNft.json'
 import masterChef from 'config/abi/masterchef.json'
 import luaAbi from 'config/abi/lua.json'
 import luaIdoAbi from 'config/abi/LuaSwapIDO.json'
+import xLuaAbi from 'config/abi/xLua.json'
+import luaMaker from 'config/abi/luaMaker.json'
 import sousChef from 'config/abi/sousChef.json'
 import sousChefV2 from 'config/abi/sousChefV2.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
@@ -122,6 +124,12 @@ export const getLuaContract = (web3?: Web3, chainId?: number) => {
 }
 export const getLuaIdoContract = (web3?: Web3, address?: string) => {
   return getContract(luaIdoAbi, address, web3)
+}
+export const getxLuaContract = (web3?: Web3, address?: string) => {
+  return getContract(xLuaAbi, address, web3)
+}
+export const getLuaMakerContract = (web3?: Web3, address?: string) => {
+  return getContract(luaMaker, address, web3)
 }
 export const getClaimRefundContract = (web3?: Web3) => {
   return getContract(claimRefundAbi, getClaimRefundAddress(), web3)

@@ -64,3 +64,29 @@ export const NUMBER_BLOCKS_PER_YEAR: { [chainId in ChainId]: number } = {
   89: 12614400,
   99: 12614400,
 }
+
+type TokenIconProps = {
+  [index: string]: string
+}
+export const TOKEN_ICONS: TokenIconProps = {
+  LUA: 'https://luaswap.org/favicon.png',
+  'LUA-V1': 'https://luaswap.org/favicon.png',
+  USDC: 'https://s2.coinmarketcap.com/static/img/coins/128x128/3408.png',
+  TOMOE: 'https://wallet.tomochain.com/public/imgs/tomoiconwhite.png',
+  ETH: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1027.png',
+  USDT: 'https://s2.coinmarketcap.com/static/img/coins/128x128/825.png',
+  FRONT: 'https://s2.coinmarketcap.com/static/img/coins/128x128/5893.png',
+  SUSHI: 'https://s2.coinmarketcap.com/static/img/coins/128x128/6758.png',
+  SRM: 'https://s2.coinmarketcap.com/static/img/coins/128x128/6187.png',
+  'FTX Token': 'https://s2.coinmarketcap.com/static/img/coins/128x128/4195.png',
+  KAI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xD9Ec3ff1f8be459Bb9369b4E79e9Ebcf7141C093/logo.png',
+  OM: 'https://s2.coinmarketcap.com/static/img/coins/128x128/6536.png',
+  WBTC: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1.png',
+  UNI: 'https://s2.coinmarketcap.com/static/img/coins/128x128/7083.png',
+  DAI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png',
+  BAT: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1697.png',
+  RAMP: 'https://s2.coinmarketcap.com/static/img/coins/128x128/7463.png',
+  WTOMO: 'https://wallet.tomochain.com/public/imgs/tomoiconwhite.png',
+  BTC: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1.png',
+  LIT: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3870.png',
+}

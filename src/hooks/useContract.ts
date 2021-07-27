@@ -24,6 +24,8 @@ import {
   getSouschefV2Contract,
   getLuaContract,
   getLuaIdoContract,
+  getxLuaContract,
+  getLuaMakerContract,
 } from 'utils/contractHelpers'
 
 /**
@@ -96,6 +98,14 @@ export const useLuaContract = (chainId: number) => {
 export const useLuaIdoContract = (address: string) => {
   const web3 = useWeb3()
   return useMemo(() => getLuaIdoContract(web3, address), [web3, address])
+}
+export const useXluaContract = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => getxLuaContract(web3, address), [web3, address])
+}
+export const useLuaMakerContract = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => getLuaMakerContract(web3, address), [web3, address])
 }
 
 export const useSousChef = (id) => {
