@@ -7,7 +7,7 @@ const TimeBlock = styled(Flex)`
   border-radius: 10px;
   background-color: #1a1a1a;
   display: flex;
-  width: 30%;
+  width: 33%;
   margin-right: 4px;
   flex-direction: column;
 `

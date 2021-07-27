@@ -33,6 +33,7 @@ const LinkRef = styled(Flex)`
   border-right: 1px solid #353535;
   padding-right: 14px;
   padding-left: 14px;
+  align-items: flex-start;
 `
 
 interface ProjectInfoProps {

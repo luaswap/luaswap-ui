@@ -13,7 +13,11 @@ const CardWrapper = styled(Card)`
 const PageLoading = () => {
   return (
     <CardWrapper>
-      <CardBody>
+      <CardBody
+        style={{
+          backgroundColor: '#353535',
+        }}
+      >
         <Flex>
           <Skeleton width="60px" height="60px" variant="circle" mr="15px" mb="15px" />
           <Flex flexDirection="column">

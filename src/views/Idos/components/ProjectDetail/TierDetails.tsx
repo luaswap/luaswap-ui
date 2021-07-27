@@ -74,7 +74,7 @@ const TIER_INFO = {
   '1': {
     name: 'Earth',
     description: 'For every user, who holds less than 100 LUA or 100 TOMO',
-    icon: `${process.env.PUBLIC_URL}/images/wallet.png`,
+    icon: `${process.env.PUBLIC_URL}/images/earth.svg`,
     CTA: (lua) => (lua ? `Buy ${lua} LUA to JOIN IDO` : `Buy LUA to JOIN IDO`),
   },
   '2': {

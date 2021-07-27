@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
@@ -20,7 +20,6 @@ import {
 } from 'common-uikitstrungdao'
 import useDeepMemo from 'hooks/useDeepMemo'
 import { formatPoolDetail } from 'utils/formatPoolData'
-import { formatCardStatus, formatCardColor } from 'utils/idoHelpers'
 import { Pool, FormatPool } from '../../types'
 import usePoolStatus from '../../hooks/usePoolStatus'
 
@@ -64,6 +63,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
+  const location = useLocation()
   const [poolStatus] = usePoolStatus(pool)
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)

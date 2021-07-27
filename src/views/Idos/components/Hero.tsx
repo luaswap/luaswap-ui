@@ -7,8 +7,10 @@ import { useTranslation } from 'contexts/Localization'
 const StyledHero = styled.div`
   padding-bottom: 15px;
   padding-top: 15px;
-  background: linear-gradient(107.27deg, #f5bd6d -12.7%, #d76700 122.45%),
-    url('${process.env.PUBLIC_URL}/images/image7.png');
+  background-image: url('${process.env.PUBLIC_URL}/images/Group16.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   border-radius: 40px;
 `
 

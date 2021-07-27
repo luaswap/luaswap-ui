@@ -34,6 +34,26 @@ const StyledFlex = styled(Flex)`
     flex-wrap: nowrap;
   }
 `
+const ProjectDetailBox = styled(Box)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.xl} {
+    width: 65%;
+  }
+`
+
+const PoolInfoBox = styled(Box)`
+  width: 45%;
+  ${({ theme }) => theme.mediaQueries.xl} {
+    width: 15%;
+  }
+`
+
+const TokenInfoBox = styled(Box)`
+  width: 45%;
+  ${({ theme }) => theme.mediaQueries.xl} {
+    width: 15%;
+  }
+`
 
 const StyledHeading = styled(Heading)`
   margin-bottom: 14px;
@@ -126,24 +146,24 @@ const ProjectDetail = () => {
             </Heading>
             <TierDetails currentPoolData={currentPoolData} />
             <StyledFlex flexWrap="wrap">
-              <Box width="65%" mr="24px">
+              <ProjectDetailBox mr="24px">
                 <StyledHeading as="h2" scale="lg" color="#D8D8D8" mb="14px">
                   Project Detail
                 </StyledHeading>
                 <ProjectInfo currentPoolData={currentPoolData} />
-              </Box>
-              <Box width="15%" mr="24px">
+              </ProjectDetailBox>
+              <PoolInfoBox mr="24px">
                 <StyledHeading as="h2" scale="lg" color="#D8D8D8">
                   Pool info
                 </StyledHeading>
                 <PoolInfo currentPoolData={currentPoolData} />
-              </Box>
-              <Box width="15%">
+              </PoolInfoBox>
+              <TokenInfoBox>
                 <StyledHeading as="h2" scale="lg" color="#D8D8D8">
                   Token info
                 </StyledHeading>
                 <TokenInfo currentPoolData={currentPoolData} />
-              </Box>
+              </TokenInfoBox>
             </StyledFlex>
             <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               How to LuaStarts

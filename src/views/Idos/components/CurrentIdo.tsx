@@ -1,5 +1,6 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react'
-import { Text, Flex } from 'common-uikitstrungdao'
+import { Text, Flex, Box } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { OpenPools } from 'state/types'
 import PoolDetail from './PoolDetail'
@@ -24,6 +25,17 @@ interface CurrentIdoProps {
   isLoadingState: boolean
 }
 
+const EmptyPool = () => {
+  return (
+    <Flex alignItems="center" justifyContent="center" flexDirection="column">
+      <img src={`${process.env.PUBLIC_URL}/images/empty.svg`} alt="empty" />
+      <Text color="#606060" textAlign="center">
+        Switch to correct network to see pool&apos;s information
+      </Text>
+    </Flex>
+  )
+}
+
 const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upcomingPools }, isLoadingState }) => {
   return (
     <IdoLayout>
@@ -35,6 +47,8 @@ const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upco
           <Row>
             {isLoadingState ? (
               <PageLoading />
+            ) : openingPools.length === 0 ? (
+              <EmptyPool />
             ) : (
               openingPools.map((pool) => {
                 return <PoolDetail pool={pool} />
