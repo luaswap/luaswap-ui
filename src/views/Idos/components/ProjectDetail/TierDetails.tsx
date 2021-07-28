@@ -91,6 +91,7 @@ const TIER_INFO = {
   },
 }
 
+// We have different layout for PC and Mobile/tablet
 const TierCard: React.FC<TierProps> = ({
   data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
   userTier,
@@ -184,9 +185,101 @@ const TierCard: React.FC<TierProps> = ({
   )
 }
 
+const TierCardMobile: React.FC<TierProps> = ({
+  data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
+  userTier,
+  nextTier,
+}) => {
+  if (tier === 0) {
+    return null
+  }
+
+  return (
+    <TierCardContainer>
+      <CardBodyWrapper>
+        <Box>
+          <TierHeaderWrapper mb="15px" flexDirection="column">
+            <Flex alignItems="center" mb="14px">
+              <ImageContainer src={TIER_INFO[tier]?.icon} alt="img" />
+              <Flex alignItems="flex-start" flexDirection="column">
+                <Text fontSize="20px" bold mr="8px">
+                  {TIER_INFO[tier]?.name}
+                </Text>
+                <TierContainer fontSize="14px" bold>
+                  Tier {tier}
+                </TierContainer>
+              </Flex>
+            </Flex>
+            <SecondaryMessage>
+              <Text color="#8B8B8B" fontSize="14px">
+                {TIER_INFO[tier]?.description}
+              </Text>
+            </SecondaryMessage>
+          </TierHeaderWrapper>
+          <Flex justifyContent="space-between" flexDirection="column">
+            <Flex justifyContent="space-between">
+              <Text color="#8B8B8B">Total {idoToken.symbol}:&nbsp;</Text>
+              <Text bold color="#C3C3C3">
+                {totalAmountIDO} {idoToken.symbol}
+              </Text>
+            </Flex>
+            <Flex justifyContent="space-between">
+              <Text color="#8B8B8B">Funds to raise:&nbsp;</Text>
+              <Text bold color="#C3C3C3">
+                {totalAmountPay} {payToken.symbol}
+              </Text>
+            </Flex>
+            <Flex justifyContent="space-between">
+              <Text color="#8B8B8B">Price per:{idoToken.symbol}&nbsp;</Text>
+              <Text bold>
+                {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
+              </Text>
+            </Flex>
+            <Flex justifyContent="space-between">
+              <Text color="#8B8B8B">Total committed:&nbsp;</Text>
+              <Text bold>
+                {totalCommittedAmount} {payToken.symbol}
+              </Text>
+            </Flex>
+          </Flex>
+        </Box>
+        <Box>
+          {userTier === tier && (
+            <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
+              <Text bold>Your Tier. GET READY!</Text>
+              <Image
+                src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
+                alt="img"
+                width={40}
+                height={40}
+                ml="20px"
+              />
+            </Button>
+          )}
+
+          {userTier < tier && (
+            <Button
+              width="100%"
+              mt="30px"
+              variant="primary"
+              style={{ textAlign: 'center' }}
+              as="a"
+              href="https://app.luaswap.org/#/swap"
+              target="__blank"
+            >
+              {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
+            </Button>
+          )}
+        </Box>
+      </CardBodyWrapper>
+    </TierCardContainer>
+  )
+}
+
 const TierDetails: React.FC<{
   currentPoolData: Pool
 }> = ({ currentPoolData }) => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   const userTier = useSelector(selectUserTier)
   const userNextTier = useSelector(selectUserNextTier)
   const { index: tierData } = currentPoolData
@@ -212,9 +305,13 @@ const TierDetails: React.FC<{
     <>
       <TierInformationWrapper>
         <Flex flexWrap="wrap" justifyContent="space-between">
-          {tiersss.map((e: IdoDetailInfo, i: number) => (
-            <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
-          ))}
+          {tiersss.map((e: IdoDetailInfo, i: number) =>
+            isMobile ? (
+              <TierCardMobile data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
+            ) : (
+              <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
+            ),
+          )}
         </Flex>
       </TierInformationWrapper>
       <SecondaryMessage>

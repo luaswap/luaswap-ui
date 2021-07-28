@@ -30,26 +30,39 @@ const Row = styled.div`
 `
 
 const StyledFlex = styled(Flex)`
-  ${({ theme }) => theme.mediaQueries.lg} {
+  @media screen and (min-width: 1250px) {
     flex-wrap: nowrap;
   }
 `
 const ProjectDetailBox = styled(Box)`
   width: 100%;
+  margin-right: 0px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-right: 24px;
+  }
   ${({ theme }) => theme.mediaQueries.xl} {
-    width: 65%;
+    width: calc(70% - 48px);
   }
 `
 
 const PoolInfoBox = styled(Box)`
-  width: 45%;
+  width: 100%;
+  margin-right: 0px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: calc(50% - 12px);
+    margin-right: 24px;
+  }
   ${({ theme }) => theme.mediaQueries.xl} {
     width: 15%;
+    margin-right: 24px;
   }
 `
 
 const TokenInfoBox = styled(Box)`
-  width: 45%;
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: calc(50% - 12px);
+  }
   ${({ theme }) => theme.mediaQueries.xl} {
     width: 15%;
   }

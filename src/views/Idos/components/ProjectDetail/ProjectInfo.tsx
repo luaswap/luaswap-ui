@@ -30,10 +30,9 @@ const LinkWrapper = styled(Flex)`
 `
 
 const LinkRef = styled(Flex)`
-  border-right: 1px solid #353535;
-  padding-right: 14px;
   padding-left: 14px;
   align-items: flex-start;
+  width: 100%;
 `
 
 interface ProjectInfoProps {
@@ -50,9 +49,14 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
             links.map((item) => {
               return (
                 <LinkRef>
-                  <Text color="#8B8B8B">{item.label} &nbsp;</Text>
-                  <Link href={item.link} target="_blank">
-                    {item.link.substr(0, 25)}
+                  <Link
+                    href={item.link}
+                    target="_blank"
+                    style={{
+                      wordBreak: 'break-all',
+                    }}
+                  >
+                    {item.label}
                   </Link>
                 </LinkRef>
               )

@@ -65,20 +65,44 @@ const ImageContainer = styled.div`
 `
 
 const CapColumnWrapper = styled(Flex)`
-  width: 15%;
+  width: 50%;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 15%;
+  }
 `
 
+const SocialLinkWrapper = styled(Flex)``
+
+const PoolWrapper = styled(Flex)``
+
 const AccessColumnWrapper = styled(Flex)`
-  width: 15%;
+  width: 50%;
+  align-items: flex-end;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 15%;
+    align-items: flex-start;
+  }
 `
 
 const ProcessColumnWrapper = styled(Flex)`
-  width: 70%;
+  margin-top: 12px;
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-top: 0px;
+    width: 70%;
+  }
+`
+
+const ProcessAmountWrapper = styled(Flex)`
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    flex-direction: row;
+  }
 `
 
 const CardWrapper = styled(Card)`
   width: 100%;
-  ${({ theme }) => theme.mediaQueries.lg} {
+  @media screen and (min-width: 1250px) {
     width: 55%;
     margin-right: 24px;
   }
@@ -148,8 +172,8 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           height: 'auto',
         }}
       >
-        <Flex justifyContent="space-between" alignItems="center">
-          <Flex mb="15px" alignItems="center">
+        <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
+          <PoolWrapper mb="15px" alignItems="center">
             <ImageContainer>
               <img src={img} alt="img" style={{ width: '100%', height: '100%' }} />
             </ImageContainer>
@@ -159,8 +183,8 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               </Text>
               <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>
             </PoolInfoBlock>
-          </Flex>
-          <Flex marginBottom="5px" alignItems="center">
+          </PoolWrapper>
+          <SocialLinkWrapper marginBottom="5px" alignItems="center">
             <IconWrapper href="google.com" target="__blank">
               <TelegramIcon />
             </IconWrapper>
@@ -173,10 +197,10 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <IconWrapper>
               <WorldIcon />
             </IconWrapper>
-          </Flex>
+          </SocialLinkWrapper>
         </Flex>
         <Text>{description}</Text>
-        <Flex justifyContent="flex-start" mb="10px" mt="15px" alignItems="flex-start">
+        <Flex justifyContent="flex-start" mb="10px" mt="15px" alignItems="flex-start" flexWrap="wrap">
           <CapColumnWrapper alignItems="flex-start" flexDirection="column">
             <Text>Cap</Text>
             <Text color="primary" bold fontSize="18px">
@@ -193,19 +217,19 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <Flex justifyContent="space-between" mb="3px">
               <Box>
                 {isPoolInProgress || !isPoolOpen ? (
-                  <Flex justifyContent="flex-start" flexDirection="row">
+                  <ProcessAmountWrapper justifyContent="flex-start">
                     <Text>Commit Process</Text>
                     <Text color="primary" bold fontSize="18px">
                       &nbsp;{totalCommittedAmount}/{totalAmountPay} {payToken?.symbol}
                     </Text>
-                  </Flex>
+                  </ProcessAmountWrapper>
                 ) : (
-                  <Flex justifyContent="flex-start" flexDirection="row">
+                  <ProcessAmountWrapper justifyContent="flex-start">
                     <Text>Swap Process</Text>
                     <Text color="primary" bold fontSize="18px">
                       &nbsp;{swappedAmountIDO ? swappedAmountIDO.toFixed(2) : '0'}/{totalAmountIDO} {idoToken?.symbol}
                     </Text>
-                  </Flex>
+                  </ProcessAmountWrapper>
                 )}
               </Box>
               <Text color="primary" bold fontSize="18px">

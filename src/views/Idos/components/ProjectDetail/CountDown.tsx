@@ -27,13 +27,16 @@ const TimerBlock = styled(Box)`
   width: 100%;
   height: 100%;
   display: flex;
-  padding: 0px 14px;
   flex-direction: column;
   align-items: center;
   text-align: center;
   background-color: #282828;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
+  padding: 24px 14px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 0px 14px;
+  }
 `
 
 interface CountDownProps {

@@ -24,30 +24,34 @@ import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
   width: 100%;
-  margin-top: 24px;
-  ${({ theme }) => theme.mediaQueries.xl} {
+  margin-right: 0px;
+  ${({ theme }) => theme.mediaQueries.sm} {
     margin-top: 0px;
-    width: 60%;
+    margin-right: 24px;
+    width: calc(65% - 24px);
   }
 `
 const BlockTimerWrapper = styled(Box)`
   width: 100%;
-  margin-top: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  ${({ theme }) => theme.mediaQueries.xl} {
+  margin-top: 24px;
+  ${({ theme }) => theme.mediaQueries.sm} {
     margin-top: 0px;
+    height: 100%;
     width: 35%;
+    margin-top: 0px;
   }
 `
 
 const FlexWrapper = styled(Flex)`
   width: 100%;
-  ${({ theme }) => theme.mediaQueries.lg} {
+  margin-top: 24px;
+  @media screen and (min-width: 1250px) {
     width: 45%;
-  }
+    margin-top: 0px;
+  } ;
 `
 
 interface DepositProps {
@@ -226,8 +230,8 @@ const Deposit: React.FC<DepositProps> = ({
   }, [poolStatus, totalAmountUserSwapped, userTotalCommitted])
 
   return (
-    <FlexWrapper flexDirection="row">
-      <CardWrapper mr="24px">
+    <FlexWrapper flexDirection="row" flexWrap="wrap">
+      <CardWrapper>
         <CardBody
           style={{
             height: '100%',
