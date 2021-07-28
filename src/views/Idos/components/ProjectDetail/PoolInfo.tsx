@@ -16,10 +16,11 @@ const ProjectInfoWrapper = styled(Box)`
   border-bottom-left-radius: 30px;
   height: 300px;
   background-color: #282828;
-  margin-bottom: 40px;
+  margin-bottom: 0px;
   width: 100%;
   ${({ theme }) => theme.mediaQueries.lg} {
     margin-right: 24px;
+    margin-bottom: 40px;
   }
 `
 

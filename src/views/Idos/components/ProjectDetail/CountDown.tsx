@@ -34,9 +34,6 @@ const TimerBlock = styled(Box)`
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
   padding: 24px 14px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 0px 14px;
-  }
 `
 
 interface CountDownProps {

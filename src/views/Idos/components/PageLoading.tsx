@@ -3,11 +3,7 @@ import { Skeleton, Card, CardBody, Flex } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 
 const CardWrapper = styled(Card)`
-  width: 300px;
   margin-bottom: 24px;
-  ${({ theme }) => theme.mediaQueries.lg} {
-    width: 600px;
-  }
 `
 
 const PageLoading = () => {

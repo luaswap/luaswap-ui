@@ -110,7 +110,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   return (
     <CardWrapper mb="24px">
       <CardBody style={{ height: '300px', backgroundColor: '#353535' }}>
-        <Flex alignItems="flex-start" justifyContent="space-between">
+        <Flex alignItems="flex-start" justifyContent="space-between" flexWrap="wrap">
           <Flex mb="15px" alignItems="center">
             <ImageContainer onClick={navigateToProjectDetail}>
               <Image src={img} alt="img" width={60} height={60} />
@@ -144,7 +144,9 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
           </Flex>
           <SecondaryButton onClick={navigateToProjectDetail}>LEARN MORE</SecondaryButton>
         </Flex>
-        <Text color="#C3C3C3">{description}</Text>
+        <Text color="#C3C3C3" mt="14px">
+          {description}
+        </Text>
         <Flex justifyContent="space-between" mb="10px">
           <Flex justifyContent="flex-start" flexDirection="row">
             <Text color="#8B8B8B" mr="5px">
