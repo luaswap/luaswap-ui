@@ -152,50 +152,48 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fetchBlockfolio = async (address: string) => {
-      const tBalance = axios.get(`${API_BLOCKFOLIO}tomochain/balance/${address}`)
-      const tLiquidity = axios.get(`${API_BLOCKFOLIO}tomochain/luaswapliquidity/${address}`)
-      const tLuasafe = axios.get(`${API_BLOCKFOLIO}tomochain/luasafe/${address}`)
+      setIsLoading(true)
+      const tBalanceResult = await axios.get(`${API_BLOCKFOLIO}tomochain/balance/${address}`)
+
+      let tLiquidityResult
+      if (tBalanceResult.data.hasLuaSwapLiquidity) {
+        tLiquidityResult = await axios.get(`${API_BLOCKFOLIO}tomochain/luaswapliquidity/${address}`)
+      }
+
+      let tLuasafeResult
+      if (tBalanceResult.data.hasLuaSafe) {
+        tLuasafeResult = await axios.get(`${API_BLOCKFOLIO}tomochain/luasafe/${address}`)
+      }
+
+      const eBalanceResult = await axios.get(`${API_BLOCKFOLIO}ethereum/balance/${address}`)
+
+      let eLiquidityResult
+      if (eBalanceResult.data.hasLuaSwapLiquidity) {
+        eLiquidityResult = await axios.get(`${API_BLOCKFOLIO}ethereum/luaswapliquidity/${address}`)
+      }
+
+      let eLuasafeResult
+      if (eBalanceResult.data.hasLuaSafe) {
+        eLuasafeResult = await axios.get(`${API_BLOCKFOLIO}ethereum/luasafe/${address}`)
+      }
       const tLuafarm = axios.get(`${API_BLOCKFOLIO}tomochain/luafarm/${address}`)
       const tMasternode = axios.get(`${API_BLOCKFOLIO}tomochain/tomomaster/${address}`)
-
-      const eBalance = axios.get(`${API_BLOCKFOLIO}ethereum/balance/${address}`)
-      const eLiquidity = axios.get(`${API_BLOCKFOLIO}ethereum/luaswapliquidity/${address}`)
-      const eLuasafe = axios.get(`${API_BLOCKFOLIO}ethereum/luasafe/${address}`)
       const eLuafarm = axios.get(`${API_BLOCKFOLIO}ethereum/luafarm/${address}`)
 
-      setIsLoading(true)
-      const [
-        tBalanceResult,
-        tLiquidityResult,
-        tLuasafeResult,
-        tLuafarmResult,
-        tMasternodeResult,
-        eBalanceResult,
-        eLiquidityResult,
-        eLuasafeResult,
-        eLuafarmResult,
-      ] = await Promise.all([
-        tBalance,
-        tLiquidity,
-        tLuasafe,
-        tLuafarm,
-        tMasternode,
-        eBalance,
-        eLiquidity,
-        eLuasafe,
-        eLuafarm,
-      ])
+      const [tLuafarmResult, tMasternodeResult, eLuafarmResult] = await Promise.all([tLuafarm, tMasternode, eLuafarm])
       setIsLoading(false)
 
       const eb = eBalanceResult.data.totalInUSD.replace(/,/g, '')
       const tb = tBalanceResult.data.totalInUSD.replace(/,/g, '')
-      const eli = eLiquidityResult.data.totalInUSD.replace(/,/g, '')
-      const tli = tLiquidityResult.data.totalInUSD.replace(/,/g, '')
-      const elu = eLuasafeResult.data.totalInUSD.replace(/,/g, '')
-      const tlu = tLuasafeResult.data.totalInUSD.replace(/,/g, '')
+      const eli =
+        eLiquidityResult && eLiquidityResult.data.totalInUSD ? eLiquidityResult.data.totalInUSD.replace(/,/g, '') : 0
+      const tli =
+        tLiquidityResult && tLiquidityResult.data.totalInUSD ? tLiquidityResult.data.totalInUSD.replace(/,/g, '') : 0
+      const elu =
+        eLuasafeResult && eLuasafeResult.data.totalInUSD ? eLuasafeResult.data.totalInUSD.replace(/,/g, '') : 0
+      const tlu =
+        tLuasafeResult && tLuasafeResult.data.totalInUSD ? tLuasafeResult.data.totalInUSD.replace(/,/g, '') : 0
       const tma = tMasternodeResult.data.totalInUSD
-      // const tfarm = tLuafarmResult.data.stakeAmount ? tLuafarmResult.data.stakeAmount : 0
-      // const efarm = eLuafarmResult.data.stakeAmount ? eLuafarmResult.data.stakeAmount : 0
 
       const usdData = {
         balance:
@@ -211,12 +209,10 @@ const Home: React.FC = () => {
         tBalance: parseFloat(tb),
         tLiquidity: parseFloat(tli),
         tLuasafe: parseFloat(tlu),
-        // tLuafarm: parseFloat(tfarm),
         tMasternode: parseFloat(tma),
         eBalance: parseFloat(eb),
         eLiquidity: parseFloat(eli),
         eLuasafe: parseFloat(elu),
-        // eLuafarm: parseFloat(efarm),
       }
       settotalInUSD(usdData)
 
@@ -229,22 +225,22 @@ const Home: React.FC = () => {
 
       const liquidity = {
         totalInUSD: parseFloat(eli) + parseFloat(tli),
-        tomochain: tLiquidityResult.data,
-        ethereum: eLiquidityResult.data,
+        tomochain: tLiquidityResult ? tLiquidityResult.data : initialState.tomochain,
+        ethereum: eLiquidityResult ? eLiquidityResult.data : initialState.ethereum,
       }
       setDataLiquidity(liquidity)
 
       const luafarm = {
         totalInUSD: 0,
-        tomochain: tLuafarmResult.data,
-        ethereum: eLuafarmResult.data,
+        tomochain: tLuafarmResult ? tLuafarmResult.data : initialState.tomochain,
+        ethereum: eLuafarmResult ? eLuafarmResult.data : initialState.ethereum,
       }
       setDataLuafarm(luafarm)
 
       const luasafe = {
         totalInUSD: parseFloat(elu) + parseFloat(tlu),
-        tomochain: tLuasafeResult.data,
-        ethereum: eLuasafeResult.data,
+        tomochain: tLuasafeResult ? tLuasafeResult.data : initialState.tomochain,
+        ethereum: eLuasafeResult ? eLuasafeResult.data : initialState.ethereum,
       }
       setDataLuasafe(luasafe)
 
@@ -259,15 +255,15 @@ const Home: React.FC = () => {
         tomochain: {
           totalInUSD: parseFloat(tb) + parseFloat(tli) + parseFloat(tlu),
           balance: tBalanceResult.data,
-          liquidity: tLiquidityResult.data,
-          luasafe: tLuasafeResult.data,
+          liquidity: tLiquidityResult ? tLiquidityResult.data : initialState.tomochain,
+          luasafe: tLuasafeResult ? tLuasafeResult.data : initialState.tomochain,
           masternode: tMasternodeResult.data,
         },
         ethereum: {
           totalInUSD: parseFloat(eb) + parseFloat(eli) + parseFloat(elu),
           balance: eBalanceResult.data,
-          liquidity: eLiquidityResult.data,
-          luasafe: eLuasafeResult.data,
+          liquidity: eLiquidityResult ? eLiquidityResult.data : initialState.ethereum,
+          luasafe: eLuasafeResult ? eLuasafeResult.data : initialState.ethereum,
         },
       }
       // @ts-ignore
