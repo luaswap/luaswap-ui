@@ -14,6 +14,7 @@ import ModalInput from 'components/ModalInput'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { IdoDetail } from 'state/types'
 import { selectUserTier } from 'state/profile'
+import { API_IDO_URL } from 'config'
 import { getERC20Contract } from 'utils/contractHelpers'
 import { getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
 import ActionButton from './ActionButton'
@@ -136,7 +137,7 @@ const Deposit: React.FC<DepositProps> = ({
   const getClaimProof = useCallback(
     async (poolId, poolIndex) => {
       const response = await axios.get(
-        `https://api.luaswap.org/api/ido/pools/claim-info/${poolId}/${cid}/${poolIndex}/${userTier}/${account}`,
+        `${API_IDO_URL}/pools/claim-info/${poolId}/${cid}/${poolIndex}/${userTier}/${account}`,
       )
       return response.data
     },
@@ -164,7 +165,7 @@ const Deposit: React.FC<DepositProps> = ({
   const getCommitProof = useCallback(
     async (poolId, poolIndex, amount) => {
       const response = await axios.get(
-        `https://api.luaswap.org/api/ido/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${userTier}/${account}/${amount}`,
+        `${API_IDO_URL}/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${userTier}/${account}/${amount}`,
       )
       return response.data
     },

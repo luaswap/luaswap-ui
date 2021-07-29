@@ -45,6 +45,7 @@ const StatusBar = styled(Text)<StatusBarProps>`
   padding: 5px;
   display: flex;
   margin-bottom: 5px;
+  font-weight: 700;
   width: 80px;
   justify-content: center;
   align-items: center;

@@ -129,28 +129,26 @@ const TierCard: React.FC<TierProps> = ({
               </SecondaryMessage>
             </Flex>
           </TierHeaderWrapper>
-          <Flex justifyContent="space-between">
-            <Flex flexDirection="row" alignItems="flex-start">
+          <Flex justifyContent="space-between" flexDirection="column">
+            <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total {idoToken.symbol}:&nbsp;</Text>
               <Text bold color="#C3C3C3">
                 {totalAmountIDO} {idoToken.symbol}
               </Text>
             </Flex>
-            <Flex flexDirection="row" alignItems="flex-start">
+            <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Funds to raise:&nbsp;</Text>
               <Text bold color="#C3C3C3">
                 {totalAmountPay} {payToken.symbol}
               </Text>
             </Flex>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Flex flexDirection="row" alignItems="flex-start">
+            <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Price per:{idoToken.symbol}&nbsp;</Text>
               <Text bold>
                 {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
               </Text>
             </Flex>
-            <Flex flexDirection="row" alignItems="flex-start">
+            <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total committed:&nbsp;</Text>
               <Text bold>
                 {totalCommittedAmount} {payToken.symbol}
