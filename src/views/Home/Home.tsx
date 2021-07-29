@@ -8,7 +8,7 @@ import { Heading, Text, BaseLayout, Progress, Flex, useModal, Box, Skeleton } fr
 import { API_BLOCKFOLIO } from 'config'
 import { useAppDispatch } from 'state'
 import { useWallet } from 'state/hooks'
-import { DataApiType } from 'state/types'
+import { DataApiType, DataLuaFarmProp } from 'state/types'
 import { setWallet } from 'state/blockfolio'
 import { useTranslation } from 'contexts/Localization'
 import PageHeader from 'components/PageHeader'
@@ -26,6 +26,23 @@ import Tier from '../../components/Tier'
 
 const initialState: DataApiType = {
   totalInUSD: 0,
+  tomochain: {
+    tag: '',
+    name: '',
+    totalInUSD: '0',
+    detailsHeader: [],
+    details: [],
+  },
+  ethereum: {
+    tag: '',
+    name: '',
+    totalInUSD: '0',
+    detailsHeader: [],
+    details: [],
+  },
+}
+const initialLuaFarmState: DataLuaFarmProp = {
+  totalStakeAmount: 0,
   tomochain: {
     tag: '',
     name: '',
@@ -84,7 +101,7 @@ const Card = styled.div`
   align-items: center;
   padding: 20px;
   border-radius: 15px;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  background-color: #282828;
   cursor: pointer;
 `
 const FlexBox = styled.div`
@@ -97,7 +114,7 @@ const CardNetwork = styled.div`
   width: 100%;
   padding-bottom: 20px;
   border-radius: 15px;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  background-color: #282828;
 `
 const FlexNetwork = styled(Flex)`
   justify-content: space-between;
@@ -113,13 +130,16 @@ const Image = styled.img`
 const IconWrapper = styled.div`
   width: 30px;
   height: 30px;
-  background-color: #fbf4bf;
-  color: ${({ theme }) => theme.colors.primary};
+  background-color: #353535;
+  color: #c3c3c3;
   text-align: center;
   line-height: 30px;
   border-radius: 50px;
   font-size: 16px;
   margin-right: 10px;
+`
+const StyleText = styled(Text)`
+  min-width: 100px;
 `
 
 const Home: React.FC = () => {
@@ -286,7 +306,7 @@ const Home: React.FC = () => {
   const [onEthWallet] = useModal(<NetworkModal data={dataNetwork.ethereum.balance} />)
   const [onEthLiquidity] = useModal(<NetworkModal data={dataNetwork.ethereum.liquidity} />)
   const [onEthLuasafe] = useModal(<NetworkModal data={dataNetwork.ethereum.luasafe} />)
-
+  console.log(dataLuafarm)
   return (
     <>
       <PageHeader>
@@ -446,7 +466,7 @@ const Home: React.FC = () => {
                               pt="10px"
                               pb="10px"
                             >
-                              <Text>{t('Wallet')}</Text>
+                              <StyleText>{t('Wallet')}</StyleText>
                               <Box width="400px" mr="20px" ml="20px">
                                 <Progress
                                   variant="round"
@@ -456,7 +476,7 @@ const Home: React.FC = () => {
                               </Box>
                               <CardValue
                                 value={(dataInUSD.eBalance / dataInUSD.ethNetwork) * 100}
-                                decimals={0}
+                                decimals={2}
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
@@ -473,7 +493,7 @@ const Home: React.FC = () => {
                               pt="10px"
                               pb="10px"
                             >
-                              <Text>{t('Liquidity Pool')}</Text>
+                              <StyleText>{t('Liquidity Pool')}</StyleText>
                               <Box width="400px" mr="20px" ml="20px">
                                 <Progress
                                   variant="round"
@@ -482,8 +502,8 @@ const Home: React.FC = () => {
                                 />
                               </Box>
                               <CardValue
-                                value={dataInUSD.eLiquidity}
-                                decimals={0}
+                                value={(dataInUSD.eLiquidity / dataInUSD.ethNetwork) * 100}
+                                decimals={2}
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
@@ -500,7 +520,7 @@ const Home: React.FC = () => {
                               pt="10px"
                               pb="10px"
                             >
-                              <Text>{t('LuaSafe')}</Text>
+                              <StyleText>{t('LuaSafe')}</StyleText>
                               <Box width="400px" mr="20px" ml="20px">
                                 <Progress
                                   variant="round"
@@ -510,7 +530,7 @@ const Home: React.FC = () => {
                               </Box>
                               <CardValue
                                 value={(dataInUSD.eLuasafe / dataInUSD.ethNetwork) * 100}
-                                decimals={0}
+                                decimals={2}
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
@@ -546,7 +566,7 @@ const Home: React.FC = () => {
                               pt="10px"
                               pb="10px"
                             >
-                              <Text>{t('Wallet')}</Text>
+                              <StyleText>{t('Wallet')}</StyleText>
                               <Box width="400px" mr="20px" ml="20px">
                                 <Progress
                                   variant="round"
@@ -556,7 +576,7 @@ const Home: React.FC = () => {
                               </Box>
                               <CardValue
                                 value={(dataInUSD.tBalance / dataInUSD.tomoNetwork) * 100}
-                                decimals={0}
+                                decimals={2}
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
@@ -573,7 +593,7 @@ const Home: React.FC = () => {
                               pt="10px"
                               pb="10px"
                             >
-                              <Text>{t('Liquidity Pool')}</Text>
+                              <StyleText>{t('Liquidity Pool')}</StyleText>
                               <Box width="400px" mr="20px" ml="20px">
                                 <Progress
                                   variant="round"
@@ -583,7 +603,7 @@ const Home: React.FC = () => {
                               </Box>
                               <CardValue
                                 value={(dataInUSD.tLiquidity / dataInUSD.tomoNetwork) * 100}
-                                decimals={0}
+                                decimals={2}
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
@@ -600,7 +620,7 @@ const Home: React.FC = () => {
                               pt="10px"
                               pb="10px"
                             >
-                              <Text>{t('LuaSafe')}</Text>
+                              <StyleText>{t('LuaSafe')}</StyleText>
                               <Box width="400px" mr="20px" ml="20px">
                                 <Progress
                                   variant="round"
@@ -610,7 +630,7 @@ const Home: React.FC = () => {
                               </Box>
                               <CardValue
                                 value={(dataInUSD.tLuasafe / dataInUSD.tomoNetwork) * 100}
-                                decimals={0}
+                                decimals={2}
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
@@ -627,7 +647,7 @@ const Home: React.FC = () => {
                               pt="10px"
                               pb="10px"
                             >
-                              <Text>{t('Masternode')}</Text>
+                              <StyleText>{t('Masternode')}</StyleText>
                               <Box width="400px" mr="20px" ml="20px">
                                 <Progress
                                   variant="round"
@@ -637,7 +657,7 @@ const Home: React.FC = () => {
                               </Box>
                               <CardValue
                                 value={(dataInUSD.tMasternode / dataInUSD.tomoNetwork) * 100}
-                                decimals={0}
+                                decimals={2}
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"

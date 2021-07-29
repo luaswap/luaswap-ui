@@ -11,15 +11,21 @@ import { setWallet, addWalletFromInput, setWalletActive } from 'state/blockfolio
 import UnlockButton from 'components/UnlockButton'
 import WalletIcon from './Icon/WalletIcon'
 
-
-
-interface InputAddressProps{
+interface InputAddressProps {
   data?: WalletProps
 }
 const StyleBox = styled.div`
   padding-bottom: 10px;
 `
-
+const StyleFlex = styled(Flex)`
+  margin-bottom: 20px;
+  margin-top: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  @media (max-width: 991px) {
+    justify-content: center;
+  }
+`
 const AddressBox = styled.div`
   display: flex;
   margin-bottom: 10px;
@@ -37,9 +43,13 @@ const IconWrapper = styled.div`
 `
 const StyleInput = styled(Input)`
   border-radius: 10px;
-  margin-right: 30px;
   height: 55px;
-  min-width: 400px;
+  margin-right: 30px;
+  max-width: 600px;
+  @media (max-width: 991px) {
+    margin-bottom: 30px;
+    margin-right: 0px;
+  }
 `
 const StyleButton = styled(Button)`
   white-space: nowrap;
@@ -50,7 +60,7 @@ const InputAddress: React.FC<InputAddressProps> = (data) => {
   const [val, setVal] = useState('')
   const [msg, setMsg] = useState('')
   const dispatch = useAppDispatch()
-  const {wallets} = useWallet()
+  const { wallets } = useWallet()
 
   const filterWalletConnected = Object.values(wallets).filter((v) => {
     return v.isConnected === true
@@ -93,57 +103,54 @@ const InputAddress: React.FC<InputAddressProps> = (data) => {
   }
   return (
     <Box>
-      <Flex marginBottom="20px" marginTop="20px" maxWidth="600px" alignItems="center">
+      <StyleFlex>
         <StyleInput onChange={handleChange} placeholder="Add valid ETH or Tomochain address" />
-        <StyleButton onClick={handleSubmit} scale="md">
-          Add Address
-        </StyleButton>
-        {!account && Object.keys(data).length < 1 && (
-          <>
-            {' '}
-            <Text mr="20px" ml="20px">
-              OR
-            </Text>
-            <UnlockButton />
-          </>
-        )}
-      </Flex>
+        <Flex alignItems="center">
+          <StyleButton onClick={handleSubmit} scale="md">
+            Add Address
+          </StyleButton>
+          {!account && Object.keys(data).length < 1 && (
+            <>
+              {' '}
+              <Text mr="20px" ml="20px">
+                OR
+              </Text>
+              <UnlockButton style={{ width: 'auto' }} />
+            </>
+          )}
+        </Flex>
+      </StyleFlex>
       <Text>{msg}</Text>
-      {filterWalletConnected.length > 0 &&
+      {filterWalletConnected.length > 0 && (
         <StyleBox>
           <Text pb="10px">Connected</Text>
-          {filterWalletConnected.map((v) => 
+          {filterWalletConnected.map((v) => (
             <AddressBox key={v.address}>
               <IconWrapper>
                 <WalletIcon />
               </IconWrapper>
-              <Text
-                onClick={() => handleChangeWallet(v.address)}
-                style={{ cursor: 'pointer' }}>
-                {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6,v.address.length,)}`}
-              </Text>
-
-            </AddressBox>
-            )}
-        </StyleBox>
-      }
-        {filterWalletWatched.length > 0 && 
-          <StyleBox>
-          <Text pb="10px">Watched</Text>
-          {filterWalletWatched.map((v) => 
-            <AddressBox key={v.address}>
-              <IconWrapper>
-                <WalletIcon />
-              </IconWrapper>
-              <Text
-                onClick={() => handleChangeWallet(v.address)}
-                style={{ cursor: 'pointer' }}>
+              <Text onClick={() => handleChangeWallet(v.address)} style={{ cursor: 'pointer' }}>
                 {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6, v.address.length)}`}
               </Text>
             </AddressBox>
-          )}
-          </StyleBox>            
-        }
+          ))}
+        </StyleBox>
+      )}
+      {filterWalletWatched.length > 0 && (
+        <StyleBox>
+          <Text pb="10px">Watched</Text>
+          {filterWalletWatched.map((v) => (
+            <AddressBox key={v.address}>
+              <IconWrapper>
+                <WalletIcon />
+              </IconWrapper>
+              <Text onClick={() => handleChangeWallet(v.address)} style={{ cursor: 'pointer' }}>
+                {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6, v.address.length)}`}
+              </Text>
+            </AddressBox>
+          ))}
+        </StyleBox>
+      )}
     </Box>
   )
 }

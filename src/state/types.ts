@@ -310,11 +310,17 @@ export interface WalletProps {
   isActive?: boolean
   walletType?: string
 }
+export interface DataLuaFarmProp {
+  totalStakeAmount: number
+  tomochain: ApiNetworkType
+  ethereum: ApiNetworkType
+}
 export interface DataApiType {
   totalInUSD: number
   tomochain: ApiNetworkType
   ethereum: ApiNetworkType
 }
+
 export interface ApiNetworkType {
   tag: string
   name: string

@@ -61,7 +61,6 @@ const TokenIcon = styled.img`
 const TokenName = styled.span``
 const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-
   const renderContent = (row, type: string) => {
     switch (type) {
       case 'balance':
@@ -81,7 +80,6 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
                   {parseFloat(row.quantity).toFixed(4)} {row.symbol}
                 </Text>
               </StyleTd>
-              {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
               <StyleTd>
                 <Text> {row.usd}</Text>
               </StyleTd>
@@ -200,13 +198,9 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
             </tr>
           </TableHead>
           <TableBody>
-            {data.length > 0 ? (
-              data.map((row) => {
-                return renderContent(row, tag)
-              })
-            ) : (
-              <Text style={{ color: '#afafaf', fontSize: 20 }}> No data</Text>
-            )}
+            {data.map((row) => {
+              return renderContent(row, tag)
+            })}
           </TableBody>
         </StyledTable>
       </TableWrapper>
