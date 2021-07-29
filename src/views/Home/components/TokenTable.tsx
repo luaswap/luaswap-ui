@@ -92,8 +92,8 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
             <tr key={row.amount}>
               <StyleTd>
                 <CellInner>
-                  <TokenIcon src={row.imgs[0]} alt={row.token0.symbol} />
-                  <TokenIcon src={row.imgs[1]} alt={row.token1.symbol} />
+                  <TokenLogo address={row.token0.address} url={row.imgs[0]} name={row.token0.symbol} />
+                  <TokenLogo address={row.token1.address} url={row.imgs[1]} name={row.token1.symbol} />
                   <LinkExternal href={row.link}>
                     <TokenName>{row.tokenName}</TokenName>
                   </LinkExternal>
@@ -141,7 +141,13 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
           // parseFloat(row.stakeAmount) > 0 &&
           <tr key={row.stakeAmount}>
             <StyleTd>
-              <Text>{row.pair}</Text>
+              <Text>{`${row.lpAddr.substring(0, 6)}...${row.lpAddr.substring(
+                row.lpAddr.length - 4,
+                row.lpAddr.length,
+              )}`}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text>{row.pair} </Text>
             </StyleTd>
             <StyleTd>
               <Text>{parseFloat(row.stakeAmount).toFixed(2)} </Text>

@@ -312,8 +312,15 @@ export interface WalletProps {
 }
 export interface DataLuaFarmProp {
   totalStakeAmount: number
-  tomochain: ApiNetworkType
-  ethereum: ApiNetworkType
+  tomochain: ApiLuaFarmType
+  ethereum: ApiLuaFarmType
+}
+export interface ApiLuaFarmType {
+  tag: string
+  name: string
+  totalStakeAmount: number
+  detailsHeader: Array<string[]>
+  details: ApiDetailType[]
 }
 export interface DataApiType {
   totalInUSD: number
@@ -324,7 +331,8 @@ export interface DataApiType {
 export interface ApiNetworkType {
   tag: string
   name: string
-  totalInUSD: string
+  totalStakeAmount?: number
+  totalInUSD?: string
   detailsHeader: Array<string[]>
   details: ApiDetailType[]
 }

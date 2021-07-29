@@ -5,14 +5,14 @@ import styled from 'styled-components'
 import { isEmpty } from 'lodash'
 import { Heading, Text, BaseLayout, Progress, Flex, useModal, Box, Skeleton } from 'common-uikitstrungdao'
 
-import { API_BLOCKFOLIO } from 'config'
-import { useAppDispatch } from 'state'
-import { useWallet } from 'state/hooks'
-import { DataApiType, DataLuaFarmProp } from 'state/types'
-import { setWallet } from 'state/blockfolio'
-import { useTranslation } from 'contexts/Localization'
-import PageHeader from 'components/PageHeader'
-import Page from 'components/layout/Page'
+import { API_BLOCKFOLIO } from '../../config'
+import { useAppDispatch } from '../../state'
+import { useWallet } from '../../state/hooks'
+import { DataApiType, DataLuaFarmProp } from '../../state/types'
+import { setWallet } from '../../state/blockfolio'
+import { useTranslation } from '../../contexts/Localization'
+import PageHeader from '../../components/PageHeader'
+import Page from '../../components/layout/Page'
 import CardValue from './components/CardValue'
 import DataModal from './components/DataModal'
 import NetworkModal from './components/NetworkModal'
@@ -30,6 +30,7 @@ const initialState: DataApiType = {
     tag: '',
     name: '',
     totalInUSD: '0',
+    totalStakeAmount: 0,
     detailsHeader: [],
     details: [],
   },
@@ -37,6 +38,7 @@ const initialState: DataApiType = {
     tag: '',
     name: '',
     totalInUSD: '0',
+    totalStakeAmount: 0,
     detailsHeader: [],
     details: [],
   },
@@ -46,14 +48,14 @@ const initialLuaFarmState: DataLuaFarmProp = {
   tomochain: {
     tag: '',
     name: '',
-    totalInUSD: '0',
+    totalStakeAmount: 0,
     detailsHeader: [],
     details: [],
   },
   ethereum: {
     tag: '',
     name: '',
-    totalInUSD: '0',
+    totalStakeAmount: 0,
     detailsHeader: [],
     details: [],
   },
@@ -205,6 +207,8 @@ const Home: React.FC = () => {
 
       const eb = eBalanceResult.data.totalInUSD.replace(/,/g, '')
       const tb = tBalanceResult.data.totalInUSD.replace(/,/g, '')
+      const ef = eLuafarmResult.data.totalStakeAmount
+      const tf = tLuafarmResult.data.totalStakeAmount
       const eli =
         eLiquidityResult && eLiquidityResult.data.totalInUSD ? eLiquidityResult.data.totalInUSD.replace(/,/g, '') : 0
       const tli =
@@ -251,9 +255,9 @@ const Home: React.FC = () => {
       setDataLiquidity(liquidity)
 
       const luafarm = {
-        totalInUSD: 0,
-        tomochain: tLuafarmResult ? tLuafarmResult.data : initialState.tomochain,
-        ethereum: eLuafarmResult ? eLuafarmResult.data : initialState.ethereum,
+        totalInUSD: ef + tf,
+        tomochain: tLuafarmResult ? tLuafarmResult.data : initialLuaFarmState.tomochain,
+        ethereum: eLuafarmResult ? eLuafarmResult.data : initialLuaFarmState.ethereum,
       }
       setDataLuafarm(luafarm)
 
@@ -306,7 +310,7 @@ const Home: React.FC = () => {
   const [onEthWallet] = useModal(<NetworkModal data={dataNetwork.ethereum.balance} />)
   const [onEthLiquidity] = useModal(<NetworkModal data={dataNetwork.ethereum.liquidity} />)
   const [onEthLuasafe] = useModal(<NetworkModal data={dataNetwork.ethereum.luasafe} />)
-  console.log(dataLuafarm)
+
   return (
     <>
       <PageHeader>
@@ -412,7 +416,7 @@ const Home: React.FC = () => {
                 <AccountLoading />
               )}
               {!isLoading ? (
-                dataLuafarm && (
+                dataLuafarm.totalInUSD > 0 && (
                   <Card onClick={onPresentLuafarm}>
                     <Flex alignItems="center">
                       <IconWrapper>

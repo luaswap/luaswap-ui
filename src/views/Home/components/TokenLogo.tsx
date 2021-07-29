@@ -19,20 +19,18 @@ export default function TokenLogo({ address, url, name }) {
   }, [address])
 
   if (error || BAD_IMAGES[address]) {
-    return (
-        <Image alt={name} src="/images/placeholder.png" />
-    )
+    return <Image alt={name} src={`${process.env.PUBLIC_URL}/images/placeholder.png`} />
   }
 
   return (
     <Image
-    alt={name}   
-    src={url}
-    onError={event => {
+      alt={name}
+      src={url}
+      onError={(event) => {
         BAD_IMAGES[address] = true
         setError(true)
         event.preventDefault()
-    }}
+      }}
     />
   )
 }
