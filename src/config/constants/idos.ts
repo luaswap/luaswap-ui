@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 export const tierMap = {
-  0: 'HELL',
+  0: '',
   1: 'EARTH',
   2: 'MOON',
   3: 'GALAXY',

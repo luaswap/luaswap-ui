@@ -5,6 +5,7 @@ import axios from 'axios'
 import { IdoDetail, IdoState, OpenPools } from 'state/types'
 import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
+import { API_IDO_URL } from 'config'
 // import { fetchIdosInformation } from './fetchIdosData'
 
 const defaultCurrentPool = {
@@ -117,7 +118,7 @@ export default idosSlice.reducer
 export const fetchPools = () => async (dispatch, getState) => {
   try {
     dispatch(fetchOpenPoolsStarts())
-    const { data } = await axios.get(`https://api.luaswap.org/api/ido/pools/open`)
+    const { data } = await axios.get(`${API_IDO_URL}/pools/open`)
     dispatch(setOpenPools(data))
     dispatch(fetchOpenPoolsEnds())
   } catch (error) {
@@ -128,7 +129,7 @@ export const fetchPools = () => async (dispatch, getState) => {
 export const fetchClosedPools = () => async (dispatch, getState) => {
   try {
     dispatch(fetchClosedPoolsStarts())
-    const { data } = await axios.get(`https://api.luaswap.org/api/ido/pools/open`)
+    const { data } = await axios.get(`${API_IDO_URL}/pools/open`)
     dispatch(setClosedPools(data))
     dispatch(fetchClosedPoolsEnds())
   } catch (error) {
@@ -139,7 +140,7 @@ export const fetchClosedPools = () => async (dispatch, getState) => {
 export const fetchPool = (id: string) => async (dispatch, getState) => {
   try {
     dispatch(fetchCurrentPoolStarts())
-    const { data } = await axios.get(`https://api.luaswap.org/api/ido/pools/detail/open/${id}`)
+    const { data } = await axios.get(`${API_IDO_URL}/pools/detail/open/${id}`)
     dispatch(setCurrentPool(data))
     dispatch(fetchCurrentPoolEnds())
   } catch (error) {

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { TokenAmount, Token } from '@luaswap/sdk'
-import { API_URL, LUA_CONTRACT } from 'config'
+import { API_IDO_URL, API_URL, LUA_CONTRACT } from 'config'
 
 const LUA = new Token(1, '0xB1f66997A5760428D3a87D68b90BfE0aE64121cC', 18, 'LUA', 'LuaToken')
 
@@ -28,12 +28,12 @@ const getProfile = async (address: string, chainId: number) => {
 }
 
 export const getTierData = async (account: string) => {
-  const { data = {} } = await axios.get(`https://api.luaswap.org/api/ido/tier/${account}`)
+  const { data = {} } = await axios.get(`${API_IDO_URL}/tier/${account}`)
   return data
 }
 
 export const postLoginDetail = async (account: string) => {
-  await axios.post('https://api.luaswap.org/api/ido/users/login', {
+  await axios.post(`${API_IDO_URL}/users/login`, {
     user: account,
   })
 }

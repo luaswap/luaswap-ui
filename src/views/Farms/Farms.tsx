@@ -225,8 +225,8 @@ const Farms: React.FC = () => {
   const isImage = true
   return (
     <>
-      <PageHeader background="url(/images/farm-bg.png)" isImage={isImage}>
-        <Heading as="h1" scale="xxl" color="secondary" mb="24px">
+      <PageHeader background={`url(${process.env.PUBLIC_URL}/images/farm-bg.png)`} isImage={isImage}>
+        <Heading as="h1" scale="xxl" color="#FFFFFF" mb="24px">
           {t('Farms')}
         </Heading>
         <Heading scale="lg" color="text">
