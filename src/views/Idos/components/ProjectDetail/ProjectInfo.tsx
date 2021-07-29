@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import { Pool } from 'views/Idos/types'
 
 const ProjectInfoWrapper = styled(Box)`
-  height: 300px;
-  overflow-y: scroll;
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;

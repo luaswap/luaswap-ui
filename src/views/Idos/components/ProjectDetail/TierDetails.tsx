@@ -62,7 +62,7 @@ const TierCardContainer = styled(Card)`
   background-color: #1a1a1a;
 
   ${({ theme }) => theme.mediaQueries.md} {
-    width: calc(33.33% - 16px);
+    width: calc(25% - 16px);
     margin-bottom: 0;
     &:not(:last-of-type) {
       margin-right: 20px;
@@ -73,19 +73,25 @@ const TierCardContainer = styled(Card)`
 const TIER_INFO = {
   '1': {
     name: 'Earth',
-    description: 'For every user, who holds less than 100 LUA or 100 TOMO',
+    description: 'Staking requirement 5000 LUA or 500 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/earth.svg`,
     CTA: (lua) => (lua ? `Buy ${lua} LUA to JOIN IDO` : `Buy LUA to JOIN IDO`),
   },
   '2': {
     name: 'Moon',
-    description: 'For every user, who holds from 100 LUA and 10.000 LUA',
+    description: 'Staking requirement 25000 LUA or 2500 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/moon.svg`,
     CTA: (lua) => (lua ? `Buy more ${lua} LUA to fly to the Moon` : `Buy more LUA to fly to the Moon`),
   },
   '3': {
+    name: 'MARS',
+    description: 'Staking requirement 125000 LUA or 12500 TOMO',
+    icon: `${process.env.PUBLIC_URL}/images/moon.svg`,
+    CTA: (lua) => (lua ? `Buy more ${lua} LUA to fly to the Moon` : `Buy more LUA to fly to the Moon`),
+  },
+  '4': {
     name: 'Galaxy',
-    description: 'For every user, who holds more than than 10.000 LUA',
+    description: 'Staking requirement 250000 LUA or 25000 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/galaxy.svg`,
     CTA: (lua) => (lua ? `Buy more ${lua} LUA to BREAK BORDER` : `Buy more LUA to BREAK BORDER`),
   },
@@ -176,7 +182,7 @@ const TierCard: React.FC<TierProps> = ({
               href="https://app.luaswap.org/#/swap"
               target="__blank"
             >
-              {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
+              {TIER_INFO[tier]?.CTA(nextTier[tier]?.addQuantityLua)}
             </Button>
           )}
         </Box>
@@ -267,7 +273,7 @@ const TierCardMobile: React.FC<TierProps> = ({
               href="https://app.luaswap.org/#/swap"
               target="__blank"
             >
-              {TIER_INFO[tier].CTA(nextTier[tier]?.addQuantityLua)}
+              {TIER_INFO[tier]?.CTA(nextTier[tier]?.addQuantityLua)}
             </Button>
           )}
         </Box>
@@ -305,13 +311,14 @@ const TierDetails: React.FC<{
     <>
       <TierInformationWrapper>
         <Flex flexWrap="wrap" justifyContent="space-between">
-          {tiersss.map((e: IdoDetailInfo, i: number) =>
-            isMobile ? (
+          {tiersss.map((e: IdoDetailInfo, i: number) => {
+            console.log(nextTier, 'next tier ?')
+            return isMobile ? (
               <TierCardMobile data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
             ) : (
               <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
-            ),
-          )}
+            )
+          })}
         </Flex>
       </TierInformationWrapper>
       <SecondaryMessage>

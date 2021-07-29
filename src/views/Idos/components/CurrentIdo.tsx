@@ -1,12 +1,36 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react'
 import { Text, Flex, Box } from 'common-uikitstrungdao'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { OpenPools } from 'state/types'
 import PoolDetail from './PoolDetail'
 import IdoLayout from './IdoLayout'
 import PageLoading from './PageLoading'
 import { Pool } from '../types'
+
+const fadeIn = keyframes`
+  from {
+    transform: scale(.25);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+`
+
+const fadeOut = keyframes`
+  from {
+    transform: scale(1);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(.25);
+    opacity: 1;
+  }
+`
 
 const Row = styled.div`
   margin: 0 auto;
@@ -36,12 +60,18 @@ const Star1 = styled(Star)`
   height: 10px;
   top: 10px;
   left: 40%;
+  animation: ${fadeIn} 0.5s linear infinite, ${fadeOut} 2s linear infinite;
+  animation-fill-mode: both;
+  animation-delay: 500ms;
 `
 const Star6 = styled(Star)`
   width: 10px;
   height: 10px;
   top: 60px;
   left: 38%;
+  animation: ${fadeIn} 0.5s linear infinite, ${fadeOut} 3s linear infinite;
+  animation-fill-mode: both;
+  animation-delay: 100ms;
 `
 
 const Star3 = styled(Star)`
@@ -49,6 +79,9 @@ const Star3 = styled(Star)`
   height: 15px;
   top: 20px;
   right: 30px;
+  animation: ${fadeIn} 1s linear infinite, ${fadeOut} 3s linear infinite;
+  animation-fill-mode: both;
+  animation-delay: 1s;
 `
 
 const Star4 = styled(Star)`
@@ -56,6 +89,9 @@ const Star4 = styled(Star)`
   height: 10px;
   bottom: 20px;
   left: 10px;
+  animation: ${fadeIn} 0.1s linear infinite, ${fadeOut} 1.5s linear infinite;
+  animation-fill-mode: both;
+  animation-delay: 100ms;
 `
 
 const Star5 = styled(Star)`
@@ -63,6 +99,9 @@ const Star5 = styled(Star)`
   height: 20px;
   bottom: 10px;
   left: 20px;
+  animation: ${fadeIn} 2s linear infinite, ${fadeOut} 1.5s linear infinite;
+  animation-fill-mode: both;
+  animation-delay: 100ms;
 `
 interface CurrentIdoProps {
   openPools: OpenPools
@@ -94,16 +133,18 @@ const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upco
             ) : openingPools.length === 0 ? (
               <EmptyPool />
             ) : (
-              openingPools.map((pool) => {
-                return <PoolDetail pool={pool} />
-              })
+              <>
+                {openingPools.map((pool) => {
+                  return <PoolDetail pool={pool} />
+                })}
+                <Star1 />
+                <Star3 />
+                <Star4 />
+                <Star5 />
+                <Star6 />
+              </>
             )}
           </Row>
-          <Star1 />
-          <Star3 />
-          <Star4 />
-          <Star5 />
-          <Star6 />
         </PoolContainer>
         <PoolContainer>
           <Text fontSize="24px" textAlign="center" color="#8B8B8B" pt="24px" pb="24px" fontWeight="700">

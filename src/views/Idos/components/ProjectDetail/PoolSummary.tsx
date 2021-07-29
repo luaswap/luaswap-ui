@@ -200,19 +200,13 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           </SocialLinkWrapper>
         </Flex>
         <Text>{description}</Text>
-        <Flex justifyContent="flex-start" mb="10px" mt="15px" alignItems="flex-start" flexWrap="wrap">
+        <Flex justifyContent="space-between" mb="10px" mt="15px" alignItems="flex-start" flexWrap="wrap">
           <CapColumnWrapper alignItems="flex-start" flexDirection="column">
             <Text>Cap</Text>
             <Text color="primary" bold fontSize="18px">
               {totalAmountIDO} {idoToken?.symbol}
             </Text>
           </CapColumnWrapper>
-          <AccessColumnWrapper alignItems="flex-start" flexDirection="column">
-            <Text>Access</Text>
-            <Text color="primary" bold fontSize="18px">
-              Public
-            </Text>
-          </AccessColumnWrapper>
           <ProcessColumnWrapper flexDirection="column">
             <Flex justifyContent="space-between" mb="3px">
               <Box>
