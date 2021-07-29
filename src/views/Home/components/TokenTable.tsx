@@ -112,7 +112,7 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
       case 'LuaSafe':
         return (
           // parseFloat(row.quantity) > 0 && (
-          <tr key={row.amount}>
+          <tr key={row.address}>
             <StyleTd>
               <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
                 row.address.length - 4,

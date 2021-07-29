@@ -46,6 +46,7 @@ const StyleInput = styled(Input)`
   height: 55px;
   margin-right: 30px;
   max-width: 600px;
+  background-color: #282828;
   @media (max-width: 991px) {
     margin-bottom: 30px;
     margin-right: 0px;

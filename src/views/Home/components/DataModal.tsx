@@ -21,7 +21,7 @@ interface DataModalProps {
 const DataModal: React.FC<DataModalProps> = ({ onDismiss, data }) => {
     const [activeTab, setActiveTab] = useState(0)
     return (
-        <Modal title="Wallet" onDismiss={onDismiss}>
+        <Modal title={data.tomochain.name} onDismiss={onDismiss}>
             {data.ethereum.details.length > 0 && data.tomochain.details.length > 0 && (
                 <>
                     <TabMenu
@@ -83,9 +83,8 @@ const DataModal: React.FC<DataModalProps> = ({ onDismiss, data }) => {
             )}
             {data.ethereum.details.length < 1 && data.tomochain.details.length < 1 && (
                 <>
-
                     <StyleOverFlow>
-                        <Text>No data</Text>
+                        <Text >No data</Text>
                     </StyleOverFlow>
                 </>
             )}

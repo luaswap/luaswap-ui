@@ -153,7 +153,7 @@ const Home: React.FC = () => {
       dispatch(setWallet(w))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [account])
 
   useEffect(() => {
     const fetchBlockfolio = async (address: string) => {
