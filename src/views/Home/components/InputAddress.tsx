@@ -11,9 +11,7 @@ import { setWallet, addWalletFromInput, setWalletActive } from 'state/blockfolio
 import UnlockButton from 'components/UnlockButton'
 import WalletIcon from './Icon/WalletIcon'
 
-
-
-interface InputAddressProps{
+interface InputAddressProps {
   data?: WalletProps
 }
 const StyleBox = styled.div`
@@ -50,7 +48,7 @@ const InputAddress: React.FC<InputAddressProps> = (data) => {
   const [val, setVal] = useState('')
   const [msg, setMsg] = useState('')
   const dispatch = useAppDispatch()
-  const {wallets} = useWallet()
+  const { wallets } = useWallet()
 
   const filterWalletConnected = Object.values(wallets).filter((v) => {
     return v.isConnected === true
@@ -109,41 +107,36 @@ const InputAddress: React.FC<InputAddressProps> = (data) => {
         )}
       </Flex>
       <Text>{msg}</Text>
-      {filterWalletConnected.length > 0 &&
+      {filterWalletConnected.length > 0 && (
         <StyleBox>
           <Text pb="10px">Connected</Text>
-          {filterWalletConnected.map((v) => 
+          {filterWalletConnected.map((v) => (
             <AddressBox key={v.address}>
               <IconWrapper>
                 <WalletIcon />
               </IconWrapper>
-              <Text
-                onClick={() => handleChangeWallet(v.address)}
-                style={{ cursor: 'pointer' }}>
-                {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6,v.address.length,)}`}
-              </Text>
-
-            </AddressBox>
-            )}
-        </StyleBox>
-      }
-        {filterWalletWatched.length > 0 && 
-          <StyleBox>
-          <Text pb="10px">Watched</Text>
-          {filterWalletWatched.map((v) => 
-            <AddressBox key={v.address}>
-              <IconWrapper>
-                <WalletIcon />
-              </IconWrapper>
-              <Text
-                onClick={() => handleChangeWallet(v.address)}
-                style={{ cursor: 'pointer' }}>
+              <Text onClick={() => handleChangeWallet(v.address)} style={{ cursor: 'pointer' }}>
                 {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6, v.address.length)}`}
               </Text>
             </AddressBox>
-          )}
-          </StyleBox>            
-        }
+          ))}
+        </StyleBox>
+      )}
+      {filterWalletWatched.length > 0 && (
+        <StyleBox>
+          <Text pb="10px">Watched</Text>
+          {filterWalletWatched.map((v) => (
+            <AddressBox key={v.address}>
+              <IconWrapper>
+                <WalletIcon />
+              </IconWrapper>
+              <Text onClick={() => handleChangeWallet(v.address)} style={{ cursor: 'pointer' }}>
+                {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6, v.address.length)}`}
+              </Text>
+            </AddressBox>
+          ))}
+        </StyleBox>
+      )}
     </Box>
   )
 }
