@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Button, Input, InputProps, Flex, Link } from 'common-uikitstrungdao'
+import { Text, Button, Input, InputProps, Flex, Link, Box } from 'common-uikitstrungdao'
 import { useTranslation } from 'contexts/Localization'
 
 interface ModalInputProps {
@@ -28,7 +28,7 @@ const getBoxShadow = ({ isWarning = false, theme }) => {
 const StyledTokenInput = styled.div<InputProps>`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.input};
+  background-color: #1a1a1a;
   border-radius: 16px;
   box-shadow: ${getBoxShadow};
   color: ${({ theme }) => theme.colors.text};
@@ -92,21 +92,25 @@ const ModalInput: React.FC<ModalInputProps> = ({
           <Text fontSize="14px">{inputTitle}</Text>
           <Text fontSize="14px">{`${secondaryTitle}: ${displayBalance(max)}`}</Text>
         </Flex>
-        <Flex alignItems="flex-end" justifyContent="space-around">
-          <StyledInput
-            pattern="^[0-9]*[.,]?[0-9]*$"
-            inputMode="decimal"
-            step="any"
-            min={min}
-            max={max}
-            onChange={onChange}
-            placeholder="0"
-            value={value}
-          />
-          <Button scale="sm" onClick={onSelectMax} mr="8px">
-            {t('Max')}
-          </Button>
-          <Text fontSize="16px">{symbol}</Text>
+        <Flex alignItems="flex-end" justifyContent="space-between">
+          <Box>
+            <StyledInput
+              pattern="^[0-9]*[.,]?[0-9]*$"
+              inputMode="decimal"
+              step="any"
+              min={min}
+              max={max}
+              onChange={onChange}
+              placeholder="0"
+              value={value}
+            />
+          </Box>
+          <Flex alignItems="center">
+            <Button scale="sm" onClick={onSelectMax} mr="8px">
+              {t('Max')}
+            </Button>
+            <Text fontSize="16px">{symbol}</Text>
+          </Flex>
         </Flex>
       </StyledTokenInput>
       {isBalanceZero && addLiquidityUrl && (

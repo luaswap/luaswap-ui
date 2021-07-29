@@ -34,6 +34,7 @@ const IconWrapper = styled.a`
 const PoolInfoBlock = styled.div`
   display: flex;
   flex-direction: column;
+  width: calc(80% - 10px);
 `
 interface StatusBarProps {
   status: string
@@ -48,21 +49,31 @@ const StatusBar = styled(Text)<StatusBarProps>`
   font-weight: 700;
   width: 80px;
   justify-content: center;
+  font-size: 14px;
   align-items: center;
   color: white;
   background-color: ${(props) => generateColorForStatusBar(props.status)};
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 16px;
+  }
 `
 
-const ImageContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const ImageContainer = styled.img`
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   background-color: #e9e9e9;
-  overflow: hidden;
   margin-right: 10px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 70px;
+    height: 70px;
+  }
+`
+const Title = styled(Text)`
+  font-size: 20px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 24px;
+  }
 `
 
 const CapColumnWrapper = styled(Flex)`
@@ -103,7 +114,7 @@ const ProcessAmountWrapper = styled(Flex)`
 
 const CardWrapper = styled(Card)`
   width: 100%;
-  @media screen and (min-width: 1250px) {
+  @media screen and (min-width: 1800px) {
     width: 55%;
     margin-right: 24px;
   }
@@ -174,14 +185,10 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
         }}
       >
         <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
-          <PoolWrapper mb="15px" alignItems="center">
-            <ImageContainer>
-              <img src={img} alt="img" style={{ width: '100%', height: '100%' }} />
-            </ImageContainer>
+          <PoolWrapper mb="15px" alignItems="center" flex="1">
+            <ImageContainer src={img} alt="img" width="20%" />
             <PoolInfoBlock>
-              <Text fontSize="24px" bold>
-                {name}
-              </Text>
+              <Title bold>{name}</Title>
               <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>
             </PoolInfoBlock>
           </PoolWrapper>

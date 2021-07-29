@@ -7,8 +7,9 @@ const TimeBlock = styled(Flex)`
   border-radius: 10px;
   background-color: #1a1a1a;
   display: flex;
-  width: 33%;
+  flex: 1;
   margin-right: 4px;
+  padding: 5px;
   flex-direction: column;
 `
 interface Props {

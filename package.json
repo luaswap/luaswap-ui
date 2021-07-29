@@ -49,7 +49,7 @@
     "bignumber.js": "^9.0.0",
     "canvas-confetti": "^1.3.3",
     "chart.js": "2.9.4",
-    "common-uikitstrungdao": "^0.1.63",
+    "common-uikitstrungdao": "^0.1.64",
     "date-fns": "^2.21.3",
     "ethers": "^5.1.4",
     "graphql": "^15.5.0",
