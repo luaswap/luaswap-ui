@@ -30,7 +30,7 @@ const Row = styled.div`
 `
 
 const StyledFlex = styled(Flex)`
-  @media screen and (min-width: 1250px) {
+  @media screen and (min-width: 1800px) {
     flex-wrap: nowrap;
   }
 `

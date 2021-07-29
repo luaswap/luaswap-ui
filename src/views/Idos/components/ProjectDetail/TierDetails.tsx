@@ -61,7 +61,7 @@ const TierCardContainer = styled(Card)`
   margin-bottom: 15px;
   background-color: #1a1a1a;
 
-  ${({ theme }) => theme.mediaQueries.md} {
+  @media screen and (min-width: 1500px) {
     width: calc(25% - 16px);
     margin-bottom: 0;
     &:not(:last-of-type) {
@@ -86,7 +86,7 @@ const TIER_INFO = {
   '3': {
     name: 'MARS',
     description: 'Staking requirement 125000 LUA or 12500 TOMO',
-    icon: `${process.env.PUBLIC_URL}/images/moon.svg`,
+    icon: `${process.env.PUBLIC_URL}/images/mars.svg`,
     CTA: (lua) => (lua ? `Buy more ${lua} LUA to fly to the Moon` : `Buy more LUA to fly to the Moon`),
   },
   '4': {
@@ -122,11 +122,9 @@ const TierCard: React.FC<TierProps> = ({
                   Tier {tier}
                 </TierContainer>
               </Flex>
-              <SecondaryMessage>
-                <Text color="#8B8B8B" fontSize="14px">
-                  {TIER_INFO[tier]?.description}
-                </Text>
-              </SecondaryMessage>
+              <Text color="#8B8B8B" fontSize="14px">
+                {TIER_INFO[tier]?.description}
+              </Text>
             </Flex>
           </TierHeaderWrapper>
           <Flex justifyContent="space-between" flexDirection="column">
@@ -159,7 +157,9 @@ const TierCard: React.FC<TierProps> = ({
         <Box>
           {userTier === tier && (
             <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
-              <Text bold>Your Tier. GET READY!</Text>
+              <Text bold color="#353535">
+                Your Tier. GET READY!
+              </Text>
               <Image
                 src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
                 alt="img"
@@ -214,11 +214,9 @@ const TierCardMobile: React.FC<TierProps> = ({
                 </TierContainer>
               </Flex>
             </Flex>
-            <SecondaryMessage>
-              <Text color="#8B8B8B" fontSize="14px">
-                {TIER_INFO[tier]?.description}
-              </Text>
-            </SecondaryMessage>
+            <Text color="#8B8B8B" fontSize="14px">
+              {TIER_INFO[tier]?.description}
+            </Text>
           </TierHeaderWrapper>
           <Flex justifyContent="space-between" flexDirection="column">
             <Flex justifyContent="space-between">
@@ -310,7 +308,6 @@ const TierDetails: React.FC<{
       <TierInformationWrapper>
         <Flex flexWrap="wrap" justifyContent="space-between">
           {tiersss.map((e: IdoDetailInfo, i: number) => {
-            console.log(nextTier, 'next tier ?')
             return isMobile ? (
               <TierCardMobile data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
             ) : (

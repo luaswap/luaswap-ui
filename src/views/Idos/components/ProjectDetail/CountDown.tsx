@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { Box, Text, Flex } from 'common-uikitstrungdao'
 import getTimePeriods from 'utils/getTimePeriods'
+import { getUtcDateString } from 'utils/formatTime'
 import Timer from '../Timer'
 import { PoolStatus } from '../../types'
 
@@ -17,6 +18,7 @@ const DateBlock = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 50%;
   width: 100%;
   justify-content: center;
   text-align: center;
@@ -25,7 +27,7 @@ const DateBlock = styled(Box)`
 `
 const TimerBlock = styled(Box)`
   width: 100%;
-  height: 100%;
+  height: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,6 +42,9 @@ interface CountDownProps {
   openAtSeconds: number
   closedAtSeconds: number
   claimAtSeconds: number
+  openAt: number
+  closeAt: number
+  claimAt: number
   poolStatus: PoolStatus
 }
 
@@ -83,13 +88,49 @@ const TimerCountDown = ({ poolStatus, openAtSeconds, closedAtSeconds, claimAtSec
   return <TimerClose closedAtSeconds={closedAtSeconds} />
 }
 
-const CountDown: React.FC<CountDownProps> = ({ openAtSeconds, closedAtSeconds, claimAtSeconds, poolStatus }) => {
+const CountDown: React.FC<CountDownProps> = ({
+  openAtSeconds,
+  closedAtSeconds,
+  claimAtSeconds,
+  openAt,
+  closeAt,
+  claimAt,
+  poolStatus,
+}) => {
+  const { title, date } = useMemo(() => {
+    if (poolStatus === 'not open') {
+      return {
+        title: 'Open in',
+        date: getUtcDateString(openAt),
+      }
+    }
+
+    if (poolStatus === 'open') {
+      return {
+        title: 'Closed at',
+        date: getUtcDateString(closeAt),
+      }
+    }
+
+    if (poolStatus === 'claim') {
+      return {
+        title: 'Claim at',
+        date: getUtcDateString(claimAt),
+      }
+    }
+
+    return {
+      title: 'Closed',
+      date: '',
+    }
+  }, [poolStatus, openAt, closeAt, claimAt])
+
   return (
     <FlexWrapper flexDirection="column">
       <DateBlock>
-        <Text color="#FFFFFF">Open in</Text>
+        <Text color="#FFFFFF">{title}</Text>
         <Text color="#FFFFFF" fontSize="24px" bold>
-          02 Aug, 2021
+          {date}
         </Text>
       </DateBlock>
       <TimerBlock>

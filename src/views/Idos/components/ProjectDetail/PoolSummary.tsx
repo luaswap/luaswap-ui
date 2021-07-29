@@ -103,7 +103,7 @@ const ProcessAmountWrapper = styled(Flex)`
 
 const CardWrapper = styled(Card)`
   width: 100%;
-  @media screen and (min-width: 1250px) {
+  @media screen and (min-width: 1800px) {
     width: 55%;
     margin-right: 24px;
   }

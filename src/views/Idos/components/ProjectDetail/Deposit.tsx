@@ -14,6 +14,7 @@ import ModalInput from 'components/ModalInput'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { IdoDetail } from 'state/types'
 import { selectUserTier } from 'state/profile'
+import { ZERO_ADDRESS } from 'config/constants/idos'
 import { API_IDO_URL } from 'config'
 import { getERC20Contract } from 'utils/contractHelpers'
 import { getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
@@ -49,7 +50,7 @@ const BlockTimerWrapper = styled(Box)`
 const FlexWrapper = styled(Flex)`
   width: 100%;
   margin-top: 24px;
-  @media screen and (min-width: 1250px) {
+  @media screen and (min-width: 1800px) {
     width: 45%;
     margin-top: 0px;
   } ;
@@ -78,6 +79,7 @@ const Deposit: React.FC<DepositProps> = ({
   const { account, library, chainId: cid } = useWeb3React()
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
   const [isApproved, fetchAllowanceData] = useIsApproved(paytokenContract, tierDataOfUser.addressIdoContract)
+  const isNativeToken = tierDataOfUser?.payToken?.address === ZERO_ADDRESS
   const { onApprove } = useApproveIdo(paytokenContract, tierDataOfUser.addressIdoContract)
   const { onDeposit } = useDepositIdo(
     tierDataOfUser.addressIdoContract,
@@ -87,8 +89,19 @@ const Deposit: React.FC<DepositProps> = ({
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
   // Data we receive from API
-  const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
-    tierDataOfUser
+  const {
+    maxAmountPay,
+    payToken,
+    minAmountPay,
+    idoToken,
+    totalAmountIDO,
+    totalAmountPay,
+    index,
+    projectId,
+    openAt,
+    closeAt,
+    claimAt,
+  } = tierDataOfUser
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const maxAmountAllowedLeft = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
@@ -277,7 +290,7 @@ const Deposit: React.FC<DepositProps> = ({
               </Flex>
               {poolStatus === 'claim' ||
                 (poolStatus === 'closed' && (
-                  <Flex justifyContent="space-between" mb="15px">
+                  <Flex justifyContent="space-between">
                     <Text>You will receive</Text>
                     <Text bold>
                       {idoReceivedAmount} {idoToken.symbol}
@@ -285,8 +298,8 @@ const Deposit: React.FC<DepositProps> = ({
                   </Flex>
                 ))}
               {isIdoAvailalbeOnChain && (
-                <Flex justifyContent="center" alignItems="center" flexDirection="column">
-                  {account && isPoolInProgress && isApproved && (
+                <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="15px">
+                  {account && isPoolInProgress && (isNativeToken || (!isNativeToken && isApproved)) && (
                     <ModalInput
                       value={value}
                       onSelectMax={handleSelectMax}
@@ -331,6 +344,9 @@ const Deposit: React.FC<DepositProps> = ({
       </CardWrapper>
       <BlockTimerWrapper>
         <CountDown
+          openAt={openAt}
+          closeAt={closeAt}
+          claimAt={claimAt}
           openAtSeconds={openAtSeconds}
           closedAtSeconds={closedAtSeconds}
           poolStatus={poolStatus}
