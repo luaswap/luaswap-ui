@@ -41,6 +41,7 @@ const PoolContainer = styled.div`
   position: relative;
   width: 100%;
   padding: 0px 24px;
+  padding-bottom: 24px;
   margin-bottom: 14px;
   ${({ theme }) => theme.mediaQueries.xl} {
     margin-right: 14px;
@@ -153,10 +154,14 @@ const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upco
           <Row>
             {isLoadingState ? (
               <PageLoading />
+            ) : upcomingPools.length === 0 ? (
+              <EmptyPool />
             ) : (
-              upcomingPools.map((pool) => {
-                return <PoolDetail pool={pool} />
-              })
+              <>
+                {upcomingPools.map((pool) => {
+                  return <PoolDetail pool={pool} />
+                })}
+              </>
             )}
           </Row>
         </PoolContainer>

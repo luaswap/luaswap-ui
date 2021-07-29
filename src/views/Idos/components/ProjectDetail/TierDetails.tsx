@@ -61,7 +61,7 @@ const TierCardContainer = styled(Card)`
   margin-bottom: 15px;
   background-color: #1a1a1a;
 
-  @media screen and (min-width: 1500px) {
+  ${({ theme }) => theme.mediaQueries.md} {
     width: calc(25% - 16px);
     margin-bottom: 0;
     &:not(:last-of-type) {
@@ -73,123 +73,32 @@ const TierCardContainer = styled(Card)`
 const TIER_INFO = {
   '1': {
     name: 'Earth',
-    description: 'Staking requirement 5000 LUA or 500 TOMO',
+    description: 'You have to stake 5000 LUA or 500 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/earth.svg`,
     CTA: (lua) => (lua ? `Buy ${lua} LUA to JOIN IDO` : `Buy LUA to JOIN IDO`),
   },
   '2': {
     name: 'Moon',
-    description: 'Staking requirement 25000 LUA or 2500 TOMO',
+    description: 'You have to stake 25000 LUA or 2500 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/moon.svg`,
-    CTA: (lua) => (lua ? `Buy more ${lua} LUA to fly to the Moon` : `Buy more LUA to fly to the Moon`),
+    CTA: (lua) => (lua ? `Buy ${lua} LUA to reach tier 2` : `Buy LUA to fly to the Moon`),
   },
   '3': {
     name: 'MARS',
-    description: 'Staking requirement 125000 LUA or 12500 TOMO',
+    description: 'You have to stake 125000 LUA or 12500 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/mars.svg`,
-    CTA: (lua) => (lua ? `Buy more ${lua} LUA to fly to the Moon` : `Buy more LUA to fly to the Moon`),
+    CTA: (lua) => (lua ? `Buy ${lua} LUA to reach tier 3` : `Buy LUA to fly to the Moon`),
   },
   '4': {
     name: 'Galaxy',
-    description: 'Staking requirement 250000 LUA or 25000 TOMO',
+    description: 'You have to stake 250000 LUA or 25000 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/galaxy.svg`,
-    CTA: (lua) => (lua ? `Buy more ${lua} LUA to BREAK BORDER` : `Buy more LUA to BREAK BORDER`),
+    CTA: (lua) => (lua ? `Buy ${lua} LUA to reach tier 4` : `Buy LUA to BREAK BORDER`),
   },
 }
 
 // We have different layout for PC and Mobile/tablet
 const TierCard: React.FC<TierProps> = ({
-  data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
-  userTier,
-  nextTier,
-}) => {
-  if (tier === 0) {
-    return null
-  }
-
-  return (
-    <TierCardContainer>
-      <CardBodyWrapper>
-        <Box>
-          <TierHeaderWrapper mb="15px" alignItems="flex-start">
-            <ImageContainer src={TIER_INFO[tier]?.icon} alt="img" />
-            <Flex alignItems="flex-start" flexDirection="column">
-              <Flex alignItems="center" flexDirection="row">
-                <Text fontSize="20px" bold mr="8px">
-                  {TIER_INFO[tier]?.name}
-                </Text>
-                <TierContainer fontSize="14px" bold>
-                  Tier {tier}
-                </TierContainer>
-              </Flex>
-              <Text color="#8B8B8B" fontSize="14px">
-                {TIER_INFO[tier]?.description}
-              </Text>
-            </Flex>
-          </TierHeaderWrapper>
-          <Flex justifyContent="space-between" flexDirection="column">
-            <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Total {idoToken.symbol}:&nbsp;</Text>
-              <Text bold color="#C3C3C3">
-                {totalAmountIDO} {idoToken.symbol}
-              </Text>
-            </Flex>
-            <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Funds to raise:&nbsp;</Text>
-              <Text bold color="#C3C3C3">
-                {totalAmountPay} {payToken.symbol}
-              </Text>
-            </Flex>
-            <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Price per:{idoToken.symbol}&nbsp;</Text>
-              <Text bold>
-                {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
-              </Text>
-            </Flex>
-            <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Total committed:&nbsp;</Text>
-              <Text bold>
-                {totalCommittedAmount} {payToken.symbol}
-              </Text>
-            </Flex>
-          </Flex>
-        </Box>
-        <Box>
-          {userTier === tier && (
-            <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
-              <Text bold color="#353535">
-                Your Tier. GET READY!
-              </Text>
-              <Image
-                src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
-                alt="img"
-                width={40}
-                height={40}
-                ml="20px"
-              />
-            </Button>
-          )}
-
-          {userTier < tier && (
-            <Button
-              width="100%"
-              mt="30px"
-              variant="primary"
-              style={{ textAlign: 'center' }}
-              as="a"
-              href="https://app.luaswap.org/#/swap"
-              target="__blank"
-            >
-              {TIER_INFO[tier]?.CTA(nextTier[tier]?.addQuantityLua)}
-            </Button>
-          )}
-        </Box>
-      </CardBodyWrapper>
-    </TierCardContainer>
-  )
-}
-
-const TierCardMobile: React.FC<TierProps> = ({
   data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
   userTier,
   nextTier,
@@ -220,25 +129,25 @@ const TierCardMobile: React.FC<TierProps> = ({
           </TierHeaderWrapper>
           <Flex justifyContent="space-between" flexDirection="column">
             <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Total {idoToken.symbol}:&nbsp;</Text>
+              <Text color="#8B8B8B">Total {idoToken.symbol}&nbsp;</Text>
               <Text bold color="#C3C3C3">
                 {totalAmountIDO} {idoToken.symbol}
               </Text>
             </Flex>
             <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Funds to raise:&nbsp;</Text>
+              <Text color="#8B8B8B">Total raise</Text>
               <Text bold color="#C3C3C3">
                 {totalAmountPay} {payToken.symbol}
               </Text>
             </Flex>
             <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Price per:{idoToken.symbol}&nbsp;</Text>
+              <Text color="#8B8B8B">Price</Text>
               <Text bold>
                 {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
               </Text>
             </Flex>
             <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Total committed:&nbsp;</Text>
+              <Text color="#8B8B8B">Total committed&nbsp;</Text>
               <Text bold>
                 {totalCommittedAmount} {payToken.symbol}
               </Text>
@@ -281,7 +190,6 @@ const TierCardMobile: React.FC<TierProps> = ({
 const TierDetails: React.FC<{
   currentPoolData: Pool
 }> = ({ currentPoolData }) => {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   const userTier = useSelector(selectUserTier)
   const userNextTier = useSelector(selectUserNextTier)
   const { index: tierData } = currentPoolData
@@ -308,11 +216,7 @@ const TierDetails: React.FC<{
       <TierInformationWrapper>
         <Flex flexWrap="wrap" justifyContent="space-between">
           {tiersss.map((e: IdoDetailInfo, i: number) => {
-            return isMobile ? (
-              <TierCardMobile data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
-            ) : (
-              <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
-            )
+            return <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
           })}
         </Flex>
       </TierInformationWrapper>

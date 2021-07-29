@@ -33,6 +33,10 @@ const CardWrapper = styled(Card)`
   ${({ theme }) => theme.mediaQueries.lg} {
     width: 100%;
   }
+
+  &:not(:last-of-type) {
+    margin-bottom: 24px;
+  }
 `
 
 const IconWrapper = styled.a`
@@ -42,16 +46,12 @@ const IconWrapper = styled.a`
   cursor: pointer;
 `
 
-const ImageContainer = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const ImageContainer = styled.img`
   border-radius: 50%;
   width: 60px;
   height: 60px;
   cursor: pointer;
   background-color: #e9e9e9;
-  overflow: hidden;
   margin-right: 10px;
 `
 
@@ -108,16 +108,14 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   }, [totalCommittedAmount, totalAmountPay, poolStatus, swappedAmountIDO, totalAmountIDO])
 
   return (
-    <CardWrapper mb="24px">
+    <CardWrapper>
       <CardBody style={{ height: '300px', backgroundColor: '#353535' }}>
         <Flex alignItems="flex-start" justifyContent="space-between" flexWrap="wrap">
           <Flex mb="15px" alignItems="center">
-            <ImageContainer onClick={navigateToProjectDetail}>
-              <Image src={img} alt="img" width={60} height={60} />
-            </ImageContainer>
+            <ImageContainer src={img} alt="img" />
             <PoolInfoBlock>
               <Text
-                fontSize="24px"
+                fontSize="20px"
                 bold
                 onClick={navigateToProjectDetail}
                 style={{
@@ -142,7 +140,9 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
               </Flex>
             </PoolInfoBlock>
           </Flex>
-          <SecondaryButton onClick={navigateToProjectDetail}>LEARN MORE</SecondaryButton>
+          <SecondaryButton onClick={navigateToProjectDetail} scale="sm">
+            LEARN MORE
+          </SecondaryButton>
         </Flex>
         <Text color="#C3C3C3" mt="14px">
           {description}

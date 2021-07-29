@@ -16,7 +16,19 @@ const StyledHero = styled.div`
 
 const StyledHeading = styled(Text)`
   font-family: 'Racing Sans One', cursive;
+  font-size: 30px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 48px;
+  }
 `
+
+const StyledText = styled(Text)`
+  font-size: 20px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 32px;
+  }
+`
+
 const Hero = () => {
   const { t } = useTranslation()
 
@@ -24,12 +36,12 @@ const Hero = () => {
     <Box mb="24px">
       <StyledHero>
         <Container>
-          <StyledHeading fontSize="48px" mb="12px" textAlign="center" color="#FFFFFF">
+          <StyledHeading mb="12px" textAlign="center" color="#FFFFFF">
             {t('Decentralize your way of investing')}
           </StyledHeading>
-          <Text bold fontSize="32px" textAlign="center" color="#FEF5E3">
+          <StyledText bold textAlign="center" color="#FEF5E3">
             {t('Subscribe to upcoming pools')}
-          </Text>
+          </StyledText>
         </Container>
       </StyledHero>
     </Box>

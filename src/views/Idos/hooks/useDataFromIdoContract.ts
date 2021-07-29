@@ -60,7 +60,7 @@ const useDataFromIdoContract = (
         Object.keys(idoIndexes).forEach((idoChainId) => {
           const idosOfCurrentChainId = []
           idoIndexes[idoChainId].forEach((ido) => {
-            if (!idoIndexMap[ido.index]) {
+            if (!idoIndexMap[ido.index] && ido.tier !== 0) {
               // We will get new contract based on addressIdoContract received from API
               const luaContractAddress = ido.addressIdoContract
               const web3 = getWeb3BasedOnChainId(Number(idoChainId))

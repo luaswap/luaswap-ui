@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { Box, Text, Flex } from 'common-uikitstrungdao'
@@ -44,8 +44,22 @@ const Step = styled(Box)`
   margin-right: 14px;
   border-radius: 50%;
 `
+const StepWithTail = styled(Step)`
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 14px;
+    left: 40px;
+    width: 80%;
+    height: 10px;
+    border-top: 5px dotted #fabc46;
+  }
+`
+
 const StepContainer = styled(Flex)`
   width: 25%;
+  position: relative;
 `
 
 const MobileStepWrapper = styled(Flex)`
@@ -65,12 +79,16 @@ const Dot = styled(Box)<DotProps>`
   &:not(:last-of-type) {
     margin-bottom: ${(props) => (props.isVertical ? '8px' : '0px')};
   }
+
+  @media screen and (max-width: 1500px) {
+    margin-right: 5px;
+  }
 `
 const DotsComponent = ({ numberOfDots, isVertical = false }) => {
   const dotArray = new Array(numberOfDots).fill(0)
 
   return (
-    <Flex flexDirection={isVertical ? 'column' : 'row'}>
+    <Flex flexDirection={isVertical ? 'column' : 'row'} overflowX="hidden">
       {dotArray.map((_dot) => {
         return <Dot isVertical={isVertical} />
       })}
@@ -83,28 +101,25 @@ const IfoStepsDesktop = () => {
     <Wrapper>
       <StepWrapper>
         <StepContainer alignItems="center">
-          <Step>
+          <StepWithTail>
             <Text bold color="#353535">
               1
             </Text>
-          </Step>
-          <DotsComponent numberOfDots={27} />
+          </StepWithTail>
         </StepContainer>
         <StepContainer alignItems="center">
-          <Step>
+          <StepWithTail>
             <Text bold color="#353535">
               2
             </Text>
-          </Step>
-          <DotsComponent numberOfDots={27} />
+          </StepWithTail>
         </StepContainer>
         <StepContainer alignItems="center">
-          <Step>
+          <StepWithTail>
             <Text bold color="#353535">
               3
             </Text>
-          </Step>
-          <DotsComponent numberOfDots={27} />
+          </StepWithTail>
         </StepContainer>
         <StepContainer alignItems="center">
           <Step>

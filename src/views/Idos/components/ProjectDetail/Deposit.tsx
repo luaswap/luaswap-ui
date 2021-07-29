@@ -89,19 +89,9 @@ const Deposit: React.FC<DepositProps> = ({
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
   const userTier = useSelector(selectUserTier)
   // Data we receive from API
-  const {
-    maxAmountPay,
-    payToken,
-    minAmountPay,
-    idoToken,
-    totalAmountIDO,
-    totalAmountPay,
-    index,
-    projectId,
-    openAt,
-    closeAt,
-    claimAt,
-  } = tierDataOfUser
+  const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
+    tierDataOfUser
+  const { openAt, closeAt, claimAt } = currentPoolData
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const maxAmountAllowedLeft = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()

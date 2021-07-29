@@ -35,7 +35,14 @@ const TimerBlock = styled(Box)`
   background-color: #282828;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
-  padding: 24px 14px;
+  padding: 10px 30px;
+`
+
+const Title = styled(Text)`
+  font-size: 20px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 24px;
+  }
 `
 
 interface CountDownProps {
@@ -129,9 +136,9 @@ const CountDown: React.FC<CountDownProps> = ({
     <FlexWrapper flexDirection="column">
       <DateBlock>
         <Text color="#FFFFFF">{title}</Text>
-        <Text color="#FFFFFF" fontSize="24px" bold>
+        <Title color="#FFFFFF" bold>
           {date}
-        </Text>
+        </Title>
       </DateBlock>
       <TimerBlock>
         <TimerCountDown
