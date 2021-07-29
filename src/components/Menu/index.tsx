@@ -66,7 +66,7 @@ const Menu = (props) => {
       connectNetwork={connectNetwork}
       accountData={profile}
       isUnlock={isUnlock}
-      isDark={isDark}
+      isDark
       chainId={chainId}
       queryChainId={queryChainId}
       toggleTheme={toggleTheme}

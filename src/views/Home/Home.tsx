@@ -8,7 +8,7 @@ import { Heading, Text, BaseLayout, Progress, Flex, useModal, Box, Skeleton } fr
 import { API_BLOCKFOLIO } from '../../config'
 import { useAppDispatch } from '../../state'
 import { useWallet } from '../../state/hooks'
-import { DataApiType, DataLuaFarmProp } from '../../state/types'
+import { DataApiType } from '../../state/types'
 import { setWallet } from '../../state/blockfolio'
 import { useTranslation } from '../../contexts/Localization'
 import PageHeader from '../../components/PageHeader'
@@ -22,7 +22,6 @@ import WalletIcon from './components/Icon/WalletIcon'
 import PoolIcon from './components/Icon/PoolIcon'
 import AccountLoading from './components/Loading/AccountLoading'
 import NetworkLoading from './components/Loading/NetworkLoading'
-import Tier from '../../components/Tier'
 
 const initialState: DataApiType = {
   totalInUSD: 0,
@@ -43,23 +42,7 @@ const initialState: DataApiType = {
     details: [],
   },
 }
-const initialLuaFarmState: DataLuaFarmProp = {
-  totalStakeAmount: 0,
-  tomochain: {
-    tag: '',
-    name: '',
-    totalStakeAmount: 0,
-    detailsHeader: [],
-    details: [],
-  },
-  ethereum: {
-    tag: '',
-    name: '',
-    totalStakeAmount: 0,
-    detailsHeader: [],
-    details: [],
-  },
-}
+
 const initialNetwork = {
   tomochain: {
     balance: initialState.tomochain,
@@ -256,8 +239,8 @@ const Home: React.FC = () => {
 
       const luafarm = {
         totalInUSD: ef + tf,
-        tomochain: tLuafarmResult ? tLuafarmResult.data : initialLuaFarmState.tomochain,
-        ethereum: eLuafarmResult ? eLuafarmResult.data : initialLuaFarmState.ethereum,
+        tomochain: tLuafarmResult ? tLuafarmResult.data : initialState.tomochain,
+        ethereum: eLuafarmResult ? eLuafarmResult.data : initialState.ethereum,
       }
       setDataLuafarm(luafarm)
 

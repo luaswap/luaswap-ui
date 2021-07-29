@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Heading, Mesage } from 'common-uikitstrungdao'
+import { Flex, Heading, Mesage, Text, Box } from 'common-uikitstrungdao'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -15,23 +15,67 @@ import Steps from './Steps'
 import Deposit from './Deposit'
 import PoolSummary from './PoolSummary'
 import ProjectInfo from './ProjectInfo'
+import PoolInfo from './PoolInfo'
+import TokenInfo from './TokenInfo'
 import PoolInformation from './PoolInformation'
 import TierDetails from './TierDetails'
 import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
 import { getIdoDataBasedOnChainIdAndTier, getIdoSupportedNetwork } from '../helper'
 
 const Row = styled.div`
-  max-width: 1200px;
+  max-width: 1600px;
   padding-left: 24px;
   padding-right: 24px;
   margin: 0 auto;
 `
 
 const StyledFlex = styled(Flex)`
-  ${({ theme }) => theme.mediaQueries.lg} {
+  @media screen and (min-width: 1800px) {
     flex-wrap: nowrap;
   }
 `
+const ProjectDetailBox = styled(Box)`
+  width: 100%;
+  margin-right: 0px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-right: 24px;
+  }
+  ${({ theme }) => theme.mediaQueries.xl} {
+    width: calc(70% - 48px);
+  }
+`
+
+const PoolInfoBox = styled(Box)`
+  width: 100%;
+  margin-right: 0px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: calc(50% - 12px);
+    margin-right: 24px;
+  }
+  ${({ theme }) => theme.mediaQueries.xl} {
+    width: 15%;
+    margin-right: 24px;
+  }
+`
+
+const TokenInfoBox = styled(Box)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: calc(50% - 12px);
+  }
+  ${({ theme }) => theme.mediaQueries.xl} {
+    width: 15%;
+  }
+`
+
+const StyledHeading = styled(Heading)`
+  margin-bottom: 14px;
+  margin-top: 40px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-top: 40px;
+  }
+`
+
 interface ParamsType {
   id: string
 }
@@ -91,7 +135,7 @@ const ProjectDetail = () => {
             {' '}
             {!isAvailalbeOnCurrentNetwork && account && (
               <Mesage variant="warning" mb="16px">
-                IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO
+                <Text>IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO</Text>
               </Mesage>
             )}
             <StyledFlex mb="40px" flexWrap="wrap">
@@ -110,17 +154,33 @@ const ProjectDetail = () => {
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
             </StyledFlex>
-            <Heading as="h2" scale="lg" mb="24px" mt="50px">
+            <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               Tier Infomation
             </Heading>
             <TierDetails currentPoolData={currentPoolData} />
-            <Heading as="h2" scale="lg" mb="24px" mt="50px">
-              Project Detail
-            </Heading>
             <StyledFlex flexWrap="wrap">
-              <ProjectInfo currentPoolData={currentPoolData} />
-              <PoolInformation currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
+              <ProjectDetailBox mr="24px">
+                <StyledHeading as="h2" scale="lg" color="#D8D8D8" mb="14px">
+                  Project Detail
+                </StyledHeading>
+                <ProjectInfo currentPoolData={currentPoolData} />
+              </ProjectDetailBox>
+              <PoolInfoBox mr="24px">
+                <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+                  Pool info
+                </StyledHeading>
+                <PoolInfo currentPoolData={currentPoolData} />
+              </PoolInfoBox>
+              <TokenInfoBox>
+                <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+                  Token info
+                </StyledHeading>
+                <TokenInfo currentPoolData={currentPoolData} />
+              </TokenInfoBox>
             </StyledFlex>
+            <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
+              How to LuaStarts
+            </Heading>
             <Steps />
           </>
         )}

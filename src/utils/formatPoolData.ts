@@ -4,8 +4,8 @@ import { IdoDetailInfo } from 'views/Idos/types'
 // eslint-disable-next-line import/prefer-default-export
 export const formatPoolDetail = (allTierPool: IdoDetailInfo[]): IdoDetailInfo => {
   const mappedIndex = {}
-
-  return allTierPool.reduce(
+  const filteredData = allTierPool.filter((data) => data.tier !== 0)
+  return filteredData.reduce(
     (accumulate, currentItem) => {
       if (!mappedIndex[currentItem.index]) {
         mappedIndex[currentItem.index] = true
@@ -22,7 +22,7 @@ export const formatPoolDetail = (allTierPool: IdoDetailInfo[]): IdoDetailInfo =>
       }
     },
     {
-      ...allTierPool[0],
+      ...filteredData[0],
       totalCommittedAmount: 0,
       totalAmountPay: 0,
       totalAmountIDO: 0,

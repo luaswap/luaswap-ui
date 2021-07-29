@@ -1,13 +1,20 @@
 import React, { useMemo } from 'react'
-import { Flex, PocketWatchIcon, Text } from 'common-uikitstrungdao'
+import styled from 'styled-components'
+import { Flex, PocketWatchIcon, Text, Box } from 'common-uikitstrungdao'
 import { useTranslation } from 'contexts/Localization'
 
+const TimeBlock = styled(Flex)`
+  border-radius: 10px;
+  background-color: #1a1a1a;
+  display: flex;
+  flex: 1;
+  margin-right: 4px;
+  padding: 5px;
+  flex-direction: column;
+`
 interface Props {
   suffix: string
   timeUntil: {
-    years: number
-    months: number
-    days: number
     hours: number
     minutes: number
     seconds: number
@@ -16,26 +23,43 @@ interface Props {
 
 const Timer: React.FC<Props> = ({ suffix, timeUntil }) => {
   const { t } = useTranslation()
+  const { hours, minutes, seconds } = timeUntil
 
   return (
-    <Flex justifyContent="center">
-      <>
-        <PocketWatchIcon width="48px" mr="16px" />
-        <Flex alignItems="center">
-          <Text bold mr="16px">
-            {suffix}:
+    <Box
+      height="100%"
+      width="100%"
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        flexDirection: 'column',
+      }}
+    >
+      <Text mb="5px" color="#8B8B8B">
+        {suffix}
+      </Text>
+      <Flex flexDirection="row" width="100%">
+        <TimeBlock>
+          <Text color="#C3C3C3" bold>
+            {hours}
           </Text>
-          <Text>
-            {t('%day%d %hour%h %minute%m %second%s', {
-              day: timeUntil.days,
-              hour: timeUntil.hours,
-              minute: timeUntil.minutes,
-              second: timeUntil.seconds,
-            })}
+          <Text color="#8B8B8B">HOUR</Text>
+        </TimeBlock>
+        <TimeBlock>
+          <Text color="#C3C3C3" bold>
+            {minutes}
           </Text>
-        </Flex>
-      </>
-    </Flex>
+          <Text color="#8B8B8B">MIN</Text>
+        </TimeBlock>
+        <TimeBlock>
+          <Text color="#C3C3C3" bold>
+            {seconds}
+          </Text>
+          <Text color="#8B8B8B">SEC</Text>
+        </TimeBlock>
+      </Flex>
+    </Box>
   )
 }
 

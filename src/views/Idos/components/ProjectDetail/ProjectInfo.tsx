@@ -1,14 +1,37 @@
 import React from 'react'
-import { Flex, Button, Text } from 'common-uikitstrungdao'
+import { Flex, Button, Text, Box, Link } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { Pool } from 'views/Idos/types'
 
-const StyledWrapper = styled(Flex)`
+const ProjectInfoWrapper = styled(Box)`
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  margin-bottom: 0px;
+  padding: 24px;
+  background-color: #282828;
   width: 100%;
-  margin-bottom: 40px;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 60%;
     margin-right: 24px;
+    margin-bottom: 40px;
+  }
+`
+
+const LinkWrapper = styled(Flex)`
+  border-bottom: 1px solid #353535;
+  padding-bottom: 14px;
+`
+
+const LinkRef = styled(Flex)`
+  padding-left: 14px;
+  padding-right: 14px;
+  align-items: flex-start;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    border-right: none;
+  }
+
+  &:not(:last-of-type) {
+    border-right: 1px solid #353535;
   }
 `
 
@@ -19,17 +42,25 @@ interface ProjectInfoProps {
 const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
   const { projectDetail, links } = currentPoolData
   return (
-    <StyledWrapper flexDirection="column">
-      <Flex>
+    <ProjectInfoWrapper>
+      <LinkWrapper flexWrap="wrap">
         {Array.isArray(links) &&
           links.map((item) => {
             return (
-              <Button mr="10px" variant="tertiary" as="a" href={item.link} target="__blank" key={item.label}>
-                {item.label}
-              </Button>
+              <LinkRef>
+                <Link
+                  href={item.link}
+                  target="_blank"
+                  style={{
+                    wordBreak: 'break-all',
+                  }}
+                >
+                  {item.label}
+                </Link>
+              </LinkRef>
             )
           })}
-      </Flex>
+      </LinkWrapper>
       <Text
         mt="20px"
         style={{
@@ -38,7 +69,7 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
       >
         {projectDetail}
       </Text>
-    </StyledWrapper>
+    </ProjectInfoWrapper>
   )
 }
 

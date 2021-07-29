@@ -1,46 +1,49 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Box, Heading, Text } from 'common-uikitstrungdao'
+import { Box, Text } from 'common-uikitstrungdao'
 import Container from 'components/layout/Container'
 import { useTranslation } from 'contexts/Localization'
 
-const getGradient = (isDark: boolean) => {
-  if (isDark) {
-    return 'repeating-linear-gradient(to right, #332453, #332453 40px, #281D44 40px, #281D44 80px)'
-  }
-
-  return 'repeating-linear-gradient(to right, #21d4e2, #21d4e2 40px, #53dee9 40px, #53dee9 80px)'
-}
-
 const StyledHero = styled.div`
-  background: ${({ theme }) => getGradient(theme.isDark)};
-  padding-bottom: 40px;
-  padding-top: 40px;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  background-image: url('${process.env.PUBLIC_URL}/images/Group16.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 40px;
 `
 
-const CurtainBottom = styled.div`
-  background-image: url('/images/curtain-bottom-${({ theme }) => (theme.isDark ? 'dark' : 'light')}.png');
-  background-repeat: repeat-x;
-  background-size: contain;
-  height: 20px;
+const StyledHeading = styled(Text)`
+  font-family: 'Racing Sans One', cursive;
+  font-size: 30px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 48px;
+  }
+`
+
+const StyledText = styled(Text)`
+  font-size: 20px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 32px;
+  }
 `
 
 const Hero = () => {
   const { t } = useTranslation()
 
   return (
-    <Box>
+    <Box mb="24px">
       <StyledHero>
         <Container>
-          <Heading as="h1" scale="xl" mb="24px">
+          <StyledHeading mb="12px" textAlign="center" color="#FFFFFF">
             {t('Decentralize your way of investing')}
-          </Heading>
-          <Text bold fontSize="20px">
+          </StyledHeading>
+          <StyledText bold textAlign="center" color="#FEF5E3">
             {t('Subscribe to upcoming pools')}
-          </Text>
+          </StyledText>
         </Container>
       </StyledHero>
-      <CurtainBottom />
     </Box>
   )
 }

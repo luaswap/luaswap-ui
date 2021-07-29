@@ -24,7 +24,7 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
   },
   {
     label: t('Liquidity'),
-    icon: 'PredictionsIcon',
+    icon: 'UnionIcon',
     href: 'https://app.luaswap.org/#/pool',
   },
 ]

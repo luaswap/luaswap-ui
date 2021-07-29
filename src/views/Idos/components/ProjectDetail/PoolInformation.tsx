@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { TabMenu, Tab, Flex, Text } from 'common-uikitstrungdao'
+import { TabMenu, Tab, Flex, Text, Heading, Box } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { getUtcDateString } from 'utils/formatTime'
@@ -7,9 +7,19 @@ import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
 const Row = styled.div`
   width: 100%;
+  display: flex;
   margin-bottom: 40px;
   ${({ theme }) => theme.mediaQueries.lg} {
-    width: 40%;
+    width: 30%;
+  }
+`
+
+const StyledHeading = styled(Heading)`
+  margin-bottom: 14px;
+  margin-top: 20px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-bottom: 24px;
+    margin-top: 30px;
   }
 `
 
@@ -77,7 +87,7 @@ const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, tier
 
   return (
     <Row>
-      <TabMenu
+      {/* <TabMenu
         activeIndex={index}
         onItemClick={onChangeTab}
         innerStyle={{
@@ -106,7 +116,17 @@ const PoolInformation: React.FC<PoolInformationProps> = ({ currentPoolData, tier
         <PoolInfoTab currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
       ) : (
         <TokenInfoTab currentPoolData={currentPoolData} tierDataOfUser={tierDataOfUser} />
-      )}
+      )} */}
+      <Box>
+        <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+          Pool info
+        </StyledHeading>
+      </Box>
+      <Box>
+        <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+          Token info
+        </StyledHeading>
+      </Box>
     </Row>
   )
 }

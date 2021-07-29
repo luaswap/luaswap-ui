@@ -5,11 +5,11 @@ import { Pool as PoolIdoDetail } from 'views/Idos/types'
 export type TranslatableText =
   | string
   | {
-      key: string
-      data?: {
-        [key: string]: string | number
-      }
+    key: string
+    data?: {
+      [key: string]: string | number
     }
+  }
 
 export interface Farm extends FarmConfig {
   tokenAmountMc?: BigNumber
@@ -310,18 +310,7 @@ export interface WalletProps {
   isActive?: boolean
   walletType?: string
 }
-export interface DataLuaFarmProp {
-  totalStakeAmount: number
-  tomochain: ApiLuaFarmType
-  ethereum: ApiLuaFarmType
-}
-export interface ApiLuaFarmType {
-  tag: string
-  name: string
-  totalStakeAmount: number
-  detailsHeader: Array<string[]>
-  details: ApiDetailType[]
-}
+
 export interface DataApiType {
   totalInUSD: number
   tomochain: ApiNetworkType

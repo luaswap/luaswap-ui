@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
@@ -15,11 +15,11 @@ import {
   WorldIcon,
   TelegramIcon,
   Progress,
+  SecondaryButton,
   Image,
 } from 'common-uikitstrungdao'
 import useDeepMemo from 'hooks/useDeepMemo'
 import { formatPoolDetail } from 'utils/formatPoolData'
-import { formatCardStatus, formatCardColor } from 'utils/idoHelpers'
 import { Pool, FormatPool } from '../../types'
 import usePoolStatus from '../../hooks/usePoolStatus'
 
@@ -28,29 +28,30 @@ const PoolInfoBlock = styled.div`
   flex-direction: column;
 `
 
-const IconWrapper = styled.a`
-  color: #212121;
-  margin: 0 3px;
-  display: flex !important;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.background};
+const CardWrapper = styled(Card)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 100%;
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 24px;
+  }
 `
 
-const ImageContainer = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const IconWrapper = styled.a`
+  margin-right: 14px;
+  border-right: 1px solid #606060;
+  padding-right: 14px;
+  cursor: pointer;
+`
+
+const ImageContainer = styled.img`
   border-radius: 50%;
   width: 60px;
   height: 60px;
   cursor: pointer;
   background-color: #e9e9e9;
-  overflow: hidden;
   margin-right: 10px;
 `
 
@@ -62,6 +63,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
+  const location = useLocation()
   const [poolStatus] = usePoolStatus(pool)
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
@@ -106,62 +108,58 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   }, [totalCommittedAmount, totalAmountPay, poolStatus, swappedAmountIDO, totalAmountIDO])
 
   return (
-    <Card
-      ribbon={<CardRibbon variantColor={formatCardColor(status)} text={formatCardStatus(status)} />}
-      mb="24px"
-      style={{
-        width: '475px',
-      }}
-    >
-      <CardBody style={{ height: '300px' }}>
-        <Flex mb="15px" alignItems="center">
-          <ImageContainer onClick={navigateToProjectDetail}>
-            <Image src={img} alt="img" width={60} height={60} />
-          </ImageContainer>
-          <PoolInfoBlock>
-            <Text
-              fontSize="24px"
-              bold
-              onClick={navigateToProjectDetail}
-              style={{
-                cursor: 'pointer',
-              }}
-            >
-              {name}
-            </Text>
-            <Flex marginBottom="5px" alignItems="center">
-              <IconWrapper href="google.com" target="__blank">
-                <TelegramIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <TwitterIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <MediumIcon />
-              </IconWrapper>
-              <IconWrapper>
-                <WorldIcon />
-              </IconWrapper>
-            </Flex>
-          </PoolInfoBlock>
-        </Flex>
-        <Text>{description}</Text>
-        <Link href="google.com" mb="15px">
-          Learn more
-        </Link>
-        <Flex justifyContent="space-between" mb="10px">
-          <Flex justifyContent="flex-start" flexDirection="column">
-            <Text color="primary">Cap</Text>
-            <Text>{totalAmountIDO}</Text>
+    <CardWrapper>
+      <CardBody style={{ height: '300px', backgroundColor: '#353535' }}>
+        <Flex alignItems="flex-start" justifyContent="space-between" flexWrap="wrap">
+          <Flex mb="15px" alignItems="center">
+            <ImageContainer src={img} alt="img" />
+            <PoolInfoBlock>
+              <Text
+                fontSize="20px"
+                bold
+                onClick={navigateToProjectDetail}
+                style={{
+                  cursor: 'pointer',
+                }}
+              >
+                {name}
+              </Text>
+              <Flex marginBottom="5px" alignItems="center">
+                <IconWrapper href="google.com" target="__blank">
+                  <TelegramIcon />
+                </IconWrapper>
+                <IconWrapper>
+                  <TwitterIcon />
+                </IconWrapper>
+                <IconWrapper>
+                  <MediumIcon />
+                </IconWrapper>
+                <IconWrapper>
+                  <WorldIcon />
+                </IconWrapper>
+              </Flex>
+            </PoolInfoBlock>
           </Flex>
-          <Flex justifyContent="flex-end" flexDirection="column">
-            <Text color="primary">Access</Text>
-            <Text>Private</Text>
+          <SecondaryButton onClick={navigateToProjectDetail} scale="sm">
+            LEARN MORE
+          </SecondaryButton>
+        </Flex>
+        <Text color="#C3C3C3" mt="14px">
+          {description}
+        </Text>
+        <Flex justifyContent="space-between" mb="10px">
+          <Flex justifyContent="flex-start" flexDirection="row">
+            <Text color="#8B8B8B" mr="5px">
+              Cap:{' '}
+            </Text>
+            <Text color="primary" fontWeight="600">
+              {totalAmountIDO}
+            </Text>
           </Flex>
         </Flex>
         <Progress variant="round" primaryStep={progressPercentage} />
       </CardBody>
-    </Card>
+    </CardWrapper>
   )
 }
 

@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
-import { Card, CardBody, Flex, Text, Mesage } from 'common-uikitstrungdao'
+import { Card, CardBody, Flex, Text, Mesage, Box } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import axios, { AxiosResponse } from 'axios'
 import { useSelector } from 'react-redux'
@@ -14,6 +14,8 @@ import ModalInput from 'components/ModalInput'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { IdoDetail } from 'state/types'
 import { selectUserTier } from 'state/profile'
+import { ZERO_ADDRESS } from 'config/constants/idos'
+import { API_IDO_URL } from 'config'
 import { getERC20Contract } from 'utils/contractHelpers'
 import { getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
 import ActionButton from './ActionButton'
@@ -24,17 +26,34 @@ import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
   width: 100%;
+  margin-right: 0px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-top: 0px;
+    margin-right: 24px;
+    width: calc(65% - 24px);
+  }
+`
+const BlockTimerWrapper = styled(Box)`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 24px;
-  ${({ theme }) => theme.mediaQueries.lg} {
-    width: 40%;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-top: 0px;
+    height: 100%;
+    width: 35%;
     margin-top: 0px;
   }
 `
+
 const FlexWrapper = styled(Flex)`
   width: 100%;
-  ${({ theme }) => theme.mediaQueries.lg} {
-    width: 40%;
-  }
+  margin-top: 24px;
+  @media screen and (min-width: 1800px) {
+    width: 45%;
+    margin-top: 0px;
+  } ;
 `
 
 interface DepositProps {
@@ -60,6 +79,7 @@ const Deposit: React.FC<DepositProps> = ({
   const { account, library, chainId: cid } = useWeb3React()
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
   const [isApproved, fetchAllowanceData] = useIsApproved(paytokenContract, tierDataOfUser.addressIdoContract)
+  const isNativeToken = tierDataOfUser?.payToken?.address === ZERO_ADDRESS
   const { onApprove } = useApproveIdo(paytokenContract, tierDataOfUser.addressIdoContract)
   const { onDeposit } = useDepositIdo(
     tierDataOfUser.addressIdoContract,
@@ -71,6 +91,7 @@ const Deposit: React.FC<DepositProps> = ({
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
+  const { openAt, closeAt, claimAt } = currentPoolData
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const maxAmountAllowedLeft = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
@@ -119,7 +140,7 @@ const Deposit: React.FC<DepositProps> = ({
   const getClaimProof = useCallback(
     async (poolId, poolIndex) => {
       const response = await axios.get(
-        `https://api.luaswap.org/api/ido/pools/claim-info/${poolId}/${cid}/${poolIndex}/${userTier}/${account}`,
+        `${API_IDO_URL}/pools/claim-info/${poolId}/${cid}/${poolIndex}/${userTier}/${account}`,
       )
       return response.data
     },
@@ -147,7 +168,7 @@ const Deposit: React.FC<DepositProps> = ({
   const getCommitProof = useCallback(
     async (poolId, poolIndex, amount) => {
       const response = await axios.get(
-        `https://api.luaswap.org/api/ido/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${userTier}/${account}/${amount}`,
+        `${API_IDO_URL}/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${userTier}/${account}/${amount}`,
       )
       return response.data
     },
@@ -213,41 +234,16 @@ const Deposit: React.FC<DepositProps> = ({
   }, [poolStatus, totalAmountUserSwapped, userTotalCommitted])
 
   return (
-    <FlexWrapper flexDirection="column">
-      {poolStatus !== 'closed' && (
-        <CardWrapper
-          style={{
-            width: '100%',
-          }}
-          mb="24px"
-        >
-          <CardBody
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Flex justifyContent="center" alignItems="center" flexDirection="column">
-              <CountDown
-                openAtSeconds={openAtSeconds}
-                closedAtSeconds={closedAtSeconds}
-                poolStatus={poolStatus}
-                claimAtSeconds={claimAtSeconds}
-              />
-            </Flex>
-          </CardBody>
-        </CardWrapper>
-      )}
-      <CardWrapper
-        style={{
-          width: '100%',
-          flex: 1,
-        }}
-      >
+    <FlexWrapper flexDirection="row" flexWrap="wrap">
+      <CardWrapper>
         <CardBody
           style={{
             height: '100%',
+            ...(!isAvailalbeOnCurrentNetwork && {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }),
           }}
         >
           {isAvailalbeOnCurrentNetwork ? (
@@ -284,7 +280,7 @@ const Deposit: React.FC<DepositProps> = ({
               </Flex>
               {poolStatus === 'claim' ||
                 (poolStatus === 'closed' && (
-                  <Flex justifyContent="space-between" mb="15px">
+                  <Flex justifyContent="space-between">
                     <Text>You will receive</Text>
                     <Text bold>
                       {idoReceivedAmount} {idoToken.symbol}
@@ -292,8 +288,8 @@ const Deposit: React.FC<DepositProps> = ({
                   </Flex>
                 ))}
               {isIdoAvailalbeOnChain && (
-                <Flex justifyContent="center" alignItems="center" flexDirection="column">
-                  {account && isPoolInProgress && isApproved && (
+                <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="15px">
+                  {account && isPoolInProgress && (isNativeToken || (!isNativeToken && isApproved)) && (
                     <ModalInput
                       value={value}
                       onSelectMax={handleSelectMax}
@@ -327,10 +323,26 @@ const Deposit: React.FC<DepositProps> = ({
               {isClaimed && <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>}
             </>
           ) : (
-            <Mesage variant="warning">Switch to correct network to see pool&apos;s information</Mesage>
+            <Flex alignItems="center" justifyContent="center" flexDirection="column">
+              <img src={`${process.env.PUBLIC_URL}/images/empty.svg`} alt="empty" />
+              <Text color="#606060" textAlign="center">
+                Switch to correct network to see pool&apos;s information
+              </Text>
+            </Flex>
           )}
         </CardBody>
       </CardWrapper>
+      <BlockTimerWrapper>
+        <CountDown
+          openAt={openAt}
+          closeAt={closeAt}
+          claimAt={claimAt}
+          openAtSeconds={openAtSeconds}
+          closedAtSeconds={closedAtSeconds}
+          poolStatus={poolStatus}
+          claimAtSeconds={claimAtSeconds}
+        />
+      </BlockTimerWrapper>
     </FlexWrapper>
   )
 }

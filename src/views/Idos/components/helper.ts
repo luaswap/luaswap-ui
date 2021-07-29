@@ -107,12 +107,12 @@ export const mapProjectStatus = (status: string) => {
 
 export const generateColorForStatusBar = (status: string) => {
   if (status === 'closed') {
-    return '#ffbfbf'
+    return '#353535'
   }
 
   if (status === 'open') {
-    return '#31D0AA'
+    return '#7fbfaf'
   }
 
-  return '#afafaf1a'
+  return '#6bc1ff'
 }

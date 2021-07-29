@@ -65,26 +65,24 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
     switch (type) {
       case 'balance':
         return (
-          parseFloat(row.amountUsd) > 0 && (
-            <tr key={row.amount}>
-              <StyleTd>
-                <CellInner>
-                  <TokenLogo address={row.address} url={row.imgs[0]} name={row.tokenName} />
-                  <LinkExternal href={row.link}>
-                    <TokenName>{row.tokenName}</TokenName>
-                  </LinkExternal>
-                </CellInner>
-              </StyleTd>
-              <StyleTd>
-                <Text>
-                  {parseFloat(row.quantity).toFixed(4)} {row.symbol}
-                </Text>
-              </StyleTd>
-              <StyleTd>
-                <Text> {row.usd}</Text>
-              </StyleTd>
-            </tr>
-          )
+          <tr key={row.amount}>
+            <StyleTd>
+              <CellInner>
+                <TokenLogo address={row.address} url={row.imgs[0]} name={row.tokenName} />
+                <LinkExternal href={row.link}>
+                  <TokenName>{row.tokenName}</TokenName>
+                </LinkExternal>
+              </CellInner>
+            </StyleTd>
+            <StyleTd>
+              <Text>
+                {parseFloat(row.quantity).toFixed(4)} {row.symbol}
+              </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.usd}</Text>
+            </StyleTd>
+          </tr>
         )
       case 'luaswapliquidity':
         return (
