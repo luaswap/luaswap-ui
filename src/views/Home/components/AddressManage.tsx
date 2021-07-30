@@ -58,8 +58,8 @@ const AddressBox = styled.div`
 const IconWrapper = styled.div`
   width: 30px;
   height: 30px;
-  background-color: #fbf4bf;
-  color: ${({ theme }) => theme.colors.primary};
+  background-color: #282828;
+  color: #c3c3c3;
   text-align: center;
   line-height: 30px;
   border-radius: 50px;
@@ -106,7 +106,7 @@ const AddressManage: React.FC<AddressManageProps> = ({ data }) => {
   return (
     <Flex position="relative">
       <StyleTextBox onClick={() => setIsOpen(!isOpen)}>
-        {filterWalletActived.length > 0 && (
+        {filterWalletActived.length > 0 ? (
           <FlexAddress>
             <IconWrapper>
               <WalletIcon />
@@ -119,7 +119,17 @@ const AddressManage: React.FC<AddressManageProps> = ({ data }) => {
             </Text>
             <ChevronDownIcon />
           </FlexAddress>
-        )}
+        ) :
+          <FlexAddress>
+            <IconWrapper>
+              <WalletIcon />
+            </IconWrapper>
+            <Text>
+              Add Address
+            </Text>
+            <ChevronDownIcon />
+          </FlexAddress>
+        }
       </StyleTextBox>
       {isOpen && (
         <StyleWalletManage ref={ref}>

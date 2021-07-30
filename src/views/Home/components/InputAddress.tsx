@@ -17,7 +17,15 @@ interface InputAddressProps {
 const StyleBox = styled.div`
   padding-bottom: 10px;
 `
-
+const StyleFlex = styled(Flex)`
+  margin-bottom: 20px;
+  margin-top: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  @media (max-width: 991px) {
+    justify-content: center;
+  }
+`
 const AddressBox = styled.div`
   display: flex;
   margin-bottom: 10px;
@@ -35,9 +43,14 @@ const IconWrapper = styled.div`
 `
 const StyleInput = styled(Input)`
   border-radius: 10px;
-  margin-right: 30px;
   height: 55px;
-  min-width: 400px;
+  margin-right: 30px;
+  max-width: 600px;
+  background-color: #282828;
+  @media (max-width: 991px) {
+    margin-bottom: 30px;
+    margin-right: 0px;
+  }
 `
 const StyleButton = styled(Button)`
   white-space: nowrap;
@@ -91,21 +104,23 @@ const InputAddress: React.FC<InputAddressProps> = (data) => {
   }
   return (
     <Box>
-      <Flex marginBottom="20px" marginTop="20px" maxWidth="600px" alignItems="center">
+      <StyleFlex>
         <StyleInput onChange={handleChange} placeholder="Add valid ETH or Tomochain address" />
-        <StyleButton onClick={handleSubmit} scale="md">
-          Add Address
-        </StyleButton>
-        {!account && Object.keys(data).length < 1 && (
-          <>
-            {' '}
-            <Text mr="20px" ml="20px">
-              OR
-            </Text>
-            <UnlockButton />
-          </>
-        )}
-      </Flex>
+        <Flex alignItems="center">
+          <StyleButton onClick={handleSubmit} scale="md">
+            Add Address
+          </StyleButton>
+          {!account && Object.keys(data).length < 1 && (
+            <>
+              {' '}
+              <Text mr="20px" ml="20px">
+                OR
+              </Text>
+              <UnlockButton style={{ width: 'auto' }} />
+            </>
+          )}
+        </Flex>
+      </StyleFlex>
       <Text>{msg}</Text>
       {filterWalletConnected.length > 0 && (
         <StyleBox>
