@@ -61,32 +61,28 @@ const TokenIcon = styled.img`
 const TokenName = styled.span``
 const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-
   const renderContent = (row, type: string) => {
     switch (type) {
       case 'balance':
         return (
-          parseFloat(row.amountUsd) > 0 && (
-            <tr key={row.amount}>
-              <StyleTd>
-                <CellInner>
-                  <TokenLogo address={row.address} url={row.imgs[0]} name={row.tokenName} />
-                  <LinkExternal href={row.link}>
-                    <TokenName>{row.tokenName}</TokenName>
-                  </LinkExternal>
-                </CellInner>
-              </StyleTd>
-              <StyleTd>
-                <Text>
-                  {parseFloat(row.quantity).toFixed(4)} {row.symbol}
-                </Text>
-              </StyleTd>
-              {/* <StyleTd><Text> {row.symbol}</Text></StyleTd> */}
-              <StyleTd>
-                <Text> {row.usd}</Text>
-              </StyleTd>
-            </tr>
-          )
+          <tr key={row.amount}>
+            <StyleTd>
+              <CellInner>
+                <TokenLogo address={row.address} url={row.imgs[0]} name={row.tokenName} />
+                <LinkExternal href={row.link}>
+                  <TokenName>{row.tokenName}</TokenName>
+                </LinkExternal>
+              </CellInner>
+            </StyleTd>
+            <StyleTd>
+              <Text>
+                {parseFloat(row.quantity).toFixed(4)} {row.symbol}
+              </Text>
+            </StyleTd>
+            <StyleTd>
+              <Text> {row.usd}</Text>
+            </StyleTd>
+          </tr>
         )
       case 'luaswapliquidity':
         return (
@@ -94,8 +90,8 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
             <tr key={row.amount}>
               <StyleTd>
                 <CellInner>
-                  <TokenIcon src={row.imgs[0]} alt={row.token0.symbol} />
-                  <TokenIcon src={row.imgs[1]} alt={row.token1.symbol} />
+                  <TokenLogo address={row.token0.address} url={row.imgs[0]} name={row.token0.symbol} />
+                  <TokenLogo address={row.token1.address} url={row.imgs[1]} name={row.token1.symbol} />
                   <LinkExternal href={row.link}>
                     <TokenName>{row.tokenName}</TokenName>
                   </LinkExternal>
@@ -116,7 +112,7 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
       case 'LuaSafe':
         return (
           // parseFloat(row.quantity) > 0 && (
-          <tr key={row.amount}>
+          <tr key={row.address}>
             <StyleTd>
               <Text>{`${row.address.substring(0, 6)}...${row.address.substring(
                 row.address.length - 4,
@@ -143,7 +139,13 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
           // parseFloat(row.stakeAmount) > 0 &&
           <tr key={row.stakeAmount}>
             <StyleTd>
-              <Text>{row.pair}</Text>
+              <Text>{`${row.lpAddr.substring(0, 6)}...${row.lpAddr.substring(
+                row.lpAddr.length - 4,
+                row.lpAddr.length,
+              )}`}</Text>
+            </StyleTd>
+            <StyleTd>
+              <Text>{row.pair} </Text>
             </StyleTd>
             <StyleTd>
               <Text>{parseFloat(row.stakeAmount).toFixed(2)} </Text>
@@ -200,13 +202,9 @@ const TokenTable: React.FC<TableProps> = ({ data, columns, tag }) => {
             </tr>
           </TableHead>
           <TableBody>
-            {data.length > 0 ? (
-              data.map((row) => {
-                return renderContent(row, tag)
-              })
-            ) : (
-              <Text style={{ color: '#afafaf', fontSize: 20 }}> No data</Text>
-            )}
+            {data.map((row) => {
+              return renderContent(row, tag)
+            })}
           </TableBody>
         </StyledTable>
       </TableWrapper>

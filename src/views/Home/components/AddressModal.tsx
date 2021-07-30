@@ -49,7 +49,7 @@ const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {
   const [val, setVal] = useState('')
   const [msg, setMsg] = useState('')
   const dispatch = useAppDispatch()
-  const {wallets} = useWallet()
+  const { wallets } = useWallet()
 
   const filterWalletConnected = Object.values(wallets).filter((v) => {
     return v.isConnected === true
@@ -68,12 +68,12 @@ const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {
   let w
   const handleSubmit = () => {
     if (Web3.utils.isAddress(val)) {
-        w = {
-          address: val,
-          isActive: false,
-          isConnected: false,
-        }
-        dispatch(addWalletFromInput(w))
+      w = {
+        address: val,
+        isActive: false,
+        isConnected: false,
+      }
+      dispatch(addWalletFromInput(w))
       setMsg('')
       setVal('')
     } else {
@@ -87,18 +87,18 @@ const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {
     <Modal title="Manage Addresses" onDismiss={onDismiss}>
       <Box>
         <Flex marginBottom="40px" marginTop="20px" maxWidth="600px" alignItems="center">
-          <StyleInput onChange={handleChange} placeholder="Add valid ETH or Tomochain address" value={ val }/>
+          <StyleInput onChange={handleChange} placeholder="Add valid ETH or Tomochain address" value={val} />
           <StyleButton onClick={handleSubmit} scale="md">
             Add Address
           </StyleButton>
         </Flex>
-        {msg && 
+        {msg &&
           <StyleNote>{msg}</StyleNote>
         }
         {filterWalletConnected.length > 0 &&
           <StyleBox>
             <Text pb="10px">Connected</Text>
-            {filterWalletConnected.map((v) => 
+            {filterWalletConnected.map((v) =>
               <AddressBox key={v.address}>
                 <IconWrapper>
                   <WalletIcon />
@@ -109,17 +109,17 @@ const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {
                     onDismiss()
                   }}
                   style={{ cursor: 'pointer' }}>
-                  {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6,v.address.length,)}`}
+                  {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6, v.address.length,)}`}
                 </Text>
 
               </AddressBox>
-              )}
+            )}
           </StyleBox>
         }
-          {filterWalletWatched.length > 0 && 
-            <StyleBox>
+        {filterWalletWatched.length > 0 &&
+          <StyleBox>
             <Text pb="10px">Watched</Text>
-            {filterWalletWatched.map((v) => 
+            {filterWalletWatched.map((v) =>
               <AddressBox key={v.address}>
                 <IconWrapper>
                   <WalletIcon />
@@ -134,8 +134,8 @@ const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {
                 </Text>
               </AddressBox>
             )}
-            </StyleBox>            
-          }
+          </StyleBox>
+        }
       </Box>
     </Modal>
   )

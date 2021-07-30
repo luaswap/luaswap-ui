@@ -15,7 +15,7 @@ interface NetworkModalProps {
 
 const NetworkModal: React.FC<NetworkModalProps> = ({ onDismiss, data }) => {
   return (
-    <Modal title="Wallet" onDismiss={onDismiss}>
+    <Modal title={data.name} onDismiss={onDismiss}>
       <StyleOverFlow>
         <TokenTable data={data.details} columns={data.detailsHeader} tag={data.tag} />
       </StyleOverFlow>
