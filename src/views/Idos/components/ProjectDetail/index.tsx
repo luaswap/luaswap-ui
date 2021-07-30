@@ -84,7 +84,7 @@ interface ParamsType {
 
 const ProjectDetail = () => {
   const { chainId, account } = useWeb3React()
-  const [loading, setLoading] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
   const blockNumber = useBlock()
@@ -94,8 +94,11 @@ const ProjectDetail = () => {
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
   useEffect(() => {
     if (id) {
-      dispatch(fetchPool(id))
-      setLoading(false)
+      dispatch(
+        fetchPool(id, () => {
+          setIsLoaded(true)
+        }),
+      )
     }
   }, [id, dispatch, blockNumber.currentBlock])
 
@@ -135,7 +138,8 @@ const ProjectDetail = () => {
   return (
     <Page>
       <Row>
-        {loading ? (
+        {/* After show the loading component, never show it second time */}
+        {!isLoaded && isLoadingPool ? (
           <PageLoader />
         ) : (
           <>

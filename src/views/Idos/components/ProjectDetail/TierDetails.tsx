@@ -6,11 +6,13 @@ import { selectUserNextTier, selectUserTier } from 'state/profile'
 import { Card, CardBody, Text, Flex, Image, Button, SecondaryMessage, Box } from 'common-uikitstrungdao'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
+import usePoolStatus from 'views/Idos/hooks/usePoolStatus'
 import { Tier } from 'state/types'
 
 interface TierProps {
   data: IdoDetailInfo
   userTier: number
+  disabledBuyMore: boolean
   nextTier: { [key: number]: Tier }
 }
 
@@ -102,6 +104,7 @@ const TierCard: React.FC<TierProps> = ({
   data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
   userTier,
   nextTier,
+  disabledBuyMore,
 }) => {
   if (tier === 0) {
     return null
@@ -173,6 +176,7 @@ const TierCard: React.FC<TierProps> = ({
               width="100%"
               mt="30px"
               variant="primary"
+              disabled={disabledBuyMore}
               style={{ textAlign: 'center' }}
               as="a"
               href="https://app.luaswap.org/#/swap"
@@ -192,12 +196,21 @@ const TierDetails: React.FC<{
 }> = ({ currentPoolData }) => {
   const userTier = useSelector(selectUserTier)
   const userNextTier = useSelector(selectUserNextTier)
+  const [poolStatus] = usePoolStatus(currentPoolData)
   const { index: tierData } = currentPoolData
   const nextTier = userNextTier.reduce((s: { [key: number]: Tier }, e: Tier) => {
     const tmps = s
     tmps[e.tier] = e
     return tmps
   }, {})
+
+  const isPoolStarted = useMemo(() => {
+    if (poolStatus === 'not open') {
+      return false
+    }
+
+    return true
+  }, [poolStatus])
 
   const tiersss: IdoDetailInfo[] = useMemo(() => {
     if (tierData) {
@@ -216,7 +229,9 @@ const TierDetails: React.FC<{
       <TierInformationWrapper>
         <Flex flexWrap="wrap" justifyContent="space-between">
           {tiersss.map((e: IdoDetailInfo, i: number) => {
-            return <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
+            return (
+              <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} disabledBuyMore={isPoolStarted} />
+            )
           })}
         </Flex>
       </TierInformationWrapper>

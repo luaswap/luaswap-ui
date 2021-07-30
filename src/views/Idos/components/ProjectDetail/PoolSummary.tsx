@@ -11,6 +11,7 @@ import {
   TelegramIcon,
   Progress,
   Box,
+  Button,
 } from 'common-uikitstrungdao'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'

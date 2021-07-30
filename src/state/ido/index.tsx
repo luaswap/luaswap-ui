@@ -62,6 +62,7 @@ export const idosSlice = createSlice({
     },
     setDefaultCurrentPool: (state) => {
       state.currentPool.data = defaultCurrentPool
+      state.currentPool.isLoading = true
     },
     fetchIdoStats: (state) => {
       state.isLoading = true
@@ -137,13 +138,15 @@ export const fetchClosedPools = () => async (dispatch, getState) => {
   }
 }
 
-export const fetchPool = (id: string) => async (dispatch, getState) => {
+export const fetchPool = (id: string, callback: () => void) => async (dispatch, getState) => {
   try {
     dispatch(fetchCurrentPoolStarts())
     const { data } = await axios.get(`${API_IDO_URL}/pools/detail/open/${id}`)
     dispatch(setCurrentPool(data))
+    callback()
     dispatch(fetchCurrentPoolEnds())
   } catch (error) {
+    callback()
     dispatch(fetchCurrentPoolEnds())
   }
 }
