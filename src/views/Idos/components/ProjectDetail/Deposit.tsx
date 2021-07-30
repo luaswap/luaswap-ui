@@ -59,7 +59,7 @@ const FlexWrapper = styled(Flex)`
 interface DepositProps {
   currentPoolData: Pool
   tierDataOfUser: IdoDetailInfo
-  contractData: IdoDetail
+  contractData: IdoDetailInfo
   userTotalCommitted: string
   totalAmountUserSwapped: string
   isAvailalbeOnCurrentNetwork: boolean
@@ -150,9 +150,11 @@ const Deposit: React.FC<DepositProps> = ({
   useEffect(() => {
     const fetchReceiveIdoAmount = async () => {
       try {
-        const { finalPay } = await getClaimProof(projectId, index)
-        const receivedIdoAmount = new BigNumber(finalPay).multipliedBy(totalAmountIDO).dividedBy(totalAmountPay)
-        setIdoReceivedAmount(getFullDisplayBalance(receivedIdoAmount))
+        if (projectId) {
+          const { finalPay } = await getClaimProof(projectId, index)
+          const receivedIdoAmount = new BigNumber(finalPay).multipliedBy(totalAmountIDO).dividedBy(totalAmountPay)
+          setIdoReceivedAmount(getFullDisplayBalance(receivedIdoAmount))
+        }
       } catch (error) {
         setIdoReceivedAmount('0')
         console.log(error)

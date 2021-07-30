@@ -17,7 +17,7 @@ const useTotalDataFromApi = (currentPoolData: Pool) => {
       ...totalPoolData,
     }
   }, [currentPoolData])
-  console.log(data, 'data ?')
+
   return data
 }
 

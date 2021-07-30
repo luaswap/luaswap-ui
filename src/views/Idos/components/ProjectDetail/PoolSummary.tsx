@@ -123,7 +123,7 @@ const CardWrapper = styled(Card)`
 interface PoolSummaryProps {
   currentPoolData: Pool
   tierDataOfUser: IdoDetailInfo
-  contractData: IdoDetail
+  contractData: IdoDetailInfo
   isAvailalbeOnCurrentNetwork: boolean
 }
 /**

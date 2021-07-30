@@ -9,6 +9,7 @@ import PageLoader from 'components/PageLoader'
 import useDeepMemo from 'hooks/useDeepMemo'
 import { fetchPool, selectCurrentPool, selectLoadingCurrentPool, setDefaultCurrentPool } from 'state/ido'
 import { selectUserTier } from 'state/profile'
+import { useBlock } from 'state/hooks'
 import { useAppDispatch } from 'state'
 
 import Steps from './Steps'
@@ -20,6 +21,7 @@ import TokenInfo from './TokenInfo'
 import PoolInformation from './PoolInformation'
 import TierDetails from './TierDetails'
 import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
+import useTotalDataFromApi from '../../hooks/useTotalDataFromApi'
 import { getIdoDataBasedOnChainIdAndTier, getIdoSupportedNetwork } from '../helper'
 
 const Row = styled.div`
@@ -85,32 +87,37 @@ const ProjectDetail = () => {
   const [loading, setLoading] = useState(true)
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
+  const blockNumber = useBlock()
   const currentPoolData = useSelector(selectCurrentPool)
   const userTier = useSelector(selectUserTier)
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
-
   useEffect(() => {
     if (id) {
       dispatch(fetchPool(id))
       setLoading(false)
     }
+  }, [id, dispatch, blockNumber.currentBlock])
 
+  // Clear current pool when component unmount
+  useEffect(() => {
     return () => {
       dispatch(setDefaultCurrentPool())
     }
-  }, [id, dispatch])
+  }, [dispatch])
 
   const tierDataOfUser = useDeepMemo(() => {
     const { index = [] } = currentPoolData
     return getIdoDataBasedOnChainIdAndTier(index, chainId, userTier)
   }, [currentPoolData, chainId, userTier])
 
-  const [idoDetailFromContract, totalUserCommittedFromContract, totalAmountUserSwapped] = useDataFromIdoContract(
+  const [_dataFromContract, totalUserCommittedFromContract, totalAmountUserSwapped] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
     tierDataOfUser.index,
     currentPoolData.index,
   )
+
+  const idoDetailFromContract = useTotalDataFromApi(currentPoolData)
 
   const isAvailalbeOnCurrentNetwork = useDeepMemo(() => {
     if (!account || !currentPoolData.index) {
@@ -128,7 +135,7 @@ const ProjectDetail = () => {
   return (
     <Page>
       <Row>
-        {loading || isLoadingPool ? (
+        {loading ? (
           <PageLoader />
         ) : (
           <>
