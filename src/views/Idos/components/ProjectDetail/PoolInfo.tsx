@@ -14,7 +14,7 @@ const ProjectInfoWrapper = styled(Box)`
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;
-  height: 300px;
+  height: 350px;
   background-color: #282828;
   margin-bottom: 0px;
   width: 100%;

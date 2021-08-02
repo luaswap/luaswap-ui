@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react'
-import { Flex, Text, Box, AddIcon } from 'common-uikitstrungdao'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { Flex, Text, Box, AddIcon, IconButton, CopyIcon, useTooltip } from 'common-uikitstrungdao'
 import styled from 'styled-components'
+import useToast from 'hooks/useToast'
 import { Pool } from 'views/Idos/types'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
@@ -12,8 +14,8 @@ const TokenInfoWrapper = styled(Box)`
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;
-  height: 300px;
   background-color: #282828;
+  height: 350px;
   padding: 24px;
   margin-bottom: 40px;
   width: 100%;
@@ -54,6 +56,7 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ currentPoolData }) => {
     img,
   } = useTotalDataFromAllPools(currentPoolData)
   const { address, symbol, decimals } = idoToken
+  const { toastSuccess } = useToast()
   const onAddToken = useCallback(async () => {
     const provider = (window as WindowChain).ethereum
     if (provider) {
@@ -96,9 +99,30 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ currentPoolData }) => {
         </Text>
       </Flex>
       <Flex flexDirection="column">
-        <Text color="#8B8B8B">Total Supply</Text>
-        <Text color="#C3C3C3" bold>
-          {totalAmountIDO}
+        <Text color="#8B8B8B">
+          Token Address{' '}
+          <span>
+            <CopyToClipboard text={idoToken?.address} onCopy={() => toastSuccess('Copied')}>
+              <IconButton
+                variant="text"
+                style={{
+                  height: 'auto',
+                  width: 'auto',
+                }}
+              >
+                <CopyIcon color="primary" width="24px" />
+              </IconButton>
+            </CopyToClipboard>
+          </span>{' '}
+        </Text>
+        <Text
+          color="#C3C3C3"
+          bold
+          style={{
+            wordBreak: 'break-all',
+          }}
+        >
+          {idoToken?.address}
         </Text>
       </Flex>
       <StyledButton onClick={onAddToken}>
