@@ -1,12 +1,11 @@
 import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import { selectUserNextTier, selectUserTier } from 'state/profile'
+import { selectUserNextTier } from 'state/profile'
 
 import { Card, CardBody, Text, Flex, Image, Button, SecondaryMessage, Box, LinkExternal } from 'common-uikitstrungdao'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
-import useSecondsUntilCurrent from 'views/Idos/hooks/useSecondsUntilCurrent'
 import { Tier } from 'state/types'
 import ExpandableButtonComponent from '../ExpandableButton'
 
@@ -213,11 +212,11 @@ const TierCard: React.FC<TierProps> = ({
 
 const TierDetails: React.FC<{
   currentPoolData: Pool
-}> = ({ currentPoolData }) => {
-  const userTier = useSelector(selectUserTier)
+  selectedUserTier: number
+  secondsUntilSnapshot: number
+}> = ({ currentPoolData, secondsUntilSnapshot, selectedUserTier }) => {
   const userNextTier = useSelector(selectUserNextTier)
-  const { index: tierData, snapshootAt } = currentPoolData
-  const secondsLeftToBuy = useSecondsUntilCurrent(snapshootAt)
+  const { index: tierData } = currentPoolData
   const nextTier = userNextTier.reduce((s: { [key: number]: Tier }, e: Tier) => {
     const tmps = s
     tmps[e.tier] = e
@@ -225,12 +224,12 @@ const TierDetails: React.FC<{
   }, {})
 
   const isPoolStarted = useMemo(() => {
-    if (secondsLeftToBuy <= 0) {
+    if (secondsUntilSnapshot <= 0) {
       return true
     }
 
     return false
-  }, [secondsLeftToBuy])
+  }, [secondsUntilSnapshot])
 
   const tiersss: IdoDetailInfo[] = useMemo(() => {
     if (tierData) {
@@ -250,7 +249,13 @@ const TierDetails: React.FC<{
         <Flex flexWrap="wrap" justifyContent="space-between">
           {tiersss.map((e: IdoDetailInfo, i: number) => {
             return (
-              <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} disabledBuyMore={isPoolStarted} />
+              <TierCard
+                data={e}
+                key={e.tier}
+                userTier={selectedUserTier}
+                nextTier={nextTier}
+                disabledBuyMore={isPoolStarted}
+              />
             )
           })}
         </Flex>

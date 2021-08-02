@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Flex, Heading, Mesage, Text, Box } from 'common-uikitstrungdao'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -9,8 +9,10 @@ import PageLoader from 'components/PageLoader'
 import useDeepMemo from 'hooks/useDeepMemo'
 import { fetchPool, selectCurrentPool, selectLoadingCurrentPool, setDefaultCurrentPool } from 'state/ido'
 import { selectUserTier } from 'state/profile'
+import { getTierDataAfterSnapshot } from 'state/profile/getProfile'
 import { useBlock } from 'state/hooks'
 import { useAppDispatch } from 'state'
+import useSecondsUntilCurrent from 'views/Idos/hooks/useSecondsUntilCurrent'
 
 import Steps from './Steps'
 import Deposit from './Deposit'
@@ -18,7 +20,6 @@ import PoolSummary from './PoolSummary'
 import ProjectInfo from './ProjectInfo'
 import PoolInfo from './PoolInfo'
 import TokenInfo from './TokenInfo'
-import PoolInformation from './PoolInformation'
 import TierDetails from './TierDetails'
 import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
 import useTotalDataFromApi from '../../hooks/useTotalDataFromApi'
@@ -85,12 +86,14 @@ interface ParamsType {
 const ProjectDetail = () => {
   const { chainId, account } = useWeb3React()
   const [isLoaded, setIsLoaded] = useState(false)
+  const [userTierAfterSnapshot, setUserTierAfterSnapshot] = useState(0)
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
   const blockNumber = useBlock()
   const currentPoolData = useSelector(selectCurrentPool)
   const userTier = useSelector(selectUserTier)
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
+  const secondsUntilSnapshot = useSecondsUntilCurrent(currentPoolData.snapshootAt)
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
   useEffect(() => {
     if (id) {
@@ -102,6 +105,22 @@ const ProjectDetail = () => {
     }
   }, [id, dispatch, blockNumber.currentBlock])
 
+  useEffect(() => {
+    const fetchTierAfterSnapshotTime = async () => {
+      try {
+        const { tier } = await getTierDataAfterSnapshot(account, id)
+        setUserTierAfterSnapshot(tier)
+      } catch (error) {
+        setUserTierAfterSnapshot(0)
+        console.log(error, 'fail to fetch tier after snapshot time')
+      }
+    }
+    // Only call this api when current date time > snapshot time
+    if (secondsUntilSnapshot <= 0) {
+      fetchTierAfterSnapshotTime()
+    }
+  }, [secondsUntilSnapshot, account, id])
+
   // Clear current pool when component unmount
   useEffect(() => {
     return () => {
@@ -109,10 +128,19 @@ const ProjectDetail = () => {
     }
   }, [dispatch])
 
+  const selectedUserTier = useMemo(() => {
+    // We will get the userTier if current date time < snapshot time or else we will get userTierAfterSnapshot
+    if (secondsUntilSnapshot <= 0) {
+      return userTierAfterSnapshot
+    }
+
+    return userTier
+  }, [secondsUntilSnapshot, userTier, userTierAfterSnapshot])
+
   const tierDataOfUser = useDeepMemo(() => {
     const { index = [] } = currentPoolData
-    return getIdoDataBasedOnChainIdAndTier(index, chainId, userTier)
-  }, [currentPoolData, chainId, userTier])
+    return getIdoDataBasedOnChainIdAndTier(index, chainId, selectedUserTier)
+  }, [currentPoolData, chainId, selectedUserTier])
 
   const [_dataFromContract, totalUserCommittedFromContract, totalAmountUserSwapped] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
@@ -162,13 +190,18 @@ const ProjectDetail = () => {
                 totalAmountUserSwapped={totalAmountUserSwapped}
                 userTotalCommitted={totalUserCommittedFromContract}
                 contractData={idoDetailFromContract}
+                selectedUserTier={selectedUserTier}
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
             </StyledFlex>
             <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               Tier Infomation
             </Heading>
-            <TierDetails currentPoolData={currentPoolData} />
+            <TierDetails
+              currentPoolData={currentPoolData}
+              selectedUserTier={selectedUserTier}
+              secondsUntilSnapshot={secondsUntilSnapshot}
+            />
             <StyledFlex flexWrap="wrap">
               <ProjectDetailBox mr="24px">
                 <StyledHeading as="h2" scale="lg" color="#D8D8D8" mb="14px">
@@ -192,7 +225,7 @@ const ProjectDetail = () => {
             <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               How to LuaStarts
             </Heading>
-            <Steps />
+            <Steps selectedUserTier={selectedUserTier} />
           </>
         )}
       </Row>

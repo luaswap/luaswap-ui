@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ProfileState, Profile } from 'state/types'
 import type { AppDispatch } from 'state'
-import getProfile, { getTierData, postLoginDetail } from './getProfile'
+import getProfile, { getTierData, getTierDataAfterSnapshot, postLoginDetail } from './getProfile'
 
 const initialState: ProfileState = {
   isInitialized: false,

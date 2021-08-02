@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js'
 import { Card, CardBody, Flex, Text, Mesage, Box } from 'common-uikitstrungdao'
 import { useWeb3React } from '@web3-react/core'
 import axios, { AxiosResponse } from 'axios'
-import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import useDepositIdo from 'hooks/useDepositIdo'
@@ -12,8 +11,6 @@ import useDeepMemo from 'hooks/useDeepMemo'
 import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import ModalInput from 'components/ModalInput'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
-import { IdoDetail } from 'state/types'
-import { selectUserTier } from 'state/profile'
 import { ZERO_ADDRESS } from 'config/constants/idos'
 import { API_IDO_URL } from 'config'
 import { getERC20Contract } from 'utils/contractHelpers'
@@ -60,6 +57,7 @@ interface DepositProps {
   currentPoolData: Pool
   tierDataOfUser: IdoDetailInfo
   contractData: IdoDetailInfo
+  selectedUserTier: number
   userTotalCommitted: string
   totalAmountUserSwapped: string
   isAvailalbeOnCurrentNetwork: boolean
@@ -71,6 +69,7 @@ const Deposit: React.FC<DepositProps> = ({
   userTotalCommitted,
   isAvailalbeOnCurrentNetwork,
   totalAmountUserSwapped,
+  selectedUserTier,
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
@@ -87,12 +86,12 @@ const Deposit: React.FC<DepositProps> = ({
     tierDataOfUser.payToken.address,
   )
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
-  const userTier = useSelector(selectUserTier)
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
   const { openAt, closeAt, claimAt } = currentPoolData
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
+
   const maxAmountAllowedLeft = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
   }, [maxAmountPay, userTotalCommitted])
@@ -140,11 +139,11 @@ const Deposit: React.FC<DepositProps> = ({
   const getClaimProof = useCallback(
     async (poolId, poolIndex) => {
       const response = await axios.get(
-        `${API_IDO_URL}/pools/claim-info/${poolId}/${cid}/${poolIndex}/${userTier}/${account}`,
+        `${API_IDO_URL}/pools/claim-info/${poolId}/${cid}/${poolIndex}/${selectedUserTier}/${account}`,
       )
       return response.data
     },
-    [account, cid, userTier],
+    [account, cid, selectedUserTier],
   )
 
   useEffect(() => {
@@ -170,11 +169,11 @@ const Deposit: React.FC<DepositProps> = ({
   const getCommitProof = useCallback(
     async (poolId, poolIndex, amount) => {
       const response = await axios.get(
-        `${API_IDO_URL}/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${userTier}/${account}/${amount}`,
+        `${API_IDO_URL}/pools/proof-commit/${poolId}/${cid}/${poolIndex}/${selectedUserTier}/${account}/${amount}`,
       )
       return response.data
     },
-    [account, cid, userTier],
+    [account, cid, selectedUserTier],
   )
 
   const onHandleCommit = useCallback(async () => {
@@ -253,7 +252,7 @@ const Deposit: React.FC<DepositProps> = ({
               <Flex justifyContent="space-between">
                 <Text>Your Tier</Text>
                 <Text bold>
-                  Tier {userTier} - {getTierName(userTier)}
+                  Tier {selectedUserTier} - {getTierName(selectedUserTier)}
                 </Text>
               </Flex>
               <Flex justifyContent="space-between">
