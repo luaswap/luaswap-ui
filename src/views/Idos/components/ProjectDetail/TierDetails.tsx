@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
+import compareAsc from 'date-fns/compareAsc'
 import { selectUserNextTier, selectUserTier } from 'state/profile'
 
 import { Card, CardBody, Text, Flex, Image, Button, SecondaryMessage, Box } from 'common-uikitstrungdao'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
-import usePoolStatus from 'views/Idos/hooks/usePoolStatus'
+import useSecondsUntilCurrent from 'views/Idos/hooks/useSecondsUntilCurrent'
 import { Tier } from 'state/types'
 
 interface TierProps {
@@ -196,8 +197,8 @@ const TierDetails: React.FC<{
 }> = ({ currentPoolData }) => {
   const userTier = useSelector(selectUserTier)
   const userNextTier = useSelector(selectUserNextTier)
-  const [poolStatus] = usePoolStatus(currentPoolData)
-  const { index: tierData } = currentPoolData
+  const { index: tierData, snapshootAt } = currentPoolData
+  const secondsLeftToBuy = useSecondsUntilCurrent(snapshootAt)
   const nextTier = userNextTier.reduce((s: { [key: number]: Tier }, e: Tier) => {
     const tmps = s
     tmps[e.tier] = e
@@ -205,12 +206,12 @@ const TierDetails: React.FC<{
   }, {})
 
   const isPoolStarted = useMemo(() => {
-    if (poolStatus === 'not open') {
-      return false
+    if (secondsLeftToBuy <= 0) {
+      return true
     }
 
-    return true
-  }, [poolStatus])
+    return false
+  }, [secondsLeftToBuy])
 
   const tiersss: IdoDetailInfo[] = useMemo(() => {
     if (tierData) {

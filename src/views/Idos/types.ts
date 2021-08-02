@@ -44,6 +44,7 @@ export interface Pool {
   claimAt: number
   index?: Record<string, IdoDetailInfo[]>
   status: number
+  snapshootAt: number
   projectDetail: string
   links: {
     label: string

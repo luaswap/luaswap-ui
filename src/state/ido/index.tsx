@@ -19,6 +19,7 @@ const defaultCurrentPool = {
   status: null,
   projectDetail: null,
   links: [],
+  snapshootAt: null,
 }
 
 const initialState: IdoState = {
