@@ -143,19 +143,16 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
         </Box>
         <Box width="25%">
           <Text bold color="#F6F6F6">
-            Your right
+            At IDO time
           </Text>
-          <Text color="#8B8B8B">
-            When the IDO is live, you can buy tokens. Please commit the amount between min and max value.
-          </Text>
+          <Text color="#8B8B8B">Purchase your token by committing between the mininum and maximum set value.</Text>
         </Box>
         <Box width="25%">
           <Text bold color="#F6F6F6">
-            Claim your tokens
+            After IDO time
           </Text>
           <Text color="#8B8B8B">
-            When the IDO finishes, you can claim the tokens you bought, and any of unspent money will be returned to
-            your wallet
+            Claim the tokens you have purchased. Any unspent assets will be returned to your wallet.
           </Text>
         </Box>
       </Flex>
@@ -207,11 +204,9 @@ const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTi
         </Step>
         <Box width="75%">
           <Text bold color="#F6F6F6">
-            Your right
+            At IDO time
           </Text>
-          <Text color="#8B8B8B">
-            When the IDO is live, you can buy tokens. Please commit the amount between min and max value.
-          </Text>
+          <Text color="#8B8B8B">Purchase your token by committing between the mininum and maximum set value.</Text>
         </Box>
       </MobileStepWrapper>
       <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
@@ -225,12 +220,11 @@ const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTi
         </Step>
         <Box width="75%">
           <Text bold color="#F6F6F6">
-            Claim your tokens
+            After IDO time
           </Text>
           <Text color="#8B8B8B">
             {' '}
-            When the IDO finishes, you can claim the tokens you bought, and any of unspent money will be returned to
-            your wallet
+            Claim the tokens you have purchased. Any unspent assets will be returned to your wallet.
           </Text>
         </Box>
       </MobileStepWrapper>

@@ -298,10 +298,10 @@ const Home: React.FC = () => {
     <>
       <PageHeader>
         <Heading as="h1" scale="xl" mb="24px">
-          Manage your assets and liabilities in one simple interface.
+          Manage your assets and liabilities under one simple interface
         </Heading>
         <Heading scale="lg" color="text">
-          Get unique access to opportunities in open finance.
+          Gain unique access into the decentralized financial market
         </Heading>
       </PageHeader>
 

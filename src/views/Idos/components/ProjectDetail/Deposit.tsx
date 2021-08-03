@@ -184,11 +184,11 @@ const Deposit: React.FC<DepositProps> = ({
       const { s, v, r, deadline } = response.proof
       const proofS = [v, r, s, deadline]
       await onDeposit(commitedAmmount, proofS)
-      toastSuccess('Deposit Successfully')
+      toastSuccess('Successfully Deposited')
       setIsRequestContractAction(false)
     } catch (error) {
       setIsRequestContractAction(false)
-      toastError('Fail to deposit')
+      toastError('Failed To deposit')
     }
   }, [onDeposit, value, toastError, toastSuccess, payToken.decimals, getCommitProof, index, projectId])
 
@@ -201,9 +201,9 @@ const Deposit: React.FC<DepositProps> = ({
       const proofS = [v, r, s, deadline]
       await onClaimReward(finalPay, proofS)
       setIsRequestContractAction(false)
-      toastSuccess('Claim reward Successfully')
+      toastSuccess('Reward Claimed Successfully')
     } catch (error) {
-      toastError('Fail to claim reward')
+      toastError('Failed to claim reward')
       setIsRequestContractAction(false)
     }
   }, [onClaimReward, toastError, toastSuccess, projectId, index, getClaimProof])
@@ -266,13 +266,13 @@ const Deposit: React.FC<DepositProps> = ({
                 </Text>
               </Flex>
               <Flex justifyContent="space-between">
-                <Text>Min commit</Text>
+                <Text>Min to Commit</Text>
                 <Text bold>
                   {minAmountPay} {payToken.symbol}
                 </Text>
               </Flex>
               <Flex justifyContent="space-between">
-                <Text>Max commit</Text>
+                <Text>Max to Committed</Text>
                 <Text bold>
                   {maxAmountPay} {payToken.symbol}
                 </Text>
