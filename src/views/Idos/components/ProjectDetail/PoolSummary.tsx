@@ -243,6 +243,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               </Text>
             </Flex>
             <Progress
+              key={poolStatus}
               variant="round"
               primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
               secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
