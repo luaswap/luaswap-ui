@@ -234,6 +234,16 @@ const Deposit: React.FC<DepositProps> = ({
     return false
   }, [poolStatus, totalAmountUserSwapped, userTotalCommitted])
 
+  const minimumClaimableAmount = useMemo(() => {
+    if (minAmountPay && totalAmountPay && totalAmountIDO) {
+      return new BigNumber(minAmountPay)
+        .multipliedBy(new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)))
+        .toString()
+    }
+
+    return 0
+  }, [minAmountPay, totalAmountIDO, totalAmountPay])
+
   return (
     <FlexWrapper flexDirection="row" flexWrap="wrap">
       <CardWrapper>
@@ -279,10 +289,19 @@ const Deposit: React.FC<DepositProps> = ({
                   {userTotalCommitted} {payToken.symbol}
                 </Text>
               </Flex>
+              {selectedUserTier !== 0 && (
+                <Flex justifyContent="space-between">
+                  <Text>Claimable amount</Text>
+                  <Text bold>
+                    {minimumClaimableAmount} {idoToken.symbol}
+                  </Text>
+                </Flex>
+              )}
+
               {poolStatus === 'claim' ||
                 (poolStatus === 'closed' && (
                   <Flex justifyContent="space-between">
-                    <Text>You will receive</Text>
+                    <Text>Claimed Amount</Text>
                     <Text bold>
                       {idoReceivedAmount} {idoToken.symbol}
                     </Text>
