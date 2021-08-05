@@ -264,8 +264,8 @@ const TierDetails: React.FC<{
         <Text color="#8B8B8B">
           If you dont have any LUA or TOMO in your wallet, you will be in Tier 0.
           <br />
-          You still have a chance to buy token by commit your fund. You will receive your fund if token sold out for
-          Tier 1, 2, 3, 4
+          You can still buy more token by committing your funds. You will receive your fund if all the tokens are sold
+          out in Tier 1, 2, 3, 4
         </Text>
       </SecondaryMessage>
     </>
