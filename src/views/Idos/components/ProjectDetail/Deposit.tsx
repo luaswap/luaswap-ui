@@ -289,24 +289,23 @@ const Deposit: React.FC<DepositProps> = ({
                   {userTotalCommitted} {payToken.symbol}
                 </Text>
               </Flex>
-              {selectedUserTier !== 0 && (
+              {(poolStatus === 'claim' || poolStatus === 'closed') && (
                 <Flex justifyContent="space-between">
                   <Text>Claimable amount</Text>
                   <Text bold>
-                    {minimumClaimableAmount} {idoToken.symbol}
+                    {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
                   </Text>
                 </Flex>
               )}
 
-              {poolStatus === 'claim' ||
-                (poolStatus === 'closed' && (
-                  <Flex justifyContent="space-between">
-                    <Text>Claimed Amount</Text>
-                    <Text bold>
-                      {idoReceivedAmount} {idoToken.symbol}
-                    </Text>
-                  </Flex>
-                ))}
+              {(poolStatus === 'claim' || poolStatus === 'closed') && (
+                <Flex justifyContent="space-between">
+                  <Text>Claimed Amount</Text>
+                  <Text bold>
+                    {isClaimed ? idoReceivedAmount : 0} {idoToken.symbol}
+                  </Text>
+                </Flex>
+              )}
               {isIdoAvailalbeOnChain && (
                 <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="15px">
                   {account && isPoolInProgress && (isNativeToken || (!isNativeToken && isApproved)) && (
