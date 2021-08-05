@@ -230,7 +230,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                   <ProcessAmountWrapper justifyContent="flex-start">
                     <Text>Swap Process</Text>
                     <Text color="primary" bold fontSize="18px">
-                      &nbsp;{swappedAmountIDO ? swappedAmountIDO.toFixed(2) : '0'}/{totalAmountIDO} {idoToken?.symbol}
+                      &nbsp;{swappedAmountIDO}/{totalAmountIDO} {idoToken?.symbol}
                     </Text>
                   </ProcessAmountWrapper>
                 )}

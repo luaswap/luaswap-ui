@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
+import BigNumber from 'bignumber.js'
 import { selectUserNextTier } from 'state/profile'
 
 import { Card, CardBody, Text, Flex, Image, Button, SecondaryMessage, Box, LinkExternal } from 'common-uikitstrungdao'
@@ -120,6 +121,14 @@ const TierCard: React.FC<TierProps> = ({
   disabledBuyMore,
 }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
+  const calculatedPrice = useMemo(() => {
+    if (totalAmountIDO && totalAmountPay) {
+      return new BigNumber(totalAmountIDO).multipliedBy(10000).div(new BigNumber(totalAmountPay)).div(10000).toString()
+    }
+
+    return null
+  }, [totalAmountIDO, totalAmountPay])
+
   if (tier === 0) {
     return null
   }
@@ -160,7 +169,7 @@ const TierCard: React.FC<TierProps> = ({
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Price</Text>
               <Text bold>
-                {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
+                {calculatedPrice} {idoToken.symbol}/{payToken.symbol}
               </Text>
             </Flex>
             <Flex justifyContent="space-between">

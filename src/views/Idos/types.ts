@@ -13,16 +13,16 @@ export interface IdoDetailInfo {
   creator: string
   idoToken: TokenInfo
   payToken: TokenInfo
-  totalAmountIDO: number
-  totalAmountPay: number
+  totalAmountIDO: string
+  totalAmountPay: string
   maxAmountPay: number
   minAmountPay: number
   claimAt: number
   closeAt: number
   openAt: number
-  swappedAmountIDO: number
+  swappedAmountIDO: string
   swappedAmountPay: number
-  totalCommittedAmount: number
+  totalCommittedAmount: string
   index: number
   projectId: string
   chainId: string

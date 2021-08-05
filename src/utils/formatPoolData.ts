@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import { IdoDetail } from 'state/types'
 import { IdoDetailInfo } from 'views/Idos/types'
 
@@ -11,10 +12,18 @@ export const formatPoolDetail = (allTierPool: IdoDetailInfo[]): IdoDetailInfo =>
         mappedIndex[currentItem.index] = true
         return {
           ...accumulate,
-          totalCommittedAmount: accumulate.totalCommittedAmount + currentItem.totalCommittedAmount,
-          totalAmountPay: accumulate.totalAmountPay + currentItem.totalAmountPay,
-          totalAmountIDO: accumulate.totalAmountIDO + currentItem.totalAmountIDO,
-          swappedAmountIDO: accumulate.swappedAmountIDO + currentItem.swappedAmountIDO,
+          totalCommittedAmount: new BigNumber(accumulate.totalCommittedAmount)
+            .plus(new BigNumber(currentItem.totalCommittedAmount))
+            .toString(),
+          totalAmountPay: new BigNumber(accumulate.totalAmountPay)
+            .plus(new BigNumber(currentItem.totalAmountPay))
+            .toString(),
+          totalAmountIDO: new BigNumber(accumulate.totalAmountIDO)
+            .plus(new BigNumber(currentItem.totalAmountIDO))
+            .toString(),
+          swappedAmountIDO: new BigNumber(accumulate.swappedAmountIDO)
+            .plus(new BigNumber(currentItem.swappedAmountIDO))
+            .toString(),
         }
       }
       return {
@@ -23,10 +32,10 @@ export const formatPoolDetail = (allTierPool: IdoDetailInfo[]): IdoDetailInfo =>
     },
     {
       ...filteredData[0],
-      totalCommittedAmount: 0,
-      totalAmountPay: 0,
-      totalAmountIDO: 0,
-      swappedAmountIDO: 0,
+      totalCommittedAmount: '0',
+      totalAmountPay: '0',
+      totalAmountIDO: '0',
+      swappedAmountIDO: '0',
     },
   )
 }
