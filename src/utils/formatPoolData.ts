@@ -70,9 +70,11 @@ export const formatPoolTotalTierByChainID = (
     if (e2) {
       return {
         ...e,
-        totalCommittedAmount: e.totalCommittedAmount + e2.totalCommittedAmount,
-        totalAmountPay: e.totalAmountPay + e2.totalAmountPay,
-        totalAmountIDO: e.totalAmountIDO + e2.totalAmountIDO,
+        totalCommittedAmount: new BigNumber(e.totalCommittedAmount)
+          .plus(new BigNumber(e2.totalCommittedAmount))
+          .toString(),
+        totalAmountPay: new BigNumber(e.totalAmountPay).plus(new BigNumber(e2.totalAmountPay)).toString(),
+        totalAmountIDO: new BigNumber(e.totalAmountIDO).plus(new BigNumber(e2.totalAmountIDO)).toString(),
       }
     }
     return e
