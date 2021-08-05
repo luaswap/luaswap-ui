@@ -23,8 +23,10 @@ const usePoolStatus = ({
       setStatus('open')
     } else if (openAtSeconds <= 0 && closedAtSeconds <= 0 && claimAtSeconds > 0) {
       setStatus('claim')
-    } else {
+    } else if (openAtSeconds <= 0 && closedAtSeconds <= 0 && claimAtSeconds <= 0) {
       setStatus('closed')
+    } else {
+      setStatus(null)
     }
   }, [openAtSeconds, closedAtSeconds, claimAtSeconds])
 

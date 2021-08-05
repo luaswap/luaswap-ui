@@ -265,12 +265,15 @@ const Deposit: React.FC<DepositProps> = ({
                   Tier {selectedUserTier} - {getTierName(selectedUserTier)}
                 </Text>
               </Flex>
-              <Flex justifyContent="space-between">
-                <Text>Min to Commit</Text>
-                <Text bold>
-                  {minAmountPay} {payToken.symbol}
-                </Text>
-              </Flex>
+              {minAmountPay !== 0 && (
+                <Flex justifyContent="space-between">
+                  <Text>Min to Commit</Text>
+                  <Text bold>
+                    {minAmountPay} {payToken.symbol}
+                  </Text>
+                </Flex>
+              )}
+
               <Flex justifyContent="space-between">
                 <Text>Max to Committed</Text>
                 <Text bold>
