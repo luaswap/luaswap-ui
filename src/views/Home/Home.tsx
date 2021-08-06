@@ -69,6 +69,14 @@ const initialInUSD = {
   eLuasafe: 0,
 }
 
+const StyleManage = styled.div`
+  position: relative;
+`
+const StyleBox = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+`
 const Cards = styled(BaseLayout)`
   align-items: stretch;
   justify-content: stretch;
@@ -308,7 +316,7 @@ const Home: React.FC = () => {
       <Page>
         {Object.keys(wallets).length > 0 || account ? (
           <>
-            <Flex justifyContent="space-between">
+            <StyleManage>
               <div>
                 {!isLoading ? <Text> Net Worth</Text> : <Skeleton width="80px" height="15px" />}
                 {!isLoading ? (
@@ -317,8 +325,10 @@ const Home: React.FC = () => {
                   <Skeleton width="120px" height="30px" mt="20px" />
                 )}
               </div>
-              <AddressManage data={wallets} />
-            </Flex>
+              <StyleBox>
+                <AddressManage data={wallets} />
+              </StyleBox>
+            </StyleManage>
             {!isLoading ? (
               <Text fontWeight="500" mb="18px" mt="50px" color="text" fontSize="20px">
                 Account Overview
