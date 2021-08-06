@@ -1,24 +1,39 @@
 import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import { selectUserNextTier, selectUserTier } from 'state/profile'
+import BigNumber from 'bignumber.js'
+import { selectUserNextTier } from 'state/profile'
 
-import { Card, CardBody, Text, Flex, Image, Button, SecondaryMessage, Box } from 'common-uikitstrungdao'
+import { Card, CardBody, Text, Flex, Image, Button, SecondaryMessage, Box, LinkExternal } from 'common-uikitstrungdao'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { Tier } from 'state/types'
+import ExpandableButtonComponent from '../ExpandableButton'
 
 interface TierProps {
   data: IdoDetailInfo
   userTier: number
+  disabledBuyMore: boolean
   nextTier: { [key: number]: Tier }
 }
+
+const ExpandingWrapper = styled(Box)<{ expanded: boolean }>`
+  height: ${(props) => (props.expanded ? '100%' : '0px')};
+  overflow: hidden;
+  margin-top: 14px;
+`
 
 const ImageContainer = styled.img`
   width: 70px;
   height: 70px;
   border-radius: 50%;
   margin-right: 14px;
+`
+const Divider = styled.div`
+  background-color: #353535;
+  height: 2px;
+  margin: 14px auto;
+  width: 100%;
 `
 
 const TierContainer = styled(Text)`
@@ -32,10 +47,7 @@ const TierContainer = styled(Text)`
   color: #8b8b8b;
 `
 
-const TierHeaderWrapper = styled(Flex)`
-  border-bottom: 2px solid #353535;
-  padding-bottom: 14px;
-`
+const TierHeaderWrapper = styled(Flex)``
 
 const TierInformationWrapper = styled(Box)`
   display: flex;
@@ -75,25 +87,29 @@ const TIER_INFO = {
     name: 'Earth',
     description: 'You have to stake 5000 LUA or 500 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/earth.svg`,
-    CTA: (lua) => (lua ? `Buy ${lua} LUA to JOIN IDO` : `Buy LUA to JOIN IDO`),
+    CTA: (lua) => (lua ? `${lua} LUA to JOIN IDO` : `LUA to JOIN IDO`),
+    CTA2: (tomo) => (tomo ? `${tomo} TOMO to JOIN IDO` : `TOMO to JOIN IDO`),
   },
   '2': {
     name: 'Moon',
     description: 'You have to stake 25000 LUA or 2500 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/moon.svg`,
-    CTA: (lua) => (lua ? `Buy ${lua} LUA to reach tier 2` : `Buy LUA to fly to the Moon`),
+    CTA: (lua) => (lua ? `${lua} LUA to reach tier 2` : `LUA to fly to the Moon`),
+    CTA2: (tomo) => (tomo ? `${tomo} TOMO to reach tier 2` : `TOMO to fly to the Moon`),
   },
   '3': {
     name: 'MARS',
     description: 'You have to stake 125000 LUA or 12500 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/mars.svg`,
-    CTA: (lua) => (lua ? `Buy ${lua} LUA to reach tier 3` : `Buy LUA to fly to the Moon`),
+    CTA: (lua) => (lua ? `${lua} LUA to reach tier 3` : `LUA to fly to the Moon`),
+    CTA2: (tomo) => (tomo ? `${tomo} TOMO to reach tier 3` : `TOMO to fly to the Moon`),
   },
   '4': {
     name: 'Galaxy',
     description: 'You have to stake 250000 LUA or 25000 TOMO',
     icon: `${process.env.PUBLIC_URL}/images/galaxy.svg`,
-    CTA: (lua) => (lua ? `Buy ${lua} LUA to reach tier 4` : `Buy LUA to BREAK BORDER`),
+    CTA: (lua) => (lua ? `${lua} LUA to reach tier 4` : `LUA to BREAK BORDER`),
+    CTA2: (tomo) => (tomo ? `${tomo} TOMO to reach tier 4` : `TOMO to fly to the Moon`),
   },
 }
 
@@ -102,7 +118,17 @@ const TierCard: React.FC<TierProps> = ({
   data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
   userTier,
   nextTier,
+  disabledBuyMore,
 }) => {
+  const [showExpandableSection, setShowExpandableSection] = useState(false)
+  const calculatedPrice = useMemo(() => {
+    if (totalAmountIDO && totalAmountPay) {
+      return new BigNumber(totalAmountIDO).multipliedBy(10000).div(new BigNumber(totalAmountPay)).div(10000).toString()
+    }
+
+    return null
+  }, [totalAmountIDO, totalAmountPay])
+
   if (tier === 0) {
     return null
   }
@@ -135,7 +161,7 @@ const TierCard: React.FC<TierProps> = ({
               </Text>
             </Flex>
             <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Total raise</Text>
+              <Text color="#8B8B8B">Total raised</Text>
               <Text bold color="#C3C3C3">
                 {totalAmountPay} {payToken.symbol}
               </Text>
@@ -143,7 +169,7 @@ const TierCard: React.FC<TierProps> = ({
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Price</Text>
               <Text bold>
-                {Math.round((10000 * totalAmountIDO) / totalAmountPay) / 10000} {idoToken.symbol}/{payToken.symbol}
+                {calculatedPrice} {idoToken.symbol}/{payToken.symbol}
               </Text>
             </Flex>
             <Flex justifyContent="space-between">
@@ -154,10 +180,13 @@ const TierCard: React.FC<TierProps> = ({
             </Flex>
           </Flex>
         </Box>
+        <Divider />
         <Box>
           {userTier === tier && (
-            <Button width="100%" mt="30px" disabled={userTier + 2 === tier}>
-              <Text bold>Your Tier. GET READY!</Text>
+            <Button width="100%" mt="4px" disabled={userTier + 2 === tier}>
+              <Text bold color="#353535">
+                Your Tier. GET READY!
+              </Text>
               <Image
                 src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
                 alt="img"
@@ -167,19 +196,22 @@ const TierCard: React.FC<TierProps> = ({
               />
             </Button>
           )}
-
           {userTier < tier && (
-            <Button
-              width="100%"
-              mt="30px"
-              variant="primary"
-              style={{ textAlign: 'center' }}
-              as="a"
-              href="https://app.luaswap.org/#/swap"
-              target="__blank"
-            >
-              {TIER_INFO[tier]?.CTA(nextTier[tier]?.addQuantityLua)}
-            </Button>
+            <>
+              <ExpandableButtonComponent
+                disabled={disabledBuyMore}
+                onClick={() => setShowExpandableSection(!showExpandableSection)}
+                expanded={showExpandableSection}
+              />
+              <ExpandingWrapper expanded={showExpandableSection}>
+                <LinkExternal href="https://app.luaswap.org/#/swap">
+                  {TIER_INFO[tier]?.CTA(nextTier[tier]?.addQuantityLua)}
+                </LinkExternal>
+                <LinkExternal href="https://app.luaswap.org/#/swap">
+                  {TIER_INFO[tier]?.CTA2(nextTier[tier]?.addQuantityTomo)}
+                </LinkExternal>
+              </ExpandingWrapper>
+            </>
           )}
         </Box>
       </CardBodyWrapper>
@@ -189,8 +221,9 @@ const TierCard: React.FC<TierProps> = ({
 
 const TierDetails: React.FC<{
   currentPoolData: Pool
-}> = ({ currentPoolData }) => {
-  const userTier = useSelector(selectUserTier)
+  selectedUserTier: number
+  secondsUntilSnapshot: number
+}> = ({ currentPoolData, secondsUntilSnapshot, selectedUserTier }) => {
   const userNextTier = useSelector(selectUserNextTier)
   const { index: tierData } = currentPoolData
   const nextTier = userNextTier.reduce((s: { [key: number]: Tier }, e: Tier) => {
@@ -198,6 +231,14 @@ const TierDetails: React.FC<{
     tmps[e.tier] = e
     return tmps
   }, {})
+
+  const isPoolStarted = useMemo(() => {
+    if (secondsUntilSnapshot <= 0) {
+      return true
+    }
+
+    return false
+  }, [secondsUntilSnapshot])
 
   const tiersss: IdoDetailInfo[] = useMemo(() => {
     if (tierData) {
@@ -216,7 +257,15 @@ const TierDetails: React.FC<{
       <TierInformationWrapper>
         <Flex flexWrap="wrap" justifyContent="space-between">
           {tiersss.map((e: IdoDetailInfo, i: number) => {
-            return <TierCard data={e} key={e.tier} userTier={userTier} nextTier={nextTier} />
+            return (
+              <TierCard
+                data={e}
+                key={e.tier}
+                userTier={selectedUserTier}
+                nextTier={nextTier}
+                disabledBuyMore={isPoolStarted}
+              />
+            )
           })}
         </Flex>
       </TierInformationWrapper>
@@ -224,8 +273,8 @@ const TierDetails: React.FC<{
         <Text color="#8B8B8B">
           If you dont have any LUA or TOMO in your wallet, you will be in Tier 0.
           <br />
-          You still have a chance to buy token by commit your fund. You will receive your fund if token sold out for
-          Tier 1, 2, 3, 4
+          You can still buy more token by committing your funds. You will receive your fund if all the tokens are sold
+          out in Tier 1, 2, 3, 4
         </Text>
       </SecondaryMessage>
     </>

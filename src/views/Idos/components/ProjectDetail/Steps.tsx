@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
 import { Box, Text, Flex } from 'common-uikitstrungdao'
-import { selectUserTier } from 'state/profile'
 
 interface DotProps {
   isVertical: boolean
@@ -96,7 +94,7 @@ const DotsComponent = ({ numberOfDots, isVertical = false }) => {
   )
 }
 
-const IfoStepsDesktop = () => {
+const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserTier }) => {
   return (
     <Wrapper>
       <StepWrapper>
@@ -141,22 +139,20 @@ const IfoStepsDesktop = () => {
             Guarantee your spot
           </Text>
           <Text color="#8B8B8B">Buy more LUA or TOMO to have a better tier level</Text>
+          <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>
         </Box>
         <Box width="25%">
           <Text bold color="#F6F6F6">
-            Your right
+            At IDO time
           </Text>
-          <Text color="#8B8B8B">
-            When the IDO is live, you can buy tokens. Please commit the amount between min and max value.
-          </Text>
+          <Text color="#8B8B8B">Purchase your token by committing between the mininum and maximum set value.</Text>
         </Box>
         <Box width="25%">
           <Text bold color="#F6F6F6">
-            Claim your tokens
+            After IDO time
           </Text>
           <Text color="#8B8B8B">
-            When the IDO finishes, you can claim the tokens you bought, and any of unspent money will be returned to
-            your wallet
+            Claim the tokens you have purchased. Any unspent assets will be returned to your wallet.
           </Text>
         </Box>
       </Flex>
@@ -164,7 +160,7 @@ const IfoStepsDesktop = () => {
   )
 }
 
-const IfoStepsMobile = () => {
+const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTier }) => {
   return (
     <MobileWrapper>
       <MobileStepWrapper alignItems="center" justifyContent="center">
@@ -194,6 +190,7 @@ const IfoStepsMobile = () => {
             Guarantee your spot
           </Text>
           <Text color="#8B8B8B">Buy more LUA or TOMO to have a better tier level</Text>
+          <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>
         </Box>
       </MobileStepWrapper>
       <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
@@ -207,11 +204,9 @@ const IfoStepsMobile = () => {
         </Step>
         <Box width="75%">
           <Text bold color="#F6F6F6">
-            Your right
+            At IDO time
           </Text>
-          <Text color="#8B8B8B">
-            When the IDO is live, you can buy tokens. Please commit the amount between min and max value.
-          </Text>
+          <Text color="#8B8B8B">Purchase your token by committing between the mininum and maximum set value.</Text>
         </Box>
       </MobileStepWrapper>
       <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
@@ -225,12 +220,11 @@ const IfoStepsMobile = () => {
         </Step>
         <Box width="75%">
           <Text bold color="#F6F6F6">
-            Claim your tokens
+            After IDO time
           </Text>
           <Text color="#8B8B8B">
             {' '}
-            When the IDO finishes, you can claim the tokens you bought, and any of unspent money will be returned to
-            your wallet
+            Claim the tokens you have purchased. Any unspent assets will be returned to your wallet.
           </Text>
         </Box>
       </MobileStepWrapper>
@@ -238,11 +232,15 @@ const IfoStepsMobile = () => {
   )
 }
 
-const IfoSteps: React.FC = () => {
-  const userTier = useSelector(selectUserTier)
+const IfoSteps: React.FC<{
+  selectedUserTier: number
+}> = ({ selectedUserTier }) => {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-
-  return isMobile ? <IfoStepsMobile /> : <IfoStepsDesktop />
+  return isMobile ? (
+    <IfoStepsMobile selectedUserTier={selectedUserTier} />
+  ) : (
+    <IfoStepsDesktop selectedUserTier={selectedUserTier} />
+  )
 }
 
 export default IfoSteps

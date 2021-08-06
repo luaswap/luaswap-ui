@@ -7,11 +7,19 @@ const TimeBlock = styled(Flex)`
   border-radius: 10px;
   background-color: #1a1a1a;
   display: flex;
-  flex: 1;
+  width: 33%;
+  height: 100%;
   margin-right: 4px;
   padding: 5px;
   flex-direction: column;
 `
+
+const StyledText = styled(Text)`
+  @media screen and (max-width: 400px) {
+    line-height: 1;
+  }
+`
+
 interface Props {
   suffix: string
   timeUntil: {

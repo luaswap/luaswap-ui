@@ -18,16 +18,19 @@ const DateBlock = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 50%;
+  height: 150px;
   width: 100%;
   justify-content: center;
   text-align: center;
   margin-bottom: 14px;
   background: linear-gradient(107.27deg, #f5bd6d -12.7%, #d76700 122.45%);
+  @media screen and (max-width: 400px) {
+    height: 125px;
+  } ;
 `
 const TimerBlock = styled(Box)`
   width: 100%;
-  height: 50%;
+  height: 150px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,6 +39,9 @@ const TimerBlock = styled(Box)`
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
   padding: 10px 30px;
+  @media screen and (max-width: 400px) {
+    height: 125px;
+  } ;
 `
 
 const Title = styled(Text)`

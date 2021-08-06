@@ -32,6 +32,11 @@ export const getTierData = async (account: string) => {
   return data
 }
 
+export const getTierDataAfterSnapshot = async (account: string, project: string) => {
+  const { data = {} } = await axios.get(`${API_IDO_URL}/users/tier/${project}/${account}`)
+  return data
+}
+
 export const postLoginDetail = async (account: string) => {
   await axios.post(`${API_IDO_URL}/users/login`, {
     user: account,
