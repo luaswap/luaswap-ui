@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { timestampAndCurrentDifference } from 'utils/formatTime'
 import useInterval from './useInterval'
 
@@ -8,13 +8,16 @@ import useInterval from './useInterval'
 const useSecondsUntilCurrent = (timestamp) => {
   const [numberOfSeconds, setNumberOfSeconds] = useState(timestampAndCurrentDifference(timestamp))
 
+  useEffect(() => {
+    setNumberOfSeconds(timestampAndCurrentDifference(timestamp))
+  }, [timestamp])
+
   useInterval(() => {
     const newSeconds = numberOfSeconds - 1
     if (newSeconds >= 0) {
       setNumberOfSeconds(newSeconds)
     }
   }, 1000)
-
   return numberOfSeconds
 }
 
