@@ -84,9 +84,20 @@ const CapColumnWrapper = styled(Flex)`
   }
 `
 
-const SocialLinkWrapper = styled(Flex)``
+const SocialLinkWrapper = styled(Flex)`
+  width: 100%;
+  @media screen and (min-width: 768px) {
+    width: 30%;
+    justify-content: flex-end;
+  }
+`
 
-const PoolWrapper = styled(Flex)``
+const PoolWrapper = styled(Flex)`
+  width: 100%;
+  @media screen and (min-width: 768px) {
+    width: 70%;
+  }
+`
 
 const AccessColumnWrapper = styled(Flex)`
   width: 50%;
@@ -187,7 +198,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
       >
         <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
           <PoolWrapper mb="15px" alignItems="center" flex="1">
-            <ImageContainer src={img} alt="img" width="20%" />
+            <ImageContainer src={img} alt="img" width="30%" />
             <PoolInfoBlock>
               <Title bold>{name}</Title>
               <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>

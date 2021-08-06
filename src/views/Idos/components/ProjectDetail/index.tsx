@@ -30,6 +30,10 @@ const Row = styled.div`
   padding-left: 24px;
   padding-right: 24px;
   margin: 0 auto;
+  @media screen and (max-width: 500px) {
+    padding-left: 0px;
+    padding-right: 0px;
+  } ;
 `
 
 const StyledFlex = styled(Flex)`
@@ -43,6 +47,7 @@ const ProjectDetailBox = styled(Box)`
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-right: 24px;
   }
+
   ${({ theme }) => theme.mediaQueries.xl} {
     width: calc(70% - 48px);
   }

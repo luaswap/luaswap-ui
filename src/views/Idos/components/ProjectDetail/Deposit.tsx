@@ -27,8 +27,11 @@ const CardWrapper = styled(Card)`
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-top: 0px;
     margin-right: 24px;
-    width: calc(65% - 24px);
+    width: calc(75% - 24px);
   }
+  @media screen and (min-width: 1500px) {
+    width: calc(65% - 24px);
+  } ;
 `
 const BlockTimerWrapper = styled(Box)`
   width: 100%;
@@ -39,9 +42,12 @@ const BlockTimerWrapper = styled(Box)`
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-top: 0px;
     height: 100%;
-    width: 35%;
+    width: 25%;
     margin-top: 0px;
   }
+  @media screen and (min-width: 1500px) {
+    width: 35%;
+  } ;
 `
 
 const FlexWrapper = styled(Flex)`
