@@ -146,12 +146,10 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
   return (
     <Container expanded={expanded}>
       <InfoContainer>
-        {isActive && (
-          <StakeContainer>
-            <StyledLinkExternal href={addLiquidityUrl}>{t('Get %symbol%', { symbol: lpLabel })}</StyledLinkExternal>
-          </StakeContainer>
-        )}
-        <StyledLinkExternal href={info}>{t('See Pair Info')}</StyledLinkExternal>
+        <StyledLinkExternal href={addLiquidityUrl}>
+          Add liquidity <br />
+          {lpLabel}
+        </StyledLinkExternal>
         {/* <TagsContainer>
           {farm.isCommunity ? <CommunityTag /> : <CoreTag />}
           {dual ? <DualTag /> : null}

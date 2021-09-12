@@ -1,5 +1,6 @@
 import fromUnixTime from 'date-fns/fromUnixTime'
 import format from 'date-fns/format'
+import parseISO from 'date-fns/parseISO'
 import compareAsc from 'date-fns/compareAsc'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 
@@ -13,7 +14,16 @@ export const getDateTypeValue = (timestamp): Date | null => {
 
 export const getUtcDateString = (timestamp): string | null => {
   if (timestamp) {
-    return fromUnixTime(timestamp).toUTCString()
+    const dateIsoFormatted = parseISO(fromUnixTime(timestamp).toISOString())
+    const dateWithOffset = new Date(
+      dateIsoFormatted.getUTCFullYear(),
+      dateIsoFormatted.getUTCMonth(),
+      dateIsoFormatted.getUTCDate(),
+      dateIsoFormatted.getUTCHours(),
+      dateIsoFormatted.getUTCMinutes(),
+      dateIsoFormatted.getUTCSeconds(),
+    )
+    return format(dateWithOffset, 'MMM dd yyyy hh:mm:ss')
   }
 
   return null

@@ -37,13 +37,13 @@ const PoolInfo: React.FC<PoolInfoProps> = ({ currentPoolData }) => {
   return (
     <ProjectInfoWrapper>
       <Flex flexDirection="column">
-        <Text color="#8B8B8B">Open</Text>
+        <Text color="#8B8B8B">Pool opens</Text>
         <Text color="#C3C3C3" bold>
           {getUtcDateString(openAt)}
         </Text>
       </Flex>
       <Flex flexDirection="column">
-        <Text color="#8B8B8B">Closes</Text>
+        <Text color="#8B8B8B">Pool closes</Text>
         <Text color="#C3C3C3" bold>
           {getUtcDateString(closeAt)}
         </Text>

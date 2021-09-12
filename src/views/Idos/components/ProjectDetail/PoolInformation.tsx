@@ -64,11 +64,11 @@ const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, tierDataOfUs
   return (
     <>
       <Flex justifyContent="space-between" mt="20px">
-        <Text>Opens</Text>
+        <Text>Pool opens</Text>
         <Text>{getUtcDateString(openAt)}</Text>
       </Flex>
       <Flex justifyContent="space-between" mt="20px">
-        <Text>Closes</Text>
+        <Text>Pool closes</Text>
         <Text>{getUtcDateString(closeAt)}</Text>
       </Flex>
       <Flex justifyContent="space-between" mt="20px">

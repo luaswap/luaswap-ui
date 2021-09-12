@@ -34,10 +34,10 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
         <Text>{t('Total Liquidity')}:</Text>
         <Text>{totalValueFormatted}</Text>
       </Flex>
-      {!removed && (
-        <StyledLinkExternal href={addLiquidityUrl}>{t('Get %symbol%', { symbol: lpLabel })}</StyledLinkExternal>
-      )}
-      <StyledLinkExternal href={infoAddress}>{t('See Pair Info')}</StyledLinkExternal>
+      <StyledLinkExternal href={addLiquidityUrl}>
+        Add liquidity <br />
+        {lpLabel}
+      </StyledLinkExternal>
     </Wrapper>
   )
 }

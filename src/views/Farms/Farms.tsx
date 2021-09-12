@@ -230,7 +230,7 @@ const Farms: React.FC = () => {
           {t('Farms')}
         </Heading>
         <Heading scale="lg" color="text">
-          {t('Earn LUA tokens by staking LUA-V1 LP token ')}
+          Stake your LP tokens and earn token rewards
         </Heading>
       </PageHeader>
       <Page>
