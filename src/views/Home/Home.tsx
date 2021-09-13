@@ -69,6 +69,14 @@ const initialInUSD = {
   eLuasafe: 0,
 }
 
+const StyleManage = styled.div`
+  position: relative;
+`
+const StyleBox = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+`
 const Cards = styled(BaseLayout)`
   align-items: stretch;
   justify-content: stretch;
@@ -296,19 +304,10 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <PageHeader>
-        <Heading as="h1" scale="xl" mb="24px">
-          Manage your assets and liabilities under one simple interface
-        </Heading>
-        <Heading scale="lg" color="text">
-          Gain unique access into the decentralized financial market
-        </Heading>
-      </PageHeader>
-
       <Page>
         {Object.keys(wallets).length > 0 || account ? (
           <>
-            <Flex justifyContent="space-between">
+            <StyleManage>
               <div>
                 {!isLoading ? <Text> Net Worth</Text> : <Skeleton width="80px" height="15px" />}
                 {!isLoading ? (
@@ -317,8 +316,10 @@ const Home: React.FC = () => {
                   <Skeleton width="120px" height="30px" mt="20px" />
                 )}
               </div>
-              <AddressManage data={wallets} />
-            </Flex>
+              <StyleBox>
+                <AddressManage data={wallets} />
+              </StyleBox>
+            </StyleManage>
             {!isLoading ? (
               <Text fontWeight="500" mb="18px" mt="50px" color="text" fontSize="20px">
                 Account Overview
@@ -349,7 +350,13 @@ const Home: React.FC = () => {
                       </IconWrapper>
                       <Text> {t('Liquidity Pool')} </Text>
                     </Flex>
-                    <CardValue value={dataLiquidity.totalInUSD} decimals={2} lineHeight="1.5" fontSize="20px" />
+                    <CardValue
+                      value={dataLiquidity.totalInUSD}
+                      prefix="$"
+                      decimals={2}
+                      lineHeight="1.5"
+                      fontSize="20px"
+                    />
                   </Card>
                 )
               ) : (
@@ -407,14 +414,14 @@ const Home: React.FC = () => {
                       </IconWrapper>
                       <Text> {t('LuaFarm')} </Text>
                     </Flex>
-                    {/* <CardValue
+                    <CardValue
                       value={dataLuafarm.totalInUSD}
-                      prefix="LP"
+                      prefix="(LP)"
                       position="after"
                       decimals={4}
                       lineHeight="1.5"
                       fontSize="20px"
-                    /> */}
+                    />
                   </Card>
                 )
               ) : (
