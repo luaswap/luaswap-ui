@@ -132,7 +132,7 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
           <Text bold color="#F6F6F6">
             Connect to your wallet
           </Text>
-          <Text color="#8B8B8B">You will need to connect to your wallet to participate in all the IDO projects</Text>
+          <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
         </Box>
         <Box width="25%">
           <Text bold color="#F6F6F6">
@@ -173,7 +173,7 @@ const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTi
           <Text bold color="#F6F6F6">
             Connect to your wallet
           </Text>
-          <Text color="#8B8B8B">You will need to connect to your wallet to participate in all the IDO projects</Text>
+          <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
         </Box>
       </MobileStepWrapper>
       <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">

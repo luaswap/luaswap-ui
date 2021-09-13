@@ -191,6 +191,7 @@ const Deposit: React.FC<DepositProps> = ({
       const proofS = [v, r, s, deadline]
       await onDeposit(commitedAmmount, proofS)
       toastSuccess('Successfully Deposited')
+      setValue('0')
       setIsRequestContractAction(false)
     } catch (error) {
       setIsRequestContractAction(false)
