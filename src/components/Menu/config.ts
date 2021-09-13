@@ -3,27 +3,27 @@ import { ContextApi } from 'contexts/Localization/types'
 
 const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
   {
-    label: t('Home'),
+    label: t('Dashboard'),
     icon: 'HomeIcon',
     href: '/',
   },
   {
-    label: t('Farms'),
+    label: t('Farm'),
     icon: 'FarmIcon',
     href: '/farms',
   },
   {
-    label: t('IDO'),
+    label: t('Luastarter'),
     icon: 'IfoIcon',
     href: '/idos',
   },
   {
-    label: t('Exchange'),
+    label: t('Swap'),
     icon: 'TradeIcon',
     href: 'https://app.luaswap.org/#/swap',
   },
   {
-    label: t('Liquidity'),
+    label: t('Pool'),
     icon: 'UnionIcon',
     href: 'https://app.luaswap.org/#/pool',
   },
