@@ -304,15 +304,6 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <PageHeader>
-        <Heading as="h1" scale="xl" mb="24px">
-          Manage your assets and liabilities under one simple interface
-        </Heading>
-        <Heading scale="lg" color="text">
-          Gain unique access into the decentralized financial market
-        </Heading>
-      </PageHeader>
-
       <Page>
         {Object.keys(wallets).length > 0 || account ? (
           <>
@@ -359,7 +350,13 @@ const Home: React.FC = () => {
                       </IconWrapper>
                       <Text> {t('Liquidity Pool')} </Text>
                     </Flex>
-                    <CardValue value={dataLiquidity.totalInUSD} decimals={2} lineHeight="1.5" fontSize="20px" />
+                    <CardValue
+                      value={dataLiquidity.totalInUSD}
+                      prefix="$"
+                      decimals={2}
+                      lineHeight="1.5"
+                      fontSize="20px"
+                    />
                   </Card>
                 )
               ) : (
@@ -417,14 +414,14 @@ const Home: React.FC = () => {
                       </IconWrapper>
                       <Text> {t('LuaFarm')} </Text>
                     </Flex>
-                    {/* <CardValue
+                    <CardValue
                       value={dataLuafarm.totalInUSD}
-                      prefix="LP"
+                      prefix="(LP)"
                       position="after"
                       decimals={4}
                       lineHeight="1.5"
                       fontSize="20px"
-                    /> */}
+                    />
                   </Card>
                 )
               ) : (

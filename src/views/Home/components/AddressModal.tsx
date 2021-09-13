@@ -41,6 +41,7 @@ const StyleInput = styled(Input)`
   margin-right: 30px;
   height: 55px;
   min-width: 400px;
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
 `
 const StyleButton = styled(Button)`
   white-space: nowrap;
@@ -87,18 +88,16 @@ const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {
     <Modal title="Manage Addresses" onDismiss={onDismiss}>
       <Box>
         <Flex marginBottom="40px" marginTop="20px" maxWidth="600px" alignItems="center">
-          <StyleInput onChange={handleChange} placeholder="Add valid ETH or Tomochain address" value={val} />
+          <StyleInput onChange={handleChange} placeholder="Add valid ETH or TomoChain address" value={val} />
           <StyleButton onClick={handleSubmit} scale="md">
             Add Address
           </StyleButton>
         </Flex>
-        {msg &&
-          <StyleNote>{msg}</StyleNote>
-        }
-        {filterWalletConnected.length > 0 &&
+        {msg && <StyleNote>{msg}</StyleNote>}
+        {filterWalletConnected.length > 0 && (
           <StyleBox>
             <Text pb="10px">Connected</Text>
-            {filterWalletConnected.map((v) =>
+            {filterWalletConnected.map((v) => (
               <AddressBox key={v.address}>
                 <IconWrapper>
                   <WalletIcon />
@@ -108,34 +107,35 @@ const AddressModal: React.FC<AddressModalProps> = ({ onDismiss }) => {
                     handleChangeWallet(v.address)
                     onDismiss()
                   }}
-                  style={{ cursor: 'pointer' }}>
-                  {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6, v.address.length,)}`}
-                </Text>
-
-              </AddressBox>
-            )}
-          </StyleBox>
-        }
-        {filterWalletWatched.length > 0 &&
-          <StyleBox>
-            <Text pb="10px">Watched</Text>
-            {filterWalletWatched.map((v) =>
-              <AddressBox key={v.address}>
-                <IconWrapper>
-                  <WalletIcon />
-                </IconWrapper>
-                <Text
-                  onClick={() => {
-                    handleChangeWallet(v.address)
-                    onDismiss()
-                  }}
-                  style={{ cursor: 'pointer' }}>
+                  style={{ cursor: 'pointer' }}
+                >
                   {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6, v.address.length)}`}
                 </Text>
               </AddressBox>
-            )}
+            ))}
           </StyleBox>
-        }
+        )}
+        {filterWalletWatched.length > 0 && (
+          <StyleBox>
+            <Text pb="10px">Watched</Text>
+            {filterWalletWatched.map((v) => (
+              <AddressBox key={v.address}>
+                <IconWrapper>
+                  <WalletIcon />
+                </IconWrapper>
+                <Text
+                  onClick={() => {
+                    handleChangeWallet(v.address)
+                    onDismiss()
+                  }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {`${v.address.substring(0, 8)}...${v.address.substring(v.address.length - 6, v.address.length)}`}
+                </Text>
+              </AddressBox>
+            ))}
+          </StyleBox>
+        )}
       </Box>
     </Modal>
   )
