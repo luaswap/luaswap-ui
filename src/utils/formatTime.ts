@@ -23,7 +23,7 @@ export const getUtcDateString = (timestamp): string | null => {
       dateIsoFormatted.getUTCMinutes(),
       dateIsoFormatted.getUTCSeconds(),
     )
-    return format(dateWithOffset, 'MMM dd yyyy hh:mm:ss')
+    return `${format(dateWithOffset, 'MMM dd yyyy HH:mm:ss')} UTC`
   }
 
   return null

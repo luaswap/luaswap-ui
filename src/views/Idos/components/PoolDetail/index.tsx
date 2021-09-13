@@ -112,7 +112,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
       <CardBody style={{ height: '300px', backgroundColor: '#353535' }}>
         <Flex alignItems="flex-start" justifyContent="space-between" flexWrap="wrap">
           <Flex mb="15px" alignItems="center">
-            <ImageContainer src={img} alt="img" />
+            <ImageContainer src={img} alt="img" onClick={navigateToProjectDetail} />
             <PoolInfoBlock>
               <Text
                 fontSize="20px"

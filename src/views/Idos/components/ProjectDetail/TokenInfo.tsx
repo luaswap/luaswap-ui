@@ -15,7 +15,7 @@ const TokenInfoWrapper = styled(Box)`
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: #282828;
-  height: 350px;
+  height: 450px;
   padding: 24px;
   margin-bottom: 40px;
   width: 100%;
@@ -49,12 +49,7 @@ interface TokenInfoProps {
 }
 
 const TokenInfo: React.FC<TokenInfoProps> = ({ currentPoolData }) => {
-  const {
-    totalAmountIDO,
-    name,
-    idoToken = { address: '', symbol: '', decimals: '' },
-    img,
-  } = useTotalDataFromAllPools(currentPoolData)
+  const { name, idoToken = { address: '', symbol: '', decimals: '' }, img } = useTotalDataFromAllPools(currentPoolData)
   const { address, symbol, decimals } = idoToken
   const { toastSuccess } = useToast()
   const onAddToken = useCallback(async () => {
