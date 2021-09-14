@@ -138,7 +138,7 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
           <Text bold color="#F6F6F6">
             Guarantee your spot
           </Text>
-          <Text color="#8B8B8B">Buy more LUA or TOMO to have a better tier level</Text>
+          <Text color="#8B8B8B">Stake more LUA to be qualified for a higher tier level</Text>
           <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>
         </Box>
         <Box width="25%">

@@ -4,7 +4,18 @@ import { useSelector } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { selectUserNextTier } from 'state/profile'
 
-import { Card, CardBody, Text, Flex, Image, Button, SecondaryMessage, Box, LinkExternal } from 'common-uikitstrungdao'
+import {
+  Card,
+  CardBody,
+  Text,
+  Flex,
+  Image,
+  Button,
+  SecondaryMessage,
+  Box,
+  LinkExternal,
+  TertiaryMessage,
+} from 'common-uikitstrungdao'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { Tier } from 'state/types'
@@ -85,28 +96,28 @@ const TierCardContainer = styled(Card)`
 const TIER_INFO = {
   '1': {
     name: 'Earth',
-    description: 'You have to stake 5000 LUA or 500 TOMO',
+    description: 'Tier requirement: 5,000 LUA',
     icon: `${process.env.PUBLIC_URL}/images/earth.svg`,
     CTA: (lua) => (lua ? `${lua} LUA to JOIN IDO` : `LUA to JOIN IDO`),
     CTA2: (tomo) => (tomo ? `${tomo} TOMO to JOIN IDO` : `TOMO to JOIN IDO`),
   },
   '2': {
     name: 'Moon',
-    description: 'You have to stake 25000 LUA or 2500 TOMO',
+    description: 'Tier requirement: 25,000 LUA',
     icon: `${process.env.PUBLIC_URL}/images/moon.svg`,
     CTA: (lua) => (lua ? `${lua} LUA to reach tier 2` : `LUA to fly to the Moon`),
     CTA2: (tomo) => (tomo ? `${tomo} TOMO to reach tier 2` : `TOMO to fly to the Moon`),
   },
   '3': {
     name: 'MARS',
-    description: 'You have to stake 125000 LUA or 12500 TOMO',
+    description: 'Tier requirement: 125,000 LUA',
     icon: `${process.env.PUBLIC_URL}/images/mars.svg`,
     CTA: (lua) => (lua ? `${lua} LUA to reach tier 3` : `LUA to fly to the Moon`),
     CTA2: (tomo) => (tomo ? `${tomo} TOMO to reach tier 3` : `TOMO to fly to the Moon`),
   },
   '4': {
     name: 'Galaxy',
-    description: 'You have to stake 250000 LUA or 25000 TOMO',
+    description: 'Tier requirement: 250,000 LUA',
     icon: `${process.env.PUBLIC_URL}/images/galaxy.svg`,
     CTA: (lua) => (lua ? `${lua} LUA to reach tier 4` : `LUA to BREAK BORDER`),
     CTA2: (tomo) => (tomo ? `${tomo} TOMO to reach tier 4` : `TOMO to fly to the Moon`),
@@ -149,9 +160,9 @@ const TierCard: React.FC<TierProps> = ({
                 </TierContainer>
               </Flex>
             </Flex>
-            <Text color="#8B8B8B" fontSize="14px">
+            <TertiaryMessage hoverContent="Hovering" hoverPlacement="right">
               {TIER_INFO[tier]?.description}
-            </Text>
+            </TertiaryMessage>
           </TierHeaderWrapper>
           <Flex justifyContent="space-between" flexDirection="column">
             <Flex justifyContent="space-between">
@@ -271,10 +282,9 @@ const TierDetails: React.FC<{
       </TierInformationWrapper>
       <SecondaryMessage>
         <Text color="#8B8B8B">
-          If you dont have any LUA or TOMO in your wallet, you will be in Tier 0.
+          If you are not qualified for any tiers, you may still be able to buy IDO tokens by committing funds.
           <br />
-          You can still buy more token by committing your funds. You will receive your fund if all the tokens are sold
-          out in Tier 1, 2, 3, 4
+          But your allocation can not be guaranteed as priority will be given to tier members.
         </Text>
       </SecondaryMessage>
     </>

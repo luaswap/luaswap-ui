@@ -13,3 +13,5 @@ export const supportIdoNetwork = {
 }
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+export const TIER_HOVER_CONTENT =
+  'The following types of assets on both Ethereum and TomoChain will be taken into account for tier qualification:\n- LUA staked in LuaSafe\n- LUA staked in LUA-TOMO(E) pools (with a multiple of 2)'
