@@ -18,6 +18,7 @@ import {
 } from 'common-uikitstrungdao'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
+import { TIER_HOVER_CONTENT } from 'config/constants/idos'
 import { Tier } from 'state/types'
 import ExpandableButtonComponent from '../ExpandableButton'
 
@@ -160,7 +161,7 @@ const TierCard: React.FC<TierProps> = ({
                 </TierContainer>
               </Flex>
             </Flex>
-            <TertiaryMessage hoverContent="Hovering" hoverPlacement="right">
+            <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="top" color="#8B8B8B">
               {TIER_INFO[tier]?.description}
             </TertiaryMessage>
           </TierHeaderWrapper>

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Box, Text, Flex } from 'common-uikitstrungdao'
+import { Box, Text, Flex, TertiaryMessage } from 'common-uikitstrungdao'
+import { TIER_HOVER_CONTENT } from 'config/constants/idos'
 
 interface DotProps {
   isVertical: boolean
@@ -138,7 +139,9 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
           <Text bold color="#F6F6F6">
             Guarantee your spot
           </Text>
-          <Text color="#8B8B8B">Stake more LUA to be qualified for a higher tier level</Text>
+          <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="right" color="#8B8B8B">
+            Stake more LUA to be qualified for a higher tier level
+          </TertiaryMessage>
           <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>
         </Box>
         <Box width="25%">
@@ -189,7 +192,9 @@ const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTi
           <Text bold color="#F6F6F6">
             Guarantee your spot
           </Text>
-          <Text color="#8B8B8B">Buy more LUA or TOMO to have a better tier level</Text>
+          <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="top" color="#8B8B8B">
+            Stake more LUA to be qualified for a higher tier level
+          </TertiaryMessage>
           <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>
         </Box>
       </MobileStepWrapper>
