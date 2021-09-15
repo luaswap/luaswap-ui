@@ -13,7 +13,7 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     href: '/farms',
   },
   {
-    label: t('Luastarter'),
+    label: t('LuaStarter'),
     icon: 'IfoIcon',
     href: '/idos',
   },

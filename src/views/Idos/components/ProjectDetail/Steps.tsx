@@ -57,8 +57,11 @@ const StepWithTail = styled(Step)`
 `
 
 const StepContainer = styled(Flex)`
-  width: 25%;
+  width: calc(25% - 15px);
   position: relative;
+  &:not(:last-of-type) {
+    margin-right: 15px;
+  }
 `
 
 const MobileStepWrapper = styled(Flex)`
@@ -129,13 +132,13 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
         </StepContainer>
       </StepWrapper>
       <Flex>
-        <Box width="25%">
+        <Box width="25%" mr="15px">
           <Text bold color="#F6F6F6">
             Connect to your wallet
           </Text>
           <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
         </Box>
-        <Box width="25%">
+        <Box width="25%" mr="15px">
           <Text bold color="#F6F6F6">
             Guarantee your spot
           </Text>
@@ -144,7 +147,7 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
           </TertiaryMessage>
           <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>
         </Box>
-        <Box width="25%">
+        <Box width="25%" mr="15px">
           <Text bold color="#F6F6F6">
             At IDO time
           </Text>
