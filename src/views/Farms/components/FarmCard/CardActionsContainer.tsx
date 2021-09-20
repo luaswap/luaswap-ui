@@ -44,7 +44,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const stakedBalance = new BigNumber(stakedBalanceAsString)
   const earnings = new BigNumber(earningsAsString)
   const lpAddress = getAddress(lpAddresses, chainId)
-  const lpName = farm.lpTokenName.toUpperCase()
+  const lpName = farm.lpTokenName?.toUpperCase()
   const isApproved = account && allowance && allowance.isGreaterThan(0)
   // @ts-ignore
   const eProvider = library || null
