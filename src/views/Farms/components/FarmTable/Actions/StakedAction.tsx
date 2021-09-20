@@ -31,6 +31,7 @@ interface StackedActionProps extends FarmWithStakedValue {
 const Staked: React.FunctionComponent<StackedActionProps> = ({
   pid,
   lpSymbol,
+  lpTokenName,
   lpAddresses,
   quoteToken,
   token,
@@ -64,9 +65,11 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   }, [stakedBalance])
 
   const [onPresentDeposit] = useModal(
-    <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={lpSymbol} addLiquidityUrl={addLiquidityUrl} />,
+    <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={lpTokenName} addLiquidityUrl={addLiquidityUrl} />,
   )
-  const [onPresentWithdraw] = useModal(<WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={lpSymbol} />)
+  const [onPresentWithdraw] = useModal(
+    <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={lpTokenName} />,
+  )
 
   const lpContract = getBep20Contract(lpAddress, web3)
 
@@ -100,7 +103,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       return (
         <ActionContainer>
           <ActionTitles>
-            <Title>{lpSymbol} </Title>
+            <Title>{lpTokenName} </Title>
             <Subtle>{t('Staked').toUpperCase()}</Subtle>
           </ActionTitles>
           <ActionContent>
@@ -128,7 +131,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       <ActionContainer>
         <ActionTitles>
           <Subtle>{t('Stake').toUpperCase()} </Subtle>
-          <Title>{lpSymbol}</Title>
+          <Title>{lpTokenName}</Title>
         </ActionTitles>
         <ActionContent>
           <Button
