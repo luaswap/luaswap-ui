@@ -27,6 +27,31 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     icon: 'UnionIcon',
     href: 'https://app.luaswap.org/#/pool',
   },
+  {
+    label: t('LuaSafe'),
+    icon: 'VaultIcon',
+    href: 'https://app.luaswap.org/#/lua-safe',
+  },
+  {
+    label: t('Limit Order'),
+    icon: 'OrderIcon',
+    href: 'https://app.luaswap.org/orderbook/#/',
+  },
+  {
+    label: t('Charts'),
+    icon: 'InfoIcon',
+    href: '',
+    items: [
+      {
+        label: t('Ethereum'),
+        href: 'https://info.luaswap.org/home',
+      },
+      {
+        label: t('Tomochain'),
+        href: 'https://info.luaswap.org/tomochain/home',
+      },
+    ],
+  },
 ]
 
 export default config
