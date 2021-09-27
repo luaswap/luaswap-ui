@@ -23,7 +23,11 @@ import TokenInfo from './TokenInfo'
 import TierDetails from './TierDetails'
 import useDataFromIdoContract from '../../hooks/useDataFromIdoContract'
 import useTotalDataFromApi from '../../hooks/useTotalDataFromApi'
-import { getIdoDataBasedOnChainIdAndTier, getIdoSupportedNetwork } from '../helper'
+import { generateColorForStatusBar, getIdoDataBasedOnChainIdAndTier, getIdoSupportedNetwork } from '../helper'
+
+interface PropjectDetailProps {
+  isShowPoolData: boolean
+}
 
 const Row = styled.div`
   max-width: 1600px;
@@ -41,7 +45,8 @@ const StyledFlex = styled(Flex)`
     flex-wrap: nowrap;
   }
 `
-const ProjectDetailBox = styled(Box)`
+
+const ProjectDetailBox = styled(Box)<PropjectDetailProps>`
   width: 100%;
   margin-right: 0px;
   ${({ theme }) => theme.mediaQueries.sm} {
@@ -49,7 +54,7 @@ const ProjectDetailBox = styled(Box)`
   }
 
   ${({ theme }) => theme.mediaQueries.xl} {
-    width: calc(70% - 48px);
+    width: ${(props) => (props.isShowPoolData ? 'calc(70% - 48px)' : '100%')};
   }
 `
 
@@ -100,6 +105,14 @@ const ProjectDetail = () => {
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
   const secondsUntilSnapshot = useSecondsUntilCurrent(currentPoolData.snapshootAt)
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
+  const { isPresent, status } = currentPoolData
+  const isShowPoolData = useMemo(() => {
+    if (isPresent && status === 1) {
+      return false
+    }
+
+    return true
+  }, [isPresent, status])
   useEffect(() => {
     if (id) {
       dispatch(
@@ -177,7 +190,7 @@ const ProjectDetail = () => {
         ) : (
           <>
             {' '}
-            {!isAvailalbeOnCurrentNetwork && account && (
+            {!isAvailalbeOnCurrentNetwork && account && isShowPoolData && (
               <Mesage variant="warning" mb="16px">
                 <Text>IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO</Text>
               </Mesage>
@@ -186,6 +199,7 @@ const ProjectDetail = () => {
               <PoolSummary
                 currentPoolData={currentPoolData}
                 tierDataOfUser={tierDataOfUser}
+                isShowPoolData={isShowPoolData}
                 contractData={idoDetailFromContract}
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
@@ -199,33 +213,41 @@ const ProjectDetail = () => {
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
             </StyledFlex>
-            <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
-              Tier Infomation
-            </Heading>
-            <TierDetails
-              currentPoolData={currentPoolData}
-              selectedUserTier={selectedUserTier}
-              secondsUntilSnapshot={secondsUntilSnapshot}
-            />
+            {isShowPoolData && (
+              <>
+                <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
+                  Tier Infomation
+                </Heading>
+                <TierDetails
+                  currentPoolData={currentPoolData}
+                  selectedUserTier={selectedUserTier}
+                  secondsUntilSnapshot={secondsUntilSnapshot}
+                />
+              </>
+            )}
             <StyledFlex flexWrap="wrap">
-              <ProjectDetailBox mr="24px">
+              <ProjectDetailBox mr="24px" isShowPoolData={isShowPoolData}>
                 <StyledHeading as="h2" scale="lg" color="#D8D8D8" mb="14px">
                   Project Detail
                 </StyledHeading>
                 <ProjectInfo currentPoolData={currentPoolData} />
               </ProjectDetailBox>
-              <PoolInfoBox mr="24px">
-                <StyledHeading as="h2" scale="lg" color="#D8D8D8">
-                  Pool info
-                </StyledHeading>
-                <PoolInfo currentPoolData={currentPoolData} />
-              </PoolInfoBox>
-              <TokenInfoBox>
-                <StyledHeading as="h2" scale="lg" color="#D8D8D8">
-                  Token info
-                </StyledHeading>
-                <TokenInfo currentPoolData={currentPoolData} />
-              </TokenInfoBox>
+              {isShowPoolData && (
+                <>
+                  <PoolInfoBox mr="24px">
+                    <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+                      Pool info
+                    </StyledHeading>
+                    <PoolInfo currentPoolData={currentPoolData} />
+                  </PoolInfoBox>
+                  <TokenInfoBox>
+                    <StyledHeading as="h2" scale="lg" color="#D8D8D8">
+                      Token info
+                    </StyledHeading>
+                    <TokenInfo currentPoolData={currentPoolData} />
+                  </TokenInfoBox>
+                </>
+              )}
             </StyledFlex>
             <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               How to LuaStarts

@@ -21,26 +21,31 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     label: t('Swap'),
     icon: 'TradeIcon',
     href: 'https://app.luaswap.org/#/swap',
+    isOpenNewTab: true,
   },
   {
     label: t('Pool'),
     icon: 'UnionIcon',
     href: 'https://app.luaswap.org/#/pool',
+    isOpenNewTab: true,
   },
   {
     label: t('LuaSafe'),
     icon: 'VaultIcon',
     href: 'https://app.luaswap.org/#/lua-safe',
+    isOpenNewTab: true,
   },
   {
     label: t('Limit Order'),
     icon: 'OrderIcon',
     href: 'https://app.luaswap.org/orderbook/#/',
+    isOpenNewTab: true,
   },
   {
     label: t('Charts'),
     icon: 'InfoIcon',
     href: '',
+    isOpenNewTab: true,
     items: [
       {
         label: t('Ethereum'),

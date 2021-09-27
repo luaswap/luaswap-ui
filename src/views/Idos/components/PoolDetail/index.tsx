@@ -68,6 +68,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
   }, [history, path, pool.id])
+  const { isPresent } = pool
   const {
     img,
     name,
@@ -147,17 +148,21 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
         <Text color="#C3C3C3" mt="14px">
           {description}
         </Text>
-        <Flex justifyContent="space-between" mb="10px">
-          <Flex justifyContent="flex-start" flexDirection="row">
-            <Text color="#8B8B8B" mr="5px">
-              Cap:{' '}
-            </Text>
-            <Text color="primary" fontWeight="600">
-              {totalAmountIDO}
-            </Text>
-          </Flex>
-        </Flex>
-        <Progress variant="round" primaryStep={progressPercentage} />
+        {!isPresent && (
+          <>
+            <Flex justifyContent="space-between" mb="10px">
+              <Flex justifyContent="flex-start" flexDirection="row">
+                <Text color="#8B8B8B" mr="5px">
+                  Cap:{' '}
+                </Text>
+                <Text color="primary" fontWeight="600">
+                  {totalAmountIDO}
+                </Text>
+              </Flex>
+            </Flex>
+            <Progress variant="round" primaryStep={progressPercentage} />
+          </>
+        )}
       </CardBody>
     </CardWrapper>
   )

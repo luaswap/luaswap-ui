@@ -137,6 +137,7 @@ interface PoolSummaryProps {
   tierDataOfUser: IdoDetailInfo
   contractData: IdoDetailInfo
   isAvailalbeOnCurrentNetwork: boolean
+  isShowPoolData: boolean
 }
 /**
  * In Pool summary component, we get live data from contract
@@ -146,6 +147,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   currentPoolData,
   tierDataOfUser,
   contractData,
+  isShowPoolData,
   isAvailalbeOnCurrentNetwork,
 }) => {
   const [poolStatus] = usePoolStatus(currentPoolData)
@@ -220,47 +222,49 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           </SocialLinkWrapper>
         </Flex>
         <Text>{description}</Text>
-        <Flex justifyContent="space-between" mb="10px" mt="15px" alignItems="flex-start" flexWrap="wrap">
-          <CapColumnWrapper alignItems="flex-start" flexDirection="column">
-            <Text>Cap</Text>
-            <Text color="primary" bold fontSize="18px">
-              {totalAmountIDO} {idoToken?.symbol}
-            </Text>
-          </CapColumnWrapper>
-          <ProcessColumnWrapper flexDirection="column">
-            <Flex justifyContent="space-between" mb="3px">
-              <Box>
-                {isPoolInProgress || !isPoolOpen ? (
-                  <ProcessAmountWrapper justifyContent="flex-start">
-                    <Text>Commit Process</Text>
-                    <Text color="primary" bold fontSize="18px">
-                      &nbsp;{totalCommittedAmount}/{totalAmountPay} {payToken?.symbol}
-                    </Text>
-                  </ProcessAmountWrapper>
-                ) : (
-                  <ProcessAmountWrapper justifyContent="flex-start">
-                    <Text>Swap Process</Text>
-                    <Text color="primary" bold fontSize="18px">
-                      &nbsp;{swappedAmountIDO}/{totalAmountIDO} {idoToken?.symbol}
-                    </Text>
-                  </ProcessAmountWrapper>
-                )}
-              </Box>
+        {isShowPoolData && (
+          <Flex justifyContent="space-between" mb="10px" mt="15px" alignItems="flex-start" flexWrap="wrap">
+            <CapColumnWrapper alignItems="flex-start" flexDirection="column">
+              <Text>Cap</Text>
               <Text color="primary" bold fontSize="18px">
-                {isPoolInProgress || !isPoolOpen
-                  ? totalCommitedPercentage.toFixed(2)
-                  : totalSwapAmountPercentage.toFixed(2)}
-                %
+                {totalAmountIDO} {idoToken?.symbol}
               </Text>
-            </Flex>
-            <Progress
-              key={poolStatus}
-              variant="round"
-              primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
-              secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
-            />
-          </ProcessColumnWrapper>
-        </Flex>
+            </CapColumnWrapper>
+            <ProcessColumnWrapper flexDirection="column">
+              <Flex justifyContent="space-between" mb="3px">
+                <Box>
+                  {isPoolInProgress || !isPoolOpen ? (
+                    <ProcessAmountWrapper justifyContent="flex-start">
+                      <Text>Commit Process</Text>
+                      <Text color="primary" bold fontSize="18px">
+                        &nbsp;{totalCommittedAmount}/{totalAmountPay} {payToken?.symbol}
+                      </Text>
+                    </ProcessAmountWrapper>
+                  ) : (
+                    <ProcessAmountWrapper justifyContent="flex-start">
+                      <Text>Swap Process</Text>
+                      <Text color="primary" bold fontSize="18px">
+                        &nbsp;{swappedAmountIDO}/{totalAmountIDO} {idoToken?.symbol}
+                      </Text>
+                    </ProcessAmountWrapper>
+                  )}
+                </Box>
+                <Text color="primary" bold fontSize="18px">
+                  {isPoolInProgress || !isPoolOpen
+                    ? totalCommitedPercentage.toFixed(2)
+                    : totalSwapAmountPercentage.toFixed(2)}
+                  %
+                </Text>
+              </Flex>
+              <Progress
+                key={poolStatus}
+                variant="round"
+                primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
+                secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
+              />
+            </ProcessColumnWrapper>
+          </Flex>
+        )}
       </CardBody>
     </CardWrapper>
   )

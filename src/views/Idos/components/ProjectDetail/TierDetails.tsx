@@ -253,13 +253,12 @@ const TierDetails: React.FC<{
   }, [secondsUntilSnapshot])
 
   const tiersss: IdoDetailInfo[] = useMemo(() => {
-    if (tierData) {
+    if (Object.keys(tierData).length !== 0) {
       const chainIds = Object.keys(tierData)
       let result: IdoDetailInfo[] = tierData[chainIds[0]]
       for (let i = 1; i < chainIds.length; i++) {
         result = formatPoolTotalTierByChainID(result, tierData[chainIds[i]])
       }
-
       return result
     }
     return []

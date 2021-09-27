@@ -39,6 +39,7 @@ export interface Pool {
   img: string
   name: string
   description: string
+  isPresent: boolean
   openAt: number
   closeAt: number
   claimAt: number
