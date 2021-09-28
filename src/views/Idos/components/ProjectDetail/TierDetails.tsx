@@ -111,7 +111,7 @@ const TIER_INFO = {
   },
   '3': {
     name: 'MARS',
-    description: 'Tier requirement: 125,000 LUA',
+    description: 'Tier requirement: 100,000 LUA',
     icon: `${process.env.PUBLIC_URL}/images/mars.svg`,
     CTA: (lua) => (lua ? `${lua} LUA to reach tier 3` : `LUA to fly to the Moon`),
     CTA2: (tomo) => (tomo ? `${tomo} TOMO to reach tier 3` : `TOMO to fly to the Moon`),
