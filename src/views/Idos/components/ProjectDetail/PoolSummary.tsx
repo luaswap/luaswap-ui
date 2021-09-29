@@ -16,6 +16,7 @@ import {
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
+import getLink from 'views/Idos/utils/getMediaUrl'
 import { IdoDetail } from 'state/types'
 import {
   calculateCommittedAmountPercentage,
@@ -124,14 +125,16 @@ const ProcessAmountWrapper = styled(Flex)`
   }
 `
 
-const CardWrapper = styled(Card)`
+const CardWrapper = styled(Card)<CardWrapperProps>`
   width: 100%;
   @media screen and (min-width: 1800px) {
-    width: 55%;
+    width: ${(props) => (props.isShowPoolData ? '55%' : '100%')};
     margin-right: 24px;
   }
 `
-
+interface CardWrapperProps {
+  isShowPoolData: boolean
+}
 interface PoolSummaryProps {
   currentPoolData: Pool
   tierDataOfUser: IdoDetailInfo
@@ -152,7 +155,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
 }) => {
   const [poolStatus] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
-
+  const { socials } = currentPoolData
   const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
@@ -192,7 +195,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
     return true
   }, [poolStatus])
   return (
-    <CardWrapper>
+    <CardWrapper isShowPoolData={isShowPoolData}>
       <CardBody
         style={{
           height: 'auto',
@@ -203,20 +206,20 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <ImageContainer src={img} alt="img" width="30%" />
             <PoolInfoBlock>
               <Title bold>{name}</Title>
-              <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>
+              {isShowPoolData && <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>}
             </PoolInfoBlock>
           </PoolWrapper>
           <SocialLinkWrapper marginBottom="5px" alignItems="center">
-            <IconWrapper href="google.com" target="__blank">
+            <IconWrapper href={getLink(socials, 'TELEGRAM')} target="_blank">
               <TelegramIcon />
             </IconWrapper>
-            <IconWrapper>
+            <IconWrapper href={getLink(socials, 'TWITTER')} target="_blank">
               <TwitterIcon />
             </IconWrapper>
-            <IconWrapper>
+            <IconWrapper href={getLink(socials, 'MEDIUM')} target="_blank">
               <MediumIcon />
             </IconWrapper>
-            <IconWrapper>
+            <IconWrapper href={getLink(socials, 'FORUM')} target="_blank">
               <WorldIcon />
             </IconWrapper>
           </SocialLinkWrapper>

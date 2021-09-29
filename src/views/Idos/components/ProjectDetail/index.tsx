@@ -83,9 +83,7 @@ const TokenInfoBox = styled(Box)`
 
 const StyledHeading = styled(Heading)`
   margin-bottom: 14px;
-  margin-top: 40px;
   ${({ theme }) => theme.mediaQueries.lg} {
-    margin-top: 40px;
   }
 `
 
@@ -203,15 +201,17 @@ const ProjectDetail = () => {
                 contractData={idoDetailFromContract}
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
-              <Deposit
-                currentPoolData={currentPoolData}
-                tierDataOfUser={tierDataOfUser}
-                totalAmountUserSwapped={totalAmountUserSwapped}
-                userTotalCommitted={totalUserCommittedFromContract}
-                contractData={idoDetailFromContract}
-                selectedUserTier={selectedUserTier}
-                isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
-              />
+              {isShowPoolData && (
+                <Deposit
+                  currentPoolData={currentPoolData}
+                  tierDataOfUser={tierDataOfUser}
+                  totalAmountUserSwapped={totalAmountUserSwapped}
+                  userTotalCommitted={totalUserCommittedFromContract}
+                  contractData={idoDetailFromContract}
+                  selectedUserTier={selectedUserTier}
+                  isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
+                />
+              )}
             </StyledFlex>
             {isShowPoolData && (
               <>

@@ -19,6 +19,7 @@ import {
   Image,
 } from 'common-uikitstrungdao'
 import useDeepMemo from 'hooks/useDeepMemo'
+import getLink from 'views/Idos/utils/getMediaUrl'
 import { formatPoolDetail } from 'utils/formatPoolData'
 import { Pool, FormatPool } from '../../types'
 import usePoolStatus from '../../hooks/usePoolStatus'
@@ -68,7 +69,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
   }, [history, path, pool.id])
-  const { isPresent } = pool
+  const { isPresent, socials } = pool
   const {
     img,
     name,
@@ -126,16 +127,16 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
                 {name}
               </Text>
               <Flex marginBottom="5px" alignItems="center">
-                <IconWrapper href="google.com" target="__blank">
+                <IconWrapper href={getLink(socials, 'TELEGRAM')} target="__blank">
                   <TelegramIcon />
                 </IconWrapper>
-                <IconWrapper>
+                <IconWrapper href={getLink(socials, 'TWITTER')} target="__blank">
                   <TwitterIcon />
                 </IconWrapper>
-                <IconWrapper>
+                <IconWrapper href={getLink(socials, 'MEDIUM')} target="__blank">
                   <MediumIcon />
                 </IconWrapper>
-                <IconWrapper>
+                <IconWrapper href={getLink(socials, 'FORUM')} target="__blank">
                   <WorldIcon />
                 </IconWrapper>
               </Flex>

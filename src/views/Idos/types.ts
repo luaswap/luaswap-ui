@@ -2,6 +2,11 @@ export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim' | null
 
 export type ChainId = 89 | 1 | 88
 
+export interface ExternalLink {
+  label: string
+  icon: string
+  link: string
+}
 export interface TokenInfo {
   address: string
   symbol: string
@@ -47,9 +52,6 @@ export interface Pool {
   status: number
   snapshootAt: number
   projectDetail: string
-  links: {
-    label: string
-    icon: string
-    link: string
-  }[]
+  links: ExternalLink[]
+  socials: ExternalLink[]
 }
