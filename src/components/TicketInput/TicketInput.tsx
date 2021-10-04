@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Flex, Input, InputProps } from 'common-uikitstrungdao'
+import { Button, Flex, Input, InputProps } from 'luastarter-uikits'
 import { useTranslation } from 'contexts/Localization'
 
 interface TokenInputProps extends InputProps {

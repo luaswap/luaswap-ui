@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Box, Flex, Input, Button } from 'common-uikitstrungdao'
+import { Text, Box, Flex, Input, Button } from 'luastarter-uikits'
 import { useWeb3React } from '@web3-react/core'
 import { useForm } from 'react-hook-form'
 import { getERC20Contract } from 'utils/contractHelpers'

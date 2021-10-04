@@ -7,10 +7,12 @@ import { useWeb3React } from '@web3-react/core'
 const NETWORK_MAP = {
   tomochain: 88,
   eth: 1,
+  bsc: 56,
 }
 
 const CHAIN_MAP = {
   88: 'tomochain',
+  56: 'bsc',
   1: 'eth',
 }
 

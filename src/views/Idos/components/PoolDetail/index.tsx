@@ -17,7 +17,7 @@ import {
   Progress,
   SecondaryButton,
   Image,
-} from 'common-uikitstrungdao'
+} from 'luastarter-uikits'
 import useDeepMemo from 'hooks/useDeepMemo'
 import getLink from 'views/Idos/utils/getMediaUrl'
 import { formatPoolDetail } from 'utils/formatPoolData'

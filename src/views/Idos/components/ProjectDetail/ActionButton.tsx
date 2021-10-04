@@ -1,7 +1,7 @@
 import React, { LegacyRef, ReactElement } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
-import { Button, AutoRenewIcon } from 'common-uikitstrungdao'
+import { Button, AutoRenewIcon } from 'luastarter-uikits'
 import UnlockButton from 'components/UnlockButton'
 import { ZERO_ADDRESS } from 'config/constants/idos'
 import CommitButton from './CommitButton'

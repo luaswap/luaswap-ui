@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ListViewIcon, CardViewIcon, IconButton } from 'common-uikitstrungdao'
+import { ListViewIcon, CardViewIcon, IconButton } from 'luastarter-uikits'
 import { ViewMode } from '../types'
 
 interface ToggleViewProps {

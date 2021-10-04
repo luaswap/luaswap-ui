@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { Flex, Heading, Mesage, Text, Box } from 'common-uikitstrungdao'
+import { Flex, Heading, Mesage, Text, Box } from 'luastarter-uikits'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'

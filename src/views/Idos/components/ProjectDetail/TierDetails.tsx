@@ -15,7 +15,7 @@ import {
   Box,
   LinkExternal,
   TertiaryMessage,
-} from 'common-uikitstrungdao'
+} from 'luastarter-uikits'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { TIER_HOVER_CONTENT } from 'config/constants/idos'

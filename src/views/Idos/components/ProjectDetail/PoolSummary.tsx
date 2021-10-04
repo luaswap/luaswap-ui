@@ -12,7 +12,7 @@ import {
   Progress,
   Box,
   Button,
-} from 'common-uikitstrungdao'
+} from 'luastarter-uikits'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'

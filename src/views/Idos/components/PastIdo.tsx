@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text } from 'common-uikitstrungdao'
+import { Text } from 'luastarter-uikits'
 import { Pool } from '../types'
 import IdoLayout from './IdoLayout'
 import PoolDetail from './PoolDetail'

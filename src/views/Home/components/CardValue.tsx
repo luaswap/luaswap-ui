@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useCountUp } from 'react-countup'
-import { Text } from 'common-uikitstrungdao'
+import { Text } from 'luastarter-uikits'
 
 export interface CardValueProps {
   value: number
@@ -21,7 +21,7 @@ const CardValue: React.FC<CardValueProps> = ({
   prefix = '',
   bold = true,
   color = 'text',
-  position='before'
+  position = 'before',
 }) => {
   const { countUp, update } = useCountUp({
     start: 0,

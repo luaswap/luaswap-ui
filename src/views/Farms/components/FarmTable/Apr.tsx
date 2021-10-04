@@ -6,7 +6,7 @@ import { Address } from 'config/constants/types'
 import BigNumber from 'bignumber.js'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-import { Skeleton } from 'common-uikitstrungdao'
+import { Skeleton } from 'luastarter-uikits'
 
 export interface AprProps {
   value: string

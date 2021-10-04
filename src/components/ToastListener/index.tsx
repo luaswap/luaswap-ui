@@ -1,5 +1,5 @@
 import React from 'react'
-import { ToastContainer } from 'common-uikitstrungdao'
+import { ToastContainer } from 'luastarter-uikits'
 import useToast from 'hooks/useToast'
 
 const ToastListener = () => {

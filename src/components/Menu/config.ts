@@ -1,4 +1,4 @@
-import { MenuEntry } from 'common-uikitstrungdao'
+import { MenuEntry } from 'luastarter-uikits'
 import { ContextApi } from 'contexts/Localization/types'
 
 const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [

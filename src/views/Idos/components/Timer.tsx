@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { Flex, PocketWatchIcon, Text, Box } from 'common-uikitstrungdao'
+import { Flex, PocketWatchIcon, Text, Box } from 'luastarter-uikits'
 import { useTranslation } from 'contexts/Localization'
 
 const TimeBlock = styled(Flex)`

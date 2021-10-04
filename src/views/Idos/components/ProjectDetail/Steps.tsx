@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Box, Text, Flex, TertiaryMessage } from 'common-uikitstrungdao'
+import { Box, Text, Flex, TertiaryMessage } from 'luastarter-uikits'
 import { TIER_HOVER_CONTENT } from 'config/constants/idos'
 
 interface DotProps {

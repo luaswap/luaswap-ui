@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, ExpandableLabel, Flex } from 'common-uikitstrungdao'
+import { Box, ExpandableLabel, Flex } from 'luastarter-uikits'
 import styled from 'styled-components'
 import usePersistState from 'hooks/usePersistState'
 import { useTranslation } from 'contexts/Localization'

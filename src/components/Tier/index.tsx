@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Heading, Box, Text, Progress, Flex, Image } from 'common-uikitstrungdao'
+import { Heading, Box, Text, Progress, Flex, Image } from 'luastarter-uikits'
 import { useSelector } from 'react-redux'
 import { selectUserTier } from 'state/profile'
 import TierProgressBar from './TierProgressBar'

@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
-import { Card, CardBody, Flex, Text, Mesage, Box } from 'common-uikitstrungdao'
+import { Card, CardBody, Flex, Text, Mesage, Box } from 'luastarter-uikits'
 import { useWeb3React } from '@web3-react/core'
 import axios, { AxiosResponse } from 'axios'
 import styled from 'styled-components'

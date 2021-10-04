@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react'
-import { Text, Flex, Box } from 'common-uikitstrungdao'
+import { Text, Flex, Box } from 'luastarter-uikits'
 import styled, { keyframes } from 'styled-components'
 import { OpenPools } from 'state/types'
 import PoolDetail from './PoolDetail'

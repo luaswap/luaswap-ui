@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Box } from 'common-uikitstrungdao'
+import { Text, Box } from 'luastarter-uikits'
 import Page from 'components/layout/Page'
 import LuaswapAbi from 'config/abi/LuaSwapIDO.json'
 import CreateForm from './components/DevTools/CreateForm'

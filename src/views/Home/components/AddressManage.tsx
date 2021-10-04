@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
-import { Text, Flex, useModal, ChevronDownIcon } from 'common-uikitstrungdao'
+import { Text, Flex, useModal, ChevronDownIcon } from 'luastarter-uikits'
 
 import { useAppDispatch } from 'state'
 import { WalletProps } from 'state/types'
@@ -119,17 +119,15 @@ const AddressManage: React.FC<AddressManageProps> = ({ data }) => {
             </Text>
             <ChevronDownIcon />
           </FlexAddress>
-        ) :
+        ) : (
           <FlexAddress>
             <IconWrapper>
               <WalletIcon />
             </IconWrapper>
-            <Text>
-              Add Address
-            </Text>
+            <Text>Add Address</Text>
             <ChevronDownIcon />
           </FlexAddress>
-        }
+        )}
       </StyleTextBox>
       {isOpen && (
         <StyleWalletManage ref={ref}>

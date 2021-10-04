@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ChevronDownIcon, ChevronUpIcon, Text } from 'common-uikitstrungdao'
+import { ChevronDownIcon, ChevronUpIcon, Text } from 'luastarter-uikits'
 
 export interface ExpandableButton {
   onClick?: () => void

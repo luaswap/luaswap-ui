@@ -9,7 +9,7 @@ import {
   UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
   WalletConnectConnector,
 } from '@web3-react/walletconnect-connector'
-import { ConnectorNames, connectorLocalStorageKey } from 'common-uikitstrungdao'
+import { ConnectorNames, connectorLocalStorageKey } from 'luastarter-uikits'
 import { connectorsByName } from 'utils/web3React'
 import useToast from 'hooks/useToast'
 import { profileClear } from 'state/profile'

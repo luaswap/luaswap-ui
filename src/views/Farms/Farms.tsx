@@ -3,7 +3,7 @@ import { Route, useRouteMatch, useHistory } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useAppDispatch } from 'state'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Text } from 'common-uikitstrungdao'
+import { Image, Heading, RowType, Text, Mesage } from 'luastarter-uikits'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -234,6 +234,11 @@ const Farms: React.FC = () => {
         </Heading>
       </PageHeader>
       <Page>
+        {chainId === 56 && (
+          <Mesage variant="warning">
+            <Text>Please switch to Ethereum/Tomomainnet to use this feature</Text>
+          </Mesage>
+        )}
         <ControlContainer>
           <ViewControls>
             <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />

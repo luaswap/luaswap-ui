@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Heading, Text, LogoIcon } from 'common-uikitstrungdao'
+import { Button, Heading, Text, LogoIcon } from 'luastarter-uikits'
 import Page from 'components/layout/Page'
 import { useTranslation } from 'contexts/Localization'
 

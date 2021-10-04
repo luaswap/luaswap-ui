@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import axios from 'axios'
-import { Box, Text, Flex } from 'common-uikitstrungdao'
+import { Box, Text, Flex } from 'luastarter-uikits'
 import Container from 'components/layout/Container'
 import useToast from 'hooks/useToast'
 import { API_IDO_URL } from 'config'

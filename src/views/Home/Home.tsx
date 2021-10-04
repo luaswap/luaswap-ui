@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { isEmpty } from 'lodash'
-import { Heading, Text, BaseLayout, Progress, Flex, useModal, Box, Skeleton } from 'common-uikitstrungdao'
+import { Heading, Text, BaseLayout, Progress, Flex, useModal, Box, Skeleton } from 'luastarter-uikits'
 
 import { API_BLOCKFOLIO } from '../../config'
 import { useAppDispatch } from '../../state'

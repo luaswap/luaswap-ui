@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ChevronDownIcon, useMatchBreakpoints } from 'common-uikitstrungdao'
+import { ChevronDownIcon, useMatchBreakpoints } from 'luastarter-uikits'
 import { useTranslation } from 'contexts/Localization'
 
 interface DetailsProps {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Flex, Box, ErrorIcon, Button } from 'common-uikitstrungdao'
+import { Text, Flex, Box, ErrorIcon, Button } from 'luastarter-uikits'
 import Banner from './Banner'
 
 const MigrationV2 = () => {

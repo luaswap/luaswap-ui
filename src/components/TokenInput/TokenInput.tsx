@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Flex, Text, Input, InputProps } from 'common-uikitstrungdao'
+import { Box, Button, Flex, Text, Input, InputProps } from 'luastarter-uikits'
 import { useTranslation } from 'contexts/Localization'
 
 interface TokenInputProps extends InputProps {

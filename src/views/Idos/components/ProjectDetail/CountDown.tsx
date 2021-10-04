@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { Box, Text, Flex } from 'common-uikitstrungdao'
+import { Box, Text, Flex } from 'luastarter-uikits'
 import getTimePeriods from 'utils/getTimePeriods'
 import { getUtcDateString } from 'utils/formatTime'
 import Timer from '../Timer'

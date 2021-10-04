@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import Web3 from 'web3'
 import styled from 'styled-components'
-import { Modal, Flex, Input, Button, Text, Box } from 'common-uikitstrungdao'
+import { Modal, Flex, Input, Button, Text, Box } from 'luastarter-uikits'
 
 import { useWallet } from 'state/hooks'
 import { useAppDispatch } from 'state'

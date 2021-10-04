@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, Input, Box, Flex, Button } from 'common-uikitstrungdao'
+import { Text, Input, Box, Flex, Button } from 'luastarter-uikits'
 import { useForm } from 'react-hook-form'
 import { getLuaIdoContract } from 'utils/contractHelpers'
 import useWeb3 from 'hooks/useWeb3'

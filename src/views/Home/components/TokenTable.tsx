@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { LinkExternal, Text } from 'common-uikitstrungdao'
+import { LinkExternal, Text } from 'luastarter-uikits'
 
 import { ApiDetailType } from 'state/types'
 import TokenLogo from './TokenLogo'

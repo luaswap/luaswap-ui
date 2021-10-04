@@ -1,4 +1,4 @@
-import { Toast } from 'common-uikitstrungdao'
+import { Toast } from 'luastarter-uikits'
 
 type ToastSignature = (title: Toast['title'], description?: Toast['description']) => void
 

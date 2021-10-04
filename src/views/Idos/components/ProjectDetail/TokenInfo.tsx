@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { Flex, Text, Box, AddIcon, IconButton, CopyIcon, useTooltip } from 'common-uikitstrungdao'
+import { Flex, Text, Box, AddIcon, IconButton, CopyIcon, useTooltip } from 'luastarter-uikits'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import { Pool } from 'views/Idos/types'

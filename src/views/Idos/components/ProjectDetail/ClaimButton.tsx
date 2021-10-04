@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Button } from 'common-uikitstrungdao'
+import { Button } from 'luastarter-uikits'
 
 interface ClaimButtonProps {
   onClick(): any

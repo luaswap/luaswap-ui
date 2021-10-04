@@ -1,4 +1,4 @@
-import { Language } from 'common-uikitstrungdao'
+import { Language } from 'luastarter-uikits'
 
 export const AR: Language = { locale: 'ar-SA', language: 'العربية', code: 'ar' }
 export const EN: Language = { locale: 'en-US', language: 'English', code: 'en' }

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { Flex, CopyIcon, Text, Box, IconButton } from 'common-uikitstrungdao'
+import { Flex, CopyIcon, Text, Box, IconButton } from 'luastarter-uikits'
 import styled from 'styled-components'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import useToast from 'hooks/useToast'

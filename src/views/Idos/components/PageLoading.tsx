@@ -1,5 +1,5 @@
 import React from 'react'
-import { Skeleton, Card, CardBody, Flex } from 'common-uikitstrungdao'
+import { Skeleton, Card, CardBody, Flex } from 'luastarter-uikits'
 import styled from 'styled-components'
 
 const CardWrapper = styled(Card)`

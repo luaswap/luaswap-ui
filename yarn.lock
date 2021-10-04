@@ -4778,19 +4778,6 @@ common-tags@^1.8.0:
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
   integrity sha512-6P6g0uetGpW/sdyUy/iQQCbFF0kWVMSIVSyYz7Zgjcgh8mgw8PQzDNZeyZ5DQ2gM7LBoZPHmnjz8rUthkBG5tw==
 
-common-uikitstrungdao@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/common-uikitstrungdao/-/common-uikitstrungdao-0.2.5.tgz#1efcbfbb785bf663d4ded0ed09924e03a10c37e3"
-  integrity sha512-BItaTkxc8v+TBASEu0YkZlZ7WB9aTnj90O2X8bWrBhlCKf61tvi4+I3K70l95I2pdKM8+ESOuUG2XV75oCWc/Q==
-  dependencies:
-    "@popperjs/core" "^2.9.2"
-    "@types/lodash" "^4.14.168"
-    "@types/styled-system" "^5.1.10"
-    lodash "^4.17.20"
-    react-popper "^2.2.5"
-    react-transition-group "^4.4.1"
-    styled-system "^5.1.5"
-
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
@@ -9575,6 +9562,19 @@ ltgt@~2.2.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/ltgt/-/ltgt-2.2.1.tgz#f35ca91c493f7b73da0e07495304f17b31f87ee5"
   integrity sha1-81ypHEk/e3PaDgdJUwTxezH4fuU=
+
+luastarter-uikits@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/luastarter-uikits/-/luastarter-uikits-0.1.1.tgz#74cccdbe34eabaa812286165b779d827011576b0"
+  integrity sha512-D1nHU4h5L3lBMLOgyuQQyOiDm/1Bx0CcdW0KEvuFMHH2hLum2zyaz4irGE5veFleXXKE7ucIrxRTsr9R8axD6A==
+  dependencies:
+    "@popperjs/core" "^2.9.2"
+    "@types/lodash" "^4.14.168"
+    "@types/styled-system" "^5.1.10"
+    lodash "^4.17.20"
+    react-popper "^2.2.5"
+    react-transition-group "^4.4.1"
+    styled-system "^5.1.5"
 
 magic-string@^0.25.0, magic-string@^0.25.7:
   version "0.25.7"

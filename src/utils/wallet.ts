@@ -1,7 +1,7 @@
 // Set of helper functions to facilitate wallet setup
 
 import { ChainId } from '@luaswap/sdk'
-// import { NetworkOptions } from 'common-uikitstrungdao'
+// import { NetworkOptions } from 'luastarter-uikits'
 import getRpcUrl from './getRpcUrl'
 
 /**

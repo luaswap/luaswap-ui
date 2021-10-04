@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Box } from 'common-uikitstrungdao'
+import { Box } from 'luastarter-uikits'
 import Container from '../layout/Container'
 
 const Outer = styled(Box)<{ background?: string; isImage?: boolean }>`

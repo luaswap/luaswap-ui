@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Button, Input, InputProps, Flex, Link, Box } from 'common-uikitstrungdao'
+import { Text, Button, Input, InputProps, Flex, Link, Box } from 'luastarter-uikits'
 import { useTranslation } from 'contexts/Localization'
 
 interface ModalInputProps {

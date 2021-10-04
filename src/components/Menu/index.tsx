@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Menu as UikitMenu } from 'common-uikitstrungdao'
+import { Menu as UikitMenu } from 'luastarter-uikits'
 import { useWeb3React } from '@web3-react/core'
 import { languageList } from 'config/localization/languages'
 import { useTranslation } from 'contexts/Localization'

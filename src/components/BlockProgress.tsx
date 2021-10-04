@@ -1,5 +1,5 @@
 import React from 'react'
-import { Progress, ProgressProps } from 'common-uikitstrungdao'
+import { Progress, ProgressProps } from 'luastarter-uikits'
 import { useBlock } from 'state/hooks'
 
 interface BlockProgressProps extends ProgressProps {

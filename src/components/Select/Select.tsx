@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { ArrowDropDownIcon, Text } from 'common-uikitstrungdao'
+import { ArrowDropDownIcon, Text } from 'luastarter-uikits'
 
 const DropDownHeader = styled.div`
   width: 100%;

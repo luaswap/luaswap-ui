@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'contexts/Localization'
-import { Input } from 'common-uikitstrungdao'
+import { Input } from 'luastarter-uikits'
 import styled from 'styled-components'
 import debounce from 'lodash/debounce'
 

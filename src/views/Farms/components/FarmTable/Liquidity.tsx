@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { HelpIcon, Text, Skeleton, useTooltip } from 'common-uikitstrungdao'
+import { HelpIcon, Text, Skeleton, useTooltip } from 'luastarter-uikits'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
 

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { TabMenu, Tab, Flex, Text, Heading, Box } from 'common-uikitstrungdao'
+import { TabMenu, Tab, Flex, Text, Heading, Box } from 'luastarter-uikits'
 import styled from 'styled-components'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { getUtcDateString } from 'utils/formatTime'

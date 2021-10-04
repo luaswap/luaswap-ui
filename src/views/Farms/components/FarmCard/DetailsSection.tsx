@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'contexts/Localization'
 import styled from 'styled-components'
-import { Text, Flex, LinkExternal } from 'common-uikitstrungdao'
+import { Text, Flex, LinkExternal } from 'luastarter-uikits'
 
 export interface ExpandableSectionProps {
   infoAddress?: string
