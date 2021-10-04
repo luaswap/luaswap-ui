@@ -132,7 +132,7 @@ const ProjectDetail = () => {
       }
     }
     // Only call this api when current date time > snapshot time
-    if (secondsUntilSnapshot <= 0 && account) {
+    if (secondsUntilSnapshot > 0 && account) {
       fetchTierAfterSnapshotTime()
     }
   }, [secondsUntilSnapshot, account, id])
@@ -146,7 +146,7 @@ const ProjectDetail = () => {
 
   const selectedUserTier = useMemo(() => {
     // We will get the userTier if current date time < snapshot time or else we will get userTierAfterSnapshot
-    if (secondsUntilSnapshot <= 0) {
+    if (secondsUntilSnapshot > 0) {
       return userTierAfterSnapshot
     }
 

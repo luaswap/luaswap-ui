@@ -280,13 +280,15 @@ const TierDetails: React.FC<{
           })}
         </Flex>
       </TierInformationWrapper>
-      <SecondaryMessage>
-        <Text color="#8B8B8B">
-          If you are not qualified for any tiers, you may still be able to buy IDO tokens by committing funds.
-          <br />
-          But your allocation can not be guaranteed as priority will be given to tier members.
-        </Text>
-      </SecondaryMessage>
+      <Box mb="24px">
+        <SecondaryMessage>
+          <Text color="#8B8B8B">
+            If you are not qualified for any tiers, you may still be able to buy IDO tokens by committing funds.
+            <br />
+            But your allocation can not be guaranteed as priority will be given to tier members.
+          </Text>
+        </SecondaryMessage>
+      </Box>
     </>
   )
 }
