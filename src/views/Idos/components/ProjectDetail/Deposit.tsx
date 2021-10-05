@@ -205,11 +205,13 @@ const Deposit: React.FC<DepositProps> = ({
       const response = await getClaimProof(projectId, index)
       const { s, v, r, deadline } = response.proof
       const { finalPay } = response
+      const formattedFinalPay = new BigNumber(finalPay).toString()
       const proofS = [v, r, s, deadline]
-      await onClaimReward(finalPay, proofS)
+      await onClaimReward(formattedFinalPay, proofS)
       setIsRequestContractAction(false)
       toastSuccess('Reward Claimed Successfully')
     } catch (error) {
+      console.log(error, 'Fail to claim reward')
       toastError('Failed to claim reward')
       setIsRequestContractAction(false)
     }
