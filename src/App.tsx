@@ -37,13 +37,13 @@ const App: React.FC = () => {
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
             <Route exact strict path="/">
-              <Home />
+              <Idos />
             </Route>
             <Route path="/farms">
               <Farms />
             </Route>
-            <Route path="/idos">
-              <Idos />
+            <Route path="/portfolio">
+              <Home />
             </Route>
             {/* 404 */}
             <Route component={NotFound} />

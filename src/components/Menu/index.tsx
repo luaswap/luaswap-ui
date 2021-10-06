@@ -27,7 +27,7 @@ const Menu = (props) => {
   const location = useLocation()
   const userEthBalance = useEthBalance()
   const { currentLanguage, setLanguage, t } = useTranslation()
-  const [queryChainId, updateLocation] = useLocationParams(location)
+  // const [queryChainId, updateLocation] = useLocationParams(location)
   const formatLuaPrice = useMemo(() => {
     if (luaPrice) {
       return luaPrice.div(10 ** 8).toNumber()
@@ -35,14 +35,14 @@ const Menu = (props) => {
 
     return 0
   }, [luaPrice])
-  useEffect(() => {
-    if (queryChainId) {
-      // const option = walletOptions.find(opts => opts.chainId === queryChainId)
-      // connectNetwork(option)
-      updateLocation()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryChainId, updateLocation, location.pathname])
+  // useEffect(() => {
+  //   if (queryChainId) {
+  //     // const option = walletOptions.find(opts => opts.chainId === queryChainId)
+  //     // connectNetwork(option)
+  //     updateLocation()
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [queryChainId, updateLocation, location.pathname])
 
   const unlockLua = useCallback(() => {
     if (luaContract) {
@@ -68,7 +68,7 @@ const Menu = (props) => {
       isUnlock={isUnlock}
       isDark
       chainId={chainId}
-      queryChainId={queryChainId}
+      // queryChainId={queryChainId}
       toggleTheme={toggleTheme}
       currentLang={currentLanguage.code}
       langs={languageList}
