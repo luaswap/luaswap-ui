@@ -5,7 +5,7 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
   {
     label: t('LuaStarter'),
     icon: 'IfoIcon',
-    href: '/',
+    href: '/ido',
   },
   {
     label: t('Portfolio'),

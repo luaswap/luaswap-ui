@@ -1,5 +1,5 @@
 import React, { lazy } from 'react'
-import { HashRouter, Route, Switch } from 'react-router-dom'
+import { HashRouter, Route, Switch, Redirect } from 'react-router-dom'
 import { ResetCSS } from 'luastarter-uikits'
 import BigNumber from 'bignumber.js'
 import useEagerConnect, { useInactiveListener } from 'hooks/useEagerConnect'
@@ -36,7 +36,7 @@ const App: React.FC = () => {
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
-            <Route exact strict path="/">
+            <Route path="/ido">
               <Idos />
             </Route>
             <Route path="/farms">
@@ -45,6 +45,7 @@ const App: React.FC = () => {
             <Route path="/portfolio">
               <Home />
             </Route>
+            <Redirect from="/" to="/ido" />
             {/* 404 */}
             <Route component={NotFound} />
           </Switch>
