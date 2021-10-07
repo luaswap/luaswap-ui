@@ -2,6 +2,7 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { BscConnector } from '@binance-chain/bsc-connector'
 import { ConnectorNames } from 'luastarter-uikits'
+import getRpcUrl from 'utils/getRpcUrl'
 import Web3 from 'web3'
 
 const POLLING_INTERVAL = 12000
@@ -11,7 +12,7 @@ export const injected = new InjectedConnector({ supportedChainIds: [1, 88, 89, 5
 const bscConnector = new BscConnector({ supportedChainIds: [56] })
 
 const walletconnect = new WalletConnectConnector({
-  rpc: { 1: NETWORK_URL },
+  rpc: { 1: NETWORK_URL, 88: getRpcUrl(88) },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
