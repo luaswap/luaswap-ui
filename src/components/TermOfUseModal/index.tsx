@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import axios from 'axios'
 import styled, { keyframes } from 'styled-components'
-import { Modal, Text, Link, Flex, Box } from 'luastarter-uikits'
+import { Modal, Text, Link, Flex, Box, useModal } from 'luastarter-uikits'
 import { EMAIL_REGEX } from 'config/constants/idos'
 import { API_IDO_URL } from 'config'
 import { useWeb3React } from '@web3-react/core'
@@ -12,8 +12,10 @@ interface TermOfUseModalProps {
   onDismiss?: () => void
 }
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.a`
   display: inline-block;
+  color: #1990ff;
+  font-weight: 700;
 `
 const roller = keyframes`
   0% {
@@ -23,7 +25,12 @@ const roller = keyframes`
     transform: rotate(360deg);
   }
 `
-
+const Label = styled.label`
+  color: #c3c3c3;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+`
 const LoaderIcon = styled.div`
   display: inline-block;
   position: relative;
@@ -66,41 +73,60 @@ const Loader = () => {
   )
 }
 
-const StyledInput = styled.input`
+interface StyledInputProps {
+  error: string
+}
+
+const StyledInput = styled.input<StyledInputProps>`
   height: 40px;
   outline: none;
-  border: 1px solid #1a1a1a;
+  border: 1px solid #c3c3c3;
   border-radius: 10px;
-  background: rgb(234 156 73);
+  background: #1a1a1a;
   padding: 0 15px;
-  min-width: 250px;
-  color: #1a1a1a;
-  margin-right: 10px;
-
+  width: 100%;
+  color: #c3c3c3;
+  margin-bottom: ${(props) => (props.error ? '0px' : '10px')};
   &::placeholder {
-    color: #1a1a1a;
+    color: #c3c3c3;
   }
 `
 const SubscribeButton = styled.button`
   height: 40px;
-  color: #fabc46;
+  color: black;
   border-radius: 10px;
+  border: none;
+  font-weight: 700;
   padding: 0 10px;
   background: transparent;
-  border: 1px solid #fabc46;
   text-transform: uppercase;
+  background-color: #fbbb44;
   cursor: pointer;
   min-width: 100px;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 `
 const ErrorMessage = styled(Text)``
 
 const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [checked, setChecked] = useState(false)
   const { account } = useWeb3React()
   const { toastSuccess, toastError } = useToast()
   const web3 = useWeb3()
   const [error, setError] = useState(null)
   const [emailAddress, setEmailAddress] = useState(null)
+
+  const disabledButton = useMemo(() => {
+    if (!error && checked && emailAddress) {
+      return false
+    }
+
+    return true
+  }, [error, checked, emailAddress])
 
   const handleChangeAddress = (e) => {
     setError(null)
@@ -133,39 +159,55 @@ const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
   }
 
   return (
-    <Modal title="Term Of Use" hideCloseButton width="400px">
+    <Modal title="Registration" hideCloseButton maxWidth="350px">
       <Text>
-        <StyledLink
-          href="https://docs.tomochain.com/luaswap/luastarter/legal-information-and-notices#terms-of-use"
-          target="_blank"
-        >
-          Terms of use
-        </StyledLink>{' '}
-        and{' '}
-        <StyledLink
-          href="https://docs.tomochain.com/luaswap/luastarter/legal-information-and-notices#privacy-policy"
-          target="_blank"
-        >
-          Privacy policy
-        </StyledLink>
+        The first IDO platform to onboard dozens of emerging <br /> projects to LuaSwap’s multi-chain ecosystem.
       </Text>
-      <Flex justifyContent="center" mt="20px">
-        <Box>
-          <StyledInput placeholder="Your email" value={emailAddress} type="email" onChange={handleChangeAddress} />
-          {error && (
-            <ErrorMessage color="red" fontSize="12px" ml="5px" mt="5px">
-              {error}
-            </ErrorMessage>
-          )}
-        </Box>
-        {isLoading ? (
-          <SubscribeButton>
-            <Loader />
-          </SubscribeButton>
-        ) : (
-          <SubscribeButton onClick={onSubmit}>I Agree</SubscribeButton>
+      <Text bold mt="10px" mb="2px">
+        Email
+      </Text>
+      <Box>
+        <StyledInput
+          placeholder="Your email"
+          value={emailAddress}
+          type="email"
+          onChange={handleChangeAddress}
+          error={error}
+        />
+        {error && (
+          <ErrorMessage color="red" fontSize="12px" ml="5px" mt="5px">
+            {error}
+          </ErrorMessage>
         )}
+      </Box>
+      <Flex alignItems="center" mb="10px">
+        <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.currentTarget.checked)} id="TOS" />
+        <Label htmlFor="TOS">
+          I have read and agree to the{' '}
+          <StyledLink
+            href="https://docs.tomochain.com/luaswap/luastarter/legal-information-and-notices#terms-of-use"
+            target="_blank"
+          >
+            Terms of use
+          </StyledLink>{' '}
+          and{' '}
+          <StyledLink
+            href="https://docs.tomochain.com/luaswap/luastarter/legal-information-and-notices#privacy-policy"
+            target="_blank"
+          >
+            Privacy policy
+          </StyledLink>
+        </Label>
       </Flex>
+      {isLoading ? (
+        <SubscribeButton>
+          <Loader />
+        </SubscribeButton>
+      ) : (
+        <SubscribeButton onClick={onSubmit} disabled={disabledButton}>
+          I Agree
+        </SubscribeButton>
+      )}
     </Modal>
   )
 }
