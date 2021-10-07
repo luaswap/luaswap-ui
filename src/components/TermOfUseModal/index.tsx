@@ -135,11 +135,17 @@ const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
   return (
     <Modal title="Term Of Use" hideCloseButton width="400px">
       <Text>
-        <StyledLink href="https://docs.tomochain.com/luaswap/luastarter#terms-of-use" target="_blank">
+        <StyledLink
+          href="https://docs.tomochain.com/luaswap/luastarter/legal-information-and-notices#terms-of-use"
+          target="_blank"
+        >
           Terms of use
         </StyledLink>{' '}
         and{' '}
-        <StyledLink href="https://docs.tomochain.com/luaswap/luastarter#terms-of-use" target="_blank">
+        <StyledLink
+          href="https://docs.tomochain.com/luaswap/luastarter/legal-information-and-notices#privacy-policy"
+          target="_blank"
+        >
           Privacy policy
         </StyledLink>
       </Text>
