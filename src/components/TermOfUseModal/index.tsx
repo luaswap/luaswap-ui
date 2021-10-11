@@ -161,7 +161,7 @@ const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
   return (
     <Modal title="Registration" hideCloseButton maxWidth="350px">
       <Text>
-        The first IDO platform to onboard dozens of emerging <br /> projects to LuaSwap’s multi-chain ecosystem.
+      Enter your email address to be automatically signed up for all the <br/> upcoming IDO pools.
       </Text>
       <Text bold mt="10px" mb="2px">
         Email
