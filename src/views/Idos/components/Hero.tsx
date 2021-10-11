@@ -5,6 +5,7 @@ import { Box, Text, Flex } from 'luastarter-uikits'
 import Container from 'components/layout/Container'
 import useToast from 'hooks/useToast'
 import { API_IDO_URL } from 'config'
+import { EMAIL_REGEX } from 'config/constants/idos'
 
 const StyledHero = styled.div`
   padding-bottom: 15px;
@@ -109,9 +110,6 @@ const Loader = () => {
   )
 }
 
-const emailRegex =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
 const Hero = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -130,7 +128,7 @@ const Hero = () => {
         return
       }
 
-      if (!emailRegex.test(address)) {
+      if (!EMAIL_REGEX.test(address)) {
         setError('Invalid email address')
         return
       }

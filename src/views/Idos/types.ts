@@ -12,6 +12,11 @@ export interface TokenInfo {
   symbol: string
   decimals: number
 }
+
+export interface TOUResponse {
+  touApproved: boolean
+  user: string
+}
 export interface IdoDetailInfo {
   tier: number
   addressIdoContract: string

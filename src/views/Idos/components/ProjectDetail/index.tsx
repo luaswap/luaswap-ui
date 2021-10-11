@@ -149,7 +149,6 @@ const ProjectDetail = () => {
     if (secondsUntilSnapshot > 0) {
       return userTierAfterSnapshot
     }
-
     return userTier
   }, [secondsUntilSnapshot, userTier, userTierAfterSnapshot])
 

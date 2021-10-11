@@ -3,7 +3,7 @@ import { PageMeta } from './types'
 
 export const DEFAULT_META: PageMeta = {
   title: 'LuaSwap',
-  description: 'Luawswap interface',
+  description: 'LuawSwap Interface',
 }
 
 export const getCustomMeta = (path: string[], t: ContextApi['t']): PageMeta => {
