@@ -17,7 +17,14 @@ export const calculateCommittedAmountPercentage = (
   totalAmountPay: string | number,
 ): number => {
   if (totalCommittedAmount && totalAmountPay) {
-    return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
+    const result = new BigNumber(totalCommittedAmount)
+      .dividedBy(new BigNumber(totalAmountPay))
+      .multipliedBy(100)
+      .toNumber()
+
+    if (result) {
+      return result
+    }
   }
 
   return 0
@@ -28,7 +35,11 @@ export const calculateSwappedAmountPercentage = (
   totalAmountIDO: string | number,
 ): number => {
   if (swappedAmountPay && totalAmountIDO) {
-    return new BigNumber(swappedAmountPay).dividedBy(new BigNumber(totalAmountIDO)).multipliedBy(100).toNumber()
+    const result = new BigNumber(swappedAmountPay).dividedBy(new BigNumber(totalAmountIDO)).multipliedBy(100).toNumber()
+
+    if (result) {
+      return result
+    }
   }
 
   return 0
