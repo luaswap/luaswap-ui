@@ -110,7 +110,7 @@ const TIER_INFO = {
     CTA2: (tomo) => (tomo ? `${tomo} TOMO to reach tier 2` : `TOMO to fly to the Moon`),
   },
   '3': {
-    name: 'MARS',
+    name: 'Mars',
     description: 'Tier requirement: 100,000 LUA',
     icon: `${process.env.PUBLIC_URL}/images/mars.svg`,
     CTA: (lua) => (lua ? `${lua} LUA to reach tier 3` : `LUA to fly to the Moon`),
@@ -173,7 +173,7 @@ const TierCard: React.FC<TierProps> = ({
               </Text>
             </Flex>
             <Flex justifyContent="space-between">
-              <Text color="#8B8B8B">Total raised</Text>
+              <Text color="#8B8B8B">Total to raise</Text>
               <Text bold color="#C3C3C3">
                 {totalAmountPay} {payToken.symbol}
               </Text>
@@ -218,9 +218,6 @@ const TierCard: React.FC<TierProps> = ({
               <ExpandingWrapper expanded={showExpandableSection}>
                 <LinkExternal href="https://app.luaswap.org/#/swap">
                   {TIER_INFO[tier]?.CTA(nextTier[tier]?.addQuantityLua)}
-                </LinkExternal>
-                <LinkExternal href="https://app.luaswap.org/#/swap">
-                  {TIER_INFO[tier]?.CTA2(nextTier[tier]?.addQuantityTomo)}
                 </LinkExternal>
               </ExpandingWrapper>
             </>

@@ -276,7 +276,7 @@ const Deposit: React.FC<DepositProps> = ({
               </Flex>
               {minAmountPay !== 0 && (
                 <Flex justifyContent="space-between">
-                  <Text>Min to Commit</Text>
+                  <Text>Min to commit</Text>
                   <Text bold>
                     {minAmountPay} {payToken.symbol}
                   </Text>
@@ -284,7 +284,7 @@ const Deposit: React.FC<DepositProps> = ({
               )}
 
               <Flex justifyContent="space-between">
-                <Text>Max to Committed</Text>
+                <Text>Max to commit</Text>
                 <Text bold>
                   {maxAmountPay} {payToken.symbol}
                 </Text>

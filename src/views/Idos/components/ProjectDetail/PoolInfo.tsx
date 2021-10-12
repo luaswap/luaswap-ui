@@ -86,7 +86,7 @@ const PoolInfo: React.FC<PoolInfoProps> = ({ currentPoolData }) => {
         </Text>
       </Flex>
       <Flex flexDirection="column">
-        <Text color="#8B8B8B">Total raise</Text>
+        <Text color="#8B8B8B">Total to raise</Text>
         <Text color="#C3C3C3" bold>
           {totalAmountPay} {payToken?.symbol}
         </Text>
