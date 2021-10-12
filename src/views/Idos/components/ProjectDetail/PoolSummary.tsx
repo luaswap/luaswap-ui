@@ -81,7 +81,7 @@ const Title = styled(Text)`
 const CapColumnWrapper = styled(Flex)`
   width: 50%;
   ${({ theme }) => theme.mediaQueries.sm} {
-    width: 15%;
+    width: 20%;
   }
 `
 
