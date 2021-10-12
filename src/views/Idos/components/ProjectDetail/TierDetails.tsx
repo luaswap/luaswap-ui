@@ -237,7 +237,7 @@ const TierDetails: React.FC<{
   secondsUntilSnapshot: number
 }> = ({ currentPoolData, secondsUntilSnapshot, selectedUserTier }) => {
   const userNextTier = useSelector(selectUserNextTier)
-  const { index: tierData } = currentPoolData
+  const { index: tierData = {} } = currentPoolData
   const nextTier = userNextTier.reduce((s: { [key: number]: Tier }, e: Tier) => {
     const tmps = s
     tmps[e.tier] = e
