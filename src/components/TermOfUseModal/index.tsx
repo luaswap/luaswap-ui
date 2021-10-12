@@ -43,10 +43,10 @@ const LoaderIcon = styled.div`
     width: 24px;
     height: 24px;
     margin: 8px;
-    border: 2px solid #1a1a1a;
+    border: 3px solid white;
     border-radius: 50%;
     animation: ${roller} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #fabc46 transparent transparent transparent;
+    border-color: white transparent transparent transparent;
   }
 
   & > div:nth-child(1) {
@@ -161,7 +161,7 @@ const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
   return (
     <Modal title="Registration" hideCloseButton maxWidth="350px">
       <Text>
-      Enter your email address to be automatically signed up for all the <br/> upcoming IDO pools.
+        Enter your email address to be automatically signed up for all the <br /> upcoming IDO pools.
       </Text>
       <Text bold mt="10px" mb="2px">
         Email

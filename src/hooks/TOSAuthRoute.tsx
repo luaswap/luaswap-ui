@@ -22,6 +22,7 @@ const TOSAuthRoute = ({ component: Component, ...rest }) => {
           onDismiss()
         }
       } catch (error) {
+        onDismiss()
         console.log(error, 'Fail to fetch Term of use information')
       }
     }

@@ -81,16 +81,26 @@ const CardBodyWrapper = styled(CardBody)`
 `
 
 const TierCardContainer = styled(Card)`
-  width: 100%;
+  width: calc(25% - 20px);
   margin-bottom: 15px;
   background-color: #1a1a1a;
 
-  ${({ theme }) => theme.mediaQueries.md} {
-    width: calc(25% - 16px);
-    margin-bottom: 0;
-    &:not(:last-of-type) {
-      margin-right: 20px;
-    }
+  @media screen and (max-width: 1500px) {
+    width: calc(33.33% - 20px);
+    margin-right: 20px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
+`
+
+const TierCardWrapper = styled(Flex)`
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: 1500px) {
+    justify-content: center;
   }
 `
 
@@ -216,8 +226,9 @@ const TierCard: React.FC<TierProps> = ({
                 expanded={showExpandableSection}
               />
               <ExpandingWrapper expanded={showExpandableSection}>
-                <LinkExternal href="https://app.luaswap.org/#/swap">
-                  {TIER_INFO[tier]?.CTA(nextTier[tier]?.addQuantityLua)}
+                <LinkExternal href="https://app.luaswap.org/#/swap">Buy LUA or TOMO</LinkExternal>
+                <LinkExternal href="https://app.luaswap.org/#/add/0x7262fa193e9590B2E075c3C16170f3f2f32F5C74">
+                  Then stake {nextTier[tier]?.addQuantityLua} LUA
                 </LinkExternal>
               </ExpandingWrapper>
             </>
@@ -263,7 +274,7 @@ const TierDetails: React.FC<{
   return (
     <>
       <TierInformationWrapper>
-        <Flex flexWrap="wrap" justifyContent="space-between">
+        <TierCardWrapper>
           {tiersss.map((e: IdoDetailInfo, i: number) => {
             return (
               <TierCard
@@ -275,7 +286,7 @@ const TierDetails: React.FC<{
               />
             )
           })}
-        </Flex>
+        </TierCardWrapper>
       </TierInformationWrapper>
       <Box mb="24px">
         <SecondaryMessage>

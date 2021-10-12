@@ -39,7 +39,7 @@ const ExpandableButton: React.FC<ExpandableButton> = ({ onClick, expanded, disab
           opacity: disabled ? 0.5 : 1,
         }}
       >
-        Buy more
+        Higher Tier
       </Text>
       {expanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
     </Wrapper>
