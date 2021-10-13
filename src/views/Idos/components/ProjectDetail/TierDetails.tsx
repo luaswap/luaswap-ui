@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import BigNumber from 'bignumber.js'
@@ -143,6 +144,18 @@ const TierCard: React.FC<TierProps> = ({
   disabledBuyMore,
 }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
+  const { chainId } = useWeb3React()
+  const addLiquidityUrl = useMemo(() => {
+    if (chainId === 88) {
+      return 'https://app.luaswap.org/#/add/0x7262fa193e9590B2E075c3C16170f3f2f32F5C74/TOMO'
+    }
+
+    if (chainId === 1) {
+      return 'https://app.luaswap.org/#/add/0x05D3606d5c81EB9b7B18530995eC9B29da05FaBa/0xB1f66997A5760428D3a87D68b90BfE0aE64121cC'
+    }
+
+    return 'https://app.luaswap.org/#/pool'
+  }, [chainId])
   const calculatedPrice = useMemo(() => {
     if (totalAmountIDO && totalAmountPay) {
       return new BigNumber(totalAmountIDO).multipliedBy(10000).div(new BigNumber(totalAmountPay)).div(10000).toString()
@@ -227,9 +240,10 @@ const TierCard: React.FC<TierProps> = ({
               />
               <ExpandingWrapper expanded={showExpandableSection}>
                 <LinkExternal href="https://app.luaswap.org/#/swap">Buy LUA or TOMO</LinkExternal>
-                <LinkExternal href="https://app.luaswap.org/#/add/0x7262fa193e9590B2E075c3C16170f3f2f32F5C74">
+                <LinkExternal href="https://app.luaswap.org/#/lua-safe">
                   Then stake {nextTier[tier]?.addQuantityLua} LUA
                 </LinkExternal>
+                <LinkExternal href={addLiquidityUrl}>Or Add Liquidity</LinkExternal>
               </ExpandingWrapper>
             </>
           )}
