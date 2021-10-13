@@ -1,9 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 export const tierMap = {
   0: '',
-  1: 'EARTH',
-  2: 'MOON',
-  3: 'GALAXY',
+  1: 'Earth',
+  2: 'Moon',
+  3: 'Mars',
+  4: 'Galaxy',
 }
 
 export const supportIdoNetwork = {

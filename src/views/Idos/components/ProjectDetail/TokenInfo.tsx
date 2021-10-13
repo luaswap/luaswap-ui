@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { useWeb3React } from '@web3-react/core'
 import { Flex, Text, Box, AddIcon, IconButton, CopyIcon, useTooltip } from 'luastarter-uikits'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
@@ -49,35 +50,49 @@ interface TokenInfoProps {
 }
 
 const TokenInfo: React.FC<TokenInfoProps> = ({ currentPoolData }) => {
+  const { chainId } = useWeb3React()
+  const { index } = currentPoolData
   const { name, idoToken = { address: '', symbol: '', decimals: '' }, img } = useTotalDataFromAllPools(currentPoolData)
   const { address, symbol, decimals } = idoToken
-  const { toastSuccess } = useToast()
+  const { toastSuccess, toastError } = useToast()
+  const idoChainId = useMemo(() => {
+    if (index) {
+      return Object.keys(index)
+    }
+
+    return []
+  }, [index])
+  // eslint-disable-next-line consistent-return
   const onAddToken = useCallback(async () => {
-    const provider = (window as WindowChain).ethereum
-    if (provider) {
-      try {
-        await provider.request({
-          method: 'wallet_watchAsset',
-          params: {
-            type: 'ERC20',
-            options: {
-              address,
-              symbol,
-              decimals,
-              image: img,
+    if (idoChainId.filter((cid) => Number(cid) === chainId).length !== 0) {
+      const provider = (window as WindowChain).ethereum
+      if (provider) {
+        try {
+          await provider.request({
+            method: 'wallet_watchAsset',
+            params: {
+              type: 'ERC20',
+              options: {
+                address,
+                symbol,
+                decimals,
+                image: img,
+              },
             },
-          },
-        })
-        return true
-      } catch (error) {
-        console.error(error)
+          })
+          return true
+        } catch (error) {
+          console.error(error)
+          return false
+        }
+      } else {
+        console.error(`Can't add token`)
         return false
       }
     } else {
-      console.error(`Can't add token`)
-      return false
+      toastError('Wrong network')
     }
-  }, [address, symbol, decimals, img])
+  }, [address, symbol, decimals, img, idoChainId, chainId, toastError])
 
   return (
     <TokenInfoWrapper>
