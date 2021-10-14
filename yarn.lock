@@ -9563,10 +9563,10 @@ ltgt@~2.2.0:
   resolved "https://registry.yarnpkg.com/ltgt/-/ltgt-2.2.1.tgz#f35ca91c493f7b73da0e07495304f17b31f87ee5"
   integrity sha1-81ypHEk/e3PaDgdJUwTxezH4fuU=
 
-luastarter-uikits@^0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/luastarter-uikits/-/luastarter-uikits-0.1.9.tgz#0ce642e22b41ab41392207e515938f71368dc5c7"
-  integrity sha512-NC7X4lMYVMaElh4B/uGPRW+HyBJUjAaZbMBTJP7TMjnakQnBpBXv43T958Fiq6+IJdVjMUafSMy0hKqTSLWN8A==
+luastarter-uikits@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/luastarter-uikits/-/luastarter-uikits-0.1.10.tgz#585fd10ef9e958e658bfb2b7a7ffc843bd1c550d"
+  integrity sha512-GYKA3lpT29/UGbwtJHg5XtKIcOnE5U3SKEZ8iGJHTuSdcesYet60Aeigqtq5MmemXBeio/IxJPZZsK1DXUTuLw==
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/lodash" "^4.14.168"
