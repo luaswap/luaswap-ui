@@ -114,7 +114,7 @@ const ErrorMessage = styled(Text)``
 const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [checked, setChecked] = useState(false)
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { toastSuccess, toastError } = useToast()
   const web3 = useWeb3()
   const [error, setError] = useState(null)
@@ -144,7 +144,13 @@ const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
         return
       }
       setIsLoading(true)
-      const signedData = await web3.eth.personal.sign(emailAddress, account, null)
+      let signedData = null
+      if (chainId === 56) {
+        const message = `0x${Buffer.from(emailAddress).toString('hex')}`
+        signedData = await web3.eth.sign(message, account)
+      } else {
+        signedData = await web3.eth.personal.sign(emailAddress, account, null)
+      }
       await axios.post(`${API_IDO_URL}/users/tou/`, {
         email: emailAddress,
         address: account,
@@ -154,6 +160,8 @@ const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
       setEmailAddress('')
       onDismiss()
     } catch (e) {
+      console.log(e, 'error ?')
+      toastError('Fail to submit')
       setIsLoading(false)
     }
   }
