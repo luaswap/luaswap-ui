@@ -18,7 +18,7 @@ const DateBlock = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 150px;
+  height: calc(50% - 7px);
   width: 100%;
   justify-content: center;
   text-align: center;
@@ -30,7 +30,7 @@ const DateBlock = styled(Box)`
 `
 const TimerBlock = styled(Box)`
   width: 100%;
-  height: 150px;
+  height: calc(50% - 7px);
   display: flex;
   flex-direction: column;
   align-items: center;

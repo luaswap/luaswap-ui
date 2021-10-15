@@ -38,12 +38,13 @@ const useDataFromIdoContract = (
   contractAddress: string,
   idoIndex: number,
   idoIndexes: Record<string, IdoDetailInfo[]>,
-): [idoData: IdoDetail, commitedAmount: string, totalAmountUserSwapped: string] => {
+): [idoData: IdoDetail, commitedAmount: string, totalAmountUserSwapped: string, isLoading: boolean] => {
   const { account, chainId } = useWeb3React()
   // Current Lua Ido contract based on log in chainid
   const luaIdoContract = useLuaIdoContract(contractAddress)
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
   const [totalUserCommitted, setTotalUserCommitted] = useState<string>('0')
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [totalAmountUserSwapped, setTotalAmountUserSwapped] = useState<string>('0')
   const { currentBlock } = useBlock()
   useEffect(() => {
@@ -51,6 +52,7 @@ const useDataFromIdoContract = (
       const idosOfEachChainId = {}
       const idoIndexMap = {}
       try {
+        setIsLoading(true)
         /**
          * We loop through every index and get all idos info in each index
          * @returns {
@@ -107,6 +109,7 @@ const useDataFromIdoContract = (
         const swappedIdoAmount = await luaIdoContract.methods.userSwappedAmountIDO(account, idoIndex).call()
         setTotalUserCommitted(getBalanceAmount(commitedAmount).toString())
         setTotalAmountUserSwapped(getBalanceAmount(swappedIdoAmount).toString())
+        setIsLoading(false)
       } catch (error) {
         console.log(error, 'error to fetch data from contract')
       }
@@ -116,7 +119,7 @@ const useDataFromIdoContract = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentBlock, chainId])
 
-  return [idoDetail, totalUserCommitted, totalAmountUserSwapped]
+  return [idoDetail, totalUserCommitted, totalAmountUserSwapped, isLoading]
 }
 
 export default useDataFromIdoContract

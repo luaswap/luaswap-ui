@@ -14,6 +14,7 @@ interface ModalInputProps {
   addLiquidityUrl?: string
   inputTitle?: string
   secondaryTitle?: string
+  isLoadingDataFromContract?: boolean
   showWarning?: boolean
 }
 
@@ -66,6 +67,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   onChange,
   onSelectMax,
   value,
+  isLoadingDataFromContract = false,
   addLiquidityUrl,
   inputTitle,
   secondaryTitle = 'Balance',
@@ -90,7 +92,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
       <StyledTokenInput isWarning={isBalanceZero && showWarning}>
         <Flex justifyContent="space-between" pl="16px">
           <Text fontSize="14px">{inputTitle}</Text>
-          <Text fontSize="14px">{`${secondaryTitle}: ${displayBalance(max)}`}</Text>
+          <Text fontSize="14px">{`${secondaryTitle}: ${isLoadingDataFromContract ? '~' : displayBalance(max)}`}</Text>
         </Flex>
         <Flex alignItems="flex-end" justifyContent="space-between">
           <Box>
@@ -106,7 +108,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
             />
           </Box>
           <Flex alignItems="center">
-            <Button scale="sm" onClick={onSelectMax} mr="8px">
+            <Button scale="sm" onClick={onSelectMax} mr="8px" disabled={isLoadingDataFromContract}>
               {t('Max')}
             </Button>
             <Text fontSize="16px">{symbol}</Text>

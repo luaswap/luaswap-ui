@@ -67,6 +67,7 @@ interface DepositProps {
   userTotalCommitted: string
   totalAmountUserSwapped: string
   isAvailalbeOnCurrentNetwork: boolean
+  isLoadingDataFromContract: boolean
 }
 
 const Deposit: React.FC<DepositProps> = ({
@@ -76,6 +77,7 @@ const Deposit: React.FC<DepositProps> = ({
   isAvailalbeOnCurrentNetwork,
   totalAmountUserSwapped,
   selectedUserTier,
+  isLoadingDataFromContract,
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
@@ -278,7 +280,7 @@ const Deposit: React.FC<DepositProps> = ({
                 <Flex justifyContent="space-between">
                   <Text>Min guaranteed</Text>
                   <Text bold>
-                  {minimumClaimableAmount} {idoToken.symbol} = {minAmountPay} {payToken.symbol}
+                    {minimumClaimableAmount} {idoToken.symbol} = {minAmountPay} {payToken.symbol}
                   </Text>
                 </Flex>
               )}
@@ -286,7 +288,7 @@ const Deposit: React.FC<DepositProps> = ({
               <Flex justifyContent="space-between">
                 <Text>Max to commit</Text>
                 <Text bold>
-                  {maxAmountPay} {payToken.symbol}
+                  {isLoadingDataFromContract ? '~' : maxAmountPay} {payToken.symbol}
                 </Text>
               </Flex>
               <Flex justifyContent="space-between">
@@ -325,6 +327,7 @@ const Deposit: React.FC<DepositProps> = ({
                       value={value}
                       onSelectMax={handleSelectMax}
                       onChange={handleChange}
+                      isLoadingDataFromContract={isLoadingDataFromContract}
                       max={maxAmountAllowedLeft}
                       min={new BigNumber(minAmountPay).toString()}
                       symbol={payToken.symbol}

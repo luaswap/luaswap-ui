@@ -47,38 +47,49 @@ const StyledFlex = styled(Flex)`
 `
 
 const ProjectDetailBox = styled(Box)<PropjectDetailProps>`
-  width: 100%;
-  margin-right: 0px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin-right: 24px;
+  width: calc(50% - 48px);
+
+  @media screen and (max-width: 1366px) {
+    width: calc(60% - 48px);
   }
 
-  ${({ theme }) => theme.mediaQueries.xl} {
-    width: ${(props) => (props.isShowPoolData ? 'calc(70% - 48px)' : '100%')};
-  }
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    margin-bottom: 24px;
+  } ;
 `
 
 const PoolInfoBox = styled(Box)`
-  width: 100%;
-  margin-right: 0px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    width: calc(50% - 12px);
-    margin-right: 24px;
+  width: 25%;
+
+  @media screen and (max-width: 1366px) {
+    width: 20%;
   }
-  ${({ theme }) => theme.mediaQueries.xl} {
-    width: 15%;
-    margin-right: 24px;
+
+  @media screen and (max-width: 1024px) {
+    width: calc(50% - 24px);
   }
+
+  @media screen and (max-width: 576px) {
+    width: 100%;
+    margin-bottom: 24px;
+  } ;
 `
 
 const TokenInfoBox = styled(Box)`
-  width: 100%;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    width: calc(50% - 12px);
+  width: 25%;
+
+  @media screen and (max-width: 1366px) {
+    width: 20%;
   }
-  ${({ theme }) => theme.mediaQueries.xl} {
-    width: 15%;
+
+  @media screen and (max-width: 1024px) {
+    width: calc(50% - 24px);
   }
+
+  @media screen and (max-width: 576px) {
+    width: 100%;
+  } ;
 `
 
 const StyledHeading = styled(Heading)`
@@ -157,7 +168,7 @@ const ProjectDetail = () => {
     return getIdoDataBasedOnChainIdAndTier(index, chainId, selectedUserTier)
   }, [currentPoolData, chainId, selectedUserTier])
 
-  const [_, totalUserCommittedFromContract, totalAmountUserSwapped] = useDataFromIdoContract(
+  const [_, totalUserCommittedFromContract, totalAmountUserSwapped, isLoadingDataFromContract] = useDataFromIdoContract(
     tierDataOfUser.addressIdoContract,
     tierDataOfUser.index,
     currentPoolData.index,
@@ -202,6 +213,7 @@ const ProjectDetail = () => {
               />
               {isShowPoolData && (
                 <Deposit
+                  isLoadingDataFromContract={isLoadingDataFromContract}
                   currentPoolData={currentPoolData}
                   tierDataOfUser={tierDataOfUser}
                   totalAmountUserSwapped={totalAmountUserSwapped}
