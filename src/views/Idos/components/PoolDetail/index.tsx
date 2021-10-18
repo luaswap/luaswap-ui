@@ -21,6 +21,7 @@ import {
 import useDeepMemo from 'hooks/useDeepMemo'
 import getLink from 'views/Idos/utils/getMediaUrl'
 import { formatPoolDetail } from 'utils/formatPoolData'
+import { formatNumberWithComma } from 'utils/formatBalance'
 import { Pool, FormatPool } from '../../types'
 import usePoolStatus from '../../hooks/usePoolStatus'
 
@@ -157,7 +158,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
                   Cap:{' '}
                 </Text>
                 <Text color="primary" fontWeight="600">
-                  {totalAmountIDO}
+                  {formatNumberWithComma(totalAmountIDO)}
                 </Text>
               </Flex>
             </Flex>

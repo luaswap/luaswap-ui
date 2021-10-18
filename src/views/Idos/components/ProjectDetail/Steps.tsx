@@ -137,6 +137,9 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
             Connect to your wallet
           </Text>
           <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
+          <Text color="red" fontSize="11px" fontStyle="italic">
+            Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration
+          </Text>
         </Box>
         <Box width="25%" mr="15px">
           <Text bold color="#F6F6F6">
@@ -180,6 +183,9 @@ const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTi
             Connect to your wallet
           </Text>
           <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
+          <Text color="red" fontSize="11px" fontStyle="italic">
+            Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration
+          </Text>
         </Box>
       </MobileStepWrapper>
       <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">

@@ -59,4 +59,7 @@ export interface Pool {
   projectDetail: string
   links: ExternalLink[]
   socials: ExternalLink[]
+  untilClaim: number
+  untilClose: number
+  untilOpen: number
 }

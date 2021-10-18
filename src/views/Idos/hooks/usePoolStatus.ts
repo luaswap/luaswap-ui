@@ -6,15 +6,14 @@ import useSecondsUntilCurrent from './useSecondsUntilCurrent'
  * Get pool's current status based on timestamp
  */
 const usePoolStatus = ({
-  openAt,
-  closeAt,
-  claimAt,
-}: IdoDetailInfo | Pool): [s: PoolStatus, o: number, c: number, d: number] => {
+  untilClaim,
+  untilClose,
+  untilOpen,
+}: Pool): [s: PoolStatus, o: number, c: number, d: number] => {
   const [status, setStatus] = useState(null)
-  const openAtSeconds = useSecondsUntilCurrent(openAt)
-  const closedAtSeconds = useSecondsUntilCurrent(closeAt)
-  const claimAtSeconds = useSecondsUntilCurrent(claimAt)
-
+  const openAtSeconds = useSecondsUntilCurrent(untilOpen)
+  const closedAtSeconds = useSecondsUntilCurrent(untilClose)
+  const claimAtSeconds = useSecondsUntilCurrent(untilClaim)
   useEffect(() => {
     /* If open time > 0 and closed time > 0 -> the Pool is not open yet */
     if (openAtSeconds > 0 && closedAtSeconds > 0) {
