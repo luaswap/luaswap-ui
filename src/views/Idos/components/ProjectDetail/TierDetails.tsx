@@ -211,7 +211,7 @@ const TierCard: React.FC<TierProps> = ({
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total committed&nbsp;</Text>
               <Text bold>
-                {totalCommittedAmount} {payToken.symbol}
+                {parseFloat(totalCommittedAmount).toFixed(2)} {payToken.symbol}
               </Text>
             </Flex>
           </Flex>

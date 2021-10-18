@@ -240,7 +240,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                     <ProcessAmountWrapper justifyContent="flex-start">
                       <Text>Commit Process</Text>
                       <Text color="primary" bold fontSize="18px">
-                        &nbsp;{totalCommittedAmount}/{totalAmountPay} {payToken?.symbol}
+                        &nbsp;{parseFloat(totalCommittedAmount).toFixed(2)}/{totalAmountPay} {payToken?.symbol}
                       </Text>
                     </ProcessAmountWrapper>
                   ) : (
