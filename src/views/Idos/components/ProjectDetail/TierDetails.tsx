@@ -199,7 +199,7 @@ const TierCard: React.FC<TierProps> = ({
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total to raise</Text>
               <Text bold color="#C3C3C3">
-                {totalAmountPay} {payToken.symbol}
+                {formatNumberWithComma(totalAmountPay, true)} {payToken.symbol}
               </Text>
             </Flex>
             <Flex justifyContent="space-between">
@@ -211,7 +211,7 @@ const TierCard: React.FC<TierProps> = ({
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total committed&nbsp;</Text>
               <Text bold>
-                {parseFloat(totalCommittedAmount).toFixed(2)} {payToken.symbol}
+                {formatNumberWithComma(totalCommittedAmount, true)} {payToken.symbol}
               </Text>
             </Flex>
           </Flex>

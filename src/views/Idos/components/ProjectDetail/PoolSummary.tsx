@@ -17,6 +17,7 @@ import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import getLink from 'views/Idos/utils/getMediaUrl'
+import { formatNumberWithComma } from 'utils/formatBalance'
 import { IdoDetail } from 'state/types'
 import {
   calculateCommittedAmountPercentage,
@@ -120,6 +121,7 @@ const ProcessColumnWrapper = styled(Flex)`
 
 const ProcessAmountWrapper = styled(Flex)`
   flex-direction: column;
+  align-items: center;
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
   }
@@ -230,7 +232,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <CapColumnWrapper alignItems="flex-start" flexDirection="column">
               <Text>Cap</Text>
               <Text color="primary" bold fontSize="18px">
-                {totalAmountIDO} {idoToken?.symbol}
+                {formatNumberWithComma(totalAmountIDO)} {idoToken?.symbol}
               </Text>
             </CapColumnWrapper>
             <ProcessColumnWrapper flexDirection="column">
@@ -240,14 +242,16 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                     <ProcessAmountWrapper justifyContent="flex-start">
                       <Text>Commit Process</Text>
                       <Text color="primary" bold fontSize="18px">
-                        &nbsp;{parseFloat(totalCommittedAmount).toFixed(2)}/{totalAmountPay} {payToken?.symbol}
+                        &nbsp;{formatNumberWithComma(totalCommittedAmount, true)}/
+                        {formatNumberWithComma(totalAmountPay)} {payToken?.symbol}
                       </Text>
                     </ProcessAmountWrapper>
                   ) : (
                     <ProcessAmountWrapper justifyContent="flex-start">
                       <Text>Swap Process</Text>
                       <Text color="primary" bold fontSize="18px">
-                        &nbsp;{swappedAmountIDO}/{totalAmountIDO} {idoToken?.symbol}
+                        &nbsp;{formatNumberWithComma(swappedAmountIDO, true)}/{formatNumberWithComma(totalAmountIDO)}{' '}
+                        {idoToken?.symbol}
                       </Text>
                     </ProcessAmountWrapper>
                   )}

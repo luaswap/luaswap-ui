@@ -52,7 +52,6 @@ const useDataFromIdoContract = (
       const idosOfEachChainId = {}
       const idoIndexMap = {}
       try {
-        setIsLoading(true)
         /**
          * We loop through every index and get all idos info in each index
          * @returns {

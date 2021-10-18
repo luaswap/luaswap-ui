@@ -31,10 +31,14 @@ export const formatNumber = (number: number, minPrecision = 2, maxPrecision = 2)
   return number.toLocaleString(undefined, options)
 }
 
-export const formatNumberWithComma = (num: number | string): string | null => {
+export const formatNumberWithComma = (num: string, precision = false): string | null => {
   try {
     if (num) {
-      const parts = num.toString().split('.')
+      let newNum = num
+      if (precision) {
+        newNum = parseFloat(num).toFixed(2)
+      }
+      const parts = newNum.toString().split('.')
       parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       return parts.join('.')
     }

@@ -6,6 +6,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import useToast from 'hooks/useToast'
 import { Pool } from 'views/Idos/types'
 import { getUtcDateString } from 'utils/formatTime'
+import { formatNumberWithComma } from 'utils/formatBalance'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
 const ProjectInfoWrapper = styled(Box)`
@@ -88,7 +89,7 @@ const PoolInfo: React.FC<PoolInfoProps> = ({ currentPoolData }) => {
       <Flex flexDirection="column">
         <Text color="#8B8B8B">Total to raise</Text>
         <Text color="#C3C3C3" bold>
-          {totalAmountPay} {payToken?.symbol}
+          {formatNumberWithComma(totalAmountPay)} {payToken?.symbol}
         </Text>
       </Flex>
       <Flex flexDirection="column">
