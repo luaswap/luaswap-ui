@@ -30,3 +30,18 @@ export const formatNumber = (number: number, minPrecision = 2, maxPrecision = 2)
   }
   return number.toLocaleString(undefined, options)
 }
+
+export const formatNumberWithComma = (num: number | string): string | null => {
+  try {
+    if (num) {
+      const parts = num.toString().split('.')
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      return parts.join('.')
+    }
+
+    return null
+  } catch (error) {
+    console.log(error, 'fail to format number')
+    return null
+  }
+}

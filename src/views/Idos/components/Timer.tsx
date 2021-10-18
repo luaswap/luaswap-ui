@@ -52,19 +52,19 @@ const Timer: React.FC<Props> = ({ suffix, timeUntil }) => {
           <Text color="#C3C3C3" bold>
             {hours}
           </Text>
-          <Text color="#8B8B8B">HOUR</Text>
+          <Text color="#8B8B8B">HOURS</Text>
         </TimeBlock>
         <TimeBlock>
           <Text color="#C3C3C3" bold>
             {minutes}
           </Text>
-          <Text color="#8B8B8B">MIN</Text>
+          <Text color="#8B8B8B">MINS</Text>
         </TimeBlock>
         <TimeBlock>
           <Text color="#C3C3C3" bold>
             {seconds}
           </Text>
-          <Text color="#8B8B8B">SEC</Text>
+          <Text color="#8B8B8B">SECS</Text>
         </TimeBlock>
       </Flex>
     </Box>

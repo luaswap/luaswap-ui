@@ -38,7 +38,7 @@ const TimerBlock = styled(Box)`
   background-color: #282828;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
-  padding: 10px 30px;
+  padding: 10px 15px;
   @media screen and (max-width: 400px) {
     height: 125px;
   } ;
@@ -63,17 +63,17 @@ interface CountDownProps {
 
 const TimerOpen = ({ openAtSeconds }) => {
   const timeUntilOpen = getTimePeriods(openAtSeconds)
-  return <Timer suffix="Open in" timeUntil={timeUntilOpen} />
+  return <Timer suffix="Open on" timeUntil={timeUntilOpen} />
 }
 
 const TimerClose = ({ closedAtSeconds }) => {
   const timeUntilClosed = getTimePeriods(closedAtSeconds)
-  return <Timer suffix="Finish in" timeUntil={timeUntilClosed} />
+  return <Timer suffix="Finish at" timeUntil={timeUntilClosed} />
 }
 
 const TimerClaim = ({ claimAtSeconds }) => {
   const timeUntilClaim = getTimePeriods(claimAtSeconds)
-  return <Timer suffix="Claim in" timeUntil={timeUntilClaim} />
+  return <Timer suffix="Claim at" timeUntil={timeUntilClaim} />
 }
 
 const TimerCountDown = ({ poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds }) => {
@@ -113,14 +113,14 @@ const CountDown: React.FC<CountDownProps> = ({
   const { title, date } = useMemo(() => {
     if (poolStatus === 'not open') {
       return {
-        title: 'Open in',
+        title: 'Open on',
         date: getUtcDateString(openAt),
       }
     }
 
     if (poolStatus === 'open') {
       return {
-        title: 'Closed at',
+        title: 'Close on',
         date: getUtcDateString(closeAt),
       }
     }

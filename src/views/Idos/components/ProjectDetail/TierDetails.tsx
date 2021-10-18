@@ -18,6 +18,7 @@ import {
   TertiaryMessage,
 } from 'luastarter-uikits'
 import { formatPoolTotalTierByChainID } from 'utils/formatPoolData'
+import { formatNumberWithComma } from 'utils/formatBalance'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { TIER_HOVER_CONTENT } from 'config/constants/idos'
 import { Tier } from 'state/types'
@@ -87,7 +88,7 @@ const TierCardContainer = styled(Card)`
   background-color: #1a1a1a;
 
   @media screen and (max-width: 1500px) {
-    width: calc(33.33% - 20px);
+    width: calc(50% - 20px);
     margin-right: 20px;
   }
 
@@ -192,7 +193,7 @@ const TierCard: React.FC<TierProps> = ({
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total {idoToken.symbol}&nbsp;</Text>
               <Text bold color="#C3C3C3">
-                {totalAmountIDO} {idoToken.symbol}
+                {formatNumberWithComma(totalAmountIDO)} {idoToken.symbol}
               </Text>
             </Flex>
             <Flex justifyContent="space-between">

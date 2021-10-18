@@ -200,7 +200,9 @@ const ProjectDetail = () => {
             {' '}
             {!isAvailalbeOnCurrentNetwork && account && isShowPoolData && (
               <Mesage variant="warning" mb="16px">
-                <Text>IDO is available on {idoSupportedNetwork}, please switch to these networks to join the IDO</Text>
+                <Text>
+                  The IDO is on {idoSupportedNetwork}, please switch to {idoSupportedNetwork} to join
+                </Text>
               </Mesage>
             )}
             <StyledFlex mb="40px" flexWrap="wrap">

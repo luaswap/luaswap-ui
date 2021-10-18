@@ -10,6 +10,7 @@ export const tierMap = {
 export const supportIdoNetwork = {
   89: 'Tomo Testnet',
   88: 'Tomo Mainnet',
+  56: 'Binance Smart Chain Network',
   1: 'Ethereum',
 }
 
