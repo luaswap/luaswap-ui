@@ -142,7 +142,7 @@ const ProjectDetail = () => {
       }
     }
     // Only call this api when current date time > snapshot time
-    if (secondsUntilSnapshot <= 0 && account) {
+    if (secondsUntilSnapshot && secondsUntilSnapshot <= 0 && account) {
       fetchTierAfterSnapshotTime()
     }
   }, [secondsUntilSnapshot, account, id])
