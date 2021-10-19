@@ -25,6 +25,7 @@ const defaultCurrentPool = {
   untilClaim: 0,
   untilClose: 0,
   untilOpen: 0,
+  untilSnapshootAt: 0,
 }
 
 const initialState: IdoState = {

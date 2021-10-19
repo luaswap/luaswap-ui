@@ -112,7 +112,7 @@ const ProjectDetail = () => {
   const currentPoolData = useSelector(selectCurrentPool)
   const userTier = useSelector(selectUserTier)
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
-  const secondsUntilSnapshot = useSecondsUntilCurrent(currentPoolData.snapshootAt)
+  const secondsUntilSnapshot = useSecondsUntilCurrent(currentPoolData.untilSnapshootAt)
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
   const { isPresent, status } = currentPoolData
   const isShowPoolData = useMemo(() => {

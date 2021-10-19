@@ -62,4 +62,5 @@ export interface Pool {
   untilClaim: number
   untilClose: number
   untilOpen: number
+  untilSnapshootAt: number
 }
