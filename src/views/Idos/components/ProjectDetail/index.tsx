@@ -47,10 +47,10 @@ const StyledFlex = styled(Flex)`
 `
 
 const ProjectDetailBox = styled(Box)<PropjectDetailProps>`
-  width: calc(50% - 48px);
-
+  width: ${(props) => (props.isShowPoolData ? 'calc(50% - 48px)' : '100%')};
+  margin-right: ${(props) => (props.isShowPoolData ? '24px' : '0px')};
   @media screen and (max-width: 1366px) {
-    width: calc(60% - 48px);
+    width: ${(props) => (props.isShowPoolData ? 'calc(60% - 48px)' : '100%')};
   }
 
   @media screen and (max-width: 1024px) {
@@ -131,7 +131,6 @@ const ProjectDetail = () => {
       )
     }
   }, [id, dispatch, blockNumber.currentBlock])
-
   useEffect(() => {
     const fetchTierAfterSnapshotTime = async () => {
       try {
@@ -239,7 +238,7 @@ const ProjectDetail = () => {
               </>
             )}
             <StyledFlex flexWrap="wrap">
-              <ProjectDetailBox mr="24px" isShowPoolData={isShowPoolData}>
+              <ProjectDetailBox isShowPoolData={isShowPoolData}>
                 <StyledHeading as="h2" scale="lg" color="#D8D8D8" mb="14px">
                   Project Detail
                 </StyledHeading>

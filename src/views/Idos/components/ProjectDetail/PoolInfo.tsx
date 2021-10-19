@@ -13,7 +13,7 @@ const ProjectInfoWrapper = styled(Box)`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 24px;
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
@@ -47,19 +47,19 @@ const PoolInfo: React.FC<PoolInfoProps> = ({ currentPoolData }) => {
 
   return (
     <ProjectInfoWrapper>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" mb="10px">
         <Text color="#8B8B8B">Pool opens</Text>
         <Text color="#C3C3C3" bold>
           {getUtcDateString(openAt)}
         </Text>
       </Flex>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" mb="10px">
         <Text color="#8B8B8B">Pool closes</Text>
         <Text color="#C3C3C3" bold>
           {getUtcDateString(closeAt)}
         </Text>
       </Flex>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" mb="10px">
         <Text color="#8B8B8B">
           Pool Address{' '}
           <span>
@@ -86,7 +86,7 @@ const PoolInfo: React.FC<PoolInfoProps> = ({ currentPoolData }) => {
           {addressIdoContract}
         </Text>
       </Flex>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" mb="10px">
         <Text color="#8B8B8B">Total to raise</Text>
         <Text color="#C3C3C3" bold>
           {formatNumberWithComma(totalAmountPay)} {payToken?.symbol}

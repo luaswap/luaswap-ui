@@ -11,7 +11,7 @@ const TokenInfoWrapper = styled(Box)`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
   border-bottom-left-radius: 30px;
@@ -32,7 +32,7 @@ const StyledButton = styled.button`
   justify-content: center;
   align-items: center;
   color: #fff;
-  padding: 10px 14px;
+  padding: 10px 0px;
   color: #353535;
   font-weight: 700;
   box-shadow: 1px 0 2px #ff1baf5d;
@@ -96,19 +96,19 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ currentPoolData }) => {
 
   return (
     <TokenInfoWrapper>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" mb="10px">
         <Text color="#8B8B8B">Name</Text>
         <Text color="#C3C3C3" bold>
           {name}
         </Text>
       </Flex>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" mb="10px">
         <Text color="#8B8B8B">Token symbol</Text>
         <Text color="#C3C3C3" bold>
           {idoToken?.symbol}
         </Text>
       </Flex>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" mb="10px">
         <Text color="#8B8B8B">
           Token Address{' '}
           <span>

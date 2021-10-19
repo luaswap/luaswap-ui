@@ -22,10 +22,10 @@ const defaultCurrentPool = {
   socials: [],
   isPresent: false,
   snapshootAt: null,
-  untilClaim: 0,
-  untilClose: 0,
-  untilOpen: 0,
-  untilSnapshootAt: 0,
+  untilClaim: null,
+  untilClose: null,
+  untilOpen: null,
+  untilSnapshootAt: null,
 }
 
 const initialState: IdoState = {

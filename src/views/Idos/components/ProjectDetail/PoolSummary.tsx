@@ -15,10 +15,11 @@ import {
 } from 'luastarter-uikits'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
+import get from 'lodash/get'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import getLink from 'views/Idos/utils/getMediaUrl'
 import { formatNumberWithComma } from 'utils/formatBalance'
-import { IdoDetail } from 'state/types'
+import { supportIdoNetwork } from 'config/constants/idos'
 import {
   calculateCommittedAmountPercentage,
   calculateSwappedAmountPercentage,
@@ -35,22 +36,19 @@ const IconWrapper = styled.a`
   cursor: pointer;
 `
 const PoolInfoBlock = styled.div`
-  display: flex;
-  flex-direction: column;
   width: calc(80% - 10px);
 `
 interface StatusBarProps {
   status: string
 }
 
-const StatusBar = styled(Text)<StatusBarProps>`
+const StatusBar = styled(Box)<StatusBarProps>`
   background-color: red;
   border-radius: 50px;
-  padding: 5px;
+  padding: 8px 16px;
   display: flex;
-  margin-bottom: 5px;
   font-weight: 700;
-  width: 80px;
+  display: inline-block;
   justify-content: center;
   font-size: 14px;
   align-items: center;
@@ -118,6 +116,17 @@ const ProcessColumnWrapper = styled(Flex)`
     width: 70%;
   }
 `
+export const YellowCard = styled(Box)`
+  box-sizing: border-box;
+  display: inline-block;
+  background-color: rgba(243, 132, 30, 0.05);
+  color: rgb(243, 132, 30);
+  margin-right: 10px;
+  font-weight: 600;
+  border-radius: 16px;
+  padding: 8px 16px;
+  transition: background-color 0.2s, opacity 0.2s;
+`
 
 const ProcessAmountWrapper = styled(Flex)`
   flex-direction: column;
@@ -155,7 +164,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   isShowPoolData,
   isAvailalbeOnCurrentNetwork,
 }) => {
-  const [poolStatus] = usePoolStatus(currentPoolData)
+  const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
   const { socials } = currentPoolData
   const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
@@ -181,13 +190,14 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
 
     return 0
   }, [swappedAmountIDO, totalAmountIDO])
+  // We will consider pool is open when pool still allows user to commit money and current time is < than claim time
   const isPoolInProgress = useMemo(() => {
-    if (poolStatus === 'open') {
+    if (poolStatus === 'open' || (poolStatus === 'claim' && claimAtSeconds > 0)) {
       return true
     }
 
     return false
-  }, [poolStatus])
+  }, [poolStatus, claimAtSeconds])
 
   const isPoolOpen = useMemo(() => {
     if (poolStatus === 'not open') {
@@ -208,6 +218,9 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <ImageContainer src={img} alt="img" width="30%" />
             <PoolInfoBlock>
               <Title bold>{name}</Title>
+              {Object.keys(get(currentPoolData, 'index', [])).map((cid) => {
+                return <YellowCard>{supportIdoNetwork[cid]}</YellowCard>
+              })}
               {isShowPoolData && <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>}
             </PoolInfoBlock>
           </PoolWrapper>
