@@ -17,11 +17,13 @@ import {
   Progress,
   SecondaryButton,
   Image,
+  Box,
 } from 'luastarter-uikits'
 import useDeepMemo from 'hooks/useDeepMemo'
 import getLink from 'views/Idos/utils/getMediaUrl'
 import { formatPoolDetail } from 'utils/formatPoolData'
 import { formatNumberWithComma } from 'utils/formatBalance'
+import get from 'lodash/get'
 import { Pool, FormatPool } from '../../types'
 import usePoolStatus from '../../hooks/usePoolStatus'
 
@@ -55,6 +57,18 @@ const ImageContainer = styled.img`
   cursor: pointer;
   background-color: #e9e9e9;
   margin-right: 10px;
+`
+
+export const YellowCard = styled(Box)`
+  box-sizing: border-box;
+  display: inline-block;
+  background-color: rgba(243, 132, 30, 0.05);
+  color: rgb(243, 132, 30);
+  margin-right: 10px;
+  font-weight: 600;
+  border-radius: 16px;
+  padding: 8px 16px;
+  transition: background-color 0.2s, opacity 0.2s;
 `
 
 interface PoolDetailProps {
@@ -141,6 +155,11 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
                   <WorldIcon />
                 </IconWrapper>
               </Flex>
+              <Box>
+                {get(pool, 'network', []).map((network) => {
+                  return <YellowCard>{network}</YellowCard>
+                })}
+              </Box>
             </PoolInfoBlock>
           </Flex>
           <SecondaryButton onClick={navigateToProjectDetail} scale="sm">

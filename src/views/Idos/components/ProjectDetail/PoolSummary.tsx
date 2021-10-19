@@ -218,8 +218,8 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <ImageContainer src={img} alt="img" width="30%" />
             <PoolInfoBlock>
               <Title bold>{name}</Title>
-              {Object.keys(get(currentPoolData, 'index', [])).map((cid) => {
-                return <YellowCard>{supportIdoNetwork[cid]}</YellowCard>
+              {get(currentPoolData, 'network', []).map((network) => {
+                return <YellowCard>{network}</YellowCard>
               })}
               {isShowPoolData && <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>}
             </PoolInfoBlock>
