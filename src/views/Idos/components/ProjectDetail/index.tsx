@@ -12,6 +12,7 @@ import { selectUserTier } from 'state/profile'
 import { getTierDataAfterSnapshot } from 'state/profile/getProfile'
 import { useBlock } from 'state/hooks'
 import { useAppDispatch } from 'state'
+import get from 'lodash/get'
 import useSecondsUntilCurrent from 'views/Idos/hooks/useSecondsUntilCurrent'
 
 import Steps from './Steps'
@@ -112,7 +113,7 @@ const ProjectDetail = () => {
   const currentPoolData = useSelector(selectCurrentPool)
   const userTier = useSelector(selectUserTier)
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
-  const secondsUntilSnapshot = useSecondsUntilCurrent(currentPoolData.untilSnapshootAt)
+  const secondsUntilSnapshot = useSecondsUntilCurrent(get(currentPoolData, 'untilSnapshootAt', null))
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
   const { isPresent, status } = currentPoolData
   const isShowPoolData = useMemo(() => {
@@ -122,6 +123,7 @@ const ProjectDetail = () => {
 
     return true
   }, [isPresent, status])
+
   useEffect(() => {
     if (id) {
       dispatch(
@@ -142,7 +144,7 @@ const ProjectDetail = () => {
       }
     }
     // Only call this api when current date time > snapshot time
-    if (secondsUntilSnapshot && secondsUntilSnapshot <= 0 && account) {
+    if (secondsUntilSnapshot !== null && secondsUntilSnapshot <= 0 && account) {
       fetchTierAfterSnapshotTime()
     }
   }, [secondsUntilSnapshot, account, id])
