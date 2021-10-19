@@ -40,7 +40,7 @@ export const formatNumberWithComma = (num: string, precision = false): string | 
       }
       const parts = newNum.toString().split('.')
       parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      return parts.join('.')
+      return parts.join('.').replace(/(\.[0-9]*[1-9])0+$|\.0*$/, '$1')
     }
 
     return null
