@@ -4,7 +4,13 @@ import { useSelector } from 'react-redux'
 import { useWeb3React } from '@web3-react/core'
 import { Route, useRouteMatch, Link } from 'react-router-dom'
 import { Flex, SecondaryButtonMenu, SecondaryMenuItem, useModal } from 'luastarter-uikits'
-import { selectOpenPools, selectLoadingOpenPools, selectClosedPools, fetchPools } from 'state/ido'
+import {
+  selectOpenPools,
+  selectLoadingOpenPools,
+  selectClosedPools,
+  fetchPools,
+  selectLoadingClosedPools,
+} from 'state/ido'
 import { useAppDispatch } from 'state'
 import Page from 'components/layout/Page'
 import TermOfUseModal from 'components/TermOfUseModal'
@@ -21,10 +27,11 @@ const Idos = () => {
   const openPools = useSelector(selectOpenPools)
   const closedPools = useSelector(selectClosedPools)
   const isLoadingOpenPools = useSelector(selectLoadingOpenPools)
+  const isLoadingClosedPools = useSelector(selectLoadingClosedPools)
   const [onDisplayTermOfUseModal] = useModal(<TermOfUseModal />, false)
   const isLoadingState = useMemo(() => {
-    return isLoadingOpenPools || isLoading
-  }, [isLoadingOpenPools, isLoading])
+    return isLoadingOpenPools || isLoading || isLoadingClosedPools
+  }, [isLoadingOpenPools, isLoading, isLoadingClosedPools])
 
   useEffect(() => {
     dispatch(fetchPools())

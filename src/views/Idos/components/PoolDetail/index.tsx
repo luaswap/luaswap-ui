@@ -71,6 +71,17 @@ export const YellowCard = styled(Box)`
   transition: background-color 0.2s, opacity 0.2s;
 `
 
+export const StyledCardBody = styled(CardBody)`
+  height: 300px;
+  background-color: #353535;
+
+  @media (max-width: 1080px) {
+    height: auto;
+    padding-top: 34px;
+    padding-bottom: 34px;
+  }
+`
+
 interface PoolDetailProps {
   pool: Pool
 }
@@ -126,7 +137,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
 
   return (
     <CardWrapper>
-      <CardBody style={{ height: '300px', backgroundColor: '#353535' }}>
+      <StyledCardBody>
         <Flex alignItems="flex-start" justifyContent="space-between" flexWrap="wrap">
           <Flex mb="15px" alignItems="center">
             <ImageContainer src={img} alt="img" onClick={navigateToProjectDetail} />
@@ -184,7 +195,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
             <Progress variant="round" primaryStep={progressPercentage} />
           </>
         )}
-      </CardBody>
+      </StyledCardBody>
     </CardWrapper>
   )
 }

@@ -16,6 +16,9 @@ const Idos = () => {
       <Route path={`${path}/project/:id`}>
         <TOSAuthRoute component={ProjectDetail} />
       </Route>
+      <Route path={`${path}/history/project/:id`}>
+        <TOSAuthRoute component={ProjectDetail} />
+      </Route>
       <Route path={`${path}/dev-tools`}>
         <AuthRoute component={DevTools} />
       </Route>

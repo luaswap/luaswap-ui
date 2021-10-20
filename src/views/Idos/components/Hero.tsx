@@ -70,6 +70,10 @@ const StyledInput = styled.input`
   &::placeholder {
     color: #1a1a1a;
   }
+
+  @media (max-width: 576px) {
+    min-width: 200px;
+  }
 `
 const SubscribeButton = styled.button`
   height: 40px;

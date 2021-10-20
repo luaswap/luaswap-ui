@@ -114,7 +114,7 @@ const EmptyPool = () => {
     <Flex alignItems="center" justifyContent="center" flexDirection="column">
       <img src={`${process.env.PUBLIC_URL}/images/empty.svg`} alt="empty" />
       <Text color="#606060" textAlign="center">
-        Switch to correct network to see pool&apos;s information
+        No Data
       </Text>
     </Flex>
   )

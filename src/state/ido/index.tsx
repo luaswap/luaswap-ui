@@ -6,6 +6,7 @@ import { IdoDetail, IdoState, OpenPools } from 'state/types'
 import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
 import { API_IDO_URL } from 'config'
+import get from 'lodash/get'
 // import { fetchIdosInformation } from './fetchIdosData'
 
 const defaultCurrentPool = {
@@ -126,11 +127,18 @@ export default idosSlice.reducer
 export const fetchPools = () => async (dispatch, getState) => {
   try {
     dispatch(fetchOpenPoolsStarts())
-    const { data } = await axios.get(`${API_IDO_URL}/pools/open`)
-    dispatch(setOpenPools(data))
+    dispatch(fetchClosedPoolsStarts())
+    const openPoolsResponse = await axios.get(`${API_IDO_URL}/pools/open`)
+    const openPools = get(openPoolsResponse, 'data', [])
+    dispatch(setOpenPools(openPools))
+    const closedPoolsResponse = await axios.get(`${API_IDO_URL}/pools/closed`)
+    const closedPools = get(closedPoolsResponse, 'data', [])
+    dispatch(setClosedPools(closedPools))
     dispatch(fetchOpenPoolsEnds())
+    dispatch(fetchClosedPoolsEnds())
   } catch (error) {
     dispatch(fetchOpenPoolsEnds())
+    dispatch(fetchClosedPoolsEnds())
   }
 }
 
