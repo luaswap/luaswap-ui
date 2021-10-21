@@ -1,42 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { useTranslation } from 'contexts/Localization'
-import { useSelector } from 'react-redux'
-import { useWeb3React } from '@web3-react/core'
+import React from 'react'
 import { Route, useRouteMatch, Link } from 'react-router-dom'
 import { Flex, SecondaryButtonMenu, SecondaryMenuItem, useModal } from 'luastarter-uikits'
-import {
-  selectOpenPools,
-  selectLoadingOpenPools,
-  selectClosedPools,
-  fetchPools,
-  selectLoadingClosedPools,
-} from 'state/ido'
-import { useAppDispatch } from 'state'
 import Page from 'components/layout/Page'
-import TermOfUseModal from 'components/TermOfUseModal'
 import Hero from './components/Hero'
 import CurrentIdo from './components/CurrentIdo'
 import PastIdo from './components/PastIdo'
 
 const Idos = () => {
-  const { t } = useTranslation()
   const { path, url, isExact } = useRouteMatch()
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
-  const [isLoading, setIsLoading] = useState(true)
-  const openPools = useSelector(selectOpenPools)
-  const closedPools = useSelector(selectClosedPools)
-  const isLoadingOpenPools = useSelector(selectLoadingOpenPools)
-  const isLoadingClosedPools = useSelector(selectLoadingClosedPools)
-  const [onDisplayTermOfUseModal] = useModal(<TermOfUseModal />, false)
-  const isLoadingState = useMemo(() => {
-    return isLoadingOpenPools || isLoading || isLoadingClosedPools
-  }, [isLoadingOpenPools, isLoading, isLoadingClosedPools])
-
-  useEffect(() => {
-    dispatch(fetchPools())
-    setIsLoading(false)
-  }, [dispatch])
 
   return (
     <>
@@ -53,10 +24,10 @@ const Idos = () => {
           </SecondaryButtonMenu>
         </Flex>
         <Route exact path={`${path}`}>
-          <CurrentIdo openPools={openPools} isLoadingState={isLoadingState} />
+          <CurrentIdo />
         </Route>
         <Route path={`${path}/history`}>
-          <PastIdo closedPools={closedPools} isLoadingState={isLoadingState} />
+          <PastIdo />
         </Route>
       </Page>
     </>

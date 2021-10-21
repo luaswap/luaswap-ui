@@ -1,7 +1,10 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Text, Flex } from 'luastarter-uikits'
+import { useSelector } from 'react-redux'
+import { useAppDispatch } from 'state'
+import { fetchClosedPools, selectClosedPools, selectLoadingClosedPools } from 'state/ido'
 import { Pool } from '../types'
 import IdoLayout from './IdoLayout'
 import PoolDetail from './PoolDetail'
@@ -30,11 +33,6 @@ const CardWrapper = styled(Flex)`
   }
 `
 
-interface PastIdoPools {
-  closedPools: Pool[]
-  isLoadingState: boolean
-}
-
 const EmptyPool = () => {
   return (
     <CardWrapper alignItems="center" justifyContent="center" flexDirection="column">
@@ -46,14 +44,22 @@ const EmptyPool = () => {
   )
 }
 
-const PastIdo: React.FC<PastIdoPools> = ({ closedPools, isLoadingState }) => {
-  if (closedPools.length === 0 && !isLoadingState) {
+const PastIdo: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const closedPools = useSelector(selectClosedPools)
+  const isLoadingClosedPool = useSelector(selectLoadingClosedPools)
+
+  useEffect(() => {
+    dispatch(fetchClosedPools())
+  }, [dispatch])
+
+  if (closedPools.length === 0 && !isLoadingClosedPool) {
     return <EmptyPool />
   }
 
   return (
     <PoolContainer>
-      {isLoadingState ? (
+      {isLoadingClosedPool ? (
         <PageLoading />
       ) : (
         <>

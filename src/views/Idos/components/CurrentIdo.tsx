@@ -1,8 +1,10 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text, Flex, Box } from 'luastarter-uikits'
+import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
-import { OpenPools } from 'state/types'
+import { fetchOpenPools, selectLoadingOpenPools, selectOpenPools } from 'state/ido'
+import { useAppDispatch } from 'state'
 import PoolDetail from './PoolDetail'
 import IdoLayout from './IdoLayout'
 import PageLoading from './PageLoading'
@@ -104,11 +106,6 @@ const Star5 = styled(Star)`
   animation-fill-mode: both;
   animation-delay: 100ms;
 `
-interface CurrentIdoProps {
-  openPools: OpenPools
-  isLoadingState: boolean
-}
-
 const EmptyPool = () => {
   return (
     <Flex alignItems="center" justifyContent="center" flexDirection="column">
@@ -120,7 +117,15 @@ const EmptyPool = () => {
   )
 }
 
-const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upcomingPools }, isLoadingState }) => {
+const CurrentIdo: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const { openingPools, upcomingPools } = useSelector(selectOpenPools)
+  const isLoadingOpenPools = useSelector(selectLoadingOpenPools)
+
+  useEffect(() => {
+    dispatch(fetchOpenPools())
+  }, [dispatch])
+
   return (
     <IdoLayout>
       <Flex flexWrap="wrap">
@@ -129,7 +134,7 @@ const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upco
             Opening Pools
           </Text>
           <Row>
-            {isLoadingState ? (
+            {isLoadingOpenPools ? (
               <PageLoading />
             ) : openingPools.length === 0 ? (
               <EmptyPool />
@@ -152,7 +157,7 @@ const CurrentIdo: React.FC<CurrentIdoProps> = ({ openPools: { openingPools, upco
             Upcoming Pools
           </Text>
           <Row>
-            {isLoadingState ? (
+            {isLoadingOpenPools ? (
               <PageLoading />
             ) : upcomingPools.length === 0 ? (
               <EmptyPool />

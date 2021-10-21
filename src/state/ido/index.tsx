@@ -134,19 +134,32 @@ export const fetchPools = () => async (dispatch, getState) => {
     const closedPoolsResponse = await axios.get(`${API_IDO_URL}/pools/closed`)
     const closedPools = get(closedPoolsResponse, 'data', [])
     dispatch(setClosedPools(closedPools))
-    dispatch(fetchOpenPoolsEnds())
     dispatch(fetchClosedPoolsEnds())
+    dispatch(fetchOpenPoolsEnds())
   } catch (error) {
     dispatch(fetchOpenPoolsEnds())
     dispatch(fetchClosedPoolsEnds())
   }
 }
 
+export const fetchOpenPools = () => async (dispatch, getState) => {
+  try {
+    dispatch(fetchOpenPoolsStarts())
+    const openPoolsResponse = await axios.get(`${API_IDO_URL}/pools/open`)
+    const openPools = get(openPoolsResponse, 'data', [])
+    dispatch(setOpenPools(openPools))
+    dispatch(fetchOpenPoolsEnds())
+  } catch (error) {
+    dispatch(fetchOpenPoolsEnds())
+  }
+}
+
 export const fetchClosedPools = () => async (dispatch, getState) => {
   try {
     dispatch(fetchClosedPoolsStarts())
-    const { data } = await axios.get(`${API_IDO_URL}/pools/open`)
-    dispatch(setClosedPools(data))
+    const closedPoolsResponse = await axios.get(`${API_IDO_URL}/pools/closed`)
+    const closedPools = get(closedPoolsResponse, 'data', [])
+    dispatch(setClosedPools(closedPools))
     dispatch(fetchClosedPoolsEnds())
   } catch (error) {
     dispatch(fetchClosedPoolsEnds())
