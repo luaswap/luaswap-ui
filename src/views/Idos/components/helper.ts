@@ -82,7 +82,7 @@ const DEFAULT_IDO = {
   closeAt: 0,
   openAt: 0,
   swappedAmountIDO: '0',
-  swappedAmountPay: 0,
+  swappedAmountPay: '0',
   totalCommittedAmount: '0',
   index: 0,
   chainId: '',

@@ -73,6 +73,7 @@ export const formatPoolTotalTierByChainID = (
         totalCommittedAmount: new BigNumber(e.totalCommittedAmount)
           .plus(new BigNumber(e2.totalCommittedAmount))
           .toString(),
+        swappedAmountPay: new BigNumber(e.swappedAmountPay).plus(new BigNumber(e2.swappedAmountPay)).toString(),
         totalAmountPay: new BigNumber(e.totalAmountPay).plus(new BigNumber(e2.totalAmountPay)).toString(),
         totalAmountIDO: new BigNumber(e.totalAmountIDO).plus(new BigNumber(e2.totalAmountIDO)).toString(),
       }
