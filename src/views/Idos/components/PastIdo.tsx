@@ -57,7 +57,7 @@ const PastIdo: React.FC<PastIdoPools> = ({ closedPools, isLoadingState }) => {
         <PageLoading />
       ) : (
         <>
-          {[...closedPools, ...closedPools, ...closedPools].map((pool) => {
+          {closedPools.map((pool) => {
             return <PoolDetail pool={pool} />
           })}
         </>
