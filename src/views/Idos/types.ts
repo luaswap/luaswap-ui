@@ -31,7 +31,7 @@ export interface IdoDetailInfo {
   closeAt: number
   openAt: number
   swappedAmountIDO: string
-  swappedAmountPay: number
+  swappedAmountPay: string
   totalCommittedAmount: string
   index: number
   projectId: string

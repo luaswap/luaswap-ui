@@ -139,7 +139,7 @@ const TIER_INFO = {
 
 // We have different layout for PC and Mobile/tablet
 const TierCard: React.FC<TierProps> = ({
-  data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {} },
+  data: { tier, totalAmountIDO, totalAmountPay, totalCommittedAmount, idoToken = {}, payToken = {}, swappedAmountPay },
   userTier,
   nextTier,
   disabledBuyMore,
@@ -168,6 +168,8 @@ const TierCard: React.FC<TierProps> = ({
   if (tier === 0) {
     return null
   }
+
+  const totalCommited = new BigNumber(totalCommittedAmount).plus(new BigNumber(swappedAmountPay)).toString()
 
   return (
     <TierCardContainer>
@@ -211,7 +213,7 @@ const TierCard: React.FC<TierProps> = ({
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total committed&nbsp;</Text>
               <Text bold>
-                {formatNumberWithComma(totalCommittedAmount, true)} {payToken.symbol}
+                {formatNumberWithComma(totalCommited, true)} {payToken.symbol}
               </Text>
             </Flex>
           </Flex>
