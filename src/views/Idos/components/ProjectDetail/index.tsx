@@ -158,7 +158,7 @@ const ProjectDetail = () => {
 
   const selectedUserTier = useMemo(() => {
     // We will get the userTier if current date time < snapshot time or else we will get userTierAfterSnapshot
-    if (secondsUntilSnapshot <= 0) {
+    if (secondsUntilSnapshot !== null && secondsUntilSnapshot <= 0) {
       return userTierAfterSnapshot
     }
     return userTier
