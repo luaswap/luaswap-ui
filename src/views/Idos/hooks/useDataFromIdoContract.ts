@@ -51,6 +51,7 @@ const useDataFromIdoContract = (
     const fetchData = async () => {
       const idosOfEachChainId = {}
       const idoIndexMap = {}
+      const tokenMap = {}
       try {
         /**
          * We loop through every index and get all idos info in each index
@@ -68,6 +69,10 @@ const useDataFromIdoContract = (
               const currentLuaIdoContract = getLuaIdoContract(web3, luaContractAddress)
               const contractIdoDetail = currentLuaIdoContract.methods.IDOs(ido.index).call
               idosOfCurrentChainId.push(contractIdoDetail)
+
+              tokenMap[ido.index] = {}
+              tokenMap[ido.index].idoToken = ido.idoToken
+              tokenMap[ido.index].payToken = ido.payToken
               idoIndexMap[ido.index] = true
             }
           })
@@ -106,8 +111,8 @@ const useDataFromIdoContract = (
          */
         const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, idoIndex).call()
         const swappedIdoAmount = await luaIdoContract.methods.userSwappedAmountIDO(account, idoIndex).call()
-        setTotalUserCommitted(getBalanceAmount(commitedAmount).toString())
-        setTotalAmountUserSwapped(getBalanceAmount(swappedIdoAmount).toString())
+        setTotalUserCommitted(getBalanceAmount(commitedAmount, tokenMap[idoIndex].payToken.decimals).toString())
+        setTotalAmountUserSwapped(getBalanceAmount(swappedIdoAmount, tokenMap[idoIndex].idoToken.decimals).toString())
         setIsLoading(false)
       } catch (error) {
         console.log(error, 'error to fetch data from contract')
