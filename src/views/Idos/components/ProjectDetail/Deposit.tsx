@@ -158,9 +158,9 @@ const Deposit: React.FC<DepositProps> = ({
     const fetchReceiveIdoAmount = async () => {
       try {
         if (projectId) {
-          const { finalPay } = await getClaimProof(projectId, index)
-          const receivedIdoAmount = new BigNumber(finalPay).multipliedBy(totalAmountIDO).dividedBy(totalAmountPay)
-          setIdoReceivedAmount(getFullDisplayBalance(receivedIdoAmount))
+          const claimProofData = await getClaimProof(projectId, index)
+          const receivedIdoAmount = new BigNumber(claimProofData.finalPay).multipliedBy(totalAmountIDO).dividedBy(totalAmountPay)
+          setIdoReceivedAmount(getFullDisplayBalance(receivedIdoAmount, claimProofData.payToken.decimals))
         }
       } catch (error) {
         setIdoReceivedAmount('0')
