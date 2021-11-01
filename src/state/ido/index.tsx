@@ -7,6 +7,7 @@ import { RootState } from 'state'
 import { Pool } from 'views/Idos/types'
 import { API_IDO_URL } from 'config'
 import get from 'lodash/get'
+import orderBy from 'lodash/orderBy'
 // import { fetchIdosInformation } from './fetchIdosData'
 
 const defaultCurrentPool = {
@@ -129,7 +130,7 @@ export const fetchPools = () => async (dispatch, getState) => {
     dispatch(fetchOpenPoolsStarts())
     dispatch(fetchClosedPoolsStarts())
     const openPoolsResponse = await axios.get(`${API_IDO_URL}/pools/open`)
-    const openPools = get(openPoolsResponse, 'data', [])
+    const openPools = orderBy(get(openPoolsResponse, 'data', []), 'priority', 'asc')
     dispatch(setOpenPools(openPools))
     const closedPoolsResponse = await axios.get(`${API_IDO_URL}/pools/closed`)
     const closedPools = get(closedPoolsResponse, 'data', [])
@@ -146,7 +147,7 @@ export const fetchOpenPools = () => async (dispatch, getState) => {
   try {
     dispatch(fetchOpenPoolsStarts())
     const openPoolsResponse = await axios.get(`${API_IDO_URL}/pools/open`)
-    const openPools = get(openPoolsResponse, 'data', [])
+    const openPools = orderBy(get(openPoolsResponse, 'data', []), 'priority', 'asc')
     dispatch(setOpenPools(openPools))
     dispatch(fetchOpenPoolsEnds())
   } catch (error) {
@@ -158,7 +159,7 @@ export const fetchClosedPools = () => async (dispatch, getState) => {
   try {
     dispatch(fetchClosedPoolsStarts())
     const closedPoolsResponse = await axios.get(`${API_IDO_URL}/pools/closed`)
-    const closedPools = get(closedPoolsResponse, 'data', [])
+    const closedPools = orderBy(get(closedPoolsResponse, 'data', []), 'priority', 'asc')
     dispatch(setClosedPools(closedPools))
     dispatch(fetchClosedPoolsEnds())
   } catch (error) {
