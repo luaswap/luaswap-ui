@@ -80,7 +80,7 @@ const Title = styled(Text)`
 const CapColumnWrapper = styled(Flex)`
   width: 50%;
   ${({ theme }) => theme.mediaQueries.sm} {
-    width: 20%;
+    width: 25%;
   }
 `
 
@@ -245,7 +245,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <CapColumnWrapper alignItems="flex-start" flexDirection="column">
               <Text>Cap</Text>
               <Text color="primary" bold fontSize="18px">
-                {formatNumberWithComma(totalAmountIDO)} {idoToken?.symbol}
+                {formatNumberWithComma(totalAmountIDO, true)} {idoToken?.symbol}
               </Text>
             </CapColumnWrapper>
             <ProcessColumnWrapper flexDirection="column">

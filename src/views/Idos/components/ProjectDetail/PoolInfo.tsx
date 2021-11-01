@@ -39,7 +39,7 @@ const PoolInfo: React.FC<PoolInfoProps> = ({ currentPoolData }) => {
 
   const calculatedPrice = useMemo(() => {
     if (totalAmountIDO && totalAmountPay) {
-      return new BigNumber(totalAmountPay).multipliedBy(10000).div(new BigNumber(totalAmountIDO)).div(10000).toString()
+      return new BigNumber(new BigNumber(totalAmountPay).div(new BigNumber(totalAmountIDO)).toFixed(8)).toString()
     }
 
     return null

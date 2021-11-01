@@ -159,7 +159,7 @@ const TierCard: React.FC<TierProps> = ({
   }, [chainId])
   const calculatedPrice = useMemo(() => {
     if (totalAmountIDO && totalAmountPay) {
-      return new BigNumber(totalAmountIDO).multipliedBy(10000).div(new BigNumber(totalAmountPay)).div(10000).toString()
+      return new BigNumber(totalAmountIDO).div(new BigNumber(totalAmountPay)).toFixed(2)
     }
 
     return null
@@ -195,7 +195,7 @@ const TierCard: React.FC<TierProps> = ({
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total {idoToken.symbol}&nbsp;</Text>
               <Text bold color="#C3C3C3">
-                {formatNumberWithComma(totalAmountIDO)} {idoToken.symbol}
+                {formatNumberWithComma(totalAmountIDO, true)} {idoToken.symbol}
               </Text>
             </Flex>
             <Flex justifyContent="space-between">

@@ -3,6 +3,7 @@ import { TabMenu, Tab, Flex, Text, Heading, Box } from 'luastarter-uikits'
 import styled from 'styled-components'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { getUtcDateString } from 'utils/formatTime'
+import { formatNumberWithComma } from 'utils/formatBalance'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
 const Row = styled.div`
@@ -73,7 +74,7 @@ const PoolInfoTab: React.FC<PoolInfoTabProps> = ({ currentPoolData, tierDataOfUs
       </Flex>
       <Flex justifyContent="space-between" mt="20px">
         <Text>Cap</Text>
-        <Text>{totalAmountIDO}</Text>
+        <Text>{formatNumberWithComma(totalAmountIDO, true)}</Text>
       </Flex>
     </>
   )

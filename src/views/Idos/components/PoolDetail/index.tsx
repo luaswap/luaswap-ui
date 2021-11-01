@@ -188,7 +188,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
                   Cap:{' '}
                 </Text>
                 <Text color="primary" fontWeight="600">
-                  {formatNumberWithComma(totalAmountIDO)}
+                  {formatNumberWithComma(totalAmountIDO, true)}
                 </Text>
               </Flex>
             </Flex>
