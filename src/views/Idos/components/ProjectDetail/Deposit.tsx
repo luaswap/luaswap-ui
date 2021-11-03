@@ -351,6 +351,7 @@ const Deposit: React.FC<DepositProps> = ({
                 isUserDepositMinimumAmount={isUserDepositMinimumAmount}
                 handleApprove={handleApprove}
                 isApproved={isApproved}
+                userTotalCommitted={userTotalCommitted}
                 poolStatus={poolStatus}
                 payTokenBalance={payTokenBalance}
                 onCommit={onHandleCommit}

@@ -27,6 +27,7 @@ interface ActionButtonProps {
   isClaimed: boolean
   minAmount: number
   payTokenBalance: BigNumber
+  userTotalCommitted: string
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -47,6 +48,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   isLoadingApproveStatus,
   minAmount,
   payTokenBalance,
+  userTotalCommitted,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const { toastError } = useToast()
@@ -94,7 +96,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
       isDepositAmountTooLarge = true
     }
 
-    if (new BigNumber(depositAmount).comparedTo(minAmount) < 0) {
+    if (new BigNumber(depositAmount).plus(new BigNumber(userTotalCommitted)).comparedTo(minAmount) < 0) {
       isDepositAmountTooSmall = true
     }
 
