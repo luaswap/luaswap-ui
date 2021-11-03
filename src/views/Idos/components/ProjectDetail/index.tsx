@@ -236,7 +236,7 @@ const ProjectDetail = () => {
             {isShowPoolData && (
               <>
                 <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
-                  Tier Infomation
+                  Tier Information
                 </Heading>
                 <TierDetails
                   currentPoolData={currentPoolData}
