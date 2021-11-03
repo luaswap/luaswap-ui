@@ -1,5 +1,6 @@
 import React from 'react'
 import { Flex, Button, Text, Box, Link } from 'luastarter-uikits'
+import uniqueId from 'lodash/uniqueId'
 import styled from 'styled-components'
 import { Pool } from 'views/Idos/types'
 

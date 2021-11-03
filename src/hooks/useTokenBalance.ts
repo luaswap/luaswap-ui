@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { getBep20Contract, getCakeContract } from 'utils/contractHelpers'
-import { BIG_ZERO } from 'utils/bigNumber'
+import { BIG_TEN, BIG_ZERO } from 'utils/bigNumber'
 import useWeb3 from './useWeb3'
 import useRefresh from './useRefresh'
 import useLastUpdated from './useLastUpdated'
 
-const useTokenBalance = (tokenAddress: string) => {
+export const useTokenBalance = (tokenAddress: string, decimals = 18) => {
   const [balance, setBalance] = useState(BIG_ZERO)
   const { account } = useWeb3React()
   const web3 = useWeb3()
@@ -17,13 +17,13 @@ const useTokenBalance = (tokenAddress: string) => {
     const fetchBalance = async () => {
       const contract = getBep20Contract(tokenAddress, web3)
       const res = await contract.methods.balanceOf(account).call()
-      setBalance(new BigNumber(res))
+      setBalance(new BigNumber(res).dividedBy(BIG_TEN.pow(decimals)))
     }
 
     if (account) {
       fetchBalance()
     }
-  }, [account, tokenAddress, web3, fastRefresh])
+  }, [account, tokenAddress, web3, fastRefresh, decimals])
 
   return balance
 }

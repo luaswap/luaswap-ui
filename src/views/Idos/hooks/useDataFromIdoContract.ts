@@ -3,6 +3,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useLuaIdoContract } from 'hooks/useContract'
 import { mappingIdoResponse } from 'state/ido/fetchIdosData'
 import { IdoDetail } from 'state/types'
+import get from 'lodash/get'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { formatIdoContract } from 'utils/formatPoolData'
 import { getWeb3BasedOnChainId } from 'utils/web3'
@@ -69,11 +70,16 @@ const useDataFromIdoContract = (
               const currentLuaIdoContract = getLuaIdoContract(web3, luaContractAddress)
               const contractIdoDetail = currentLuaIdoContract.methods.IDOs(ido.index).call
               idosOfCurrentChainId.push(contractIdoDetail)
-
               tokenMap[ido.index] = {}
               tokenMap[ido.index].idoToken = ido.idoToken
               tokenMap[ido.index].payToken = ido.payToken
               idoIndexMap[ido.index] = true
+            }
+
+            if (ido.tier === 0) {
+              tokenMap[ido.index] = {}
+              tokenMap[ido.index].idoToken = ido.idoToken
+              tokenMap[ido.index].payToken = ido.payToken
             }
           })
           idosOfEachChainId[idoChainId] = idosOfCurrentChainId
@@ -111,8 +117,12 @@ const useDataFromIdoContract = (
          */
         const commitedAmount = await luaIdoContract.methods.userCommitedAmount(account, idoIndex).call()
         const swappedIdoAmount = await luaIdoContract.methods.userSwappedAmountIDO(account, idoIndex).call()
-        setTotalUserCommitted(getBalanceAmount(commitedAmount, tokenMap[idoIndex].payToken.decimals).toString())
-        setTotalAmountUserSwapped(getBalanceAmount(swappedIdoAmount, tokenMap[idoIndex].idoToken.decimals).toString())
+        setTotalUserCommitted(
+          getBalanceAmount(commitedAmount, get(tokenMap, `${idoIndex}.payToken.decimals`, null)).toString(),
+        )
+        setTotalAmountUserSwapped(
+          getBalanceAmount(swappedIdoAmount, get(tokenMap, `${idoIndex}.idoToken.decimals`, null)).toString(),
+        )
         setIsLoading(false)
       } catch (error) {
         console.log(error, 'error to fetch data from contract')

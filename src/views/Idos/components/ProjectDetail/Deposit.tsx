@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import useDepositIdo from 'hooks/useDepositIdo'
 import { useApproveIdo } from 'hooks/useApproveIdo'
+import { useTokenBalance } from 'hooks/useTokenBalance'
 import useDeepMemo from 'hooks/useDeepMemo'
 import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import ModalInput from 'components/ModalInput'
@@ -68,6 +69,7 @@ interface DepositProps {
   totalAmountUserSwapped: string
   isAvailalbeOnCurrentNetwork: boolean
   isLoadingDataFromContract: boolean
+  isLoadingTierInfo: boolean
 }
 
 const Deposit: React.FC<DepositProps> = ({
@@ -78,6 +80,7 @@ const Deposit: React.FC<DepositProps> = ({
   totalAmountUserSwapped,
   selectedUserTier,
   isLoadingDataFromContract,
+  isLoadingTierInfo,
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
@@ -85,8 +88,12 @@ const Deposit: React.FC<DepositProps> = ({
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
-  const [isApproved, fetchAllowanceData] = useIsApproved(paytokenContract, tierDataOfUser.addressIdoContract)
+  const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(
+    paytokenContract,
+    tierDataOfUser.addressIdoContract,
+  )
   const isNativeToken = tierDataOfUser?.payToken?.address === ZERO_ADDRESS
+  const payTokenBalance = useTokenBalance(tierDataOfUser?.payToken?.address, tierDataOfUser?.payToken?.decimals)
   const { onApprove } = useApproveIdo(paytokenContract, tierDataOfUser.addressIdoContract)
   const { onDeposit } = useDepositIdo(
     tierDataOfUser.addressIdoContract,
@@ -159,7 +166,9 @@ const Deposit: React.FC<DepositProps> = ({
       try {
         if (projectId) {
           const claimProofData = await getClaimProof(projectId, index)
-          const receivedIdoAmount = new BigNumber(claimProofData.finalPay).multipliedBy(totalAmountIDO).dividedBy(totalAmountPay)
+          const receivedIdoAmount = new BigNumber(claimProofData.finalPay)
+            .multipliedBy(totalAmountIDO)
+            .dividedBy(totalAmountPay)
           setIdoReceivedAmount(getFullDisplayBalance(receivedIdoAmount, claimProofData.payToken.decimals))
         }
       } catch (error) {
@@ -167,12 +176,12 @@ const Deposit: React.FC<DepositProps> = ({
         console.log(error)
       }
     }
-    // We only fetch the IDO token that user can claimed when pool status is closed
-    if (poolStatus === 'closed') {
+    // We only fetch the IDO token that user can claimed when pool status is closed and when we successfully load tier info after snapshot
+    if (poolStatus === 'closed' && !isLoadingTierInfo) {
       fetchReceiveIdoAmount()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolStatus, getClaimProof, projectId, index])
+  }, [poolStatus, getClaimProof, projectId, index, isLoadingTierInfo])
 
   const getCommitProof = useCallback(
     async (poolId, poolIndex, amount) => {
@@ -284,7 +293,6 @@ const Deposit: React.FC<DepositProps> = ({
                   </Text>
                 </Flex>
               )}
-
               <Flex justifyContent="space-between">
                 <Text>Max to commit</Text>
                 <Text bold>
@@ -344,7 +352,9 @@ const Deposit: React.FC<DepositProps> = ({
                 handleApprove={handleApprove}
                 isApproved={isApproved}
                 poolStatus={poolStatus}
+                payTokenBalance={payTokenBalance}
                 onCommit={onHandleCommit}
+                isLoadingApproveStatus={isLoadingApproveStatus}
                 isIdoAvailalbeOnChain={isIdoAvailalbeOnChain}
                 onClaim={onHandleClaim}
                 disabled={!isClaimable}
@@ -352,6 +362,7 @@ const Deposit: React.FC<DepositProps> = ({
                 isClaimed={isClaimed}
                 paytokenAddress={payToken.address}
                 maxAmountAllowedLeft={maxAmountAllowedLeft}
+                minAmount={minAmountPay}
                 depositAmount={value}
               />
               {isClaimed && <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>}

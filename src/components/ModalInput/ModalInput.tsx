@@ -75,24 +75,12 @@ const ModalInput: React.FC<ModalInputProps> = ({
 }) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
-
-  const displayBalance = (balance: string) => {
-    if (isBalanceZero) {
-      return '0'
-    }
-    const balanceNumber = Number(balance)
-    if (balanceNumber > 0 && balanceNumber < 0.0001) {
-      return balanceNumber.toLocaleString(undefined, { maximumFractionDigits: 20 })
-    }
-    return balanceNumber.toLocaleString()
-  }
-
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <StyledTokenInput isWarning={isBalanceZero && showWarning}>
         <Flex justifyContent="space-between" pl="16px">
           <Text fontSize="14px">{inputTitle}</Text>
-          <Text fontSize="14px">{`${secondaryTitle}: ${isLoadingDataFromContract ? '~' : displayBalance(max)}`}</Text>
+          <Text fontSize="14px">{`${secondaryTitle}: ${isLoadingDataFromContract ? '~' : max}`}</Text>
         </Flex>
         <Flex alignItems="flex-end" justifyContent="space-between">
           <Box>

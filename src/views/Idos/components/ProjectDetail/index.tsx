@@ -106,6 +106,7 @@ interface ParamsType {
 const ProjectDetail = () => {
   const { chainId, account } = useWeb3React()
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoadingTierInfo, setIsLoadingTierInfo] = useState(true)
   const [userTierAfterSnapshot, setUserTierAfterSnapshot] = useState(0)
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
@@ -138,8 +139,10 @@ const ProjectDetail = () => {
       try {
         const { tier } = await getTierDataAfterSnapshot(account, id)
         setUserTierAfterSnapshot(tier)
+        setIsLoadingTierInfo(false)
       } catch (error) {
         setUserTierAfterSnapshot(0)
+        setIsLoadingTierInfo(false)
         console.log(error, 'fail to fetch tier after snapshot time')
       }
     }
@@ -147,6 +150,7 @@ const ProjectDetail = () => {
     if (secondsUntilSnapshot !== null && secondsUntilSnapshot <= 0 && account) {
       fetchTierAfterSnapshotTime()
     }
+    setIsLoadingTierInfo(false)
   }, [secondsUntilSnapshot, account, id])
 
   // Clear current pool when component unmount
@@ -216,6 +220,7 @@ const ProjectDetail = () => {
               />
               {isShowPoolData && (
                 <Deposit
+                  isLoadingTierInfo={isLoadingTierInfo}
                   isLoadingDataFromContract={isLoadingDataFromContract}
                   currentPoolData={currentPoolData}
                   tierDataOfUser={tierDataOfUser}

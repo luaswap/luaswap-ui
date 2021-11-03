@@ -2,6 +2,7 @@ import React, { LegacyRef, ReactElement } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { Button, AutoRenewIcon } from 'luastarter-uikits'
+import useToast from 'hooks/useToast'
 import UnlockButton from 'components/UnlockButton'
 import { ZERO_ADDRESS } from 'config/constants/idos'
 import CommitButton from './CommitButton'
@@ -10,6 +11,7 @@ import { PoolStatus } from '../../types'
 
 interface ActionButtonProps {
   poolStatus: PoolStatus
+  isLoadingApproveStatus: boolean
   onCommit(): any
   onClaim(): any
   disabled: boolean
@@ -23,6 +25,8 @@ interface ActionButtonProps {
   maxAmountAllowedLeft: string
   depositAmount: string
   isClaimed: boolean
+  minAmount: number
+  payTokenBalance: BigNumber
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -40,14 +44,17 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   maxAmountAllowedLeft,
   depositAmount,
   isClaimed,
+  isLoadingApproveStatus,
+  minAmount,
+  payTokenBalance,
 }): ReactElement | null => {
   const { account } = useWeb3React()
+  const { toastError } = useToast()
   const isNativeToken = paytokenAddress === ZERO_ADDRESS
   if (!account) {
     return <UnlockButton />
   }
-
-  if (!isIdoAvailalbeOnChain || isClaimed) {
+  if (!isIdoAvailalbeOnChain || isClaimed || isLoadingApproveStatus) {
     return null
   }
 
@@ -79,19 +86,39 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   if (poolStatus === 'open') {
     const isMaxAmountEqualZero = maxAmountAllowedLeft === '0'
     let isDepositAmountTooLarge = false
+    let isDepositAmountTooSmall = false
+    let isDepositAmountLargerThanBalance = false
     const isDepositAmountInvalid = !depositAmount || depositAmount === '0'
 
     if (new BigNumber(depositAmount).comparedTo(maxAmountAllowedLeft) > 0) {
       isDepositAmountTooLarge = true
     }
+
+    if (new BigNumber(depositAmount).comparedTo(minAmount) < 0) {
+      isDepositAmountTooSmall = true
+    }
+
+    if (payTokenBalance.isZero() || new BigNumber(depositAmount).comparedTo(payTokenBalance) > 0) {
+      isDepositAmountLargerThanBalance = true
+    }
     return (
       <CommitButton
-        onClick={onCommit}
+        onClick={() => {
+          if (isDepositAmountLargerThanBalance) {
+            toastError('Committed amount is larger than your balance')
+            return
+          }
+          onCommit()
+        }}
         symbol={symbol}
         isLoading={isRequestContractAction}
         endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
         disabled={
-          isMaxAmountEqualZero || isDepositAmountTooLarge || isDepositAmountInvalid || !isUserDepositMinimumAmount
+          isMaxAmountEqualZero ||
+          isDepositAmountTooLarge ||
+          isDepositAmountInvalid ||
+          !isUserDepositMinimumAmount ||
+          isDepositAmountTooSmall
         }
       />
     )
