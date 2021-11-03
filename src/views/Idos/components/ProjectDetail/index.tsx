@@ -149,8 +149,9 @@ const ProjectDetail = () => {
     // Only call this api when current date time > snapshot time
     if (secondsUntilSnapshot !== null && secondsUntilSnapshot <= 0 && account) {
       fetchTierAfterSnapshotTime()
+    } else {
+      setIsLoadingTierInfo(false)
     }
-    setIsLoadingTierInfo(false)
   }, [secondsUntilSnapshot, account, id])
 
   // Clear current pool when component unmount

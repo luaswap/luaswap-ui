@@ -20,7 +20,7 @@ export const useTokenBalance = (tokenAddress: string, decimals = 18) => {
       setBalance(new BigNumber(res).dividedBy(BIG_TEN.pow(decimals)))
     }
 
-    if (account) {
+    if (account && tokenAddress) {
       fetchBalance()
     }
   }, [account, tokenAddress, web3, fastRefresh, decimals])
