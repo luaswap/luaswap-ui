@@ -48,7 +48,7 @@ const useDataFromIdoContract = (
 ] => {
   const { account, chainId } = useWeb3React()
   // Current Lua Ido contract based on log in chainid
-  const luaIdoContract = useLuaIdoContract('0xb329d7CC8A22E8127868Bcd81dAD9160863798b3')
+  const luaIdoContract = useLuaIdoContract(contractAddress)
   const [luaVestingAddress, setLuaVestingAddress] = useState(null)
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
   const [totalUserCommitted, setTotalUserCommitted] = useState<string>('0')

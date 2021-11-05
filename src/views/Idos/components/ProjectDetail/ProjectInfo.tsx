@@ -46,9 +46,10 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
     <ProjectInfoWrapper>
       <LinkWrapper flexWrap="wrap">
         {Array.isArray(links) &&
-          links.map((item) => {
+          links.map((item, index) => {
             return (
-              <LinkRef key={item.link}>
+              // eslint-disable-next-line react/no-array-index-key
+              <LinkRef key={`${item.link}-${index}`}>
                 <Link
                   href={item.link}
                   target="_blank"

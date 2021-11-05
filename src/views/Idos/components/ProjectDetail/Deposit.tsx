@@ -97,13 +97,10 @@ const Deposit: React.FC<DepositProps> = ({
   const [isRequestContractAction, setIsRequestContractAction] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
-  const {
-    claimAt: claimVestingTime,
-    claimPercentage: claimVestingPercentage,
-    userVestingInfo,
-  } = useVestingInfo('0x3dF24b8c9b2839c0E804dBB58D245fF7e115FA56')
+  const { vestingData, estimateClaim } = useVestingInfo(luaVestingAddress)
+  const { claimAt: claimVestingTime, claimPercentage: claimVestingPercentage, userVestingInfo } = vestingData
   const [currentVestingPercentage, setCurrentVestingPercentage] = useState(0)
-  const luaVestingContract = useLuaVestingContract('0x3dF24b8c9b2839c0E804dBB58D245fF7e115FA56')
+  const luaVestingContract = useLuaVestingContract(luaVestingAddress)
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
   const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(
     paytokenContract,
@@ -329,14 +326,14 @@ const Deposit: React.FC<DepositProps> = ({
         <CardBody
           style={{
             height: '100%',
-            // ...(!isAvailalbeOnCurrentNetwork && {
-            //   display: 'flex',
-            //   justifyContent: 'center',
-            //   alignItems: 'center',
-            // }),
+            ...(!isAvailalbeOnCurrentNetwork && {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }),
           }}
         >
-          {!isAvailalbeOnCurrentNetwork ? (
+          {isAvailalbeOnCurrentNetwork ? (
             <>
               <Flex justifyContent="space-between">
                 <Text>Your Tier</Text>
@@ -383,16 +380,13 @@ const Deposit: React.FC<DepositProps> = ({
                     <Text bold>
                       {poolStatus === 'claim'
                         ? 'Processing'
-                        : new BigNumber(idoReceivedAmount).multipliedBy(currentVestingPercentage).dividedBy(100)}{' '}
+                        : new BigNumber(idoReceivedAmount)
+                            .multipliedBy(currentVestingPercentage)
+                            .dividedBy(100)
+                            .toString()}{' '}
                       {idoToken.symbol}
                     </Text>
                   </Flex>
-                  <Text>Next claim in:</Text>
-                  <Text bold>
-                    <span>{timeNextClaim.hours} hour(s)</span>&nbsp;
-                    <span>{timeNextClaim.minutes} minute(s)</span>&nbsp;
-                    <span>{timeNextClaim.seconds} second(s)</span>
-                  </Text>
                 </>
               ) : (
                 <>
@@ -442,6 +436,8 @@ const Deposit: React.FC<DepositProps> = ({
                 poolStatus={poolStatus}
                 payTokenBalance={payTokenBalance}
                 isLoadingApproveStatus={isLoadingApproveStatus}
+                idoReceivedAmount={idoReceivedAmount}
+                claimSymbol={idoToken.symbol}
                 isIdoAvailalbeOnChain={isIdoAvailalbeOnChain}
                 handleApprove={handleApprove}
                 onCommit={onHandleCommit}
@@ -455,8 +451,9 @@ const Deposit: React.FC<DepositProps> = ({
                 minAmount={minAmountPay}
                 depositAmount={value}
                 isShowVesting={isShowVesting}
-                claimVestingTime={claimVestingTime}
-                userVestingInfo={userVestingInfo}
+                vestingData={vestingData}
+                timeNextClaim={timeNextClaim}
+                estimateClaim={estimateClaim}
               />
               {isClaimed && <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>}
             </>

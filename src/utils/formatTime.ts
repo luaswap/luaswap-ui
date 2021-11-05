@@ -50,6 +50,20 @@ export const compareWithCurrentDateTime = (timestamp): boolean => {
   return false
 }
 
+export const compareTwoTimestamp = (timestamp1, timestamp2): boolean => {
+  if (timestamp1 && timestamp2) {
+    const result = compareAsc(fromUnixTime(timestamp1), fromUnixTime(timestamp2))
+
+    if (result === 1) {
+      return true
+    }
+
+    return false
+  }
+
+  return false
+}
+
 export const differenceInSecond = (date1: Date, date2: Date): number => {
   if (date1 && date2) {
     return differenceInSeconds(date1, date2)

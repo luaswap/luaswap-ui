@@ -1,13 +1,16 @@
-import React, { LegacyRef, ReactElement } from 'react'
+import React, { LegacyRef, ReactElement, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { Button, AutoRenewIcon } from 'luastarter-uikits'
 import useToast from 'hooks/useToast'
 import UnlockButton from 'components/UnlockButton'
 import { ZERO_ADDRESS } from 'config/constants/idos'
-import { UserVestingInfoType } from 'views/Idos/hooks/useVestingInfo'
+import { UserVestingInfoType, VestingInfo } from 'views/Idos/hooks/useVestingInfo'
+import { compareTwoTimestamp } from 'utils/formatTime'
+import { TimePeriodType } from 'utils/getTimePeriods'
 import CommitButton from './CommitButton'
 import ClaimButton from './ClaimButton'
+import VestingButton from './VestingButton'
 import { PoolStatus } from '../../types'
 
 interface ActionButtonProps {
@@ -31,8 +34,11 @@ interface ActionButtonProps {
   payTokenBalance: BigNumber
   userTotalCommitted: string
   isShowVesting: boolean
-  claimVestingTime: string[]
-  userVestingInfo: UserVestingInfoType
+  timeNextClaim: TimePeriodType
+  idoReceivedAmount: string
+  claimSymbol: string
+  vestingData: VestingInfo
+  estimateClaim: (time: number) => Promise<any>
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -56,29 +62,25 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   userTotalCommitted,
   isShowVesting,
   onClaimVesting,
-  userVestingInfo,
-  claimVestingTime,
+  idoReceivedAmount,
+  timeNextClaim,
+  claimSymbol,
+  vestingData,
+  estimateClaim,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const { toastError } = useToast()
   const isNativeToken = paytokenAddress === ZERO_ADDRESS
+  const { userVestingInfo } = vestingData
+  const { claimAtsTime } = userVestingInfo
+  const userClaimFirstPercent = useMemo(() => {
+    return claimAtsTime !== '0'
+  }, [claimAtsTime])
+
   if (!account) {
     return <UnlockButton />
   }
-  return (
-    <ClaimButton
-      onClick={() => {
-        if (false) {
-          onClaim()
-        } else {
-          onClaimVesting()
-        }
-      }}
-      disabled={disabled}
-      isLoading={isRequestContractAction}
-      endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
-    />
-  )
+
   if (!isIdoAvailalbeOnChain || isClaimed || isLoadingApproveStatus) {
     return null
   }
@@ -100,9 +102,23 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   if (poolStatus === 'closed') {
     if (isShowVesting) {
       return (
-        <ClaimButton
-          onClick={onClaim}
-          disabled={disabled}
+        <VestingButton
+          vestingData={vestingData}
+          userVestingInfo={userVestingInfo}
+          estimateClaim={estimateClaim}
+          timeNextClaim={timeNextClaim}
+          userClaimFirstPercent={userClaimFirstPercent}
+          claimSymbol={claimSymbol}
+          idoReceivedAmount={idoReceivedAmount}
+          onClick={() => {
+            // If user already claim 1 time we will call other functi
+            if (!userClaimFirstPercent) {
+              onClaim()
+            } else {
+              onClaimVesting()
+            }
+          }}
+          disabled={userClaimFirstPercent}
           isLoading={isRequestContractAction}
           endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
         />
