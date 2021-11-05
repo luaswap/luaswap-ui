@@ -38,7 +38,7 @@ interface ActionButtonProps {
   idoReceivedAmount: string
   claimSymbol: string
   vestingData: VestingInfo
-  estimateClaim: (time: number) => Promise<any>
+  estimatedAmount: string
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -66,7 +66,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   timeNextClaim,
   claimSymbol,
   vestingData,
-  estimateClaim,
+  estimatedAmount,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const { toastError } = useToast()
@@ -105,7 +105,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
         <VestingButton
           vestingData={vestingData}
           userVestingInfo={userVestingInfo}
-          estimateClaim={estimateClaim}
+          estimatedAmount={estimatedAmount}
           timeNextClaim={timeNextClaim}
           userClaimFirstPercent={userClaimFirstPercent}
           claimSymbol={claimSymbol}

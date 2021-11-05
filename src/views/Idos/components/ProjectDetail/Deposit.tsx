@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
-import { Card, CardBody, Flex, Text, Mesage, Box } from 'luastarter-uikits'
+import { Card, CardBody, Flex, Text, Mesage, Box, TertiaryMessage } from 'luastarter-uikits'
 import { useWeb3React } from '@web3-react/core'
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import styled from 'styled-components'
 import compareAsc from 'date-fns/compareAsc'
 import get from 'lodash/get'
@@ -11,12 +11,19 @@ import useDepositIdo from 'hooks/useDepositIdo'
 import { useApproveIdo } from 'hooks/useApproveIdo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import useDeepMemo from 'hooks/useDeepMemo'
+import useCurrentTime from 'hooks/useTimer'
 import useClaimVesting from 'hooks/useClaimVesting'
 import useVestingInfo from 'views/Idos/hooks/useVestingInfo'
+import generateClaimInfo from 'views/Idos/utils/generateClaimInfo'
 import { useSecondsUtilTimestamp } from 'views/Idos/hooks/useSecondsUntilCurrent'
 import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
 import { useLuaVestingContract } from 'hooks/useContract'
-import { compareWithCurrentDateTime, getUtcDateString, timestampAndCurrentDifference } from 'utils/formatTime'
+import {
+  compareTwoTimestamp,
+  compareWithCurrentDateTime,
+  getUtcDateString,
+  timestampAndCurrentDifference,
+} from 'utils/formatTime'
 import getTimePeriods from 'utils/getTimePeriods'
 import ModalInput from 'components/ModalInput'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
@@ -98,9 +105,12 @@ const Deposit: React.FC<DepositProps> = ({
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
   const { vestingData, estimateClaim } = useVestingInfo(luaVestingAddress)
+  const [estimatedAmount, setEstimatedAmount] = useState(null)
   const { claimAt: claimVestingTime, claimPercentage: claimVestingPercentage, userVestingInfo } = vestingData
+  const { claimAtsTime } = userVestingInfo
   const [currentVestingPercentage, setCurrentVestingPercentage] = useState(0)
   const luaVestingContract = useLuaVestingContract(luaVestingAddress)
+  const currentTimestamp = useCurrentTime()
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
   const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(
     paytokenContract,
@@ -137,6 +147,10 @@ const Deposit: React.FC<DepositProps> = ({
     return calculateSwapRate(totalAmountIDO, totalAmountPay)
   }, [totalAmountIDO, totalAmountPay])
 
+  const currentTimestampInSecond = useMemo(() => {
+    return Math.floor(currentTimestamp / 1000)
+  }, [currentTimestamp])
+
   const isIdoAvailalbeOnChain = useDeepMemo(() => {
     const { addressIdoContract } = tierDataOfUser
 
@@ -155,8 +169,8 @@ const Deposit: React.FC<DepositProps> = ({
     // We start to compare to each time in the claim time array
     // If userClaimTime smaller than a timestamp in array we will get that timestamp and consider it as the next claim time
     for (let i = 0; i < claimVestingTime.length; i++) {
-      const result = compareWithCurrentDateTime(claimVestingTime[i])
-      if (!result) {
+      const result = compareAsc(currentTimestampInSecond, Number(claimVestingTime[i]))
+      if (result === -1) {
         setCurrentVestingPercentage(
           claimVestingPercentage.reduce((a, b, _index) => {
             if (_index < i) {
@@ -170,9 +184,20 @@ const Deposit: React.FC<DepositProps> = ({
       }
     }
     return null
-  }, [claimVestingTime, claimVestingPercentage])
-  const secondsUntilNextClaim = useSecondsUtilTimestamp(nextClaimTime)
+  }, [claimVestingTime, claimVestingPercentage, currentTimestampInSecond])
 
+  const isCurrentTimeOutOfClaimTimeFrame = useMemo(() => {
+    if (claimVestingTime && claimVestingTime.length !== 0) {
+      const lastTimeFrame = claimVestingTime[claimVestingTime.length - 1]
+      const result = compareTwoTimestamp(currentTimestamp, Number(lastTimeFrame))
+
+      return result
+    }
+
+    return false
+  }, [currentTimestamp, claimVestingTime])
+
+  const secondsUntilNextClaim = useSecondsUtilTimestamp(nextClaimTime)
   const timeNextClaim = useMemo(() => {
     return getTimePeriods(secondsUntilNextClaim)
   }, [secondsUntilNextClaim])
@@ -228,6 +253,15 @@ const Deposit: React.FC<DepositProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolStatus, getClaimProof, projectId, index, isLoadingTierInfo])
+
+  useEffect(() => {
+    const fetchEstimatedAmount = async () => {
+      const res = await estimateClaim(currentTimestampInSecond)
+      setEstimatedAmount(res)
+    }
+
+    fetchEstimatedAmount()
+  }, [estimateClaim, currentTimestampInSecond])
 
   const getCommitProof = useCallback(
     async (poolId, poolIndex, amount) => {
@@ -375,8 +409,28 @@ const Deposit: React.FC<DepositProps> = ({
                       {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
                     </Text>
                   </Flex>
-                  <Flex justifyContent="space-between">
-                    <Text>Current claimable amount</Text>
+                  <TertiaryMessage
+                    hoverContent={generateClaimInfo(claimVestingTime, claimVestingPercentage)}
+                    hoverPlacement="top"
+                    color="#C3C3C3"
+                  >
+                    Claim information
+                  </TertiaryMessage>
+                  {/* When user does not claim any thing even after the claim time frame */}
+                  {claimAtsTime === '0' && !isCurrentTimeOutOfClaimTimeFrame ? (
+                    <Mesage variant="warning" mt="18px">
+                      You will be able to claim: {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount}{' '}
+                      {idoToken.symbol}
+                    </Mesage>
+                  ) : (
+                    <Mesage variant="warning" mt="18px">
+                      Time till next claim: {timeNextClaim.hours} hour(s) {timeNextClaim.minutes} minute(s){' '}
+                      {timeNextClaim.seconds} second(s)
+                    </Mesage>
+                  )}
+
+                  {/* <Flex justifyContent="space-between">
+                    <Text>Total claimed amount</Text>
                     <Text bold>
                       {poolStatus === 'claim'
                         ? 'Processing'
@@ -386,7 +440,7 @@ const Deposit: React.FC<DepositProps> = ({
                             .toString()}{' '}
                       {idoToken.symbol}
                     </Text>
-                  </Flex>
+                  </Flex> */}
                 </>
               ) : (
                 <>
@@ -453,7 +507,7 @@ const Deposit: React.FC<DepositProps> = ({
                 isShowVesting={isShowVesting}
                 vestingData={vestingData}
                 timeNextClaim={timeNextClaim}
-                estimateClaim={estimateClaim}
+                estimatedAmount={estimatedAmount}
               />
               {isClaimed && <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>}
             </>

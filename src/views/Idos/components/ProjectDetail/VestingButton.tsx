@@ -17,7 +17,7 @@ interface VestingButtonProps {
   userClaimFirstPercent: boolean
   idoReceivedAmount: string
   claimSymbol: string
-  estimateClaim: (time: number) => Promise<any>
+  estimatedAmount: string
   vestingData: VestingInfo
 }
 
@@ -30,36 +30,26 @@ const VestingButton: React.FC<VestingButtonProps> = ({
   idoReceivedAmount,
   claimSymbol,
   vestingData,
-  estimateClaim,
+  estimatedAmount,
   ...props
 }) => {
   const { claimAtsTime, claimedAmount } = userVestingInfo
-  const [estimatedAmount, setEstimatedAmount] = useState(null)
   const currentTimestamp = useTimer()
   const { claimAt, claimPercentage } = vestingData
   const currentTimestampInSecond = useMemo(() => {
     return Math.floor(currentTimestamp / 1000)
   }, [currentTimestamp])
-  useEffect(() => {
-    const fetchEstimatedAmount = async () => {
-      const res = await estimateClaim(currentTimestampInSecond)
-      setEstimatedAmount(res)
-    }
-
-    fetchEstimatedAmount()
-  }, [estimateClaim, currentTimestampInSecond])
 
   const isCurrentTimeOutOfClaimTimeFrame = useMemo(() => {
-    if (claimAtsTime && claimAtsTime.length !== 0) {
-      const lastTimeFrame = claimAtsTime[claimAtsTime.length - 1]
+    if (claimAtsTime) {
+      const lastTimeFrame = claimAt[claimAt.length - 1]
       const result = compareTwoTimestamp(currentTimestamp, Number(lastTimeFrame))
 
       return result
     }
 
     return false
-  }, [currentTimestamp, claimAtsTime])
-
+  }, [currentTimestamp, claimAtsTime, claimAt])
   // const currentClaimTimeframe = useMemo(() => {
   //   if (userClaimFirstPercent) {
   //     return null
@@ -73,11 +63,10 @@ const VestingButton: React.FC<VestingButtonProps> = ({
 
     return false
   }, [estimatedAmount])
-
-  if (!userClaimFirstPercent) {
+  if (!userClaimFirstPercent && isCurrentTimeOutOfClaimTimeFrame) {
     return (
       <Button mb="15px" mt="15px" width="100%" variant="primary" onClick={onClick} {...props}>
-        Claim {new BigNumber(idoReceivedAmount).dividedBy(100).multipliedBy(claimedAmount[0]).toString()} {claimSymbol}
+        Claim reward
       </Button>
     )
   }
