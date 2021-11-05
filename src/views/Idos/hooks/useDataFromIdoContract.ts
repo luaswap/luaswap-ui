@@ -39,10 +39,17 @@ const useDataFromIdoContract = (
   contractAddress: string,
   idoIndex: number,
   idoIndexes: Record<string, IdoDetailInfo[]>,
-): [idoData: IdoDetail, commitedAmount: string, totalAmountUserSwapped: string, isLoading: boolean] => {
+): [
+  idoData: IdoDetail,
+  commitedAmount: string,
+  totalAmountUserSwapped: string,
+  isLoading: boolean,
+  luaVestingAddress: string,
+] => {
   const { account, chainId } = useWeb3React()
   // Current Lua Ido contract based on log in chainid
-  const luaIdoContract = useLuaIdoContract(contractAddress)
+  const luaIdoContract = useLuaIdoContract('0xb329d7CC8A22E8127868Bcd81dAD9160863798b3')
+  const [luaVestingAddress, setLuaVestingAddress] = useState(null)
   const [idoDetail, setIdoDetail] = useState<IdoDetail>(defaultIdoDetail)
   const [totalUserCommitted, setTotalUserCommitted] = useState<string>('0')
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -133,7 +140,19 @@ const useDataFromIdoContract = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentBlock, chainId])
 
-  return [idoDetail, totalUserCommitted, totalAmountUserSwapped, isLoading]
+  useEffect(() => {
+    const fetchVestingInfo = async () => {
+      try {
+        const vestingContract = await luaIdoContract.methods.vesting().call()
+        setLuaVestingAddress(vestingContract)
+      } catch (error) {
+        console.log(error, 'fail to get vesting contract')
+      }
+    }
+    fetchVestingInfo()
+  }, [luaIdoContract, contractAddress])
+
+  return [idoDetail, totalUserCommitted, totalAmountUserSwapped, isLoading, luaVestingAddress]
 }
 
 export default useDataFromIdoContract

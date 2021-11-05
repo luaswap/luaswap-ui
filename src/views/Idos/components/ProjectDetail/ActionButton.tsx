@@ -5,6 +5,7 @@ import { Button, AutoRenewIcon } from 'luastarter-uikits'
 import useToast from 'hooks/useToast'
 import UnlockButton from 'components/UnlockButton'
 import { ZERO_ADDRESS } from 'config/constants/idos'
+import { UserVestingInfoType } from 'views/Idos/hooks/useVestingInfo'
 import CommitButton from './CommitButton'
 import ClaimButton from './ClaimButton'
 import { PoolStatus } from '../../types'
@@ -14,6 +15,7 @@ interface ActionButtonProps {
   isLoadingApproveStatus: boolean
   onCommit(): any
   onClaim(): any
+  onClaimVesting(): any
   disabled: boolean
   symbol: string
   isRequestContractAction: boolean
@@ -28,6 +30,9 @@ interface ActionButtonProps {
   minAmount: number
   payTokenBalance: BigNumber
   userTotalCommitted: string
+  isShowVesting: boolean
+  claimVestingTime: string[]
+  userVestingInfo: UserVestingInfoType
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -49,6 +54,10 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   minAmount,
   payTokenBalance,
   userTotalCommitted,
+  isShowVesting,
+  onClaimVesting,
+  userVestingInfo,
+  claimVestingTime,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const { toastError } = useToast()
@@ -56,6 +65,20 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   if (!account) {
     return <UnlockButton />
   }
+  return (
+    <ClaimButton
+      onClick={() => {
+        if (false) {
+          onClaim()
+        } else {
+          onClaimVesting()
+        }
+      }}
+      disabled={disabled}
+      isLoading={isRequestContractAction}
+      endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
+    />
+  )
   if (!isIdoAvailalbeOnChain || isClaimed || isLoadingApproveStatus) {
     return null
   }
@@ -75,6 +98,17 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   }
 
   if (poolStatus === 'closed') {
+    if (isShowVesting) {
+      return (
+        <ClaimButton
+          onClick={onClaim}
+          disabled={disabled}
+          isLoading={isRequestContractAction}
+          endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
+        />
+      )
+    }
+
     return (
       <ClaimButton
         onClick={onClaim}

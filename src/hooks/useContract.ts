@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import useWeb3 from 'hooks/useWeb3'
+import { ZERO_ADDRESS } from 'config/constants/idos'
 import {
   getBep20Contract,
   getCakeContract,
@@ -24,6 +25,7 @@ import {
   getSouschefV2Contract,
   getLuaContract,
   getLuaIdoContract,
+  getLuaVestingContract,
 } from 'utils/contractHelpers'
 
 /**
@@ -96,6 +98,17 @@ export const useLuaContract = (chainId: number) => {
 export const useLuaIdoContract = (address: string) => {
   const web3 = useWeb3()
   return useMemo(() => getLuaIdoContract(web3, address), [web3, address])
+}
+
+export const useLuaVestingContract = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => {
+    if (address === ZERO_ADDRESS) {
+      return null
+    }
+
+    return getLuaVestingContract(web3, address)
+  }, [web3, address])
 }
 
 export const useSousChef = (id) => {

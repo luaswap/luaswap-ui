@@ -48,7 +48,7 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ currentPoolData }) => {
         {Array.isArray(links) &&
           links.map((item) => {
             return (
-              <LinkRef>
+              <LinkRef key={item.link}>
                 <Link
                   href={item.link}
                   target="_blank"

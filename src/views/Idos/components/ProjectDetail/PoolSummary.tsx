@@ -219,7 +219,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <PoolInfoBlock>
               <Title bold>{name}</Title>
               {get(currentPoolData, 'network', []).map((network) => {
-                return <YellowCard>{network}</YellowCard>
+                return <YellowCard key={network}>{network}</YellowCard>
               })}
               {isShowPoolData && <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>}
             </PoolInfoBlock>

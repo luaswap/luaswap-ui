@@ -4,12 +4,20 @@ import { Card, CardBody, Flex, Text, Mesage, Box } from 'luastarter-uikits'
 import { useWeb3React } from '@web3-react/core'
 import axios, { AxiosResponse } from 'axios'
 import styled from 'styled-components'
+import compareAsc from 'date-fns/compareAsc'
+import get from 'lodash/get'
 import useToast from 'hooks/useToast'
 import useDepositIdo from 'hooks/useDepositIdo'
 import { useApproveIdo } from 'hooks/useApproveIdo'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import useDeepMemo from 'hooks/useDeepMemo'
+import useClaimVesting from 'hooks/useClaimVesting'
+import useVestingInfo from 'views/Idos/hooks/useVestingInfo'
+import { useSecondsUtilTimestamp } from 'views/Idos/hooks/useSecondsUntilCurrent'
 import useClaimRewardIdo from 'hooks/useClaimRewardIdo'
+import { useLuaVestingContract } from 'hooks/useContract'
+import { compareWithCurrentDateTime, getUtcDateString, timestampAndCurrentDifference } from 'utils/formatTime'
+import getTimePeriods from 'utils/getTimePeriods'
 import ModalInput from 'components/ModalInput'
 import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import { ZERO_ADDRESS } from 'config/constants/idos'
@@ -70,6 +78,7 @@ interface DepositProps {
   isAvailalbeOnCurrentNetwork: boolean
   isLoadingDataFromContract: boolean
   isLoadingTierInfo: boolean
+  luaVestingAddress: string
 }
 
 const Deposit: React.FC<DepositProps> = ({
@@ -81,12 +90,20 @@ const Deposit: React.FC<DepositProps> = ({
   selectedUserTier,
   isLoadingDataFromContract,
   isLoadingTierInfo,
+  luaVestingAddress,
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
   const [isRequestContractAction, setIsRequestContractAction] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
+  const {
+    claimAt: claimVestingTime,
+    claimPercentage: claimVestingPercentage,
+    userVestingInfo,
+  } = useVestingInfo('0x3dF24b8c9b2839c0E804dBB58D245fF7e115FA56')
+  const [currentVestingPercentage, setCurrentVestingPercentage] = useState(0)
+  const luaVestingContract = useLuaVestingContract('0x3dF24b8c9b2839c0E804dBB58D245fF7e115FA56')
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
   const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(
     paytokenContract,
@@ -101,6 +118,7 @@ const Deposit: React.FC<DepositProps> = ({
     tierDataOfUser.payToken.address,
   )
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
+  const { onClaimVesting } = useClaimVesting(luaVestingAddress)
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
@@ -110,7 +128,6 @@ const Deposit: React.FC<DepositProps> = ({
   const maxAmountAllowedLeft = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
   }, [maxAmountPay, userTotalCommitted])
-
   const isUserDepositMinimumAmount = useMemo(() => {
     const flag = new BigNumber(userTotalCommitted).plus(new BigNumber(value)).comparedTo(new BigNumber(minAmountPay))
     if (flag < 0) {
@@ -129,10 +146,42 @@ const Deposit: React.FC<DepositProps> = ({
     return !!addressIdoContract
   }, [tierDataOfUser])
 
+  const isShowVesting = useMemo(() => {
+    if (luaVestingContract) {
+      return true
+    }
+
+    return false
+  }, [luaVestingContract])
+
+  const nextClaimTime = useMemo(() => {
+    // We start to compare to each time in the claim time array
+    // If userClaimTime smaller than a timestamp in array we will get that timestamp and consider it as the next claim time
+    for (let i = 0; i < claimVestingTime.length; i++) {
+      const result = compareWithCurrentDateTime(claimVestingTime[i])
+      if (!result) {
+        setCurrentVestingPercentage(
+          claimVestingPercentage.reduce((a, b, _index) => {
+            if (_index < i) {
+              return a + Number(b)
+            }
+
+            return a
+          }, 0),
+        )
+        return claimVestingTime[i]
+      }
+    }
+    return null
+  }, [claimVestingTime, claimVestingPercentage])
+  const secondsUntilNextClaim = useSecondsUtilTimestamp(nextClaimTime)
+
+  const timeNextClaim = useMemo(() => {
+    return getTimePeriods(secondsUntilNextClaim)
+  }, [secondsUntilNextClaim])
   const handleSelectMax = useCallback(() => {
     setValue(maxAmountAllowedLeft)
   }, [maxAmountAllowedLeft])
-
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget.validity.valid) {
       setValue(e.currentTarget.value.replace(/,/g, '.'))
@@ -228,6 +277,18 @@ const Deposit: React.FC<DepositProps> = ({
     }
   }, [onClaimReward, toastError, toastSuccess, projectId, index, getClaimProof])
 
+  const onHandleClaimVesting = useCallback(async () => {
+    try {
+      setIsRequestContractAction(true)
+      await onClaimVesting()
+      setIsRequestContractAction(false)
+      toastSuccess('Reward Claimed Successfully')
+    } catch (error) {
+      toastError('Fail to claim reward')
+      setIsRequestContractAction(false)
+    }
+  }, [onClaimVesting, toastError, toastSuccess])
+
   const isPoolInProgress = useMemo(() => {
     if (poolStatus === 'open') {
       return true
@@ -253,7 +314,6 @@ const Deposit: React.FC<DepositProps> = ({
 
     return false
   }, [poolStatus, totalAmountUserSwapped, userTotalCommitted])
-
   const minimumClaimableAmount = useMemo(() => {
     if (minAmountPay && totalAmountPay && totalAmountIDO) {
       return new BigNumber(minAmountPay)
@@ -263,21 +323,20 @@ const Deposit: React.FC<DepositProps> = ({
 
     return 0
   }, [minAmountPay, totalAmountIDO, totalAmountPay])
-
   return (
     <FlexWrapper flexDirection="row" flexWrap="wrap">
       <CardWrapper>
         <CardBody
           style={{
             height: '100%',
-            ...(!isAvailalbeOnCurrentNetwork && {
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }),
+            // ...(!isAvailalbeOnCurrentNetwork && {
+            //   display: 'flex',
+            //   justifyContent: 'center',
+            //   alignItems: 'center',
+            // }),
           }}
         >
-          {isAvailalbeOnCurrentNetwork ? (
+          {!isAvailalbeOnCurrentNetwork ? (
             <>
               <Flex justifyContent="space-between">
                 <Text>Your Tier</Text>
@@ -311,23 +370,52 @@ const Deposit: React.FC<DepositProps> = ({
                   {userTotalCommitted} {payToken.symbol}
                 </Text>
               </Flex>
-              {(poolStatus === 'claim' || poolStatus === 'closed') && (
-                <Flex justifyContent="space-between">
-                  <Text>Claimable amount</Text>
+              {isShowVesting ? (
+                <>
+                  <Flex justifyContent="space-between">
+                    <Text>Total claimable amount</Text>
+                    <Text bold>
+                      {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
+                    </Text>
+                  </Flex>
+                  <Flex justifyContent="space-between">
+                    <Text>Current claimable amount</Text>
+                    <Text bold>
+                      {poolStatus === 'claim'
+                        ? 'Processing'
+                        : new BigNumber(idoReceivedAmount).multipliedBy(currentVestingPercentage).dividedBy(100)}{' '}
+                      {idoToken.symbol}
+                    </Text>
+                  </Flex>
+                  <Text>Next claim in:</Text>
                   <Text bold>
-                    {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
+                    <span>{timeNextClaim.hours} hour(s)</span>&nbsp;
+                    <span>{timeNextClaim.minutes} minute(s)</span>&nbsp;
+                    <span>{timeNextClaim.seconds} second(s)</span>
                   </Text>
-                </Flex>
+                </>
+              ) : (
+                <>
+                  {(poolStatus === 'claim' || poolStatus === 'closed') && (
+                    <Flex justifyContent="space-between">
+                      <Text>Claimable amount</Text>
+                      <Text bold>
+                        {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
+                      </Text>
+                    </Flex>
+                  )}
+
+                  {(poolStatus === 'claim' || poolStatus === 'closed') && (
+                    <Flex justifyContent="space-between">
+                      <Text>Claimed Amount</Text>
+                      <Text bold>
+                        {isClaimed ? idoReceivedAmount : 0} {idoToken.symbol}
+                      </Text>
+                    </Flex>
+                  )}
+                </>
               )}
 
-              {(poolStatus === 'claim' || poolStatus === 'closed') && (
-                <Flex justifyContent="space-between">
-                  <Text>Claimed Amount</Text>
-                  <Text bold>
-                    {isClaimed ? idoReceivedAmount : 0} {idoToken.symbol}
-                  </Text>
-                </Flex>
-              )}
               {isIdoAvailalbeOnChain && (
                 <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="15px">
                   {account && isPoolInProgress && (isNativeToken || (!isNativeToken && isApproved)) && (
@@ -349,14 +437,15 @@ const Deposit: React.FC<DepositProps> = ({
               <ActionButton
                 isRequestContractAction={isRequestContractAction}
                 isUserDepositMinimumAmount={isUserDepositMinimumAmount}
-                handleApprove={handleApprove}
                 isApproved={isApproved}
                 userTotalCommitted={userTotalCommitted}
                 poolStatus={poolStatus}
                 payTokenBalance={payTokenBalance}
-                onCommit={onHandleCommit}
                 isLoadingApproveStatus={isLoadingApproveStatus}
                 isIdoAvailalbeOnChain={isIdoAvailalbeOnChain}
+                handleApprove={handleApprove}
+                onCommit={onHandleCommit}
+                onClaimVesting={onHandleClaimVesting}
                 onClaim={onHandleClaim}
                 disabled={!isClaimable}
                 symbol={payToken.symbol}
@@ -365,6 +454,9 @@ const Deposit: React.FC<DepositProps> = ({
                 maxAmountAllowedLeft={maxAmountAllowedLeft}
                 minAmount={minAmountPay}
                 depositAmount={value}
+                isShowVesting={isShowVesting}
+                claimVestingTime={claimVestingTime}
+                userVestingInfo={userVestingInfo}
               />
               {isClaimed && <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>}
             </>

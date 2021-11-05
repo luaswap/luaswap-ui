@@ -174,11 +174,8 @@ const ProjectDetail = () => {
     return getIdoDataBasedOnChainIdAndTier(index, chainId, selectedUserTier)
   }, [currentPoolData, chainId, selectedUserTier])
 
-  const [_, totalUserCommittedFromContract, totalAmountUserSwapped, isLoadingDataFromContract] = useDataFromIdoContract(
-    tierDataOfUser.addressIdoContract,
-    tierDataOfUser.index,
-    currentPoolData.index,
-  )
+  const [_, totalUserCommittedFromContract, totalAmountUserSwapped, isLoadingDataFromContract, luaVestingAddress] =
+    useDataFromIdoContract(tierDataOfUser.addressIdoContract, tierDataOfUser.index, currentPoolData.index)
 
   const idoDetailFromContract = useTotalDataFromApi(currentPoolData)
 
@@ -221,6 +218,7 @@ const ProjectDetail = () => {
               />
               {isShowPoolData && (
                 <Deposit
+                  luaVestingAddress={luaVestingAddress}
                   isLoadingTierInfo={isLoadingTierInfo}
                   isLoadingDataFromContract={isLoadingDataFromContract}
                   currentPoolData={currentPoolData}
