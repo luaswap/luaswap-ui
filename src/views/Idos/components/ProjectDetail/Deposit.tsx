@@ -101,6 +101,7 @@ const Deposit: React.FC<DepositProps> = ({
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
+  const [currentTimeIndex, setCurrentTimeIndex] = useState(null)
   const [isRequestContractAction, setIsRequestContractAction] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
@@ -171,6 +172,7 @@ const Deposit: React.FC<DepositProps> = ({
     for (let i = 0; i < claimVestingTime.length; i++) {
       const result = compareAsc(currentTimestampInSecond, Number(claimVestingTime[i]))
       if (result === -1) {
+        setCurrentTimeIndex(i)
         setCurrentVestingPercentage(
           claimVestingPercentage.reduce((a, b, _index) => {
             if (_index < i) {
