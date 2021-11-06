@@ -193,7 +193,7 @@ const Deposit: React.FC<DepositProps> = ({
   }, [claimVestingTime, claimVestingPercentage, currentTimestampInSecond])
 
   const isClaimedAllVesting = useMemo(() => {
-    if (isShowVesting && claimedAmount && idoReceivedAmount) {
+    if (isShowVesting && claimedAmount && idoReceivedAmount && claimedAmount !== '0') {
       if (getFullDisplayBalance(new BigNumber(claimedAmount), idoToken.decimals) === idoReceivedAmount) {
         return true
       }
@@ -326,12 +326,16 @@ const Deposit: React.FC<DepositProps> = ({
       await onClaimReward(formattedFinalPay, proofS)
       setIsRequestContractAction(false)
       toastSuccess('Reward Claimed Successfully')
+      // It will refetch vesting data from contract when user claim successfully
+      if (isShowVesting) {
+        refetchDataFromContract()
+      }
     } catch (error) {
       console.log(error, 'Fail to claim reward')
       toastError('Failed to claim reward')
       setIsRequestContractAction(false)
     }
-  }, [onClaimReward, toastError, toastSuccess, projectId, index, getClaimProof])
+  }, [onClaimReward, toastError, toastSuccess, projectId, index, getClaimProof, refetchDataFromContract, isShowVesting])
 
   const onHandleClaimVesting = useCallback(async () => {
     try {
@@ -339,6 +343,7 @@ const Deposit: React.FC<DepositProps> = ({
       await onClaimVesting()
       setIsRequestContractAction(false)
       toastSuccess('Reward Claimed Successfully')
+      // Reload data from contract when user claim
       refetchDataFromContract()
     } catch (error) {
       toastError('Fail to claim reward')
