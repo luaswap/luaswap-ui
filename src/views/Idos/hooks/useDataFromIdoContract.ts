@@ -33,12 +33,14 @@ const defaultIdoDetail = {
  * @param contractAddress Ido contract address
  * @param idoIndex Index of the current IDO in contract (based on chain id and user tier)
  * @param idoIndexes List of idos for each chain id in this IDO
+ * @param verionContract Version of current contract
  * @returns Data of the current IDO on contract and amount of committed token of current User
  */
 const useDataFromIdoContract = (
   contractAddress: string,
   idoIndex: number,
   idoIndexes: Record<string, IdoDetailInfo[]>,
+  verionContract: number,
 ): [
   idoData: IdoDetail,
   commitedAmount: string,
@@ -149,8 +151,11 @@ const useDataFromIdoContract = (
         console.log(error, 'fail to get vesting contract')
       }
     }
-    fetchVestingInfo()
-  }, [luaIdoContract, contractAddress])
+    // Only fetch vesting information when version contract = 2
+    if (verionContract === 2) {
+      fetchVestingInfo()
+    }
+  }, [luaIdoContract, contractAddress, verionContract])
 
   return [idoDetail, totalUserCommitted, totalAmountUserSwapped, isLoading, luaVestingAddress]
 }

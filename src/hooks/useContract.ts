@@ -103,7 +103,7 @@ export const useLuaIdoContract = (address: string) => {
 export const useLuaVestingContract = (address: string) => {
   const web3 = useWeb3()
   return useMemo(() => {
-    if (address === ZERO_ADDRESS) {
+    if (address === ZERO_ADDRESS || !address) {
       return null
     }
 

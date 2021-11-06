@@ -28,6 +28,7 @@ const defaultCurrentPool = {
   untilClose: null,
   untilOpen: null,
   untilSnapshootAt: null,
+  versionContract: null,
 }
 
 const initialState: IdoState = {

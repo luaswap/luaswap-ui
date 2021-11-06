@@ -132,7 +132,7 @@ const Deposit: React.FC<DepositProps> = ({
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
-  const { openAt, closeAt, claimAt } = currentPoolData
+  const { openAt, closeAt, claimAt, versionContract } = currentPoolData
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
 
   const maxAmountAllowedLeft = useMemo(() => {
@@ -162,13 +162,16 @@ const Deposit: React.FC<DepositProps> = ({
 
   // Has vesting function or not
   const isShowVesting = useMemo(() => {
-    if (luaVestingContract) {
+    if (versionContract === 1) {
+      return false
+    }
+
+    if (versionContract === 2) {
       return true
     }
 
-    return false
-  }, [luaVestingContract])
-
+    return true
+  }, [versionContract])
   // Find the next time frame
   const nextClaimTime = useMemo(() => {
     // We start to compare to each time in the claim time array
