@@ -17,9 +17,9 @@ export interface VestingInfo {
 }
 
 const DEFAULT_USERINFO = {
-  amount: null,
+  amount: '0',
   claimAtsTime: null,
-  claimedAmount: null,
+  claimedAmount: '0',
 }
 
 const formatVestingUserInfo = (userInfo: UserVestingInfoType = DEFAULT_USERINFO) => {
@@ -35,8 +35,13 @@ const useVestingInfo = (
 ): {
   vestingData: VestingInfo
   estimateClaim: (time: any) => Promise<any>
+  refetchDataFromContract: () => any
+  isLoadingVestingInfo: boolean
 } => {
   const { account } = useWeb3React()
+  // Force the hook to refetch
+  const [refetching, setRefetching] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState({
     claimAt: [],
     claimPercentage: [],
@@ -44,6 +49,10 @@ const useVestingInfo = (
   })
   const web3 = useWeb3()
   const vestingContract = useLuaVestingContract(vestingAddress)
+
+  const refetchDataFromContract = useCallback(() => {
+    setRefetching(refetching + 1)
+  }, [refetching])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,12 +70,12 @@ const useVestingInfo = (
         const claimAtsResult = await makeBatchRequest(claimAtsCall, web3)
         const userVestingInfo = await vestingContract.methods.info(account).call()
         const formatedVestingInfo = formatVestingUserInfo(userVestingInfo)
-
         setData({
           claimAt: claimAtsResult,
           claimPercentage: claimPercentsResult,
           userVestingInfo: formatedVestingInfo,
         })
+        setIsLoading(false)
       } catch (error) {
         console.log(error, 'fail to fetch vesting info')
       }
@@ -75,7 +84,7 @@ const useVestingInfo = (
     if (vestingContract && account) {
       fetchData()
     }
-  }, [vestingContract, web3, account])
+  }, [vestingContract, web3, account, refetching])
 
   const estimateClaim = useCallback(
     async (time) => {
@@ -96,6 +105,8 @@ const useVestingInfo = (
   return {
     vestingData: data,
     estimateClaim,
+    refetchDataFromContract,
+    isLoadingVestingInfo: isLoading,
   }
 }
 

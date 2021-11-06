@@ -39,6 +39,8 @@ interface ActionButtonProps {
   claimSymbol: string
   vestingData: VestingInfo
   estimatedAmount: string
+  isLoadingVestingInfo: boolean
+  isClaimedAllVesting: boolean
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -67,6 +69,8 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   claimSymbol,
   vestingData,
   estimatedAmount,
+  isLoadingVestingInfo,
+  isClaimedAllVesting,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const { toastError } = useToast()
@@ -81,7 +85,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     return <UnlockButton />
   }
 
-  if (!isIdoAvailalbeOnChain || isClaimed || isLoadingApproveStatus) {
+  if ((!isIdoAvailalbeOnChain || isClaimed || isLoadingApproveStatus) && !isShowVesting) {
     return null
   }
 
@@ -98,9 +102,11 @@ const ActionButton: React.FC<ActionButtonProps> = ({
       </Button>
     )
   }
-
   if (poolStatus === 'closed') {
     if (isShowVesting) {
+      if (isLoadingVestingInfo || isClaimedAllVesting) {
+        return null
+      }
       return (
         <VestingButton
           vestingData={vestingData}
@@ -110,6 +116,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
           userClaimFirstPercent={userClaimFirstPercent}
           claimSymbol={claimSymbol}
           idoReceivedAmount={idoReceivedAmount}
+          isClaimedAllVesting={isClaimedAllVesting}
           onClick={() => {
             // If user already claim 1 time we will call other functi
             if (!userClaimFirstPercent) {

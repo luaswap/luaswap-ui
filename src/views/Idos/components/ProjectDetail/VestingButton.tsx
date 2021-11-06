@@ -2,10 +2,8 @@ import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 import { Button } from 'luastarter-uikits'
 import { TimePeriodType } from 'utils/getTimePeriods'
 import { UserVestingInfoType, VestingInfo } from 'views/Idos/hooks/useVestingInfo'
-import BigNumber from 'bignumber.js'
 import useTimer from 'hooks/useTimer'
 import { compareTwoTimestamp } from 'utils/formatTime'
-import { fromUnixTime } from 'date-fns'
 
 interface VestingButtonProps {
   onClick(): any
@@ -19,6 +17,7 @@ interface VestingButtonProps {
   claimSymbol: string
   estimatedAmount: string
   vestingData: VestingInfo
+  isClaimedAllVesting: boolean
 }
 
 const VestingButton: React.FC<VestingButtonProps> = ({
@@ -31,14 +30,12 @@ const VestingButton: React.FC<VestingButtonProps> = ({
   claimSymbol,
   vestingData,
   estimatedAmount,
+  isClaimedAllVesting,
   ...props
 }) => {
   const { claimAtsTime, claimedAmount } = userVestingInfo
   const currentTimestamp = useTimer()
   const { claimAt, claimPercentage } = vestingData
-  const currentTimestampInSecond = useMemo(() => {
-    return Math.floor(currentTimestamp / 1000)
-  }, [currentTimestamp])
 
   const isCurrentTimeOutOfClaimTimeFrame = useMemo(() => {
     if (claimAtsTime) {
@@ -50,11 +47,6 @@ const VestingButton: React.FC<VestingButtonProps> = ({
 
     return false
   }, [currentTimestamp, claimAtsTime, claimAt])
-  // const currentClaimTimeframe = useMemo(() => {
-  //   if (userClaimFirstPercent) {
-  //     return null
-  //   }
-  // }, [userClaimFirstPercent])
 
   const isDisabledButton = useMemo(() => {
     if (estimatedAmount === '0') {
@@ -63,6 +55,7 @@ const VestingButton: React.FC<VestingButtonProps> = ({
 
     return false
   }, [estimatedAmount])
+  // User not claim anything and current time is out of time frame
   if (!userClaimFirstPercent && isCurrentTimeOutOfClaimTimeFrame) {
     return (
       <Button mb="15px" mt="15px" width="100%" variant="primary" onClick={onClick} {...props}>
@@ -70,10 +63,11 @@ const VestingButton: React.FC<VestingButtonProps> = ({
       </Button>
     )
   }
-
   return (
     <Button mb="15px" mt="15px" width="100%" variant="primary" onClick={onClick} disabled={isDisabledButton} {...props}>
-      Claim {estimatedAmount} {claimSymbol}
+      {isDisabledButton
+        ? `${timeNextClaim.hours} hour(s) ${timeNextClaim.minutes} minute(s) ${timeNextClaim.seconds} second(s)`
+        : `Claim ${estimatedAmount} ${claimSymbol}`}
     </Button>
   )
 }
