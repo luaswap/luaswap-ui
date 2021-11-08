@@ -25,6 +25,7 @@ export interface Farm extends FarmConfig {
   totalToken2Value?: number
   apy?: number
   reward?: string
+  luaReward?: string
   userData?: {
     allowance: string
     tokenBalance: string
