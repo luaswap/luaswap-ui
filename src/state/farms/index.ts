@@ -3,15 +3,18 @@ import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Web3 from 'web3'
 import getNewRewardPerBlock from 'hooks/useNewRewards'
+import getNewRewardPerBlockDual from 'hooks/useNewRewardsDual'
 import { allPools, tomoSupportedPools } from 'config/constants/farms'
 import isArchivedPid from 'utils/farmHelpers'
 import { IsTomoChain } from 'utils/wallet'
 import { API_ETH, API_TOMO } from 'config'
+import { FarmConfig } from 'config/constants/types'
 import {
   fetchFarmUserEarnings,
   fetchFarmUserAllowances,
   fetchFarmUserTokenBalances,
   fetchFarmUserStakedBalances,
+  fetchFarmUserEarningsLua,
 } from './fetchFarmUser'
 import { FarmsState, Farm } from '../types'
 
@@ -24,6 +27,7 @@ const allPoolConfig = allPools.map((farm) => ({
     tokenBalance: '0',
     stakedBalance: '0',
     earnings: '0',
+    earningsLua: '0',
   },
 }))
 
@@ -34,6 +38,7 @@ const allTomoSupportedPools = tomoSupportedPools.map((farm) => ({
     tokenBalance: '0',
     stakedBalance: '0',
     earnings: '0',
+    earningsLua: '0',
   },
 }))
 const initialState: FarmsState = { data: allPoolConfig, userDataLoaded: false }
@@ -52,7 +57,8 @@ export const farmsSlice = createSlice({
     },
     setFarmsPublicData: (state, action) => {
       const liveFarmsData: Farm[] = action.payload
-      state.data = state.data.map((farm) => {
+      const data = state.data.length === 0 ? liveFarmsData : state.data
+      state.data = data.map((farm) => {
         const liveFarmData = liveFarmsData.find((f) => f.pid === farm.pid)
         return { ...farm, ...liveFarmData }
       })
@@ -73,26 +79,29 @@ export const farmsSlice = createSlice({
 export const { setFarmUserData, setFarmsPublicData, setDefaultFarmData } = farmsSlice.actions
 
 // Thunks
-export const fetchFarms = (chainId: number, web3: Web3) => async (dispatch, getState) => {
+export const fetchFarms = (chainId: number, web3: Web3, isDual: boolean) => async (dispatch, getState) => {
   const IsTomo = IsTomoChain(chainId)
   const apiUrl = IsTomo ? API_TOMO : API_ETH
-  const { data } = await axios.get(`${apiUrl}/pools`)
+  const finalUrl = isDual ? `${apiUrl}/dualfarm` : apiUrl
+  const { data } = await axios.get(`${finalUrl}/pools`)
   dispatch(setFarmsPublicData(data))
   const apyListResponse = data.map((farm) => {
+    if (isDual) return getNewRewardPerBlockDual(web3, farm.pid + 1, chainId, farm.master)
     return getNewRewardPerBlock(web3, farm.pid + 1, chainId)
   })
   const apyList = await Promise.all(apyListResponse)
   dispatch(setFarmsPublicData(apyList))
 }
 export const fetchFarmUserDataAsync =
-  (account: string, chainId?: number, web3?: Web3) => async (dispatch, getState) => {
+  (account: string, chainId?: number, web3?: Web3, pools?: FarmConfig[]) => async (dispatch, getState) => {
     try {
       const IsTomo = IsTomoChain(chainId)
-      const farmsToFetch = IsTomo ? tomoSupportedPools : allPools
+      const farmsToFetch = pools || (IsTomo ? tomoSupportedPools : allPools)
       const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch, chainId, web3)
       const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch, chainId, web3)
       const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId, web3)
       const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId, web3)
+      const userFarmEarningsLua = await fetchFarmUserEarningsLua(account, farmsToFetch, chainId, web3)
       const arrayOfUserDataObjects = farmsToFetch.map((farm, index) => {
         return {
           pid: farm.pid,
@@ -100,9 +109,10 @@ export const fetchFarmUserDataAsync =
           stakedBalance: userStakedBalances[index],
           allowance: userFarmAllowances[index],
           tokenBalance: userFarmTokenBalances[index],
+          earningsLua: userFarmEarningsLua[index],
         }
       })
-
+      console.log({ pools, arrayOfUserDataObjects })
       dispatch(setFarmUserData({ arrayOfUserDataObjects }))
     } catch (error) {
       console.log(error, 'fetch farm data fail')

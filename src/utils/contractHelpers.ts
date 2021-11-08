@@ -115,8 +115,8 @@ export const getLotteryContract = (web3?: Web3) => {
 export const getLotteryTicketContract = (web3?: Web3) => {
   return getContract(lotteryTicketAbi, getLotteryTicketAddress(), web3)
 }
-export const getMasterchefContract = (web3?: Web3, chainId?: number) => {
-  return getContract(masterChef, getMasterChefAddress(chainId), web3)
+export const getMasterchefContract = (web3?: Web3, chainId?: number, address?: string) => {
+  return getContract(masterChef, address || getMasterChefAddress(chainId), web3)
 }
 export const getLuaContract = (web3?: Web3, chainId?: number) => {
   return getContract(luaAbi, getLuaAddress(chainId), web3)

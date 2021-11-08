@@ -1,10 +1,10 @@
 import tokens from './tokens'
 import { allPools } from './farms'
-import { Ifo, Token } from './types'
+import { Address, Ifo, Token } from './types'
 
 const cakeBnbLpToken: Token = {
-  symbol: allPools[1].lpSymbol,
-  address: allPools[1].lpAddresses,
+  symbol: '',
+  address: '0x0000000000000000000000000000000000000000' as Address,
   decimals: 18,
 }
 

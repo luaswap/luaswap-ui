@@ -4,7 +4,7 @@ import erc20ABI from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import multicall from 'utils/multicall'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
-import { FarmConfig } from 'config/constants/types'
+import { Address, FarmConfig } from 'config/constants/types'
 
 export const fetchFarmUserAllowances = async (
   account: string,
@@ -15,7 +15,7 @@ export const fetchFarmUserAllowances = async (
   const masterChefAddress = getMasterChefAddress(chainId)
   const calls = farmsToFetch.map((farm) => {
     const lpContractAddress = getAddress(farm.lpAddresses, chainId)
-    return { address: lpContractAddress, name: 'allowance', params: [account, masterChefAddress] }
+    return { address: lpContractAddress, name: 'allowance', params: [account, farm.master || masterChefAddress] }
   })
 
   const rawLpAllowances = await multicall(erc20ABI, calls, chainId, web3)
@@ -57,7 +57,7 @@ export const fetchFarmUserStakedBalances = async (
   const masterChefAddress = getMasterChefAddress(chainId)
   const calls = farmsToFetch.map((farm) => {
     return {
-      address: masterChefAddress,
+      address: farm.master || masterChefAddress,
       name: 'userInfo',
       params: [farm.pid, account],
     }
@@ -79,8 +79,30 @@ export const fetchFarmUserEarnings = async (
 
   const calls = farmsToFetch.map((farm) => {
     return {
-      address: masterChefAddress,
+      address: farm.master || masterChefAddress,
       name: 'pendingReward',
+      params: [farm.pid, account],
+    }
+  })
+  const rawEarnings = await multicall(masterchefABI, calls, chainId, web3)
+  const parsedEarnings = rawEarnings.map((earnings) => {
+    return new BigNumber(earnings).toJSON()
+  })
+  return parsedEarnings
+}
+
+export const fetchFarmUserEarningsLua = async (
+  account: string,
+  farmsToFetch: FarmConfig[],
+  chainId: number,
+  web3?: Web3,
+) => {
+  const masterChefAddress = getMasterChefAddress(chainId)
+
+  const calls = farmsToFetch.map((farm) => {
+    return {
+      address: farm.master || masterChefAddress,
+      name: 'pendingLuaReward',
       params: [farm.pid, account],
     }
   })

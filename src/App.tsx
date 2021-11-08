@@ -15,7 +15,8 @@ import EasterEgg from './components/EasterEgg'
 // Only pool is included in the main bundle because of it's the most visited page
 const Home = lazy(() => import('./views/Home'))
 const NotFound = lazy(() => import('./views/NotFound'))
-const Farms = lazy(() => import('./views/Farms'))
+// const Farms = lazy(() => import('./views/Farms'))
+const DualFarms = lazy(() => import('./views/DualFarms'))
 const Idos = lazy(() => import('./views/Idos'))
 
 // This config is required for number formatting
@@ -39,8 +40,11 @@ const App: React.FC = () => {
             <Route path="/ido">
               <Idos />
             </Route>
-            <Route path="/farms">
+            {/* <Route path="/farms">
               <Farms />
+            </Route> */}
+            <Route path="/dual-farm">
+              <DualFarms />
             </Route>
             <Route path="/portfolio">
               <Home />
