@@ -30,7 +30,7 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({ lpLabel, isCommunityFar
         <Image src={farm.icon2} alt={tokenSymbol} width={64} height={64} />
       </Wrapper>
       <Flex flexDirection="column" alignItems="flex-end">
-        <Heading mb="4px">{lpLabel.split(' ')[0]}</Heading>
+        <Heading mb="4px">{lpLabel.replace('LUA-V1 LP', '').trim()}</Heading>
         <Flex justifyContent="center">{/* {isCommunityFarm ? <CommunityTag /> : <CoreTag />} */}</Flex>
       </Flex>
     </Wrapper>
