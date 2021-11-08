@@ -36,6 +36,7 @@ export interface IdoDetailInfo {
   index: number
   projectId: string
   chainId: string
+  vestingContract: string
 }
 
 export interface FormatPool extends IdoDetailInfo {
@@ -64,4 +65,7 @@ export interface Pool {
   untilOpen: number
   versionContract: number
   untilSnapshootAt: number
+  percentVesting: string[]
+  timeVesting: string[]
+  isVesting: boolean
 }

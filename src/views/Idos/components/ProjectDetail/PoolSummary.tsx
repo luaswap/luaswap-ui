@@ -166,7 +166,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
 }) => {
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
-  const { socials } = currentPoolData
+  const { socials, timeVesting, percentVesting, versionContract, isVesting } = currentPoolData
   const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
@@ -175,6 +175,22 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
 
     return 0
   }, [totalCommittedAmount, totalAmountPay])
+
+  const isShowVesting = useMemo(() => {
+    if (isVesting && versionContract === 2 && tierDataOfUser.vestingContract) {
+      return true
+    }
+
+    return false
+  }, [isVesting, versionContract])
+
+  // const calculatedSwappedAmount = useMemo(() => {
+  //   if (isShowVesting) {
+
+  //   }
+
+  //   return swappedAmountIDO
+  // }, [swappedAmountIDO, isShowVesting])
 
   const totalPayTokenCommited = useMemo(() => {
     if (totalCommittedAmount !== null && swappedAmountIDO !== null) {
@@ -263,8 +279,8 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                     <ProcessAmountWrapper justifyContent="flex-start">
                       <Text>Swap Process</Text>
                       <Text color="primary" bold fontSize="18px">
-                        &nbsp;{formatNumberWithComma(swappedAmountIDO, true)}/{formatNumberWithComma(totalAmountIDO, true)}{' '}
-                        {idoToken?.symbol}
+                        &nbsp;{formatNumberWithComma(swappedAmountIDO, true)}/
+                        {formatNumberWithComma(totalAmountIDO, true)} {idoToken?.symbol}
                       </Text>
                     </ProcessAmountWrapper>
                   )}

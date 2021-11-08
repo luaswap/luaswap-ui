@@ -146,8 +146,8 @@ const TermOfUseModal: React.FC<TermOfUseModalProps> = ({ onDismiss }) => {
       setIsLoading(true)
       let signedData = null
       if (chainId === 56) {
-        const message = `0x${Buffer.from(emailAddress).toString('hex')}`
-        signedData = await web3.eth.sign(message, account)
+        // Sign data for chain Binance Smart Chain
+        signedData = await web3.eth.personal.sign(emailAddress, account, null)
       } else {
         signedData = await web3.eth.personal.sign(emailAddress, account, null)
       }

@@ -223,7 +223,6 @@ const ProjectDetail = () => {
               />
               {isShowPoolData && (
                 <Deposit
-                  luaVestingAddress={luaVestingAddress}
                   isLoadingTierInfo={isLoadingTierInfo}
                   isLoadingDataFromContract={isLoadingDataFromContract}
                   currentPoolData={currentPoolData}

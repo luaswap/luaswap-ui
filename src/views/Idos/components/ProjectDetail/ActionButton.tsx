@@ -41,6 +41,8 @@ interface ActionButtonProps {
   estimatedAmount: string
   isLoadingVestingInfo: boolean
   isClaimedAllVesting: boolean
+  timeVesting: string[]
+  percentVesting: string[]
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -71,6 +73,8 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   estimatedAmount,
   isLoadingVestingInfo,
   isClaimedAllVesting,
+  timeVesting,
+  percentVesting,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const { toastError } = useToast()
@@ -111,6 +115,8 @@ const ActionButton: React.FC<ActionButtonProps> = ({
         <VestingButton
           vestingData={vestingData}
           userVestingInfo={userVestingInfo}
+          timeVesting={timeVesting}
+          percentVesting={percentVesting}
           estimatedAmount={estimatedAmount}
           timeNextClaim={timeNextClaim}
           userClaimFirstPercent={userClaimFirstPercent}

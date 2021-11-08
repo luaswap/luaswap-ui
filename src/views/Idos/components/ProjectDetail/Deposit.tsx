@@ -86,7 +86,6 @@ interface DepositProps {
   isAvailalbeOnCurrentNetwork: boolean
   isLoadingDataFromContract: boolean
   isLoadingTierInfo: boolean
-  luaVestingAddress: string
 }
 
 const Deposit: React.FC<DepositProps> = ({
@@ -98,7 +97,6 @@ const Deposit: React.FC<DepositProps> = ({
   selectedUserTier,
   isLoadingDataFromContract,
   isLoadingTierInfo,
-  luaVestingAddress,
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
@@ -106,13 +104,14 @@ const Deposit: React.FC<DepositProps> = ({
   const [isRequestContractAction, setIsRequestContractAction] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const { account, library, chainId: cid } = useWeb3React()
-  const { vestingData, estimateClaim, refetchDataFromContract, isLoadingVestingInfo } =
-    useVestingInfo(luaVestingAddress)
+  const { vestingData, estimateClaim, refetchDataFromContract, isLoadingVestingInfo } = useVestingInfo(
+    tierDataOfUser.vestingContract,
+  )
   const [estimatedAmount, setEstimatedAmount] = useState(null)
-  const { claimAt: claimVestingTime, claimPercentage: claimVestingPercentage, userVestingInfo } = vestingData
+  const { userVestingInfo } = vestingData
   const { claimAtsTime, claimedAmount } = userVestingInfo
   const [currentVestingPercentage, setCurrentVestingPercentage] = useState(0)
-  const luaVestingContract = useLuaVestingContract(luaVestingAddress)
+  const luaVestingContract = useLuaVestingContract(tierDataOfUser.vestingContract)
   const currentTimestamp = useCurrentTime()
   const paytokenContract = getERC20Contract(library, tierDataOfUser.payToken.address, cid)
   const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(
@@ -128,11 +127,11 @@ const Deposit: React.FC<DepositProps> = ({
     tierDataOfUser.payToken.address,
   )
   const { onClaimReward } = useClaimRewardIdo(tierDataOfUser.addressIdoContract, tierDataOfUser.index)
-  const { onClaimVesting } = useClaimVesting(luaVestingAddress)
+  const { onClaimVesting } = useClaimVesting(tierDataOfUser.vestingContract)
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
-  const { openAt, closeAt, claimAt, versionContract } = currentPoolData
+  const { openAt, closeAt, claimAt, versionContract, timeVesting, percentVesting, isVesting } = currentPoolData
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
 
   const maxAmountAllowedLeft = useMemo(() => {
@@ -165,8 +164,7 @@ const Deposit: React.FC<DepositProps> = ({
     if (versionContract === 1) {
       return false
     }
-
-    if (versionContract === 2) {
+    if (versionContract === 2 && isVesting) {
       return true
     }
 
@@ -174,26 +172,31 @@ const Deposit: React.FC<DepositProps> = ({
   }, [versionContract])
   // Find the next time frame
   const nextClaimTime = useMemo(() => {
+    if (versionContract === 1) {
+      return null
+    }
     // We start to compare to each time in the claim time array
     // If userClaimTime smaller than a timestamp in array we will get that timestamp and consider it as the next claim time
-    for (let i = 0; i < claimVestingTime.length; i++) {
-      const result = compareAsc(currentTimestampInSecond, Number(claimVestingTime[i]))
-      if (result === -1) {
-        setCurrentTimeIndex(i)
-        setCurrentVestingPercentage(
-          claimVestingPercentage.reduce((a, b, _index) => {
-            if (_index < i) {
-              return a + Number(b)
-            }
+    if (versionContract === 2 && isVesting) {
+      for (let i = 0; i < timeVesting.length; i++) {
+        const result = compareAsc(currentTimestampInSecond, Number(timeVesting[i]))
+        if (result === -1) {
+          setCurrentTimeIndex(i)
+          setCurrentVestingPercentage(
+            percentVesting.reduce((a, b, _index) => {
+              if (_index < i) {
+                return a + Number(b)
+              }
 
-            return a
-          }, 0),
-        )
-        return claimVestingTime[i]
+              return a
+            }, 0),
+          )
+          return timeVesting[i]
+        }
       }
     }
     return null
-  }, [claimVestingTime, claimVestingPercentage, currentTimestampInSecond])
+  }, [timeVesting, percentVesting, currentTimestampInSecond, isVesting, versionContract])
 
   const isClaimedAllVesting = useMemo(() => {
     if (isShowVesting && claimedAmount && idoReceivedAmount && claimedAmount !== '0') {
@@ -206,15 +209,15 @@ const Deposit: React.FC<DepositProps> = ({
   }, [claimedAmount, idoReceivedAmount, idoToken, isShowVesting])
   // If current time is larger than claim time frame
   const isCurrentTimeOutOfClaimTimeFrame = useMemo(() => {
-    if (claimVestingTime && claimVestingTime.length !== 0) {
-      const lastTimeFrame = claimVestingTime[claimVestingTime.length - 1]
+    if (isShowVesting && timeVesting && timeVesting.length !== 0) {
+      const lastTimeFrame = timeVesting[timeVesting.length - 1]
       const result = compareTwoTimestamp(currentTimestamp, Number(lastTimeFrame))
 
       return result
     }
 
     return false
-  }, [currentTimestamp, claimVestingTime])
+  }, [currentTimestamp, timeVesting])
 
   // Calculate the time until next claim
   const secondsUntilNextClaim = useSecondsUtilTimestamp(nextClaimTime)
@@ -452,7 +455,7 @@ const Deposit: React.FC<DepositProps> = ({
                     </Text>
                   </Flex>
                   <TertiaryMessage
-                    hoverContent={generateClaimInfo(claimVestingTime, claimVestingPercentage)}
+                    hoverContent={generateClaimInfo(timeVesting, percentVesting)}
                     hoverPlacement="top"
                     color="#C3C3C3"
                   >
@@ -554,6 +557,8 @@ const Deposit: React.FC<DepositProps> = ({
                 estimatedAmount={estimatedAmount}
                 isLoadingVestingInfo={isLoadingVestingInfo}
                 isClaimedAllVesting={isClaimedAllVesting}
+                timeVesting={timeVesting}
+                percentVesting={percentVesting}
               />
               {isClaimed && !isShowVesting && (
                 <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>
