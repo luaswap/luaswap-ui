@@ -23,7 +23,6 @@ const MultiplierTag = styled(Tag)`
 `
 
 const CardHeading: React.FC<ExpandableSectionProps> = ({ lpLabel, isCommunityFarm, farmImages, tokenSymbol, farm }) => {
-  console.log(farm)
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
       <Wrapper justifyContent="left" alignItems="center" width="130px">

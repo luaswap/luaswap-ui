@@ -59,7 +59,9 @@ export const farmsSlice = createSlice({
       const liveFarmsData: Farm[] = action.payload
       const data = state.data.length === 0 ? liveFarmsData : state.data
       state.data = data.map((farm) => {
-        const liveFarmData = liveFarmsData.find((f) => f.pid === farm.pid)
+        const liveFarmData = liveFarmsData.find(
+          (f) => f.pid === farm.pid && (f.master || '').toLowerCase() === (farm.master || '').toLowerCase(),
+        )
         return { ...farm, ...liveFarmData }
       })
     },
@@ -67,7 +69,9 @@ export const farmsSlice = createSlice({
       const { arrayOfUserDataObjects } = action.payload
       arrayOfUserDataObjects.forEach((userDataEl) => {
         const { pid } = userDataEl
-        const index = state.data.findIndex((farm) => farm.pid === pid)
+        const index = state.data.findIndex(
+          (farm) => farm.pid === pid && (userDataEl.master || '').toLowerCase() === (farm.master || '').toLowerCase(),
+        )
         state.data[index] = { ...state.data[index], userData: userDataEl }
       })
       state.userDataLoaded = true
@@ -104,6 +108,7 @@ export const fetchFarmUserDataAsync =
       const userFarmEarningsLua = await fetchFarmUserEarningsLua(account, farmsToFetch, chainId, web3)
       const arrayOfUserDataObjects = farmsToFetch.map((farm, index) => {
         return {
+          master: farm.master,
           pid: farm.pid,
           earnings: userFarmEarnings[index],
           stakedBalance: userStakedBalances[index],
@@ -112,7 +117,7 @@ export const fetchFarmUserDataAsync =
           earningsLua: userFarmEarningsLua[index],
         }
       })
-      console.log({ pools, arrayOfUserDataObjects })
+      console.log({ arrayOfUserDataObjects })
       dispatch(setFarmUserData({ arrayOfUserDataObjects }))
     } catch (error) {
       console.log(error, 'fetch farm data fail')

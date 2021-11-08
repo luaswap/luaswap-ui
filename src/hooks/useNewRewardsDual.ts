@@ -42,6 +42,7 @@ const getNewRewardPerBlockDual = async (web3, pid1 = 0, chainId, master) => {
   )
   const reward = poolReward.farmer
   return {
+    master,
     pid: pid1 - 1,
     reward: poolReward.rewardToken,
     luaReward: poolReward.rewardLua,
