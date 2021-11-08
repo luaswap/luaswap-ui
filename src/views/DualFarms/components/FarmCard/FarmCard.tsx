@@ -99,7 +99,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
   const { pairLink } = farm
   const lpAddress = farm.lpAddresses[chainId]
   const isPromotedFarm = farm.token.symbol === 'CAKE'
-
+  // console.log(farm)
   if (!farm.master) {
     return <div>Missing master address in this pool</div>
   }
@@ -114,40 +114,41 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
         farmImages={farmImages}
         tokenSymbol={farm.token.symbol}
       />
-      {!removed && !isTomo && (
-        <>
-          <Flex justifyContent="space-between" alignItems="center">
-            <Text>{t('APR')}:</Text>
-            <Text bold style={{ display: 'flex', alignItems: 'center' }}>
-              {newReward && farm && luaPrice && farm.usdValue && farm.totalToken2Value && farm.poolWeight ? (
-                <>
-                  {/* <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} /> */}
-                  {parseFloat(
-                    luaPrice
-                      .times(NUMBER_BLOCKS_PER_YEAR[ID])
-                      .times(newReward.div(10 ** 18))
-                      .div(farm.usdValue)
-                      .div(10 ** 8)
-                      .times(100)
-                      .toFixed(2),
-                  ).toLocaleString('en-US')}
-                  %
-                </>
-              ) : (
-                <Skeleton height={24} width={80} />
-              )}
-            </Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text>{t('Reward')}:</Text>
-            <Text bold>{newReward ? getBalanceNumber(newReward).toFixed(3) : '~'} LUA / block</Text>
-          </Flex>
-        </>
-      )}
-      <Flex justifyContent="space-between">
+      <>
+        {/* <Flex justifyContent="space-between" alignItems="center">
+          <Text>{t('APR')}:</Text>
+          <Text bold style={{ display: 'flex', alignItems: 'center' }}>
+            {newReward && farm && luaPrice && farm.usdValue && farm.totalToken2Value && farm.poolWeight ? (
+              <>
+                {parseFloat(
+                  luaPrice
+                    .times(NUMBER_BLOCKS_PER_YEAR[ID])
+                    .times(newReward.div(10 ** 18))
+                    .div(farm.usdValue)
+                    .div(10 ** 8)
+                    .times(100)
+                    .toFixed(2),
+                ).toLocaleString('en-US')}
+                %
+              </>
+            ) : (
+              <Skeleton height={24} width={80} />
+            )}
+          </Text>
+        </Flex> */}
+        <Flex justifyContent="space-between">
+          <Text>{t('Reward')}:</Text>
+          <Text bold>
+            {newReward ? parseInt(getBalanceNumber(newReward).toFixed(2)) : '~'} {farm.quoteToken.symbol}
+            &nbsp;+&nbsp;
+            {newReward ? parseInt(getBalanceNumber(new BigNumber(farm.luaReward || '0')).toFixed(2)) : '~'} LUA / block
+          </Text>
+        </Flex>
+      </>
+      {/* <Flex justifyContent="space-between">
         <Text>{t('Earn')}:</Text>
         <Text bold>{earnLabel}</Text>
-      </Flex>
+      </Flex> */}
       <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} />
       <Divider />
       <ExpandableSectionButton

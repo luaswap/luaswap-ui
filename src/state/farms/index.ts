@@ -117,7 +117,6 @@ export const fetchFarmUserDataAsync =
           earningsLua: userFarmEarningsLua[index],
         }
       })
-      console.log({ arrayOfUserDataObjects })
       dispatch(setFarmUserData({ arrayOfUserDataObjects }))
     } catch (error) {
       console.log(error, 'fetch farm data fail')
