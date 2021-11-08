@@ -9,11 +9,11 @@ import { useMasterchef } from './useContract'
 
 // Approve a Farm
 // eslint-disable-next-line import/prefer-default-export
-export const useApprove = (lpContract: Contract) => {
+export const useApprove = (lpContract: Contract, master?: string) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
   const web3 = useWeb3()
-  const masterChefContract = useMasterchef(chainId)
+  const masterChefContract = useMasterchef(chainId, master)
 
   const handleApprove = useCallback(async () => {
     try {

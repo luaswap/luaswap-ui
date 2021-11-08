@@ -12,11 +12,17 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     icon: 'ListView',
     href: '/portfolio',
   },
+  // {
+  //   label: t('Farm'),
+  //   icon: 'FarmIcon',
+  //   href: 'https://app.luaswap.org/#/farming',
+  //   isOpenNewTab: true,
+  // },
   {
-    label: t('Farm'),
+    label: t('Dual Farm'),
     icon: 'FarmIcon',
-    href: 'https://app.luaswap.org/#/farming',
-    isOpenNewTab: true,
+    href: '/dual-farm',
+    isOpenNewTab: false,
   },
   {
     label: t('Swap'),

@@ -7,11 +7,11 @@ import { harvest } from 'utils/callHelpers'
 import { useMasterchef } from './useContract'
 
 // eslint-disable-next-line import/prefer-default-export
-export const useHarvest = (farmPid: number) => {
+export const useHarvest = (farmPid: number, master?: string) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
   const web3 = useWeb3()
-  const masterChefContract = useMasterchef(chainId)
+  const masterChefContract = useMasterchef(chainId, master)
 
   const handleHarvest = useCallback(async () => {
     const txHash = await harvest(masterChefContract, farmPid, account, chainId)

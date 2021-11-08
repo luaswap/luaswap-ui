@@ -175,7 +175,12 @@ const ProjectDetail = () => {
   }, [currentPoolData, chainId, selectedUserTier])
 
   const [_, totalUserCommittedFromContract, totalAmountUserSwapped, isLoadingDataFromContract, luaVestingAddress] =
-    useDataFromIdoContract(tierDataOfUser.addressIdoContract, tierDataOfUser.index, currentPoolData.index)
+    useDataFromIdoContract(
+      tierDataOfUser.addressIdoContract,
+      tierDataOfUser.index,
+      currentPoolData.index,
+      currentPoolData.versionContract,
+    )
 
   const idoDetailFromContract = useTotalDataFromApi(currentPoolData)
 

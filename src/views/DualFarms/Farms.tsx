@@ -106,15 +106,25 @@ const Farms: React.FC = () => {
   const { account, chainId } = useWeb3React()
   const web3 = useWeb3()
   const dispatch = useAppDispatch()
-  const ID = chainId === 88 ? 88 : 1
+  const ID = 88 // chainId === 88 ? 88 : 1
   const history = useHistory()
   useEffect(() => {
     dispatch(setDefaultFarmData(chainId))
-    dispatch(fetchFarms(chainId, web3, false))
-    if (account) {
-      dispatch(fetchFarmUserDataAsync(account, chainId, web3))
-    }
+    dispatch(fetchFarms(chainId, web3, true))
   }, [account, dispatch, chainId, web3])
+
+  useEffect(() => {
+    let id
+    if (account && farmsLP.length > 0 && farmsLP[0].master) {
+      id = setInterval(() => {
+        dispatch(fetchFarmUserDataAsync(account, chainId, web3, farmsLP))
+      }, 2000)
+    }
+
+    return () => {
+      clearInterval(id)
+    }
+  }, [account, farmsLP.length, chainId, web3, dispatch])
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
@@ -131,11 +141,13 @@ const Farms: React.FC = () => {
         return latinise(farm.lpSymbol.toLowerCase()).includes(lowercaseQuery)
       })
     }
-
     return farmsLP
   }, [query, farmsLP])
 
-  const rowData = farmsLpMemoized.map((farm) => {
+  const rowData = []
+  /*
+  farmsLpMemoized.map((farm) => {
+    console.log(farm)
     const { token, quoteToken } = farm
     const tokenAddress = token.address
     const quoteTokenAddress = quoteToken.address
@@ -179,37 +191,9 @@ const Farms: React.FC = () => {
 
     return row
   })
+  */
 
   const renderContent = (): JSX.Element => {
-    if (viewMode === ViewMode.TABLE && rowData.length) {
-      const columnSchema = DesktopColumnSchema
-
-      const columns = columnSchema.map((column) => ({
-        id: column.id,
-        name: column.name,
-        label: column.label,
-        sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
-          switch (column.name) {
-            case 'farm':
-              return b.id - a.id
-            case 'apr':
-              if (a.original.apr.value && b.original.apr.value) {
-                return Number(a.original.apr.value) - Number(b.original.apr.value)
-              }
-
-              return 0
-            case 'earned':
-              return a.original.earned.earnings - b.original.earned.earnings
-            default:
-              return 1
-          }
-        },
-        sortable: column.sortable,
-      }))
-
-      return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
-    }
-
     return (
       <div>
         <FlexLayout>
@@ -234,12 +218,13 @@ const Farms: React.FC = () => {
         </Heading>
       </PageHeader>
       <Page>
-        {chainId === 56 && (
+        {chainId !== 88 && (
           <Mesage variant="warning">
-            <Text>Please switch to Ethereum/Tomomainnet to use this feature</Text>
+            <Text>Please switch to Tomo Mainnet to use this feature</Text>
           </Mesage>
         )}
-        <ControlContainer>
+        <br />
+        {/* <ControlContainer>
           <ViewControls>
             <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
           </ViewControls>
@@ -249,7 +234,7 @@ const Farms: React.FC = () => {
               <SearchInput onChange={handleChangeQuery} />
             </LabelWrapper>
           </FilterContainer>
-        </ControlContainer>
+        </ControlContainer> */}
         {renderContent()}
       </Page>
     </>

@@ -5,11 +5,11 @@ import { Pool as PoolIdoDetail } from 'views/Idos/types'
 export type TranslatableText =
   | string
   | {
-    key: string
-    data?: {
-      [key: string]: string | number
+      key: string
+      data?: {
+        [key: string]: string | number
+      }
     }
-  }
 
 export interface Farm extends FarmConfig {
   tokenAmountMc?: BigNumber
@@ -30,6 +30,7 @@ export interface Farm extends FarmConfig {
     tokenBalance: string
     stakedBalance: string
     earnings: string
+    earningsLua: string
   }
 }
 

@@ -6,11 +6,11 @@ import { fetchFarmUserDataAsync } from 'state/actions'
 import { stake } from 'utils/callHelpers'
 import { useMasterchef } from './useContract'
 
-const useStake = (pid: number) => {
+const useStake = (pid: number, master?: string) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useWeb3React()
   const web3 = useWeb3()
-  const masterChefContract = useMasterchef(chainId)
+  const masterChefContract = useMasterchef(chainId, master)
 
   const handleStake = useCallback(
     async (amount: string) => {
