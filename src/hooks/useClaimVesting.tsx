@@ -10,7 +10,12 @@ const useClaimVesting = (contractAddress: string) => {
     const txHash = await claimVesting(vestingContract, account)
   }, [account, vestingContract])
 
-  return { onClaimVesting: handleClaimVesting }
+  if (contractAddress) {
+    return { onClaimVesting: handleClaimVesting }
+  }
+  return {
+    onClaimVesting: () => {},
+  }
 }
 
 export default useClaimVesting

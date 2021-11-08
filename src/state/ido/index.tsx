@@ -29,6 +29,9 @@ const defaultCurrentPool = {
   untilOpen: null,
   untilSnapshootAt: null,
   versionContract: null,
+  isVesting: false,
+  timeVesting: [],
+  percentVesting: [],
 }
 
 const initialState: IdoState = {

@@ -11,8 +11,6 @@ export interface UserVestingInfoType {
 }
 
 export interface VestingInfo {
-  claimAt: string[]
-  claimPercentage: string[]
   userVestingInfo: UserVestingInfoType
 }
 
@@ -43,8 +41,6 @@ const useVestingInfo = (
   const [refetching, setRefetching] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState({
-    claimAt: [],
-    claimPercentage: [],
     userVestingInfo: DEFAULT_USERINFO,
   })
   const web3 = useWeb3()
@@ -57,22 +53,9 @@ const useVestingInfo = (
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const claimPercentsCall = []
-        const claimAtsCall = []
-        const length = await vestingContract.methods.getVestingLength().call()
-        for (let i = 0; i < Number(length); i++) {
-          const claimAt = vestingContract.methods.claimAts(i).call
-          const claimPercent = vestingContract.methods.claimPercents(i).call
-          claimAtsCall.push(claimAt)
-          claimPercentsCall.push(claimPercent)
-        }
-        const claimPercentsResult = await makeBatchRequest(claimPercentsCall, web3)
-        const claimAtsResult = await makeBatchRequest(claimAtsCall, web3)
         const userVestingInfo = await vestingContract.methods.info(account).call()
         const formatedVestingInfo = formatVestingUserInfo(userVestingInfo)
         setData({
-          claimAt: claimAtsResult,
-          claimPercentage: claimPercentsResult,
           userVestingInfo: formatedVestingInfo,
         })
         setIsLoading(false)
@@ -81,7 +64,7 @@ const useVestingInfo = (
       }
     }
 
-    if (vestingContract && account) {
+    if (vestingAddress && vestingContract && account) {
       fetchData()
     }
   }, [vestingContract, web3, account, refetching])

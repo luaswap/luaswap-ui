@@ -86,6 +86,7 @@ const DEFAULT_IDO = {
   totalCommittedAmount: '0',
   index: 0,
   chainId: '',
+  vestingContract: '',
 }
 
 export const getIdoDataBasedOnChainIdAndTier = (

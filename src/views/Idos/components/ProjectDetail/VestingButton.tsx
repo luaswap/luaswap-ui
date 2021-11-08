@@ -18,6 +18,8 @@ interface VestingButtonProps {
   estimatedAmount: string
   vestingData: VestingInfo
   isClaimedAllVesting: boolean
+  timeVesting: string[]
+  percentVesting: string[]
 }
 
 const VestingButton: React.FC<VestingButtonProps> = ({
@@ -31,25 +33,26 @@ const VestingButton: React.FC<VestingButtonProps> = ({
   vestingData,
   estimatedAmount,
   isClaimedAllVesting,
+  timeVesting,
+  percentVesting,
   ...props
 }) => {
   const { claimAtsTime, claimedAmount } = userVestingInfo
   const currentTimestamp = useTimer()
-  const { claimAt, claimPercentage } = vestingData
 
   const isCurrentTimeOutOfClaimTimeFrame = useMemo(() => {
     if (claimAtsTime) {
-      const lastTimeFrame = claimAt[claimAt.length - 1]
+      const lastTimeFrame = timeVesting[timeVesting.length - 1]
       const result = compareTwoTimestamp(currentTimestamp, Number(lastTimeFrame))
 
       return result
     }
 
     return false
-  }, [currentTimestamp, claimAtsTime, claimAt])
+  }, [currentTimestamp, claimAtsTime, timeVesting])
 
   const isDisabledButton = useMemo(() => {
-    if (estimatedAmount === '0') {
+    if (estimatedAmount === '0' || !estimatedAmount) {
       return true
     }
 
