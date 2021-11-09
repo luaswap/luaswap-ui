@@ -11,6 +11,7 @@ import {
   TelegramIcon,
   Progress,
   Box,
+  TertiaryMessage,
   Button,
 } from 'luastarter-uikits'
 import styled from 'styled-components'
@@ -137,10 +138,26 @@ const ProcessAmountWrapper = styled(Flex)`
 `
 
 const CardWrapper = styled(Card)<CardWrapperProps>`
-  width: 100%;
-  @media screen and (min-width: 1800px) {
-    width: ${(props) => (props.isShowPoolData ? '55%' : '100%')};
-    margin-right: 24px;
+  width: ${(props) => (props.isShowPoolData ? 'calc(55% - 24px)' : '85%')};
+  margin-right: 24px;
+
+  @media (max-width: 1800px) {
+    width: ${(props) => (props.isShowPoolData ? '100%' : 'calc(85% - 24px)')};
+    margin-right: ${(props) => (props.isShowPoolData ? '0px' : '24px')};
+  }
+
+  @media (max-width: 1500px) {
+    width: ${(props) => (props.isShowPoolData ? '100%' : 'calc(75% - 24px)')};
+  }
+
+  @media (max-width: 1100px) {
+    margin-right: ${(props) => (props.isShowPoolData ? '0px' : '24px')};
+  }
+
+  @media (max-width: 800px) {
+    width: 100%;
+    margin-right: 0px;
+    margin-bottom: ${(props) => (props.isShowPoolData ? '0px' : '24px')};
   }
 `
 interface CardWrapperProps {
@@ -269,7 +286,12 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                 <Box>
                   {isPoolInProgress || !isPoolOpen ? (
                     <ProcessAmountWrapper justifyContent="flex-start">
-                      <Text>Commit Process</Text>
+                      <TertiaryMessage
+                        hoverContent="You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of the percentage shown."
+                        hoverPlacement="top"
+                      >
+                        Commit Process
+                      </TertiaryMessage>
                       <Text color="primary" bold fontSize="18px">
                         &nbsp;{formatNumberWithComma(totalCommittedAmount, true)}/
                         {formatNumberWithComma(totalAmountPay)} {payToken?.symbol}

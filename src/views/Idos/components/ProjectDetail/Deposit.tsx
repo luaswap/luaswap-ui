@@ -39,41 +39,50 @@ import { calculateSwapRate, getTierName } from '../helper'
 import CountDown from './CountDown'
 
 const CardWrapper = styled(Card)`
-  width: 100%;
-  margin-right: 0px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin-top: 0px;
-    margin-right: 24px;
-    width: calc(75% - 24px);
+  width: calc(65% - 24px);
+  margin-right: 24px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-right: 0px;
+    margin-bottom: 24px;
   }
-  @media screen and (min-width: 1500px) {
-    width: calc(65% - 24px);
-  } ;
 `
-const BlockTimerWrapper = styled(Box)`
-  width: 100%;
+interface ShowPoolDataProps {
+  isShowPoolData: boolean
+}
+
+const BlockTimerWrapper = styled(Box)<ShowPoolDataProps>`
+  width: ${(props) => (props.isShowPoolData ? '35%' : '100%')};
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 24px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin-top: 0px;
-    height: 100%;
-    width: 25%;
-    margin-top: 0px;
+
+  @media (max-width: 1800px) {
+    width: ${(props) => (props.isShowPoolData ? '35%' : '100%')};
   }
-  @media screen and (min-width: 1500px) {
-    width: 35%;
-  } ;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-right: 0px;
+  }
 `
 
-const FlexWrapper = styled(Flex)`
-  width: 100%;
-  margin-top: 24px;
-  @media screen and (min-width: 1800px) {
-    width: 45%;
-    margin-top: 0px;
-  } ;
+const FlexWrapper = styled(Flex)<ShowPoolDataProps>`
+  width: ${(props) => (props.isShowPoolData ? '45%' : '15%')};
+
+  @media (max-width: 1800px) {
+    margin-top: ${(props) => (props.isShowPoolData ? '24px' : '0px')};
+    width: ${(props) => (props.isShowPoolData ? '100%' : '15%')};
+  }
+
+  @media (max-width: 1500px) {
+    width: ${(props) => (props.isShowPoolData ? '100%' : '25%')};
+  }
+
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `
 
 interface DepositProps {
@@ -86,6 +95,7 @@ interface DepositProps {
   isAvailalbeOnCurrentNetwork: boolean
   isLoadingDataFromContract: boolean
   isLoadingTierInfo: boolean
+  isShowPoolData: boolean
 }
 
 const Deposit: React.FC<DepositProps> = ({
@@ -97,6 +107,7 @@ const Deposit: React.FC<DepositProps> = ({
   selectedUserTier,
   isLoadingDataFromContract,
   isLoadingTierInfo,
+  isShowPoolData,
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
@@ -137,6 +148,7 @@ const Deposit: React.FC<DepositProps> = ({
   const maxAmountAllowedLeft = useMemo(() => {
     return new BigNumber(maxAmountPay).minus(new BigNumber(userTotalCommitted)).toString()
   }, [maxAmountPay, userTotalCommitted])
+
   const isUserDepositMinimumAmount = useMemo(() => {
     const flag = new BigNumber(userTotalCommitted).plus(new BigNumber(value)).comparedTo(new BigNumber(minAmountPay))
     if (flag < 0) {
@@ -391,92 +403,93 @@ const Deposit: React.FC<DepositProps> = ({
     return 0
   }, [minAmountPay, totalAmountIDO, totalAmountPay])
   return (
-    <FlexWrapper flexDirection="row" flexWrap="wrap">
-      <CardWrapper>
-        <CardBody
-          style={{
-            height: '100%',
-            ...(!isAvailalbeOnCurrentNetwork && {
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }),
-          }}
-        >
-          {isAvailalbeOnCurrentNetwork ? (
-            <>
-              <Flex justifyContent="space-between">
-                <Text>Your Tier</Text>
-                <Text bold>
-                  Tier {selectedUserTier} - {getTierName(selectedUserTier)}
-                </Text>
-              </Flex>
-              {minAmountPay !== 0 && (
+    <FlexWrapper flexDirection="row" flexWrap="wrap" isShowPoolData={isShowPoolData}>
+      {isShowPoolData && (
+        <CardWrapper>
+          <CardBody
+            style={{
+              height: '100%',
+              ...(!isAvailalbeOnCurrentNetwork && {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }),
+            }}
+          >
+            {isAvailalbeOnCurrentNetwork ? (
+              <>
                 <Flex justifyContent="space-between">
-                  <Text>Min guaranteed</Text>
+                  <Text>Your Tier</Text>
                   <Text bold>
-                    {minimumClaimableAmount} {idoToken.symbol} = {minAmountPay} {payToken.symbol}
+                    Tier {selectedUserTier} - {getTierName(selectedUserTier)}
                   </Text>
                 </Flex>
-              )}
-              <Flex justifyContent="space-between">
-                <Text>Max to commit</Text>
-                <Text bold>
-                  {isLoadingDataFromContract ? '~' : maxAmountPay} {payToken.symbol}
-                </Text>
-              </Flex>
-              <Flex justifyContent="space-between">
-                <Text>Price</Text>
-                <Text bold>
-                  1 {payToken.symbol} / {rate} {idoToken.symbol}
-                </Text>
-              </Flex>
-              <Flex justifyContent="space-between">
-                <Text>Your committed</Text>
-                <Text bold>
-                  {userTotalCommitted} {payToken.symbol}
-                </Text>
-              </Flex>
-              {isShowVesting ? (
-                <>
+                {minAmountPay !== 0 && (
                   <Flex justifyContent="space-between">
-                    <Text>Total claimable amount</Text>
+                    <Text>Min guaranteed</Text>
                     <Text bold>
-                      {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
+                      {minimumClaimableAmount} {idoToken.symbol} = {minAmountPay} {payToken.symbol}
                     </Text>
                   </Flex>
-                  <Flex justifyContent="space-between">
-                    <Text>Claimed amount</Text>
-                    <Text bold>
-                      {poolStatus === 'claim'
-                        ? 'Processing'
-                        : getFullDisplayBalance(new BigNumber(claimedAmount), idoToken.decimals)}{' '}
-                      {idoToken.symbol}
-                    </Text>
-                  </Flex>
-                  <TertiaryMessage
-                    hoverContent={generateClaimInfo(timeVesting, percentVesting)}
-                    hoverPlacement="top"
-                    color="#C3C3C3"
-                  >
-                    Claim information
-                  </TertiaryMessage>
-                  {/* When user does not claim any thing even after the claim time frame */}
-                  {claimAtsTime === '0' && !isCurrentTimeOutOfClaimTimeFrame ? (
-                    <Mesage variant="warning" mt="18px">
-                      You will be able to claim: {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount}{' '}
-                      {idoToken.symbol}
-                    </Mesage>
-                  ) : (
-                    nextClaimTime &&
-                    (poolStatus === 'claim' || poolStatus === 'closed') && (
+                )}
+                <Flex justifyContent="space-between">
+                  <Text>Max to commit</Text>
+                  <Text bold>
+                    {isLoadingDataFromContract ? '~' : maxAmountPay} {payToken.symbol}
+                  </Text>
+                </Flex>
+                <Flex justifyContent="space-between">
+                  <Text>Price</Text>
+                  <Text bold>
+                    1 {payToken.symbol} / {rate} {idoToken.symbol}
+                  </Text>
+                </Flex>
+                <Flex justifyContent="space-between">
+                  <Text>Your committed</Text>
+                  <Text bold>
+                    {userTotalCommitted} {payToken.symbol}
+                  </Text>
+                </Flex>
+                {isShowVesting ? (
+                  <>
+                    <Flex justifyContent="space-between">
+                      <Text>Total claimable amount</Text>
+                      <Text bold>
+                        {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
+                      </Text>
+                    </Flex>
+                    <Flex justifyContent="space-between">
+                      <Text>Claimed amount</Text>
+                      <Text bold>
+                        {poolStatus === 'claim'
+                          ? 'Processing'
+                          : getFullDisplayBalance(new BigNumber(claimedAmount), idoToken.decimals)}{' '}
+                        {idoToken.symbol}
+                      </Text>
+                    </Flex>
+                    <TertiaryMessage
+                      hoverContent={generateClaimInfo(timeVesting, percentVesting)}
+                      hoverPlacement="top"
+                      color="#C3C3C3"
+                    >
+                      Claim information
+                    </TertiaryMessage>
+                    {/* When user does not claim any thing even after the claim time frame */}
+                    {claimAtsTime === '0' && !isCurrentTimeOutOfClaimTimeFrame ? (
                       <Mesage variant="warning" mt="18px">
-                        The next vesting time: ({currentTimeIndex + 1}) {getUtcDateString(Number(nextClaimTime))}
+                        You will be able to claim: {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount}{' '}
+                        {idoToken.symbol}
                       </Mesage>
-                    )
-                  )}
+                    ) : (
+                      nextClaimTime &&
+                      (poolStatus === 'claim' || poolStatus === 'closed') && (
+                        <Mesage variant="warning" mt="18px">
+                          The next vesting time: ({currentTimeIndex + 1}) {getUtcDateString(Number(nextClaimTime))}
+                        </Mesage>
+                      )
+                    )}
 
-                  {/* <Flex justifyContent="space-between">
+                    {/* <Flex justifyContent="space-between">
                     <Text>Total claimed amount</Text>
                     <Text bold>
                       {poolStatus === 'claim'
@@ -488,96 +501,97 @@ const Deposit: React.FC<DepositProps> = ({
                       {idoToken.symbol}
                     </Text>
                   </Flex> */}
-                </>
-              ) : (
-                <>
-                  {(poolStatus === 'claim' || poolStatus === 'closed') && (
-                    <Flex justifyContent="space-between">
-                      <Text>Claimable amount</Text>
-                      <Text bold>
-                        {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
-                      </Text>
-                    </Flex>
-                  )}
+                  </>
+                ) : (
+                  <>
+                    {(poolStatus === 'claim' || poolStatus === 'closed') && (
+                      <Flex justifyContent="space-between">
+                        <Text>Claimable amount</Text>
+                        <Text bold>
+                          {poolStatus === 'claim' ? 'Processing' : idoReceivedAmount} {idoToken.symbol}
+                        </Text>
+                      </Flex>
+                    )}
 
-                  {(poolStatus === 'claim' || poolStatus === 'closed') && (
-                    <Flex justifyContent="space-between">
-                      <Text>Claimed Amount</Text>
-                      <Text bold>
-                        {isClaimed ? idoReceivedAmount : 0} {idoToken.symbol}
-                      </Text>
-                    </Flex>
-                  )}
-                </>
-              )}
+                    {(poolStatus === 'claim' || poolStatus === 'closed') && (
+                      <Flex justifyContent="space-between">
+                        <Text>Claimed Amount</Text>
+                        <Text bold>
+                          {isClaimed ? idoReceivedAmount : 0} {idoToken.symbol}
+                        </Text>
+                      </Flex>
+                    )}
+                  </>
+                )}
 
-              {isIdoAvailalbeOnChain && (
-                <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="15px">
-                  {account && isPoolInProgress && (isNativeToken || (!isNativeToken && isApproved)) && (
-                    <ModalInput
-                      value={value}
-                      onSelectMax={handleSelectMax}
-                      onChange={handleChange}
-                      isLoadingDataFromContract={isLoadingDataFromContract}
-                      max={maxAmountAllowedLeft}
-                      min={new BigNumber(minAmountPay).toString()}
-                      symbol={payToken.symbol}
-                      inputTitle="Amount"
-                      secondaryTitle="Available Balance"
-                      showWarning={false}
-                    />
-                  )}
-                </Flex>
-              )}
-              <ActionButton
-                isRequestContractAction={isRequestContractAction}
-                isUserDepositMinimumAmount={isUserDepositMinimumAmount}
-                isApproved={isApproved}
-                userTotalCommitted={userTotalCommitted}
-                poolStatus={poolStatus}
-                payTokenBalance={payTokenBalance}
-                isLoadingApproveStatus={isLoadingApproveStatus}
-                idoReceivedAmount={idoReceivedAmount}
-                claimSymbol={idoToken.symbol}
-                isIdoAvailalbeOnChain={isIdoAvailalbeOnChain}
-                handleApprove={handleApprove}
-                onCommit={onHandleCommit}
-                onClaimVesting={onHandleClaimVesting}
-                onClaim={onHandleClaim}
-                disabled={!isClaimable}
-                symbol={payToken.symbol}
-                isClaimed={isClaimed}
-                paytokenAddress={payToken.address}
-                maxAmountAllowedLeft={maxAmountAllowedLeft}
-                minAmount={minAmountPay}
-                depositAmount={value}
-                isShowVesting={isShowVesting}
-                vestingData={vestingData}
-                timeNextClaim={timeNextClaim}
-                estimatedAmount={estimatedAmount}
-                isLoadingVestingInfo={isLoadingVestingInfo}
-                isClaimedAllVesting={isClaimedAllVesting}
-                timeVesting={timeVesting}
-                percentVesting={percentVesting}
-              />
-              {isClaimed && !isShowVesting && (
-                <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>
-              )}
-              {isClaimedAllVesting && isShowVesting && (
-                <Mesage variant="warning">You have claimed all your reward, check your wallet balance</Mesage>
-              )}
-            </>
-          ) : (
-            <Flex alignItems="center" justifyContent="center" flexDirection="column">
-              <img src={`${process.env.PUBLIC_URL}/images/empty.svg`} alt="empty" />
-              <Text color="#606060" textAlign="center">
-                Switch to correct network to see pool&apos;s information
-              </Text>
-            </Flex>
-          )}
-        </CardBody>
-      </CardWrapper>
-      <BlockTimerWrapper>
+                {isIdoAvailalbeOnChain && (
+                  <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="15px">
+                    {account && isPoolInProgress && (isNativeToken || (!isNativeToken && isApproved)) && (
+                      <ModalInput
+                        value={value}
+                        onSelectMax={handleSelectMax}
+                        onChange={handleChange}
+                        isLoadingDataFromContract={isLoadingDataFromContract}
+                        max={maxAmountAllowedLeft}
+                        min={new BigNumber(minAmountPay).toString()}
+                        symbol={payToken.symbol}
+                        inputTitle="Amount"
+                        secondaryTitle="Available Balance"
+                        showWarning={false}
+                      />
+                    )}
+                  </Flex>
+                )}
+                <ActionButton
+                  isRequestContractAction={isRequestContractAction}
+                  isUserDepositMinimumAmount={isUserDepositMinimumAmount}
+                  isApproved={isApproved}
+                  userTotalCommitted={userTotalCommitted}
+                  poolStatus={poolStatus}
+                  payTokenBalance={payTokenBalance}
+                  isLoadingApproveStatus={isLoadingApproveStatus}
+                  idoReceivedAmount={idoReceivedAmount}
+                  claimSymbol={idoToken.symbol}
+                  isIdoAvailalbeOnChain={isIdoAvailalbeOnChain}
+                  handleApprove={handleApprove}
+                  onCommit={onHandleCommit}
+                  onClaimVesting={onHandleClaimVesting}
+                  onClaim={onHandleClaim}
+                  disabled={!isClaimable}
+                  symbol={payToken.symbol}
+                  isClaimed={isClaimed}
+                  paytokenAddress={payToken.address}
+                  maxAmountAllowedLeft={maxAmountAllowedLeft}
+                  minAmount={minAmountPay}
+                  depositAmount={value}
+                  isShowVesting={isShowVesting}
+                  vestingData={vestingData}
+                  timeNextClaim={timeNextClaim}
+                  estimatedAmount={estimatedAmount}
+                  isLoadingVestingInfo={isLoadingVestingInfo}
+                  isClaimedAllVesting={isClaimedAllVesting}
+                  timeVesting={timeVesting}
+                  percentVesting={percentVesting}
+                />
+                {isClaimed && !isShowVesting && (
+                  <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>
+                )}
+                {isClaimedAllVesting && isShowVesting && (
+                  <Mesage variant="warning">You have claimed all your reward, check your wallet balance</Mesage>
+                )}
+              </>
+            ) : (
+              <Flex alignItems="center" justifyContent="center" flexDirection="column">
+                <img src={`${process.env.PUBLIC_URL}/images/empty.svg`} alt="empty" />
+                <Text color="#606060" textAlign="center">
+                  Switch to correct network to see pool&apos;s information
+                </Text>
+              </Flex>
+            )}
+          </CardBody>
+        </CardWrapper>
+      )}
+      <BlockTimerWrapper isShowPoolData={isShowPoolData}>
         <CountDown
           openAt={openAt}
           closeAt={closeAt}

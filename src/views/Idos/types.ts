@@ -1,4 +1,4 @@
-export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim' | null
+export type PoolStatus = 'not open' | 'open' | 'closed' | 'claim' | null | 'preview'
 
 export type ChainId = 89 | 1 | 88
 

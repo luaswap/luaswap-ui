@@ -66,6 +66,7 @@ export interface Profile {
 export interface FarmsState {
   data: Farm[]
   userDataLoaded: boolean
+  farmDataLoaded: boolean
 }
 
 export interface VaultFees {

@@ -83,10 +83,10 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   return (
     <Action>
       <Flex>
-        <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="3px">
+        <Text bold textTransform="uppercase" color="#FABC46" fontSize="12px" pr="3px">
           {quoteToken.symbol} & LUA
         </Text>
-        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+        <Text bold textTransform="uppercase" color="#c3c3c3" fontSize="12px">
           {t('Earned')}
         </Text>
       </Flex>
@@ -98,10 +98,10 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
         earningsLua={earningsLua}
       />
       <Flex>
-        <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="3px">
+        <Text bold textTransform="uppercase" color="#FABC46" fontSize="12px" pr="3px">
           {lpName}
         </Text>
-        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+        <Text bold textTransform="uppercase" color="#c3c3c3" fontSize="12px">
           {t('Staked')}
         </Text>
       </Flex>

@@ -45,7 +45,7 @@ const StyledCardAccent = styled.div`
 
 const FCard = styled.div<{ isPromotedFarm: boolean }>`
   align-self: baseline;
-  background: ${(props) => props.theme.card.background};
+  background: #282828;
   border-radius: ${({ theme, isPromotedFarm }) => (isPromotedFarm ? '31px' : theme.radii.card)};
   box-shadow: 0px 1px 4px rgba(25, 19, 38, 0.15);
   display: flex;
@@ -102,6 +102,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
   if (!farm.master) {
     return <div>Missing master address in this pool</div>
   }
+  console.log(farm, 'farm ??')
   return (
     <FCard isPromotedFarm={isPromotedFarm}>
       {isPromotedFarm && <StyledCardAccent />}
@@ -142,6 +143,10 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
             &nbsp;+&nbsp;
             {getBalanceNumber(new BigNumber(farm.luaReward || '0')).toFixed(2)} LUA / block
           </Text>
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text>APY:</Text>
+          <Text bold>{farm.apy}</Text>
         </Flex>
       </>
       {/* <Flex justifyContent="space-between">

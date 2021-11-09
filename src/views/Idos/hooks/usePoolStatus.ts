@@ -14,9 +14,13 @@ const usePoolStatus = ({
   const openAtSeconds = useSecondsUntilCurrent(untilOpen)
   const closedAtSeconds = useSecondsUntilCurrent(untilClose)
   const claimAtSeconds = useSecondsUntilCurrent(untilClaim)
+
   useEffect(() => {
-    /* If open time > 0 and closed time > 0 -> the Pool is not open yet */
-    if (openAtSeconds > 0 && closedAtSeconds > 0) {
+    // If we only has open time, it means that we only allow user to preview the info of the IDO
+    if (openAtSeconds > 0 && !closedAtSeconds) {
+      setStatus('preview')
+      /* If open time > 0 and closed time > 0 -> the Pool is not open yet */
+    } else if (openAtSeconds > 0 && closedAtSeconds > 0) {
       setStatus('not open')
     } else if (openAtSeconds <= 0 && closedAtSeconds > 0) {
       setStatus('open')

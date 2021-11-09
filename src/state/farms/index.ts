@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable import/no-cycle */
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Web3 from 'web3'
@@ -9,6 +10,7 @@ import isArchivedPid from 'utils/farmHelpers'
 import { IsTomoChain } from 'utils/wallet'
 import { API_ETH, API_TOMO } from 'config'
 import { FarmConfig } from 'config/constants/types'
+import { RootState } from 'state'
 import {
   fetchFarmUserEarnings,
   fetchFarmUserAllowances,
@@ -41,7 +43,7 @@ const allTomoSupportedPools = tomoSupportedPools.map((farm) => ({
     earningsLua: '0',
   },
 }))
-const initialState: FarmsState = { data: allPoolConfig, userDataLoaded: false }
+const initialState: FarmsState = { data: allPoolConfig, userDataLoaded: false, farmDataLoaded: false }
 export const farmsSlice = createSlice({
   name: 'Farms',
   initialState,
@@ -64,6 +66,7 @@ export const farmsSlice = createSlice({
         )
         return { ...farm, ...liveFarmData }
       })
+      state.farmDataLoaded = true
     },
     setFarmUserData: (state, action) => {
       const { arrayOfUserDataObjects } = action.payload
@@ -83,19 +86,21 @@ export const farmsSlice = createSlice({
 export const { setFarmUserData, setFarmsPublicData, setDefaultFarmData } = farmsSlice.actions
 
 // Thunks
-export const fetchFarms = (chainId: number, web3: Web3, isDual: boolean) => async (dispatch, getState) => {
-  const IsTomo = IsTomoChain(chainId)
-  const apiUrl = IsTomo ? API_TOMO : API_ETH
-  const finalUrl = isDual ? `${apiUrl}/dualfarm` : apiUrl
-  const { data } = await axios.get(`${finalUrl}/pools`)
-  dispatch(setFarmsPublicData(data))
-  const apyListResponse = data.map((farm) => {
-    if (isDual) return getNewRewardPerBlockDual(web3, farm.pid + 1, chainId, farm.master)
-    return getNewRewardPerBlock(web3, farm.pid + 1, chainId)
-  })
-  const apyList = await Promise.all(apyListResponse)
-  dispatch(setFarmsPublicData(apyList))
-}
+export const fetchFarms =
+  (chainId: number, web3: Web3, isDual: boolean, callback?: () => void) => async (dispatch, getState) => {
+    const IsTomo = IsTomoChain(chainId)
+    const apiUrl = IsTomo ? API_TOMO : API_ETH
+    const finalUrl = isDual ? `${apiUrl}/dualfarm` : apiUrl
+    const { data } = await axios.get(`${finalUrl}/pools`)
+    dispatch(setFarmsPublicData(data))
+    const apyListResponse = data.map((farm) => {
+      if (isDual) return getNewRewardPerBlockDual(web3, farm.pid + 1, chainId, farm.master)
+      return getNewRewardPerBlock(web3, farm.pid + 1, chainId)
+    })
+    const apyList = await Promise.all(apyListResponse)
+    dispatch(setFarmsPublicData(apyList))
+    callback()
+  }
 export const fetchFarmUserDataAsync =
   (account: string, chainId?: number, web3?: Web3, pools?: FarmConfig[]) => async (dispatch, getState) => {
     try {
@@ -124,3 +129,6 @@ export const fetchFarmUserDataAsync =
   }
 
 export default farmsSlice.reducer
+
+// Selector
+export const selectFarmState = (state: RootState) => state.farms
