@@ -111,36 +111,11 @@ export const fetchFarmUserDataAsync =
     try {
       const IsTomo = IsTomoChain(chainId)
       const farmsToFetch = pools || (IsTomo ? tomoSupportedPools : allPools)
-      const userFarmTokenBalances = await fetchFarmUserTokenBalances(
-        '0xA5b9e906cd4D76c99b6ad4db1D35e9a8C95d9E0E',
-        farmsToFetch,
-        chainId,
-        web3,
-      )
-      const userFarmAllowances = await fetchFarmUserAllowances(
-        '0xA5b9e906cd4D76c99b6ad4db1D35e9a8C95d9E0E',
-        farmsToFetch,
-        chainId,
-        web3,
-      )
-      const userStakedBalances = await fetchFarmUserStakedBalances(
-        '0xA5b9e906cd4D76c99b6ad4db1D35e9a8C95d9E0E',
-        farmsToFetch,
-        chainId,
-        web3,
-      )
-      const userFarmEarnings = await fetchFarmUserEarnings(
-        '0xA5b9e906cd4D76c99b6ad4db1D35e9a8C95d9E0E',
-        farmsToFetch,
-        chainId,
-        web3,
-      )
-      const userFarmEarningsLua = await fetchFarmUserEarningsLua(
-        '0xA5b9e906cd4D76c99b6ad4db1D35e9a8C95d9E0E',
-        farmsToFetch,
-        chainId,
-        web3,
-      )
+      const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch, chainId, web3)
+      const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch, chainId, web3)
+      const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch, chainId, web3)
+      const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch, chainId, web3)
+      const userFarmEarningsLua = await fetchFarmUserEarningsLua(account, farmsToFetch, chainId, web3)
       const arrayOfUserDataObjects = farmsToFetch.map((farm, index) => {
         return {
           master: farm.master,
