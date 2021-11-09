@@ -136,6 +136,10 @@ const ProcessAmountWrapper = styled(Flex)`
     flex-direction: row;
   }
 `
+const InfoText = styled(Text)`
+  color: red;
+  font-size: 11px;
+`
 
 const CardWrapper = styled(Card)<CardWrapperProps>`
   width: ${(props) => (props.isShowPoolData ? 'calc(55% - 24px)' : '85%')};
@@ -323,6 +327,10 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             </ProcessColumnWrapper>
           </Flex>
         )}
+        <InfoText>
+          (*) You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of the
+          percentage shown.
+        </InfoText>
       </CardBody>
     </CardWrapper>
   )
