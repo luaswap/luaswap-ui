@@ -2,8 +2,9 @@ import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Route, useRouteMatch, useHistory } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useAppDispatch } from 'state'
+import { useSelector } from 'react-redux'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Text, Mesage } from 'luastarter-uikits'
+import { Image, Heading, RowType, Text, Mesage, Spinner } from 'luastarter-uikits'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -24,6 +25,10 @@ import SearchInput from './components/SearchInput'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema, ViewMode } from './components/types'
+
+const PoolContainer = styled.div`
+  padding: 48px 24px;
+`
 
 const ControlContainer = styled.div`
   display: flex;
@@ -90,6 +95,12 @@ const ViewControls = styled.div`
     }
   }
 `
+const PageLoader = styled.div`
+  height: calc(100vh - 312px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const StyledImage = styled(Image)`
   margin-left: auto;
@@ -100,6 +111,7 @@ const Farms: React.FC = () => {
   const { path } = useRouteMatch()
   const { t } = useTranslation()
   const { data: farmsLP, userDataLoaded } = useFarms()
+  const [isLoading, setIsLoading] = useState(true)
   const luaPrice = useLuaPrice()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, 'pancake_farm_view')
@@ -110,7 +122,11 @@ const Farms: React.FC = () => {
   const history = useHistory()
   useEffect(() => {
     dispatch(setDefaultFarmData(chainId))
-    dispatch(fetchFarms(chainId, web3, true))
+    dispatch(
+      fetchFarms(chainId, web3, true, () => {
+        setIsLoading(false)
+      }),
+    )
   }, [account, dispatch, chainId, web3])
 
   useEffect(() => {
@@ -196,8 +212,8 @@ const Farms: React.FC = () => {
   const renderContent = (): JSX.Element => {
     return (
       <div>
-        <FlexLayout>
-          <Route exact path={`${path}`}>
+        {!isLoading ? (
+          <FlexLayout>
             {farmsLpMemoized.map((farm) => (
               <FarmCard
                 key={`${farm.master}${farm.pid}`}
@@ -207,8 +223,12 @@ const Farms: React.FC = () => {
                 luaPrice={luaPrice}
               />
             ))}
-          </Route>
-        </FlexLayout>
+          </FlexLayout>
+        ) : (
+          <PageLoader>
+            <Spinner />
+          </PageLoader>
+        )}
       </div>
     )
   }
@@ -223,13 +243,12 @@ const Farms: React.FC = () => {
           Stake your LP tokens and earn token rewards
         </Heading>
       </PageHeader>
-      <Page>
-        {chainId !== 88 && (
+      <PoolContainer>
+        {chainId !== 88 && !isLoading && (
           <Mesage variant="warning">
             <Text>Please switch to Tomo Mainnet to use this feature</Text>
           </Mesage>
         )}
-        <br />
         {/* <ControlContainer>
           <ViewControls>
             <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
@@ -242,7 +261,7 @@ const Farms: React.FC = () => {
           </FilterContainer>
         </ControlContainer> */}
         {renderContent()}
-      </Page>
+      </PoolContainer>
     </>
   )
 }

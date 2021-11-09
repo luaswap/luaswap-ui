@@ -94,7 +94,7 @@ const TimerCountDown = ({ poolStatus, openAtSeconds, closedAtSeconds, claimAtSec
     return <TimerClaim claimAtSeconds={claimAtSeconds} />
   }
 
-  if (poolStatus === 'not open') {
+  if (poolStatus === 'not open' || poolStatus === 'preview') {
     return <TimerOpen openAtSeconds={openAtSeconds} />
   }
 
@@ -111,7 +111,7 @@ const CountDown: React.FC<CountDownProps> = ({
   poolStatus,
 }) => {
   const { title, date } = useMemo(() => {
-    if (poolStatus === 'not open') {
+    if (poolStatus === 'not open' || poolStatus === 'preview') {
       return {
         title: 'Open on',
         date: getUtcDateString(openAt),

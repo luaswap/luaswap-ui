@@ -121,9 +121,8 @@ const ProjectDetail = () => {
     if (isPresent && status === 1) {
       return false
     }
-
     return true
-  }, [isPresent, status])
+  }, [isPresent, status, secondsUntilSnapshot])
 
   useEffect(() => {
     if (id) {
@@ -221,19 +220,18 @@ const ProjectDetail = () => {
                 contractData={idoDetailFromContract}
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
-              {isShowPoolData && (
-                <Deposit
-                  isLoadingTierInfo={isLoadingTierInfo}
-                  isLoadingDataFromContract={isLoadingDataFromContract}
-                  currentPoolData={currentPoolData}
-                  tierDataOfUser={tierDataOfUser}
-                  totalAmountUserSwapped={totalAmountUserSwapped}
-                  userTotalCommitted={totalUserCommittedFromContract}
-                  contractData={idoDetailFromContract}
-                  selectedUserTier={selectedUserTier}
-                  isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
-                />
-              )}
+              <Deposit
+                isShowPoolData={isShowPoolData}
+                isLoadingTierInfo={isLoadingTierInfo}
+                isLoadingDataFromContract={isLoadingDataFromContract}
+                currentPoolData={currentPoolData}
+                tierDataOfUser={tierDataOfUser}
+                totalAmountUserSwapped={totalAmountUserSwapped}
+                userTotalCommitted={totalUserCommittedFromContract}
+                contractData={idoDetailFromContract}
+                selectedUserTier={selectedUserTier}
+                isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
+              />
             </StyledFlex>
             {isShowPoolData && (
               <>
