@@ -327,10 +327,12 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             </ProcessColumnWrapper>
           </Flex>
         )}
-        <InfoText>
-          (*) You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of the
-          percentage shown.
-        </InfoText>
+        {isShowPoolData && (
+          <InfoText>
+            (*) You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of
+            the percentage shown.
+          </InfoText>
+        )}
       </CardBody>
     </CardWrapper>
   )

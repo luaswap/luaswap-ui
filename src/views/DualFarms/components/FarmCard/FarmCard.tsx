@@ -16,6 +16,9 @@ import CardActionsContainer from './CardActionsContainer'
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number
+  reserves0?: string
+  reserves1?: string
+  totalSupply?: string
 }
 
 const AccentGradient = keyframes`  
@@ -103,7 +106,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
   if (!farm.master) {
     return <div>Missing master address in this pool</div>
   }
-  console.log(farm, 'farm ??')
+
   return (
     <FCard isPromotedFarm={isPromotedFarm}>
       {isPromotedFarm && <StyledCardAccent />}
@@ -147,7 +150,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
         </Flex>
         <Flex justifyContent="space-between">
           <Text>APY:</Text>
-          <Text bold>{farm.apy}</Text>
+          <Text bold>{farm.apy} %</Text>
         </Flex>
       </>
       {/* <Flex justifyContent="space-between">

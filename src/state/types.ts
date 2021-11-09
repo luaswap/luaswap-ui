@@ -2,6 +2,12 @@ import BigNumber from 'bignumber.js'
 import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constants/types'
 import { Pool as PoolIdoDetail } from 'views/Idos/types'
 
+export type TokenType = {
+  decimals: number
+  projectLink: string
+  symbol: string
+}
+
 export type TranslatableText =
   | string
   | {
@@ -23,6 +29,8 @@ export interface Farm extends FarmConfig {
   addLiquidityLink: string
   usdValue?: number
   totalToken2Value?: number
+  tokenSymbol?: TokenType
+  token2Symbol?: TokenType
   apy?: number
   reward?: string
   luaReward?: string

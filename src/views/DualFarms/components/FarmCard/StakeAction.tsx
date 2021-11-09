@@ -1,15 +1,22 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from 'luastarter-uikits'
+import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal, Text } from 'luastarter-uikits'
 import { useLocation } from 'react-router-dom'
+import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import useStake from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
-import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
+import { getBalanceAmount, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 
+export interface FarmWithStakedValue extends Farm {
+  apr?: number
+  reserves0?: string
+  reserves1?: string
+  totalSupply?: string
+}
 interface FarmCardActionsProps {
   stakedBalance?: BigNumber
   tokenBalance?: BigNumber
@@ -17,6 +24,7 @@ interface FarmCardActionsProps {
   pid?: number
   addLiquidityUrl?: string
   master?: string
+  farm: FarmWithStakedValue
 }
 
 const IconButtonWrapper = styled.div`
@@ -31,6 +39,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   tokenBalance,
   tokenName,
   pid,
+  farm,
   master,
   addLiquidityUrl,
 }) => {
@@ -38,6 +47,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const { onStake } = useStake(pid, master)
   const { onUnstake } = useUnstake(pid, master)
   const location = useLocation()
+  const { reserves0, reserves1, totalSupply, token2Symbol, tokenSymbol } = farm
 
   const displayBalance = useCallback(() => {
     const stakedBalanceNumber = getBalanceNumber(stakedBalance)
@@ -46,6 +56,22 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
     }
     return stakedBalanceNumber.toLocaleString()
   }, [stakedBalance])
+
+  const calculatedAmount1 = useMemo(() => {
+    return new BigNumber(reserves0)
+      .multipliedBy(getBalanceAmount(stakedBalance))
+      .dividedBy(totalSupply)
+      .toNumber()
+      .toFixed(2)
+  }, [displayBalance])
+
+  const calculatedAmount2 = useMemo(() => {
+    return new BigNumber(reserves1)
+      .multipliedBy(getBalanceAmount(stakedBalance))
+      .dividedBy(totalSupply)
+      .toNumber()
+      .toFixed(2)
+  }, [displayBalance])
 
   const [onPresentDeposit] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} />,
@@ -77,10 +103,27 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       </IconButtonWrapper>
     )
   }
-
+  // (${calculatedAmount1} ${tokenSymbol?.symbol} + ${calculatedAmount2} ${
+  //   token2Symbol?.symbol
+  // })
   return (
     <Flex justifyContent="space-between" alignItems="center">
-      <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'text'}>{displayBalance()}</Heading>
+      <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'text'}>
+        {stakedBalance.eq(0) ? (
+          '0'
+        ) : (
+          <span>
+            {displayBalance()}
+            <span
+              style={{
+                fontSize: '15px',
+              }}
+            >
+              &nbsp;({calculatedAmount1} {tokenSymbol?.symbol} + {calculatedAmount2} {token2Symbol?.symbol})
+            </span>
+          </span>
+        )}
+      </Heading>
       {renderStakingButtons()}
     </Flex>
   )

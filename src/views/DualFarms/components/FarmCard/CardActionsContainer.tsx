@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { provider as ProviderType } from 'web3-core'
 import BigNumber from 'bignumber.js'
@@ -6,6 +6,7 @@ import { getAddress } from 'utils/addressHelpers'
 import { getERC20Contract } from 'utils/contractHelpers'
 import { useWeb3React } from '@web3-react/core'
 import { Button, Flex, Text } from 'luastarter-uikits'
+import { getBalanceAmount, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import useWeb3 from 'hooks/useWeb3'
@@ -19,6 +20,9 @@ const Action = styled.div`
 `
 export interface FarmWithStakedValue extends Farm {
   apr?: number
+  reserves0?: string
+  reserves1?: string
+  totalSupply?: string
 }
 
 interface FarmCardActionsProps {
@@ -32,7 +36,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const { t } = useTranslation()
   const [requestedApproval, setRequestedApproval] = useState(false)
   const { library, chainId } = useWeb3React()
-  const { pid, lpAddresses, master, quoteToken } = farm
+  const { pid, lpAddresses, master, quoteToken, reserves0, reserves1, totalSupply } = farm
   const {
     allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
@@ -67,6 +71,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
     return isApproved ? (
       <StakeAction
         stakedBalance={stakedBalance}
+        farm={farm}
         tokenBalance={tokenBalance}
         tokenName={lpName}
         pid={pid}
