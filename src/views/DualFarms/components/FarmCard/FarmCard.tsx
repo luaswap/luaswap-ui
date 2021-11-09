@@ -102,7 +102,6 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
   const { pairLink } = farm
   const lpAddress = farm.lpAddresses[chainId]
   const isPromotedFarm = farm.token.symbol === 'CAKE'
-  // console.log(farm)
   if (!farm.master) {
     return <div>Missing master address in this pool</div>
   }
@@ -143,9 +142,9 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, account, luaPrice })
         <Flex justifyContent="space-between">
           <Text>{t('Reward')}:</Text>
           <Text bold>
-            {newReward ? parseInt(getBalanceNumber(newReward).toFixed(2)) : '~'} {farm.quoteToken.symbol}
+            {getBalanceNumber(newReward).toFixed(2)} {farm.quoteToken.symbol}
             &nbsp;+&nbsp;
-            {newReward ? parseInt(getBalanceNumber(new BigNumber(farm.luaReward || '0')).toFixed(2)) : '~'} LUA / block
+            {getBalanceNumber(new BigNumber(farm.luaReward || '0')).toFixed(2)} LUA / block
           </Text>
         </Flex>
         <Flex justifyContent="space-between">
