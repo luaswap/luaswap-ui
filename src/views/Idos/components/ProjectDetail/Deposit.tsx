@@ -180,7 +180,7 @@ const Deposit: React.FC<DepositProps> = ({
       return true
     }
 
-    return true
+    return false
   }, [versionContract])
   // Find the next time frame
   const nextClaimTime = useMemo(() => {
