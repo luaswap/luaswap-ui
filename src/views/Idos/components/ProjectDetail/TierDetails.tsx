@@ -192,7 +192,7 @@ const TierCard: React.FC<TierProps> = ({
             </TertiaryMessage>
           </TierHeaderWrapper>
           <Flex justifyContent="space-between" flexDirection="column">
-            <Flex justifyContent="space-between">
+            {/* <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Total {idoToken.symbol}&nbsp;</Text>
               <Text bold color="#C3C3C3">
                 {formatNumberWithComma(totalAmountIDO, true)} {idoToken.symbol}
@@ -203,7 +203,7 @@ const TierCard: React.FC<TierProps> = ({
               <Text bold color="#C3C3C3">
                 {formatNumberWithComma(totalAmountPay, true)} {payToken.symbol}
               </Text>
-            </Flex>
+            </Flex> */}
             <Flex justifyContent="space-between">
               <Text color="#8B8B8B">Price</Text>
               <Text bold>
