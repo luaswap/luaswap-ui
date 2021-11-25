@@ -116,13 +116,18 @@ const ProjectDetail = () => {
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
   const secondsUntilSnapshot = useSecondsUntilCurrent(get(currentPoolData, 'untilSnapshootAt', null))
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
-  const { isPresent, status } = currentPoolData
+  const { isPresent, isWhitelist, status } = currentPoolData
   const isShowPoolData = useMemo(() => {
     if (isPresent && status === 1) {
       return false
     }
+
+    if (isWhitelist) {
+      return false
+    }
+
     return true
-  }, [isPresent, status, secondsUntilSnapshot])
+  }, [isPresent, isWhitelist, status, secondsUntilSnapshot])
 
   useEffect(() => {
     if (id) {
