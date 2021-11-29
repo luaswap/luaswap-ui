@@ -13,6 +13,7 @@ import {
   Box,
   TertiaryMessage,
   Button,
+  LinkExternal,
 } from 'luastarter-uikits'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
@@ -173,6 +174,7 @@ interface PoolSummaryProps {
   contractData: IdoDetailInfo
   isAvailalbeOnCurrentNetwork: boolean
   isShowPoolData: boolean
+  isShowTierInfor: boolean
 }
 /**
  * In Pool summary component, we get live data from contract
@@ -183,11 +185,13 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   tierDataOfUser,
   contractData,
   isShowPoolData,
+  isShowTierInfor,
   isAvailalbeOnCurrentNetwork,
 }) => {
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
   const { socials, timeVesting, percentVesting, versionContract, isVesting } = currentPoolData
+  const { whitelistLink } = currentPoolData
   const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
@@ -290,12 +294,16 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                 <Box>
                   {isPoolInProgress || !isPoolOpen ? (
                     <ProcessAmountWrapper justifyContent="flex-start">
-                      <TertiaryMessage
-                        hoverContent="You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of the percentage shown."
-                        hoverPlacement="top"
-                      >
-                        Commit Process
-                      </TertiaryMessage>
+                      {isShowTierInfor ? (
+                        <TertiaryMessage
+                          hoverContent="You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of the percentage shown."
+                          hoverPlacement="top"
+                        >
+                          Commit Process
+                        </TertiaryMessage>
+                      ) : (
+                        <Text>Commit Process</Text>
+                      )}
                       <Text color="primary" bold fontSize="18px">
                         &nbsp;{formatNumberWithComma(totalCommittedAmount, true)}/
                         {formatNumberWithComma(totalAmountPay)} {payToken?.symbol}
@@ -327,10 +335,19 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             </ProcessColumnWrapper>
           </Flex>
         )}
-        {isShowPoolData && (
+        {isShowPoolData && isShowTierInfor && (
           <InfoText>
             (*) You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of
             the percentage shown.
+          </InfoText>
+        )}
+        {isShowPoolData && !isShowTierInfor && (
+          <InfoText>
+            (*) Pool for WHITELIST WINNERS ONLY. If you are not on the&nbsp;
+            <a style={{ textDecoration: 'underline' }} href={whitelistLink}>
+              list
+            </a>
+            , you can NOT commit successfully.
           </InfoText>
         )}
       </CardBody>

@@ -230,11 +230,13 @@ const ProjectDetail = () => {
                 currentPoolData={currentPoolData}
                 tierDataOfUser={tierDataOfUser}
                 isShowPoolData={isShowPoolData}
+                isShowTierInfor={isShowTierInfor}
                 contractData={idoDetailFromContract}
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
               <Deposit
                 isShowPoolData={isShowPoolData}
+                isShowTierInfor={isShowTierInfor}
                 isLoadingTierInfo={isLoadingTierInfo}
                 isLoadingDataFromContract={isLoadingDataFromContract}
                 currentPoolData={currentPoolData}
@@ -285,7 +287,7 @@ const ProjectDetail = () => {
             <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               How to LuaStarts
             </Heading>
-            <Steps selectedUserTier={selectedUserTier} />
+            <Steps selectedUserTier={selectedUserTier} isShowTierInfor={isShowTierInfor} />
           </>
         )}
       </Row>

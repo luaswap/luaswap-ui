@@ -98,7 +98,10 @@ const DotsComponent = ({ numberOfDots, isVertical = false }) => {
   )
 }
 
-const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserTier }) => {
+const IfoStepsDesktop: React.FC<{ selectedUserTier: number; isShowTierInfor: boolean }> = ({
+  selectedUserTier,
+  isShowTierInfor,
+}) => {
   return (
     <Wrapper>
       <StepWrapper>
@@ -148,7 +151,7 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
           <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="right" color="#8B8B8B">
             Stake more LUA to be qualified for a higher tier level
           </TertiaryMessage>
-          <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>
+          {isShowTierInfor && <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>}
         </Box>
         <Box width="25%" mr="15px">
           <Text bold color="#F6F6F6">
@@ -169,7 +172,10 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number }> = ({ selectedUserT
   )
 }
 
-const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTier }) => {
+const IfoStepsMobile: React.FC<{ selectedUserTier: number; isShowTierInfor: boolean }> = ({
+  selectedUserTier,
+  isShowTierInfor,
+}) => {
   return (
     <MobileWrapper>
       <MobileStepWrapper alignItems="center" justifyContent="center">
@@ -204,7 +210,7 @@ const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTi
           <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="top" color="#8B8B8B">
             Stake more LUA to be qualified for a higher tier level
           </TertiaryMessage>
-          <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>
+          {isShowTierInfor && <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>}
         </Box>
       </MobileStepWrapper>
       <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
@@ -248,12 +254,13 @@ const IfoStepsMobile: React.FC<{ selectedUserTier: number }> = ({ selectedUserTi
 
 const IfoSteps: React.FC<{
   selectedUserTier: number
-}> = ({ selectedUserTier }) => {
+  isShowTierInfor: boolean
+}> = ({ selectedUserTier, isShowTierInfor }) => {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   return isMobile ? (
-    <IfoStepsMobile selectedUserTier={selectedUserTier} />
+    <IfoStepsMobile selectedUserTier={selectedUserTier} isShowTierInfor={isShowTierInfor} />
   ) : (
-    <IfoStepsDesktop selectedUserTier={selectedUserTier} />
+    <IfoStepsDesktop selectedUserTier={selectedUserTier} isShowTierInfor={isShowTierInfor} />
   )
 }
 

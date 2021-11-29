@@ -96,6 +96,7 @@ interface DepositProps {
   isLoadingDataFromContract: boolean
   isLoadingTierInfo: boolean
   isShowPoolData: boolean
+  isShowTierInfor: boolean
 }
 
 const Deposit: React.FC<DepositProps> = ({
@@ -108,6 +109,7 @@ const Deposit: React.FC<DepositProps> = ({
   isLoadingDataFromContract,
   isLoadingTierInfo,
   isShowPoolData,
+  isShowTierInfor,
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
@@ -418,12 +420,14 @@ const Deposit: React.FC<DepositProps> = ({
           >
             {isAvailalbeOnCurrentNetwork ? (
               <>
-                <Flex justifyContent="space-between">
-                  <Text>Your Tier</Text>
-                  <Text bold>
-                    Tier {selectedUserTier} - {getTierName(selectedUserTier)}
-                  </Text>
-                </Flex>
+                {isShowTierInfor && (
+                  <Flex justifyContent="space-between">
+                    <Text>Your Tier</Text>
+                    <Text bold>
+                      Tier {selectedUserTier} - {getTierName(selectedUserTier)}
+                    </Text>
+                  </Flex>
+                )}
                 {minAmountPay !== 0 && (
                   <Flex justifyContent="space-between">
                     <Text>Min guaranteed</Text>
