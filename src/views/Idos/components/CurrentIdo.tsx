@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React, { useEffect } from 'react'
-import { Text, Flex, Box } from 'luastarter-uikits'
+import { Text, Flex, Box, Heading } from 'luastarter-uikits'
 import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
 import { fetchOpenPools, selectLoadingOpenPools, selectOpenPools } from 'state/ido'
@@ -9,6 +9,7 @@ import PoolDetail from './PoolDetail'
 import IdoLayout from './IdoLayout'
 import PageLoading from './PageLoading'
 import { Pool } from '../types'
+import IfoSteps from './ProjectDetail/Steps'
 
 const fadeIn = keyframes`
   from {
@@ -106,6 +107,10 @@ const Star5 = styled(Star)`
   animation-fill-mode: both;
   animation-delay: 100ms;
 `
+
+const StepSection = styled.div`
+  margin-top: 30px;
+`
 const EmptyPool = () => {
   return (
     <Flex alignItems="center" justifyContent="center" flexDirection="column">
@@ -171,6 +176,12 @@ const CurrentIdo: React.FC = () => {
           </Row>
         </PoolContainer>
       </Flex>
+      <StepSection>
+        <Heading as="h2" scale="lg" color="#D8D8D8" mb="20px">
+          How to LuaStarts
+        </Heading>
+        <IfoSteps isShowTierInfor={false} />
+      </StepSection>
     </IdoLayout>
   )
 }

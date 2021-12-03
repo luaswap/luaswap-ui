@@ -98,7 +98,7 @@ const DotsComponent = ({ numberOfDots, isVertical = false }) => {
   )
 }
 
-const IfoStepsDesktop: React.FC<{ selectedUserTier: number; isShowTierInfor: boolean }> = ({
+const IfoStepsDesktop: React.FC<{ selectedUserTier?: number; isShowTierInfor: boolean }> = ({
   selectedUserTier,
   isShowTierInfor,
 }) => {
@@ -172,7 +172,7 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier: number; isShowTierInfor: boo
   )
 }
 
-const IfoStepsMobile: React.FC<{ selectedUserTier: number; isShowTierInfor: boolean }> = ({
+const IfoStepsMobile: React.FC<{ selectedUserTier?: number; isShowTierInfor: boolean }> = ({
   selectedUserTier,
   isShowTierInfor,
 }) => {
@@ -253,7 +253,7 @@ const IfoStepsMobile: React.FC<{ selectedUserTier: number; isShowTierInfor: bool
 }
 
 const IfoSteps: React.FC<{
-  selectedUserTier: number
+  selectedUserTier?: number
   isShowTierInfor: boolean
 }> = ({ selectedUserTier, isShowTierInfor }) => {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
