@@ -22,6 +22,7 @@ import { IdoDetailInfo, Pool } from 'views/Idos/types'
 import getLink from 'views/Idos/utils/getMediaUrl'
 import { formatNumberWithComma } from 'utils/formatBalance'
 import { supportIdoNetwork } from 'config/constants/idos'
+import { useWeb3React } from '@web3-react/core'
 import {
   calculateCommittedAmountPercentage,
   calculateSwappedAmountPercentage,
@@ -188,6 +189,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   isShowTierInfor,
   isAvailalbeOnCurrentNetwork,
 }) => {
+  const { account } = useWeb3React()
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
   const { socials, timeVesting, percentVesting, versionContract, isVesting } = currentPoolData
@@ -344,10 +346,15 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
         {isShowPoolData && !isShowTierInfor && (
           <InfoText>
             (*) Pool for WHITELIST WINNERS ONLY. If you are not on the&nbsp;
-            <a style={{ textDecoration: 'underline' }} href={whitelistLink}>
+            <a style={{ textDecoration: 'underline' }} href={whitelistLink} target="_blank" rel="noreferrer">
               list
             </a>
             , you can NOT commit successfully.
+          </InfoText>
+        )}
+        {isShowPoolData && !account && (
+          <InfoText>
+            (*) Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration.
           </InfoText>
         )}
       </CardBody>
