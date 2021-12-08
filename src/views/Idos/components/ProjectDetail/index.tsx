@@ -126,10 +126,6 @@ const ProjectDetail = () => {
   }, [isPresent, isWhitelist, status, secondsUntilSnapshot])
 
   const isShowTierInfor = useMemo(() => {
-    if (isPresent && status === 1) {
-      return false
-    }
-
     if (isWhitelist) {
       return false
     }
@@ -248,7 +244,7 @@ const ProjectDetail = () => {
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
             </StyledFlex>
-            {isShowTierInfor && (
+            {isShowTierInfor && isShowPoolData && (
               <>
                 <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
                   Tier Information
