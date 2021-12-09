@@ -60,8 +60,8 @@ const Star = styled(Box)`
   overflow: hidden;
 `
 const Star1 = styled(Star)`
-  width: 10px;
-  height: 10px;
+  width: 30px;
+  height: 30px;
   top: 10px;
   left: 40%;
   animation: ${fadeIn} 0.5s linear infinite, ${fadeOut} 2s linear infinite;
@@ -69,18 +69,18 @@ const Star1 = styled(Star)`
   animation-delay: 500ms;
 `
 const Star6 = styled(Star)`
-  width: 10px;
-  height: 10px;
+  width: 30px;
+  height: 30px;
   top: 60px;
   left: 38%;
   animation: ${fadeIn} 0.5s linear infinite, ${fadeOut} 3s linear infinite;
   animation-fill-mode: both;
-  animation-delay: 100ms;
+  animation-delay: 500ms;
 `
 
 const Star3 = styled(Star)`
-  width: 15px;
-  height: 15px;
+  width: 35px;
+  height: 35px;
   top: 20px;
   right: 30px;
   animation: ${fadeIn} 1s linear infinite, ${fadeOut} 3s linear infinite;
@@ -89,23 +89,23 @@ const Star3 = styled(Star)`
 `
 
 const Star4 = styled(Star)`
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
   bottom: 20px;
   left: 10px;
   animation: ${fadeIn} 0.1s linear infinite, ${fadeOut} 1.5s linear infinite;
   animation-fill-mode: both;
-  animation-delay: 100ms;
+  animation-delay: 800ms;
 `
 
 const Star5 = styled(Star)`
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   bottom: 10px;
   left: 20px;
   animation: ${fadeIn} 2s linear infinite, ${fadeOut} 1.5s linear infinite;
   animation-fill-mode: both;
-  animation-delay: 100ms;
+  animation-delay: 700ms;
 `
 
 const StepSection = styled.div`

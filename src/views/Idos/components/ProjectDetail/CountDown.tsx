@@ -24,9 +24,32 @@ const DateBlock = styled(Box)`
   text-align: center;
   margin-bottom: 14px;
   background: linear-gradient(107.27deg, #f5bd6d -12.7%, #d76700 122.45%);
+  position: relative;
   @media screen and (max-width: 400px) {
     height: 125px;
-  } ;
+  }
+
+  &::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    background-color: #1a1a1a;
+    bottom: 5px;
+    border-radius: 50%;
+    left: 30px;
+  }
+
+  &::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    background-color: #1a1a1a;
+    bottom: 5px;
+    border-radius: 50%;
+    right: 30px;
+  }
 `
 const TimerBlock = styled(Box)`
   width: 100%;
@@ -39,9 +62,64 @@ const TimerBlock = styled(Box)`
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
   padding: 10px 15px;
+  position: relative;
+
+  @media screen and (max-width: 768px) {
+    padding: 40px 15px;
+  }
+
   @media screen and (max-width: 400px) {
     height: 125px;
-  } ;
+  }
+
+  &::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    background-color: #1a1a1a;
+    top: 5px;
+    border-radius: 50%;
+    left: 30px;
+  }
+
+  &::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    background-color: #1a1a1a;
+    top: 5px;
+    border-radius: 50%;
+    right: 30px;
+  }
+`
+
+const ConnectDateTime = styled.div`
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 40px;
+    background-color: #606060;
+    z-index: 1;
+    border-radius: 12px;
+    left: 33px;
+    top: -27px;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 40px;
+    background-color: #606060;
+    z-index: 1;
+    border-radius: 12px;
+    right: 33px;
+    top: -27px;
+  }
 `
 
 const Title = styled(Text)`
@@ -146,6 +224,7 @@ const CountDown: React.FC<CountDownProps> = ({
           {date}
         </Title>
       </DateBlock>
+      <ConnectDateTime />
       <TimerBlock>
         <TimerCountDown
           openAtSeconds={openAtSeconds}

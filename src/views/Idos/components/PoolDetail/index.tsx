@@ -62,13 +62,14 @@ const ImageContainer = styled.img`
 export const YellowCard = styled(Box)`
   box-sizing: border-box;
   display: inline-block;
-  background-color: rgba(243, 132, 30, 0.05);
-  color: rgb(243, 132, 30);
+  background-color: rgba(225, 169, 63, 0.3);
+  color: #fabc46;
   margin-right: 10px;
   font-weight: 600;
   border-radius: 16px;
-  padding: 8px 16px;
+  padding: 6px 16px;
   transition: background-color 0.2s, opacity 0.2s;
+  font-size: 12px;
 `
 
 export const StyledCardBody = styled(CardBody)`
@@ -80,6 +81,10 @@ export const StyledCardBody = styled(CardBody)`
     padding-top: 34px;
     padding-bottom: 34px;
   }
+`
+
+const SecondaryButtonWhite = styled(SecondaryButton)`
+  border-color: #fffcf6;
 `
 
 interface PoolDetailProps {
@@ -95,7 +100,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
   }, [history, path, pool.id])
-  const { isPresent, socials } = pool
+  const { isPresent, socials, isWhitelist } = pool
   const {
     img,
     name,
@@ -143,7 +148,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
             <ImageContainer src={img} alt="img" onClick={navigateToProjectDetail} />
             <PoolInfoBlock>
               <Text
-                fontSize="20px"
+                fontSize="24px"
                 bold
                 onClick={navigateToProjectDetail}
                 style={{
@@ -166,23 +171,33 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
                   <WorldIcon />
                 </IconWrapper>
               </Flex>
-              <Box>
-                {get(pool, 'network', []).map((network) => {
-                  return <YellowCard>{network}</YellowCard>
-                })}
-              </Box>
             </PoolInfoBlock>
           </Flex>
-          <SecondaryButton onClick={navigateToProjectDetail} scale="sm">
-            LEARN MORE
-          </SecondaryButton>
+          {isWhitelist ? (
+            <SecondaryButton onClick={navigateToProjectDetail} scale="sm" mb="15px">
+              <Text fontSize="12px" color="#FABC46">
+                TIER MEMBER
+              </Text>
+            </SecondaryButton>
+          ) : (
+            <SecondaryButtonWhite onClick={navigateToProjectDetail} scale="sm" mb="15px">
+              <Text fontSize="12px" color="#FFFCF6">
+                WHITELIST MEMBER
+              </Text>
+            </SecondaryButtonWhite>
+          )}
         </Flex>
-        <Text color="#C3C3C3" mt="14px">
+        <Box>
+          {get(pool, 'network', []).map((network) => {
+            return <YellowCard>{network}</YellowCard>
+          })}
+        </Box>
+        <Text color="#C3C3C3" mt="14px" fontSize="14px">
           {description}
         </Text>
         {!isPresent && (
           <>
-            <Flex justifyContent="space-between" mb="10px">
+            <Flex justifyContent="space-between" mb="4px" mt="16px">
               <Flex justifyContent="flex-start" flexDirection="row">
                 <Text color="#8B8B8B" mr="5px">
                   Cap:{' '}
@@ -192,7 +207,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
                 </Text>
               </Flex>
             </Flex>
-            <Progress variant="round" primaryStep={progressPercentage} />
+            <Progress variant="round" scale="sm" primaryStep={progressPercentage} />
           </>
         )}
       </StyledCardBody>

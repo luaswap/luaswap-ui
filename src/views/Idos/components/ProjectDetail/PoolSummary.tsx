@@ -34,7 +34,7 @@ import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
 const IconWrapper = styled.a`
   margin-right: 14px;
-  border-right: 1px solid #606060;
+  border-right: ${(props) => (props['hide-border-right'] === 'true' ? 'none' : '1px solid #606060')};
   padding-right: 14px;
   cursor: pointer;
 `
@@ -90,7 +90,6 @@ const CapColumnWrapper = styled(Flex)`
 const SocialLinkWrapper = styled(Flex)`
   width: 100%;
   @media screen and (min-width: 768px) {
-    width: 30%;
     justify-content: flex-end;
   }
 `
@@ -122,13 +121,15 @@ const ProcessColumnWrapper = styled(Flex)`
 export const YellowCard = styled(Box)`
   box-sizing: border-box;
   display: inline-block;
-  background-color: rgba(243, 132, 30, 0.05);
-  color: rgb(243, 132, 30);
-  margin-right: 10px;
-  font-weight: 600;
+  background-color: #353535;
+  color: #fabc46;
+  border: 1px solid #fabc46;
+  font-weight: bold;
+  font-size: 12px;
   border-radius: 16px;
   padding: 8px 16px;
   transition: background-color 0.2s, opacity 0.2s;
+  align-self: end;
 `
 
 const ProcessAmountWrapper = styled(Flex)`
@@ -165,6 +166,11 @@ const CardWrapper = styled(Card)<CardWrapperProps>`
     margin-right: 0px;
     margin-bottom: ${(props) => (props.isShowPoolData ? '0px' : '24px')};
   }
+`
+
+const PoolInfoSocialBlock = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 interface CardWrapperProps {
   isShowPoolData: boolean
@@ -261,26 +267,28 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <ImageContainer src={img} alt="img" width="30%" />
             <PoolInfoBlock>
               <Title bold>{name}</Title>
-              {get(currentPoolData, 'network', []).map((network) => {
-                return <YellowCard key={network}>{network}</YellowCard>
-              })}
               {isShowPoolData && <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>}
             </PoolInfoBlock>
           </PoolWrapper>
-          <SocialLinkWrapper marginBottom="5px" alignItems="center">
-            <IconWrapper href={getLink(socials, 'TELEGRAM')} target="_blank">
-              <TelegramIcon />
-            </IconWrapper>
-            <IconWrapper href={getLink(socials, 'TWITTER')} target="_blank">
-              <TwitterIcon />
-            </IconWrapper>
-            <IconWrapper href={getLink(socials, 'MEDIUM')} target="_blank">
-              <MediumIcon />
-            </IconWrapper>
-            <IconWrapper href={getLink(socials, 'FORUM')} target="_blank">
-              <WorldIcon />
-            </IconWrapper>
-          </SocialLinkWrapper>
+          <PoolInfoSocialBlock>
+            <SocialLinkWrapper marginBottom="5px" alignItems="center">
+              <IconWrapper href={getLink(socials, 'TELEGRAM')} target="_blank">
+                <TelegramIcon />
+              </IconWrapper>
+              <IconWrapper href={getLink(socials, 'TWITTER')} target="_blank">
+                <TwitterIcon />
+              </IconWrapper>
+              <IconWrapper href={getLink(socials, 'MEDIUM')} target="_blank">
+                <MediumIcon />
+              </IconWrapper>
+              <IconWrapper href={getLink(socials, 'FORUM')} target="_blank" hide-border-right="true">
+                <WorldIcon />
+              </IconWrapper>
+            </SocialLinkWrapper>
+            {get(currentPoolData, 'network', []).map((network) => {
+              return <YellowCard key={network}>{network}</YellowCard>
+            })}
+          </PoolInfoSocialBlock>
         </Flex>
         <Text>{description}</Text>
         {isShowPoolData && (
@@ -331,6 +339,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               <Progress
                 key={poolStatus}
                 variant="round"
+                scale="sm"
                 primaryStep={(isPoolInProgress || !isPoolOpen) && totalCommitedPercentage}
                 secondaryStep={!isPoolInProgress && totalSwapAmountPercentage}
               />
