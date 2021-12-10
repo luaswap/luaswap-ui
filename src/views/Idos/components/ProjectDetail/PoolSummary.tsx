@@ -171,6 +171,7 @@ const CardWrapper = styled(Card)<CardWrapperProps>`
 const PoolInfoSocialBlock = styled.div`
   display: flex;
   flex-direction: column;
+  align-self: flex-start;
 `
 interface CardWrapperProps {
   isShowPoolData: boolean

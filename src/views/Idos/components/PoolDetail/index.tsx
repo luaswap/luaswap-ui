@@ -83,7 +83,11 @@ export const StyledCardBody = styled(CardBody)`
   }
 `
 
-const SecondaryButtonWhite = styled(SecondaryButton)`
+const SecondaryButtonPool = styled(SecondaryButton)`
+  width: 165px;
+`
+
+const SecondaryButtonWhite = styled(SecondaryButtonPool)`
   border-color: #fffcf6;
 `
 
@@ -174,11 +178,11 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
             </PoolInfoBlock>
           </Flex>
           {isWhitelist ? (
-            <SecondaryButton onClick={navigateToProjectDetail} scale="sm" mb="15px">
+            <SecondaryButtonPool onClick={navigateToProjectDetail} scale="sm" mb="15px">
               <Text fontSize="12px" color="#FABC46">
                 TIER MEMBER
               </Text>
-            </SecondaryButton>
+            </SecondaryButtonPool>
           ) : (
             <SecondaryButtonWhite onClick={navigateToProjectDetail} scale="sm" mb="15px">
               <Text fontSize="12px" color="#FFFCF6">
