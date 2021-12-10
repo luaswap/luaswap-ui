@@ -25,7 +25,7 @@ import getLink from 'views/Idos/utils/getMediaUrl'
 import { formatPoolDetail } from 'utils/formatPoolData'
 import { formatNumberWithComma } from 'utils/formatBalance'
 import get from 'lodash/get'
-import { showTimeOfPool } from 'utils/formatTime'
+import useGetTimeOfPool from 'views/Idos/hooks/useGetTimeOfPool'
 import { Pool, FormatPool } from '../../types'
 import usePoolStatus from '../../hooks/usePoolStatus'
 
@@ -103,6 +103,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const { chainId } = useWeb3React()
   const location = useLocation()
   const [poolStatus] = usePoolStatus(pool)
+  const [poolTimeStamp] = useGetTimeOfPool(pool)
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
   }, [history, path, pool.id])
@@ -198,10 +199,10 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
             return <YellowCard>{network}</YellowCard>
           })}
         </Box>
-        {showTimeOfPool(untilOpen, untilClose, untilClaim) && (
+        {poolTimeStamp && (
           <Flex alignItems="center" mt="16px">
             <CalendarIcon />
-            <Text ml="8px">{showTimeOfPool(untilOpen, untilClose, untilClaim)}</Text>
+            <Text ml="8px">{poolTimeStamp}</Text>
           </Flex>
         )}
         <Text color="#C3C3C3" mt="16px">

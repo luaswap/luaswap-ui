@@ -2,8 +2,10 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import format from 'date-fns/format'
 import parseISO from 'date-fns/parseISO'
 import compareAsc from 'date-fns/compareAsc'
-import formatDistanceStrict from 'date-fns/formatDistanceStrict'
+import differenceInDays from 'date-fns/differenceInDays'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
+import differenceInHours from 'date-fns/differenceInHours'
+import differenceInMinutes from 'date-fns/differenceInMinutes'
 
 export const getDateTypeValue = (timestamp): Date | null => {
   if (timestamp) {
@@ -83,21 +85,23 @@ export const timestampAndCurrentDifference = (timestamp) => {
 
 export const convertSecondToDay = (seconds) => {
   if (seconds) {
-    return formatDistanceStrict(new Date(0), new Date(seconds * 1000), { roundingMethod: 'ceil' })
+    const day = differenceInDays(new Date(seconds * 1000), new Date(0))
+    if (day > 0) {
+      return ['day', day]
+    }
+    const hour = differenceInHours(new Date(seconds * 1000), new Date(0))
+    if (hour > 0) {
+      return ['hour', hour]
+    }
+    const minute = differenceInMinutes(new Date(seconds * 1000), new Date(0))
+    if (minute > 0) {
+      return ['minute', minute]
+    }
+    const second = differenceInSeconds(new Date(seconds * 1000), new Date(0))
+    if (second > 0) {
+      return ['second', second]
+    }
   }
 
-  return null
-}
-
-export const showTimeOfPool = (untilOpen, untilClose, untilClaim) => {
-  if (untilOpen) {
-    return `${convertSecondToDay(untilOpen)} until pool opens.`
-  }
-  if (untilClose) {
-    return `${convertSecondToDay(untilClose)} until pool closes.`
-  }
-  if (untilClaim) {
-    return `${convertSecondToDay(untilClaim)} until claiming time.`
-  }
-  return null
+  return [null, null]
 }

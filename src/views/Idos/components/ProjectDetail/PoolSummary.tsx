@@ -32,6 +32,7 @@ import {
 } from '../helper'
 import usePoolStatus from '../../hooks/usePoolStatus'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
+import PoolDateStatus from './PoolDateStatus'
 
 const IconWrapper = styled.a`
   margin-right: ${(props) => (props['last-child'] === 'true' ? '0' : '14px')};
@@ -54,12 +55,12 @@ const StatusBar = styled(Box)<StatusBarProps>`
   font-weight: 700;
   display: inline-block;
   justify-content: center;
-  font-size: 14px;
+  font-size: 12px;
   align-items: center;
-  color: white;
+  color: #8b8b8b;
   background-color: ${(props) => generateColorForStatusBar(props.status)};
   ${({ theme }) => theme.mediaQueries.sm} {
-    font-size: 16px;
+    font-size: 12px;
   }
 `
 
@@ -92,6 +93,13 @@ const SocialLinkWrapper = styled(Flex)`
   width: 100%;
   @media screen and (min-width: 768px) {
     justify-content: flex-end;
+  }
+`
+
+const PoolTag = styled(Flex)`
+  margin-top: 5px;
+  @media screen and (max-width: 768px) {
+    margin-bottom: 15px;
   }
 `
 
@@ -139,6 +147,9 @@ const ProcessAmountWrapper = styled(Flex)`
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
   }
+  @media screen and (max-width: 768px) {
+    align-items: flex-start;
+  }
 `
 const InfoText = styled(Text)`
   color: red;
@@ -177,11 +188,15 @@ const PoolInfoSocialBlock = styled.div`
 
 const SecondaryButtonPool = styled(SecondaryButton)`
   width: 165px;
+  margin-bottom: 0;
+  height: 28px;
+  margin-left: 10px;
 `
 
 const SecondaryButtonWhite = styled(SecondaryButtonPool)`
   border-color: #fffcf6;
 `
+
 interface CardWrapperProps {
   isShowPoolData: boolean
 }
@@ -277,7 +292,12 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             <ImageContainer src={img} alt="img" width="30%" />
             <PoolInfoBlock>
               <Title bold>{name}</Title>
-              {isShowPoolData && <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>}
+              {isShowPoolData && (
+                <Flex alignItems="center">
+                  <StatusBar status={poolStatus}>{mapProjectStatus(poolStatus)}</StatusBar>
+                  <PoolDateStatus currentPoolData={currentPoolData} />
+                </Flex>
+              )}
             </PoolInfoBlock>
           </PoolWrapper>
           <PoolInfoSocialBlock>
@@ -295,11 +315,11 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                 <WorldIcon />
               </IconWrapper>
             </SocialLinkWrapper>
-            <Flex>
+            <PoolTag>
               {get(currentPoolData, 'network', []).map((network) => {
                 return <YellowCard key={network}>{network}</YellowCard>
               })}
-              {isWhitelist ? (
+              {!isWhitelist ? (
                 <SecondaryButtonPool scale="sm" mb="15px">
                   <Text fontSize="12px" color="#FABC46">
                     TIER MEMBER
@@ -312,7 +332,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                   </Text>
                 </SecondaryButtonWhite>
               )}
-            </Flex>
+            </PoolTag>
           </PoolInfoSocialBlock>
         </Flex>
         <Text>{description}</Text>
