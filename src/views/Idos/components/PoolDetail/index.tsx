@@ -177,7 +177,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
               </Flex>
             </PoolInfoBlock>
           </Flex>
-          {isWhitelist ? (
+          {!isWhitelist ? (
             <SecondaryButtonPool onClick={navigateToProjectDetail} scale="sm" mb="15px">
               <Text fontSize="12px" color="#FABC46">
                 TIER MEMBER
