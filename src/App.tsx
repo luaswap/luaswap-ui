@@ -10,6 +10,7 @@ import SuspenseWithChunkError from './components/SuspenseWithChunkError'
 import ToastListener from './components/ToastListener'
 import PageLoader from './components/PageLoader'
 import EasterEgg from './components/EasterEgg'
+import ScrollToTop from './components/ScrollToTop'
 
 // Route-based code splitting
 // Only pool is included in the main bundle because of it's the most visited page
@@ -32,31 +33,33 @@ const App: React.FC = () => {
   useFetchProfile()
   return (
     <HashRouter>
-      <ResetCSS />
-      <GlobalStyle />
-      <Menu>
-        <SuspenseWithChunkError fallback={<PageLoader />}>
-          <Switch>
-            <Route path="/ido">
-              <Idos />
-            </Route>
-            {/* <Route path="/farms">
+      <ScrollToTop>
+        <ResetCSS />
+        <GlobalStyle />
+        <Menu>
+          <SuspenseWithChunkError fallback={<PageLoader />}>
+            <Switch>
+              <Route path="/ido">
+                <Idos />
+              </Route>
+              {/* <Route path="/farms">
               <Farms />
             </Route> */}
-            <Route path="/dual-farm">
-              <DualFarms />
-            </Route>
-            <Route path="/portfolio">
-              <Home />
-            </Route>
-            <Redirect from="/" to="/ido" />
-            {/* 404 */}
-            <Route component={NotFound} />
-          </Switch>
-        </SuspenseWithChunkError>
-      </Menu>
-      <EasterEgg iterations={2} />
-      <ToastListener />
+              <Route path="/dual-farm">
+                <DualFarms />
+              </Route>
+              <Route path="/portfolio">
+                <Home />
+              </Route>
+              <Redirect from="/" to="/ido" />
+              {/* 404 */}
+              <Route component={NotFound} />
+            </Switch>
+          </SuspenseWithChunkError>
+        </Menu>
+        <EasterEgg iterations={2} />
+        <ToastListener />
+      </ScrollToTop>
     </HashRouter>
   )
 }
