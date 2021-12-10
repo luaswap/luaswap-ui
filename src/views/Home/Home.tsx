@@ -474,7 +474,7 @@ const Home: React.FC = () => {
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
-                                fontSize="16px"
+                                fontSize="14px"
                                 bold={false}
                               />
                             </Flex>
@@ -501,7 +501,7 @@ const Home: React.FC = () => {
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
-                                fontSize="16px"
+                                fontSize="14px"
                                 bold={false}
                               />
                             </Flex>
@@ -528,7 +528,7 @@ const Home: React.FC = () => {
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
-                                fontSize="16px"
+                                fontSize="14px"
                                 bold={false}
                               />
                             </Flex>
@@ -574,7 +574,7 @@ const Home: React.FC = () => {
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
-                                fontSize="16px"
+                                fontSize="14px"
                                 bold={false}
                               />
                             </Flex>
@@ -601,7 +601,7 @@ const Home: React.FC = () => {
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
-                                fontSize="16px"
+                                fontSize="14px"
                                 bold={false}
                               />
                             </Flex>
@@ -628,7 +628,7 @@ const Home: React.FC = () => {
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
-                                fontSize="16px"
+                                fontSize="14px"
                                 bold={false}
                               />
                             </Flex>
@@ -655,7 +655,7 @@ const Home: React.FC = () => {
                                 position="after"
                                 prefix="%"
                                 lineHeight="1.5"
-                                fontSize="16px"
+                                fontSize="14px"
                                 bold={false}
                               />
                             </Flex>

@@ -2,6 +2,7 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import format from 'date-fns/format'
 import parseISO from 'date-fns/parseISO'
 import compareAsc from 'date-fns/compareAsc'
+import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 
 export const getDateTypeValue = (timestamp): Date | null => {
@@ -77,5 +78,26 @@ export const timestampAndCurrentDifference = (timestamp) => {
     return differenceInSecond(getDateTypeValue(timestamp), new Date())
   }
 
+  return null
+}
+
+export const convertSecondToDay = (seconds) => {
+  if (seconds) {
+    return formatDistanceStrict(new Date(0), new Date(seconds * 1000), { roundingMethod: 'ceil' })
+  }
+
+  return null
+}
+
+export const showTimeOfPool = (untilOpen, untilClose, untilClaim) => {
+  if (untilOpen) {
+    return `${convertSecondToDay(untilOpen)} until pool opens.`
+  }
+  if (untilClose) {
+    return `${convertSecondToDay(untilClose)} until pool closes.`
+  }
+  if (untilClaim) {
+    return `${convertSecondToDay(untilClaim)} until claiming time.`
+  }
   return null
 }

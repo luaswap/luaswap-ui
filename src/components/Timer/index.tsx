@@ -43,7 +43,7 @@ const DefaultHeadingTextComponent = ({ children, ...props }) => (
   </Heading>
 )
 const DefaultBodyTextComponent = ({ children, ...props }) => (
-  <Text fontSize="16px" fontWeight="600" {...props}>
+  <Text fontWeight="600" {...props}>
     {children}
   </Text>
 )

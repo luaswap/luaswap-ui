@@ -99,7 +99,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
             <Button scale="sm" onClick={onSelectMax} mr="8px" disabled={isLoadingDataFromContract}>
               {t('Max')}
             </Button>
-            <Text fontSize="16px">{symbol}</Text>
+            <Text>{symbol}</Text>
           </Flex>
         </Flex>
       </StyledTokenInput>

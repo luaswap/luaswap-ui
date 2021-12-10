@@ -18,12 +18,14 @@ import {
   SecondaryButton,
   Image,
   Box,
+  CalendarIcon,
 } from 'luastarter-uikits'
 import useDeepMemo from 'hooks/useDeepMemo'
 import getLink from 'views/Idos/utils/getMediaUrl'
 import { formatPoolDetail } from 'utils/formatPoolData'
 import { formatNumberWithComma } from 'utils/formatBalance'
 import get from 'lodash/get'
+import { showTimeOfPool } from 'utils/formatTime'
 import { Pool, FormatPool } from '../../types'
 import usePoolStatus from '../../hooks/usePoolStatus'
 
@@ -45,7 +47,7 @@ const CardWrapper = styled(Card)`
 
 const IconWrapper = styled.a`
   margin-right: 14px;
-  border-right: 1px solid #606060;
+  border-right: ${(props) => (props['hide-border-right'] === 'true' ? 'none' : '1px solid #606060')};
   padding-right: 14px;
   cursor: pointer;
 `
@@ -104,7 +106,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
   }, [history, path, pool.id])
-  const { isPresent, socials, isWhitelist } = pool
+  const { isPresent, socials, isWhitelist, untilOpen, untilClose, untilClaim } = pool
   const {
     img,
     name,
@@ -171,7 +173,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
                 <IconWrapper href={getLink(socials, 'MEDIUM')} target="__blank">
                   <MediumIcon />
                 </IconWrapper>
-                <IconWrapper href={getLink(socials, 'FORUM')} target="__blank">
+                <IconWrapper href={getLink(socials, 'FORUM')} target="__blank" hide-border-right="true">
                   <WorldIcon />
                 </IconWrapper>
               </Flex>
@@ -196,7 +198,13 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
             return <YellowCard>{network}</YellowCard>
           })}
         </Box>
-        <Text color="#C3C3C3" mt="14px" fontSize="14px">
+        {showTimeOfPool(untilOpen, untilClose, untilClaim) && (
+          <Flex alignItems="center" mt="16px">
+            <CalendarIcon />
+            <Text ml="8px">{showTimeOfPool(untilOpen, untilClose, untilClaim)}</Text>
+          </Flex>
+        )}
+        <Text color="#C3C3C3" mt="16px">
           {description}
         </Text>
         {!isPresent && (

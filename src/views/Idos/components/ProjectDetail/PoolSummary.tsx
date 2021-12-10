@@ -12,6 +12,7 @@ import {
   Progress,
   Box,
   TertiaryMessage,
+  SecondaryButton,
   Button,
   LinkExternal,
 } from 'luastarter-uikits'
@@ -33,9 +34,9 @@ import usePoolStatus from '../../hooks/usePoolStatus'
 import useTotalDataFromAllPools from '../../hooks/useTotalDataFromAllPools'
 
 const IconWrapper = styled.a`
-  margin-right: 14px;
-  border-right: ${(props) => (props['hide-border-right'] === 'true' ? 'none' : '1px solid #606060')};
-  padding-right: 14px;
+  margin-right: ${(props) => (props['last-child'] === 'true' ? '0' : '14px')};
+  border-right: ${(props) => (props['last-child'] === 'true' ? 'none' : '1px solid #606060')};
+  padding-right: ${(props) => (props['last-child'] === 'true' ? '0' : '14px')};
   cursor: pointer;
 `
 const PoolInfoBlock = styled.div`
@@ -121,15 +122,15 @@ const ProcessColumnWrapper = styled(Flex)`
 export const YellowCard = styled(Box)`
   box-sizing: border-box;
   display: inline-block;
-  background-color: #353535;
+  background-color: rgba(225, 169, 63, 0.3);
   color: #fabc46;
-  border: 1px solid #fabc46;
   font-weight: bold;
-  font-size: 12px;
   border-radius: 16px;
   padding: 8px 16px;
   transition: background-color 0.2s, opacity 0.2s;
+  font-size: 12px;
   align-self: end;
+  text-align: center;
 `
 
 const ProcessAmountWrapper = styled(Flex)`
@@ -173,6 +174,14 @@ const PoolInfoSocialBlock = styled.div`
   flex-direction: column;
   align-self: flex-start;
 `
+
+const SecondaryButtonPool = styled(SecondaryButton)`
+  width: 165px;
+`
+
+const SecondaryButtonWhite = styled(SecondaryButtonPool)`
+  border-color: #fffcf6;
+`
 interface CardWrapperProps {
   isShowPoolData: boolean
 }
@@ -200,7 +209,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
   const { socials, timeVesting, percentVesting, versionContract, isVesting } = currentPoolData
-  const { whitelistLink } = currentPoolData
+  const { whitelistLink, isWhitelist } = currentPoolData
   const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
@@ -282,13 +291,28 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               <IconWrapper href={getLink(socials, 'MEDIUM')} target="_blank">
                 <MediumIcon />
               </IconWrapper>
-              <IconWrapper href={getLink(socials, 'FORUM')} target="_blank" hide-border-right="true">
+              <IconWrapper href={getLink(socials, 'FORUM')} target="_blank" last-child="true">
                 <WorldIcon />
               </IconWrapper>
             </SocialLinkWrapper>
-            {get(currentPoolData, 'network', []).map((network) => {
-              return <YellowCard key={network}>{network}</YellowCard>
-            })}
+            <Flex>
+              {get(currentPoolData, 'network', []).map((network) => {
+                return <YellowCard key={network}>{network}</YellowCard>
+              })}
+              {isWhitelist ? (
+                <SecondaryButtonPool scale="sm" mb="15px">
+                  <Text fontSize="12px" color="#FABC46">
+                    TIER MEMBER
+                  </Text>
+                </SecondaryButtonPool>
+              ) : (
+                <SecondaryButtonWhite scale="sm" mb="15px">
+                  <Text fontSize="12px" color="#FFFCF6">
+                    WHITELIST MEMBER
+                  </Text>
+                </SecondaryButtonWhite>
+              )}
+            </Flex>
           </PoolInfoSocialBlock>
         </Flex>
         <Text>{description}</Text>
