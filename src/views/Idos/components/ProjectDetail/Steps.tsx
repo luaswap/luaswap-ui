@@ -35,24 +35,35 @@ const StepWrapper = styled(Flex)`
 
 const Step = styled(Box)`
   background-color: #fabc46;
-  width: 32px;
+  width: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
+  height: 40px;
   margin-right: 14px;
   border-radius: 50%;
+  border: 4px solid #5b4c2f;
+
+  &:before {
+    border-radius: 50%;
+    border: 4px solid #3a352a;
+    width: 48px;
+    height: 48px;
+    content: '';
+    display: block;
+    position: absolute;
+  }
 `
 const StepWithTail = styled(Step)`
   &:after {
     content: '';
     display: block;
     position: absolute;
-    top: 14px;
-    left: 40px;
-    width: 80%;
+    top: 18px;
+    left: 44px;
+    width: 90%;
     height: 10px;
-    border-top: 5px dotted #fabc46;
+    border-top: 4px dotted #e1a93f;
   }
 `
 
