@@ -9,12 +9,10 @@ const useGetTimeOfPool = ({ untilOpen, untilClose, untilClaim }: Pool): [t: stri
     if (untilOpen) {
       const [time, value] = convertSecondToDay(untilOpen)
       setTimeStamp(`${value} ${time}(s) until pool opens.`)
-    }
-    if (untilClose) {
+    } else if (untilClose) {
       const [time, value] = convertSecondToDay(untilClose)
       setTimeStamp(`${value} ${time}(s) until pool closes.`)
-    }
-    if (untilClaim) {
+    } else if (untilClaim) {
       const [time, value] = convertSecondToDay(untilClaim)
       setTimeStamp(`${value} ${time}(s) until claiming time.`)
     }
