@@ -397,7 +397,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             the percentage shown.
           </InfoText>
         )}
-        {isShowPoolData && !isShowTierInfor && (
+        {!isShowTierInfor && whitelistLink && (
           <InfoText>
             (*) Pool for WHITELIST WINNERS ONLY. If you are not on the&nbsp;
             <a style={{ textDecoration: 'underline' }} href={whitelistLink} target="_blank" rel="noreferrer">
