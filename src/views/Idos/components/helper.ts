@@ -111,7 +111,7 @@ export const mapProjectStatus = (status: string) => {
   }
 
   if (status === 'not open') {
-    return 'Pending'
+    return 'In Preparation'
   }
 
   return 'Opening'
