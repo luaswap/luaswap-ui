@@ -399,6 +399,7 @@ const Deposit: React.FC<DepositProps> = ({
     if (minAmountPay && totalAmountPay && totalAmountIDO) {
       return new BigNumber(minAmountPay)
         .multipliedBy(new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)))
+        .toFixed(6)
         .toString()
     }
 
