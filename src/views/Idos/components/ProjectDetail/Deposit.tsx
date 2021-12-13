@@ -277,7 +277,7 @@ const Deposit: React.FC<DepositProps> = ({
           const receivedIdoAmount = new BigNumber(claimProofData.finalPay)
             .multipliedBy(totalAmountIDO)
             .dividedBy(totalAmountPay)
-          setIdoReceivedAmount(getFullDisplayBalance(receivedIdoAmount, claimProofData.payToken.decimals))
+          setIdoReceivedAmount(getFullDisplayBalance(receivedIdoAmount, claimProofData.payToken.decimals, 6))
         }
       } catch (error) {
         setIdoReceivedAmount('0')
@@ -468,7 +468,7 @@ const Deposit: React.FC<DepositProps> = ({
                       <Text bold>
                         {poolStatus === 'claim'
                           ? 'Processing'
-                          : getFullDisplayBalance(new BigNumber(claimedAmount), idoToken.decimals)}{' '}
+                          : getFullDisplayBalance(new BigNumber(claimedAmount), idoToken.decimals, 6)}{' '}
                         {idoToken.symbol}
                       </Text>
                     </Flex>

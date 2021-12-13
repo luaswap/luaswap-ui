@@ -159,7 +159,7 @@ const TierCard: React.FC<TierProps> = ({
   }, [chainId])
   const calculatedPrice = useMemo(() => {
     if (totalAmountIDO && totalAmountPay) {
-      return new BigNumber(totalAmountIDO).div(new BigNumber(totalAmountPay)).toFixed(2)
+      return new BigNumber(totalAmountIDO).div(new BigNumber(totalAmountPay)).toFixed(6)
     }
 
     return null
