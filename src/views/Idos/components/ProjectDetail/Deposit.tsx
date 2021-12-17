@@ -52,6 +52,11 @@ interface ShowPoolDataProps {
   isShowPoolData: boolean
 }
 
+const InfoText = styled(Text)`
+  color: red;
+  font-size: 11px;
+`
+
 const BlockTimerWrapper = styled(Box)<ShowPoolDataProps>`
   width: ${(props) => (props.isShowPoolData ? '35%' : '100%')};
   display: flex;
@@ -547,6 +552,12 @@ const Deposit: React.FC<DepositProps> = ({
                       />
                     )}
                   </Flex>
+                )}
+                {isReject && (
+                  <InfoText>
+                    (*) This IDO has been officially cancelled. Please click on Refund button to claim back your
+                    investment at TGE time.
+                  </InfoText>
                 )}
                 <ActionButton
                   isRequestContractAction={isRequestContractAction}
