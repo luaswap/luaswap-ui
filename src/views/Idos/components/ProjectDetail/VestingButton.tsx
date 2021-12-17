@@ -62,7 +62,7 @@ const VestingButton: React.FC<VestingButtonProps> = ({
   if (!userClaimFirstPercent && isCurrentTimeOutOfClaimTimeFrame) {
     return (
       <Button mb="15px" mt="15px" width="100%" variant="primary" onClick={onClick} {...props}>
-        Claim reward
+        {Number(claimedAmount) === 0 && Number(idoReceivedAmount) === 0 ? 'Refund' : 'Claim reward'}
       </Button>
     )
   }
