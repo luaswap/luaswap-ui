@@ -30,6 +30,7 @@ const defaultCurrentPool = {
   untilSnapshootAt: null,
   versionContract: null,
   isVesting: false,
+  isReject: false,
   timeVesting: [],
   percentVesting: [],
 }

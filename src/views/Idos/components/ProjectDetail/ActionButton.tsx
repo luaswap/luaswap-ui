@@ -43,6 +43,7 @@ interface ActionButtonProps {
   isClaimedAllVesting: boolean
   timeVesting: string[]
   percentVesting: string[]
+  isReject: boolean
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -75,6 +76,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   isClaimedAllVesting,
   timeVesting,
   percentVesting,
+  isReject,
 }): ReactElement | null => {
   const { account } = useWeb3React()
   const { toastError } = useToast()
@@ -133,6 +135,8 @@ const ActionButton: React.FC<ActionButtonProps> = ({
           }}
           disabled={userClaimFirstPercent}
           isLoading={isRequestContractAction}
+          isReject={isReject}
+          userTotalCommitted={userTotalCommitted}
           endIcon={isRequestContractAction && <AutoRenewIcon spin color="currentColor" />}
         />
       )

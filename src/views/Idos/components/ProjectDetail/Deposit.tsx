@@ -144,7 +144,8 @@ const Deposit: React.FC<DepositProps> = ({
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
-  const { openAt, closeAt, claimAt, versionContract, timeVesting, percentVesting, isVesting } = currentPoolData
+  const { openAt, closeAt, claimAt, versionContract, timeVesting, percentVesting, isVesting, isReject } =
+    currentPoolData
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
 
   const maxAmountAllowedLeft = useMemo(() => {
@@ -577,6 +578,7 @@ const Deposit: React.FC<DepositProps> = ({
                   isClaimedAllVesting={isClaimedAllVesting}
                   timeVesting={timeVesting}
                   percentVesting={percentVesting}
+                  isReject={isReject}
                 />
                 {isClaimed && !isShowVesting && (
                   <Mesage variant="warning">You have claimed your reward, check your wallet balance</Mesage>

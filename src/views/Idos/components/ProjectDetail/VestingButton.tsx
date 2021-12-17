@@ -20,6 +20,8 @@ interface VestingButtonProps {
   isClaimedAllVesting: boolean
   timeVesting: string[]
   percentVesting: string[]
+  isReject: boolean
+  userTotalCommitted: string
 }
 
 const VestingButton: React.FC<VestingButtonProps> = ({
@@ -35,6 +37,8 @@ const VestingButton: React.FC<VestingButtonProps> = ({
   isClaimedAllVesting,
   timeVesting,
   percentVesting,
+  isReject,
+  userTotalCommitted,
   ...props
 }) => {
   const { claimAtsTime, claimedAmount } = userVestingInfo
@@ -51,6 +55,13 @@ const VestingButton: React.FC<VestingButtonProps> = ({
     return false
   }, [currentTimestamp, claimAtsTime, timeVesting])
 
+  const isDisableClaimOrRefundButton = useMemo(() => {
+    if (idoReceivedAmount === '0' && claimedAmount === '0' && userTotalCommitted === '0') {
+      return true
+    }
+    return false
+  }, [idoReceivedAmount, claimedAmount, userTotalCommitted])
+
   const isDisabledButton = useMemo(() => {
     if (estimatedAmount === '0' || !estimatedAmount) {
       return true
@@ -58,11 +69,20 @@ const VestingButton: React.FC<VestingButtonProps> = ({
 
     return false
   }, [estimatedAmount])
+
   // User not claim anything and current time is out of time frame
   if (!userClaimFirstPercent && isCurrentTimeOutOfClaimTimeFrame) {
     return (
-      <Button mb="15px" mt="15px" width="100%" variant="primary" onClick={onClick} {...props}>
-        {Number(claimedAmount) === 0 && Number(idoReceivedAmount) === 0 ? 'Refund' : 'Claim reward'}
+      <Button
+        mb="15px"
+        mt="15px"
+        width="100%"
+        variant="primary"
+        onClick={onClick}
+        {...props}
+        disabled={isDisableClaimOrRefundButton}
+      >
+        {isReject ? 'Refund' : 'Claim reward'}
       </Button>
     )
   }

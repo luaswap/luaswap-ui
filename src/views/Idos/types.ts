@@ -70,4 +70,5 @@ export interface Pool {
   percentVesting: string[]
   timeVesting: string[]
   isVesting: boolean
+  isReject: boolean
 }
