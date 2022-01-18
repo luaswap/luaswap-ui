@@ -168,7 +168,7 @@ const StakeBox = () => {
         <MaxButtomOnStakeBox onClick={onClickMax}>Max</MaxButtomOnStakeBox>
       </WrappInputOnStakeBox>
       <StakeBoxDropDown tokensAccept={tokensAccept} tokenSelected={tokenSelected} setTokenSelected={setTokenSelected} />
-      <ButtonStakeBox scale="md" onClick={onClickButtonStake} disabled={isLoading || !inputValue}>
+      <ButtonStakeBox scale="md" onClick={onClickButtonStake} disabled={isLoading || !inputValue || !tokenSelected}>
         {!isLoading ? 'Stake' : 'Staking...'}
       </ButtonStakeBox>
     </StakeBoxCard>
