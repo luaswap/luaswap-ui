@@ -152,3 +152,27 @@ export const soushHarvestBnb = async (sousChefContract, account) => {
       return tx.transactionHash
     })
 }
+
+export const stakeLock = async (luaIdoLockContract, account, amount, isNativeToken, tokenAddress) => {
+  // If pay token is native token, we will send amount or else we wont'
+  return luaIdoLockContract.methods
+    .deposit(tokenAddress, amount)
+    .send({
+      from: account,
+      ...(isNativeToken && { value: amount }),
+    })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
+export const unStakeLock = async (luaIdoLockContract, account, amount, index) => {
+  return luaIdoLockContract.methods
+    .withdraw(index, amount)
+    .send({
+      from: account,
+    })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}

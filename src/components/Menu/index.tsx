@@ -28,6 +28,7 @@ const Menu = (props) => {
   const userEthBalance = useEthBalance()
   const { currentLanguage, setLanguage, t } = useTranslation()
   // const [queryChainId, updateLocation] = useLocationParams(location)
+
   const formatLuaPrice = useMemo(() => {
     if (luaPrice) {
       return luaPrice.div(10 ** 8).toNumber()

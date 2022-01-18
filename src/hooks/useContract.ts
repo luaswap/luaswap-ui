@@ -26,6 +26,7 @@ import {
   getLuaContract,
   getLuaIdoContract,
   getLuaVestingContract,
+  getLuaIdoLockContract,
 } from 'utils/contractHelpers'
 
 /**
@@ -98,6 +99,11 @@ export const useLuaContract = (chainId: number) => {
 export const useLuaIdoContract = (address: string) => {
   const web3 = useWeb3()
   return useMemo(() => getLuaIdoContract(web3, address), [web3, address])
+}
+
+export const useLuaIdoLockContract = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => getLuaIdoLockContract(web3, address), [web3, address])
 }
 
 export const useLuaVestingContract = (address: string) => {

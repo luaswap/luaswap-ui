@@ -75,7 +75,7 @@ export const StakeBoxCard = styled(Card)`
   border-radius: 20px;
   padding: 24px;
   overflow: unset;
-  max-height: 380px;
+  max-height: 250px;
 `
 
 export const WrappInputOnStakeBox = styled(WrappInputOnRow)`
@@ -124,7 +124,7 @@ export const DropDownValue = styled.span`
 
 export const SelectSectionDropDown = styled.div`
   position: absolute;
-  bottom: -125px;
+  top: 50px;
   right: 0;
   background: #353535;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -156,4 +156,8 @@ export const Overlay = styled.div`
   position: fixed;
   top: 0;
   right: 0;
+`
+
+export const WrapperRow = styled.div`
+  border-bottom: 1px solid #7e7d7d;
 `

@@ -1,5 +1,5 @@
 import { Text } from 'luastarter-uikits'
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import {
   DropDownInput,
   DropDownStakeWrapp,
@@ -11,8 +11,7 @@ import {
 
 const options = ['Select an Option', 'First Option', 'Second Option', 'Third Option']
 
-const StakeBoxDropDown = () => {
-  const [value, setValue] = useState('')
+const StakeBoxDropDown = ({ tokensAccept, tokenSelected, setTokenSelected }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const closeSelectBox = () => {
@@ -20,7 +19,7 @@ const StakeBoxDropDown = () => {
   }
 
   const onChange = (e) => {
-    setValue(e)
+    setTokenSelected(e)
     closeSelectBox()
   }
 
@@ -31,17 +30,16 @@ const StakeBoxDropDown = () => {
   return (
     <DropDownStakeWrapp>
       <DropDownInput onClick={handleOpen}>
-        <DropDownValue>{value || 'Token'}</DropDownValue>
+        <DropDownValue>{tokenSelected?.name || 'Token'}</DropDownValue>
         <img src={`${process.env.PUBLIC_URL}/images/arr-down-stake-dropdown.png`} alt="" />
       </DropDownInput>
       {isOpen && (
         <SelectSectionDropDown>
-          <SelectItemDropDown onClick={() => onChange('xLua')}>
-            <Text>xLua</Text>
-          </SelectItemDropDown>
-          <SelectItemDropDown onClick={() => onChange('LP Token')}>
-            <Text>LP Token</Text>
-          </SelectItemDropDown>
+          {tokensAccept.map((token) => (
+            <SelectItemDropDown onClick={() => onChange(token)} key={token.address}>
+              <Text>{token.name}</Text>
+            </SelectItemDropDown>
+          ))}
         </SelectSectionDropDown>
       )}
       {isOpen && <Overlay onClick={closeSelectBox} />}

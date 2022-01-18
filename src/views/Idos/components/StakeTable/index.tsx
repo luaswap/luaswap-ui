@@ -1,9 +1,29 @@
+import { useWeb3React } from '@web3-react/core'
+import axios from 'axios'
+import BigNumber from 'bignumber.js'
 import { Text } from 'luastarter-uikits'
-import React, { Component } from 'react'
+import React, { Component, useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectEstTotalLua, selectTokensLock } from 'state/stake'
+import { getTokensAccept, getUserTokensLock } from 'state/stake/getStake'
+import { getBalanceAmount, getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
+import { getUtcDateString } from 'utils/formatTime'
+import useGetTokensLock from 'views/Idos/hooks/useGetTokensLock'
 import RowItem from './RowItem'
 import { Arrow, Table, TBody, TD, TextHeader, TFooter, THead, TR } from './StakeTableStyled'
 
 const StakeTable: React.FC = () => {
+  const { onGetTokensLock } = useGetTokensLock()
+  const { account, chainId } = useWeb3React()
+  const tokensLock = useSelector(selectTokensLock)
+  const estTotalLua = useSelector(selectEstTotalLua)
+
+  useEffect(() => {
+    if (account) {
+      onGetTokensLock()
+    }
+  }, [onGetTokensLock, account])
+
   return (
     <Table>
       <THead>
@@ -24,7 +44,9 @@ const StakeTable: React.FC = () => {
         </TR>
       </THead>
       <TBody>
-        <RowItem />
+        {tokensLock.map((row, index) => (
+          <RowItem item={row} key={index.toString()} />
+        ))}
       </TBody>
       <TFooter>
         <TR>
@@ -33,7 +55,7 @@ const StakeTable: React.FC = () => {
           </TD>
           <TD justifyContent="flex-end" width="21%" />
           <TD justifyContent="flex-end" width="21%">
-            <Text fontSize="12px">14000</Text>
+            <Text fontSize="12px">{estTotalLua}</Text>
           </TD>
           <TD justifyContent="flex-end" width="28%" />
           <TD justifyContent="flex-end" width="7%" />
