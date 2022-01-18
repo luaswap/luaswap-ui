@@ -1,6 +1,14 @@
 import styled from 'styled-components'
 import { Button, Card, Input, SecondaryButton, Text } from 'luastarter-uikits'
 
+export const WrapperLoadingTable = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 export const Table = styled.div`
   color: white;
 `

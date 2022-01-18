@@ -12,4 +12,5 @@ export const getUserTokensLock = async (address) => {
 
 export const getValueTokenByLUA = async (tokenAddress, chainId, quantity) => {
   const { data } = await axios.get(`https://api.luaswap.org/api/ido/tier-v2/${chainId}/${tokenAddress}/${quantity}`)
+  return data
 }

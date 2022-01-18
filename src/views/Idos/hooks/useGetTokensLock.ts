@@ -9,7 +9,7 @@ const useGetTokensLock = () => {
 
   const handleGetTokensLock = useCallback(async () => {
     await dispatch(getTokensLock(account, chainId))
-  }, [account, dispatch])
+  }, [account, chainId, dispatch])
 
   return { onGetTokensLock: handleGetTokensLock }
 }

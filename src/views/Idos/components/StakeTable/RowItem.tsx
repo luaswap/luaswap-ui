@@ -1,9 +1,10 @@
 import BigNumber from 'bignumber.js'
 import useStakeLock from 'views/Idos/hooks/useStakeLock'
-import { Text } from 'luastarter-uikits'
+import { Text, useModal } from 'luastarter-uikits'
 import React, { useCallback, useEffect, useState } from 'react'
 import { BIG_TEN } from 'utils/bigNumber'
 import useGetTokensLock from 'views/Idos/hooks/useGetTokensLock'
+import useToast from 'hooks/useToast'
 import {
   Arrow,
   InputOnRow,
@@ -14,6 +15,7 @@ import {
   WrapperRow,
   WrappInputOnRow,
 } from './StakeTableStyled'
+import ConfirmModal from './ConfirmModal'
 
 const RowItem = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -21,6 +23,8 @@ const RowItem = ({ item }) => {
   const [valueTokenToLua, setValueTokenToLua] = useState(0)
   const { onUnStakeLock } = useStakeLock('0x0a875D0cE6c8A6C49FCC848974C60d73f83CEcB6', item?.address)
   const { onGetTokensLock } = useGetTokensLock()
+  const [isLoading, setIsLoading] = useState(false)
+  const { toastSuccess, toastError } = useToast()
 
   const handleSetIsOpen = () => {
     setIsOpen(!isOpen)
@@ -33,16 +37,34 @@ const RowItem = ({ item }) => {
     setInputValue(e.target.value)
   }
 
-  const handleUnStakeLock = useCallback(async () => {
+  const onHandleUnStakeLock = useCallback(async () => {
     try {
+      setIsLoading(true)
       await onUnStakeLock(item.index, new BigNumber(inputValue).times(BIG_TEN.pow(item.decimals || 18)).toString())
       await onGetTokensLock()
       setInputValue('')
       setIsOpen(false)
+      setIsLoading(false)
+      toastSuccess('Unstake successfully')
     } catch (error) {
       console.log(error)
+      setIsLoading(false)
+      toastError('Unstake faild')
     }
   }, [onUnStakeLock, inputValue, onGetTokensLock])
+
+  const [onPresentConfirmation] = useModal(
+    <ConfirmModal onConfirm={onHandleUnStakeLock} token={item} quantity={inputValue} />,
+    false,
+  )
+
+  const onClickUnstakeButton = () => {
+    if (Number(inputValue) <= Number(item.quantity)) {
+      onPresentConfirmation()
+    } else {
+      toastError('Max value enter is quantity of token')
+    }
+  }
 
   const handleKeyPress = (event) => {
     if (!/[0-9.]/.test(event.key)) {
@@ -52,6 +74,7 @@ const RowItem = ({ item }) => {
       event.preventDefault()
     }
   }
+
   return (
     <WrapperRow>
       <TR onClick={handleSetIsOpen}>
@@ -88,9 +111,9 @@ const RowItem = ({ item }) => {
               />
               <MaxButtom onClick={() => onMaxBtnClick()}>Max</MaxButtom>
             </WrappInputOnRow>
-            <SecondaryButtonRowItem scale="sm" mb="15px">
-              <Text fontSize="10px" color="#FABC46" onClick={handleUnStakeLock}>
-                UNSTAKE
+            <SecondaryButtonRowItem scale="sm" mb="15px" disabled={isLoading || !inputValue}>
+              <Text fontSize="10px" color="#FABC46" onClick={onClickUnstakeButton}>
+                {!isLoading ? 'UNSTAKE' : 'UNSTAKING...'}
               </Text>
             </SecondaryButtonRowItem>
           </TD>

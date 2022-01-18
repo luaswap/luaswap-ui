@@ -4,7 +4,7 @@ import { useApprove } from 'hooks/useApprove'
 import { useApproveIdo } from 'hooks/useApproveIdo'
 import useStakeLock from 'views/Idos/hooks/useStakeLock'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { Text } from 'luastarter-uikits'
+import { Text, useModal } from 'luastarter-uikits'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { getTokensAccept } from 'state/stake/getStake'
 import { BIG_TEN } from 'utils/bigNumber'
@@ -12,6 +12,9 @@ import { getERC20Contract } from 'utils/contractHelpers'
 import useIsApproved from 'views/Idos/hooks/useIsApproved'
 import { Contract } from 'web3-eth-contract'
 import useGetTokensLock from 'views/Idos/hooks/useGetTokensLock'
+import useToast from 'hooks/useToast'
+import { useAppDispatch } from 'state'
+import { setLockDuration } from 'state/stake'
 import StakeBoxDropDown from './StakeBoxDropDown'
 import {
   ButtonStakeBox,
@@ -20,6 +23,7 @@ import {
   StakeBoxCard,
   WrappInputOnStakeBox,
 } from './StakeTableStyled'
+import ConfirmModal from './ConfirmModal'
 
 interface TokenSelectedModel {
   address: string
@@ -33,6 +37,9 @@ const StakeBox = () => {
   const [inputValue, setInputValue] = useState('')
   const [paytokenContract, setPayTokenContract] = useState({} as Contract)
   const tokenValue = useTokenBalance(tokenSelected ? tokenSelected?.address : '')
+  const [isLoading, setIsLoading] = useState(false)
+  const { toastSuccess, toastError } = useToast()
+  const dispath = useAppDispatch()
 
   const { onGetTokensLock } = useGetTokensLock()
 
@@ -66,7 +73,8 @@ const StakeBox = () => {
   const handleGetTokensAccept = async () => {
     try {
       const data = await getTokensAccept()
-      setTokensAccept(data['88'].tokens)
+      setTokensAccept(data[cid]?.tokens || [])
+      dispath(setLockDuration(data[cid]?.lockDuration || 0))
       return data
     } catch (e) {
       return false
@@ -75,12 +83,9 @@ const StakeBox = () => {
 
   const handleApprove = useCallback(async () => {
     try {
-      // setIsRequestContractAction(true)
       await onApprove()
       fetchAllowanceData()
-      // setIsRequestContractAction(false)
     } catch (e) {
-      // setIsRequestContractAction(false)
       console.error(e)
     }
   }, [onApprove, fetchAllowanceData])
@@ -90,8 +95,10 @@ const StakeBox = () => {
       await onStakeLock(new BigNumber(inputValue).times(BIG_TEN.pow(tokenSelected.decimals || 18)).toString())
       await onGetTokensLock()
       setTokenSelected(null)
+      toastSuccess('Stake Successfully')
     } catch (error) {
       console.error(error)
+      toastError('Stake faild')
     }
   }, [onStakeLock, inputValue])
 
@@ -100,8 +107,10 @@ const StakeBox = () => {
   }
 
   useEffect(() => {
-    handleGetTokensAccept()
-  }, [])
+    if (cid?.toString()) {
+      handleGetTokensAccept()
+    }
+  }, [cid])
 
   const onChangeInput = (e) => {
     setInputValue(e.target.value)
@@ -112,11 +121,26 @@ const StakeBox = () => {
   }
 
   const onStakeToken = async () => {
+    setIsLoading(true)
     if (!isApproved) {
       await handleApprove()
       await handleSubmitStake()
     } else {
       await handleSubmitStake()
+    }
+    setIsLoading(false)
+  }
+
+  const [onPresentConfirmation] = useModal(
+    <ConfirmModal onConfirm={onStakeToken} token={tokenSelected} quantity={inputValue} isStake />,
+    false,
+  )
+
+  const onClickButtonStake = async () => {
+    if (Number(inputValue) <= Number(tokenPrice)) {
+      onPresentConfirmation()
+    } else {
+      toastError('Max value enter is balance of token')
     }
   }
 
@@ -144,8 +168,8 @@ const StakeBox = () => {
         <MaxButtomOnStakeBox onClick={onClickMax}>Max</MaxButtomOnStakeBox>
       </WrappInputOnStakeBox>
       <StakeBoxDropDown tokensAccept={tokensAccept} tokenSelected={tokenSelected} setTokenSelected={setTokenSelected} />
-      <ButtonStakeBox scale="md" onClick={onStakeToken}>
-        Stake
+      <ButtonStakeBox scale="md" onClick={onClickButtonStake} disabled={isLoading || !inputValue}>
+        {!isLoading ? 'Stake' : 'Staking...'}
       </ButtonStakeBox>
     </StakeBoxCard>
   )
