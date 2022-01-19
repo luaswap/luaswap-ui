@@ -43,7 +43,7 @@ const Idos = () => {
             <SecondaryMenuItem as={Link} to={`${url}/history`} pt="24px" pb="24px" className={styles.tabStyle}>
               PREVIOUS POOLS
             </SecondaryMenuItem>
-            <SecondaryMenuItem as={Link} to={`${url}/stake`} pt="24px" pb="24px">
+            <SecondaryMenuItem as={Link} to={`${url}/stake`} pt="24px" pb="24px" className={styles.tabStyle}>
               <TextStake>STAKE</TextStake>
             </SecondaryMenuItem>
           </SecondaryButtonMenu>
