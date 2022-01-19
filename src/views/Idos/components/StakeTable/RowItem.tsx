@@ -111,8 +111,13 @@ const RowItem = ({ item }) => {
               />
               <MaxButtom onClick={() => onMaxBtnClick()}>Max</MaxButtom>
             </WrappInputOnRow>
-            <SecondaryButtonRowItem scale="sm" mb="15px" disabled={isLoading || !inputValue}>
-              <Text fontSize="10px" color="#FABC46" onClick={onClickUnstakeButton}>
+            <SecondaryButtonRowItem
+              scale="sm"
+              mb="15px"
+              disabled={isLoading || !inputValue}
+              onClick={onClickUnstakeButton}
+            >
+              <Text fontSize="10px" color="#FABC46">
                 {!isLoading ? 'UNSTAKE' : 'UNSTAKING...'}
               </Text>
             </SecondaryButtonRowItem>
