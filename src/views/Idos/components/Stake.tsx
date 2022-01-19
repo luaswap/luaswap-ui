@@ -1,5 +1,5 @@
 import { Card, Text } from 'luastarter-uikits'
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { selectTokensLock } from 'state/stake'
@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import IfoLayout from './IdoLayout'
 import StakeTable from './StakeTable'
 import StakeBox from './StakeTable/StakeBox'
+import useGetTokensLock from '../hooks/useGetTokensLock'
 
 const StakeContainer = styled(IfoLayout)`
   grid-template-columns: 5fr 2fr;
@@ -48,7 +49,15 @@ const StakeBoxNoDataCase = styled.div`
 
 const Stake: React.FC = () => {
   const { account, chainId } = useWeb3React()
+  const { onGetTokensLock } = useGetTokensLock()
+
+  useEffect(() => {
+    if (account) {
+      onGetTokensLock()
+    }
+  }, [onGetTokensLock, account])
   const tokensLock = useSelector(selectTokensLock)
+
   return (
     <>
       {account ? (
