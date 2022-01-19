@@ -1,4 +1,3 @@
-import TOSAuthRoute from 'hooks/TOSAuthRoute'
 import React from 'react'
 import { Route, useRouteMatch, Switch } from 'react-router-dom'
 import NFTDetail from './components/NFTDetail'
@@ -9,12 +8,8 @@ const NFTs = () => {
 
   return (
     <Switch>
-      <Route path={`${path}/detail/:id`}>
-        <TOSAuthRoute component={NFTDetail} />
-      </Route>
-      <Route path={`${path}`}>
-        <TOSAuthRoute component={NFTsInfo} />
-      </Route>
+      <Route path={`${path}/detail/:id`} component={NFTDetail} />
+      <Route path={`${path}`} component={NFTsInfo} />
     </Switch>
   )
 }
