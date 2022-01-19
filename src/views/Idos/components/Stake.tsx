@@ -79,13 +79,13 @@ const Stake: React.FC = () => {
             </>
           ) : (
             <NoticeWrap>
-              <Text fontSize="16px">You need to select Tomochain Mainnet or Ethereum network.</Text>
+              <Text fontSize="16px">Connect your wallet to LuaStarter & select TomoChain or Ethereum network.</Text>
             </NoticeWrap>
           )}
         </>
       ) : (
         <NoticeWrap>
-          <Text fontSize="16px">You need to connect your wallet and select Tomochain Mainnet or Ethereum network.</Text>
+          <Text fontSize="16px">Select TomoChain or Ethereum network to stake.</Text>
         </NoticeWrap>
       )}
     </>
