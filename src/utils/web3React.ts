@@ -16,7 +16,7 @@ const walletconnect = new WalletConnectConnector({
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
-})
+} as any)
 
 export const connectorsByName = {
   [ConnectorNames.Injected]: injected,

@@ -83,9 +83,12 @@ const StakeBox = () => {
 
   const handleApprove = useCallback(async () => {
     try {
+      setIsLoading(true)
       await onApprove()
       fetchAllowanceData()
+      setIsLoading(false)
     } catch (e) {
+      setIsLoading(false)
       console.error(e)
     }
   }, [onApprove, fetchAllowanceData])
@@ -122,12 +125,13 @@ const StakeBox = () => {
 
   const onStakeToken = async () => {
     setIsLoading(true)
-    if (!isApproved) {
-      await handleApprove()
-      await handleSubmitStake()
-    } else {
-      await handleSubmitStake()
-    }
+    // if (!isApproved) {
+    //   await handleApprove()
+    //   await handleSubmitStake()
+    // } else {
+    //   await handleSubmitStake()
+    // }
+    await handleSubmitStake()
     setIsLoading(false)
   }
 
@@ -168,9 +172,15 @@ const StakeBox = () => {
         <MaxButtomOnStakeBox onClick={onClickMax}>Max</MaxButtomOnStakeBox>
       </WrappInputOnStakeBox>
       <StakeBoxDropDown tokensAccept={tokensAccept} tokenSelected={tokenSelected} setTokenSelected={setTokenSelected} />
-      <ButtonStakeBox scale="md" onClick={onClickButtonStake} disabled={isLoading || !inputValue || !tokenSelected}>
-        {!isLoading ? 'Stake' : 'Staking...'}
-      </ButtonStakeBox>
+      {!isApproved ? (
+        <ButtonStakeBox scale="md" onClick={handleApprove} disabled={isLoading || !inputValue || !tokenSelected}>
+          {!isLoading ? 'Approve' : 'Approving...'}
+        </ButtonStakeBox>
+      ) : (
+        <ButtonStakeBox scale="md" onClick={onClickButtonStake} disabled={isLoading || !inputValue || !tokenSelected}>
+          {!isLoading ? 'Stake' : 'Staking...'}
+        </ButtonStakeBox>
+      )}
     </StakeBoxCard>
   )
 }
