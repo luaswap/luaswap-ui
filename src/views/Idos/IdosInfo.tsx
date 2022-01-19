@@ -7,6 +7,7 @@ import Hero from './components/Hero'
 import CurrentIdo from './components/CurrentIdo'
 import PastIdo from './components/PastIdo'
 import Stake from './components/Stake'
+import styles from './styles.module.scss'
 
 const TextStake = styled.span`
   width: 150px;
@@ -35,11 +36,11 @@ const Idos = () => {
       <Page>
         <Hero />
         <Flex mb="32px" alignItems="center" justifyContent="center">
-          <SecondaryButtonMenu activeIndex={index} scale="sm" variant="primary">
-            <SecondaryMenuItem as={Link} to={`${url}`} pt="24px" pb="24px">
+          <SecondaryButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="primary">
+            <SecondaryMenuItem as={Link} to={`${url}`} pt="24px" pb="24px" className={styles.tabStyle}>
               OPENING POOLS
             </SecondaryMenuItem>
-            <SecondaryMenuItem as={Link} to={`${url}/history`} pt="24px" pb="24px">
+            <SecondaryMenuItem as={Link} to={`${url}/history`} pt="24px" pb="24px" className={styles.tabStyle}>
               PREVIOUS POOLS
             </SecondaryMenuItem>
             <SecondaryMenuItem as={Link} to={`${url}/stake`} pt="24px" pb="24px">
