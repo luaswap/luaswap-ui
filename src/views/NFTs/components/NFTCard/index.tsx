@@ -123,15 +123,15 @@ const NFTStatusUpcoming = styled(NFTStatus)`
 // }
 
 const NFTCard = () => {
-  // const history = useHistory()
-  // const { path } = useRouteMatch()
-  // const { chainId } = useWeb3React()
-  // const location = useLocation()
+  const history = useHistory()
+  const { path } = useRouteMatch()
+  const { chainId } = useWeb3React()
+  const location = useLocation()
   // const [poolStatus] = usePoolStatus(pool)
   // const [poolTimeStamp] = useGetTimeOfPool(pool)
-  // const navigateToProjectDetail = useCallback(() => {
-  //   history.push(`${path}/project/${pool.id}`)
-  // }, [history, path, pool.id])
+  const navigateToProjectDetail = useCallback(() => {
+    history.push(`${path}/detail/id-nft-hereeeeeeeeee`)
+  }, [history, path])
   // const { isPresent, socials, isWhitelist, untilOpen, untilClose, untilClaim } = pool
   // const {
   //   img,
@@ -171,8 +171,6 @@ const NFTCard = () => {
 
   //   return 0
   // }, [totalCommittedAmount, totalAmountPay, poolStatus, swappedAmountIDO, totalAmountIDO])
-
-  const navigateToProjectDetail = () => {}
 
   return (
     <CardWrapper>
