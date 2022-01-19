@@ -59,16 +59,15 @@ const LoaderIcon = styled.div`
 const StyledInput = styled.input`
   height: 40px;
   outline: none;
-  border: 1px solid #1a1a1a;
-  border-radius: 10px;
+  border: 1px solid #ffffff;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
   background: rgb(234 156 73);
   padding: 0 15px;
   min-width: 250px;
-  color: #1a1a1a;
-  margin-right: 10px;
-
+  color: #ffffff;
   &::placeholder {
-    color: #1a1a1a;
+    color: #ffffff;
   }
 
   @media (max-width: 576px) {
@@ -77,11 +76,15 @@ const StyledInput = styled.input`
 `
 const SubscribeButton = styled.button`
   height: 40px;
-  color: #1a1a1a;
-  border-radius: 10px;
+  color: #fabc46;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 700;
+  background-color: #ffffff;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   padding: 0 10px;
-  background: transparent;
-  border: 1px solid #1a1a1a;
+  border: 1px solid #ffffff;
   text-transform: uppercase;
   cursor: pointer;
   min-width: 100px;
@@ -93,13 +96,16 @@ const StyledHeading = styled(Text)`
   font-size: 30px;
   ${({ theme }) => theme.mediaQueries.sm} {
     font-size: 48px;
+    line-height: 56px;
   }
 `
 
 const StyledText = styled(Text)`
   font-size: 20px;
   ${({ theme }) => theme.mediaQueries.sm} {
-    font-size: 32px;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 32px;
   }
 `
 
@@ -154,28 +160,30 @@ const Hero = () => {
     <Box mb="24px">
       <StyledHero>
         <Container>
-          <StyledHeading mb="12px" textAlign="center" color="#FFFFFF">
+          <StyledHeading mb="16px" textAlign="center" color="#FFFFFF">
             Decentralize your way of investing
           </StyledHeading>
-          <StyledText bold textAlign="center" color="#FEF5E3">
-            Subscribe to upcoming pools
-          </StyledText>
-          <Flex justifyContent="center" mt="20px">
-            <Box>
-              <StyledInput placeholder="Your email" value={address} type="email" onChange={handleChangeAddress} />
-              {error && (
-                <ErrorMessage color="red" fontSize="12px" ml="5px" mt="5px">
-                  {error}
-                </ErrorMessage>
+          <Flex alignItems="center" mt="20px" justifyContent="center">
+            <StyledText bold textAlign="center" color="#FEF5E3" mr="16px">
+              Subscribe to upcoming pools
+            </StyledText>
+            <Flex justifyContent="center">
+              <Box>
+                <StyledInput placeholder="Your email" value={address} type="email" onChange={handleChangeAddress} />
+                {error && (
+                  <ErrorMessage color="red" fontSize="12px" ml="5px" mt="5px">
+                    {error}
+                  </ErrorMessage>
+                )}
+              </Box>
+              {isLoading ? (
+                <SubscribeButton>
+                  <Loader />
+                </SubscribeButton>
+              ) : (
+                <SubscribeButton onClick={onSubmit}>Subscribe</SubscribeButton>
               )}
-            </Box>
-            {isLoading ? (
-              <SubscribeButton>
-                <Loader />
-              </SubscribeButton>
-            ) : (
-              <SubscribeButton onClick={onSubmit}>Subscribe</SubscribeButton>
-            )}
+            </Flex>
           </Flex>
         </Container>
       </StyledHero>
