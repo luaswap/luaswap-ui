@@ -9,9 +9,9 @@ export const WrapperLoadingTable = styled.div`
   align-items: center;
 `
 
-export const Table = styled.div`
+export const Table = styled.table`
   color: white;
-  overflow-x: auto;
+  width: 100%;
 `
 
 export const THead = styled.div`

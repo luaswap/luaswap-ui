@@ -16,7 +16,7 @@ const StakeContainer = styled(IfoLayout)`
     grid-template-columns: 2fr 1fr;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
 `
