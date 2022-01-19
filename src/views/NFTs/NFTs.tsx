@@ -1,36 +1,21 @@
-import Page from 'components/layout/Page'
+import TOSAuthRoute from 'hooks/TOSAuthRoute'
 import React from 'react'
-import styled from 'styled-components'
-import Hero from './components/Hero'
-import NFTCard from './components/NFTCard'
-import NFTsLayout from './components/NFTsLayout'
-
-const NFTsContainer = styled(NFTsLayout)`
-  grid-template-columns: 1fr 1fr;
-
-  @media (max-width: 1366px) {
-    grid-template-columns: 1fr;
-  }
-`
+import { Route, useRouteMatch, Switch } from 'react-router-dom'
+import NFTDetail from './components/NFTDetail'
+import NFTsInfo from './NFTsInfo'
 
 const NFTs = () => {
+  const { path } = useRouteMatch()
+
   return (
-    <Page>
-      <Hero />
-      <NFTsContainer>
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-        <NFTCard />
-      </NFTsContainer>
-    </Page>
+    <Switch>
+      <Route path={`${path}/detail/:id`}>
+        <TOSAuthRoute component={NFTDetail} />
+      </Route>
+      <Route path={`${path}`}>
+        <TOSAuthRoute component={NFTsInfo} />
+      </Route>
+    </Switch>
   )
 }
 
