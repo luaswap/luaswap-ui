@@ -36,7 +36,7 @@ const Idos = () => {
       <Page>
         <Hero />
         <Flex mb="32px" alignItems="center" justifyContent="center">
-          <SecondaryButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="primary">
+          <SecondaryButtonMenu activeIndex={index} scale="sm" variant="primary">
             <SecondaryMenuItem as={Link} to={`${url}`} pt="24px" pb="24px" className={styles.tabStyle}>
               OPENING POOLS
             </SecondaryMenuItem>
