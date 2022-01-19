@@ -11,6 +11,7 @@ export const WrapperLoadingTable = styled.div`
 
 export const Table = styled.div`
   color: white;
+  overflow-x: auto;
 `
 
 export const THead = styled.div`
@@ -31,9 +32,16 @@ export const TR = styled.div`
 export const TD = styled.div<{ width: string; justifyContent: string }>`
   width: ${(props) => props.width};
   display: flex;
+  min-width: 100px;
   justify-content: ${(props) => props.justifyContent};
   cursor: pointer;
   align-items: center;
+
+  @media (max-width: 575px) {
+    & > div {
+      font-size: 10px;
+    }
+  }
 `
 
 export const TFooter = styled.div`
@@ -43,6 +51,10 @@ export const TFooter = styled.div`
 
 export const TextHeader = styled(Text)`
   font-weight: bold;
+
+  @media (max-width: 575px) {
+    font-size: 10px;
+  }
 `
 
 export const Arrow = styled.img<{ isOpen: boolean }>`
@@ -70,6 +82,14 @@ export const InputOnRow = styled(Input)`
     color: #8b8b8b;
     font-size: 14px;
   }
+
+  @media (max-width: 576px) {
+    font-size: 12px;
+    height: 35px;
+    &::placeholder {
+      font-size: 12px;
+    }
+  }
 `
 
 export const MaxButtom = styled.span`
@@ -78,6 +98,10 @@ export const MaxButtom = styled.span`
   right: 16px;
   cursor: pointer;
   color: #fabc46;
+
+  @media (max-width: 576px) {
+    font-size: 12px;
+  }
 `
 export const StakeBoxCard = styled(Card)`
   border-radius: 20px;
@@ -122,12 +146,20 @@ export const DropDownInput = styled.div`
   cursor: pointer;
   width: 100%;
   height: 100%;
+
+  @media (max-width: 576px) {
+    font-size: 12px;
+  }
 `
 
 export const DropDownValue = styled.span`
   font-size: 15px;
   color: #d8d8d8;
   font-weight: bold;
+
+  @media (max-width: 576px) {
+    font-size: 12px;
+  }
 `
 
 export const SelectSectionDropDown = styled.div`
@@ -139,6 +171,10 @@ export const SelectSectionDropDown = styled.div`
   border-radius: 8px;
   padding: 8px;
   z-index: 1;
+
+  @media (max-width: 576px) {
+    font-size: 12px;
+  }
 `
 
 export const SelectItemDropDown = styled.div`
@@ -148,6 +184,10 @@ export const SelectItemDropDown = styled.div`
   align-items: center;
   padding-left: 12px;
   cursor: pointer;
+
+  @media (max-width: 576px) {
+    font-size: 12px;
+  }
 
   &:hover {
     background: #606060;

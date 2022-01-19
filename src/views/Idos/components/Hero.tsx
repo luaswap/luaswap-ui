@@ -62,6 +62,7 @@ const StyledInput = styled.input`
   border: 1px solid #ffffff;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
+  font-weight: 600;
   background: rgb(234 156 73);
   padding: 0 15px;
   min-width: 250px;
@@ -72,6 +73,8 @@ const StyledInput = styled.input`
 
   @media (max-width: 576px) {
     min-width: 200px;
+    font-size: 12px;
+    height: 35px;
   }
 `
 const SubscribeButton = styled.button`
@@ -88,6 +91,11 @@ const SubscribeButton = styled.button`
   text-transform: uppercase;
   cursor: pointer;
   min-width: 100px;
+
+  @media (max-width: 576px) {
+    font-size: 12px;
+    height: 35px;
+  }
 `
 const ErrorMessage = styled(Text)``
 
@@ -99,6 +107,11 @@ const StyledHeading = styled(Text)`
     line-height: 56px;
   }
 `
+const StyledFlex = styled(Flex)`
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`
 
 const StyledText = styled(Text)`
   font-size: 20px;
@@ -106,6 +119,10 @@ const StyledText = styled(Text)`
     font-size: 24px;
     font-weight: bold;
     line-height: 32px;
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 10px;
   }
 `
 
@@ -163,7 +180,7 @@ const Hero = () => {
           <StyledHeading mb="16px" textAlign="center" color="#FFFFFF">
             Decentralize your way of investing
           </StyledHeading>
-          <Flex alignItems="center" mt="20px" justifyContent="center">
+          <StyledFlex alignItems="center" mt="20px" justifyContent="center">
             <StyledText bold textAlign="center" color="#FEF5E3" mr="16px">
               Subscribe to upcoming pools
             </StyledText>
@@ -184,7 +201,7 @@ const Hero = () => {
                 <SubscribeButton onClick={onSubmit}>Subscribe</SubscribeButton>
               )}
             </Flex>
-          </Flex>
+          </StyledFlex>
         </Container>
       </StyledHero>
     </Box>

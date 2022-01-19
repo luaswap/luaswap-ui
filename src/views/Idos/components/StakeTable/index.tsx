@@ -23,10 +23,10 @@ const StakeTable: React.FC = () => {
               <TD justifyContent="flex-start" width="23%">
                 <TextHeader fontSize="12px">TOKEN</TextHeader>
               </TD>
-              <TD justifyContent="flex-end" width="21%">
+              <TD justifyContent="flex-end" width="15%">
                 <TextHeader fontSize="12px">QUANTITY</TextHeader>
               </TD>
-              <TD justifyContent="flex-end" width="21%">
+              <TD justifyContent="flex-end" width="27%">
                 <TextHeader fontSize="12px">ESTIMATE LUA</TextHeader>
               </TD>
               <TD justifyContent="flex-end" width="28%">
@@ -45,8 +45,8 @@ const StakeTable: React.FC = () => {
               <TD justifyContent="flex-start" width="23%">
                 <Text fontSize="12px">Total</Text>
               </TD>
-              <TD justifyContent="flex-end" width="21%" />
-              <TD justifyContent="flex-end" width="21%">
+              <TD justifyContent="flex-end" width="15%" />
+              <TD justifyContent="flex-end" width="27%">
                 <Text fontSize="12px">{estTotalLua}</Text>
               </TD>
               <TD justifyContent="flex-end" width="28%" />

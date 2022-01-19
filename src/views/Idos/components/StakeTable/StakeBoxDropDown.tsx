@@ -37,7 +37,7 @@ const StakeBoxDropDown = ({ tokensAccept, tokenSelected, setTokenSelected }) => 
         <SelectSectionDropDown>
           {tokensAccept.map((token) => (
             <SelectItemDropDown onClick={() => onChange(token)} key={token.address}>
-              <Text>{token.name}</Text>
+              {token.name}
             </SelectItemDropDown>
           ))}
         </SelectSectionDropDown>
