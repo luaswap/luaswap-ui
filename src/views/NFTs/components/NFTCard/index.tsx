@@ -36,6 +36,7 @@ const PoolInfoBlock = styled.div`
 
 const CardWrapper = styled(Card)`
   width: 100%;
+  border-radius: 40px;
   ${({ theme }) => theme.mediaQueries.lg} {
     width: 100%;
   }
@@ -91,6 +92,30 @@ const SecondaryButtonPool = styled(SecondaryButton)`
 
 const SecondaryButtonWhite = styled(SecondaryButtonPool)`
   border-color: #fffcf6;
+`
+const CardStamp = styled.div`
+  position: absolute;
+  right: 0;
+  padding: 8px 18px;
+  background: #606060;
+  border-radius: 24px 0px 0px 24px;
+`
+
+const NFTStatus = styled(Text)`
+  font-weight: bold;
+  font-size: 14px;
+`
+
+const NFTStatusClosedSoldOut = styled(NFTStatus)`
+  color: #8b8b8b;
+`
+
+const NFTStatusOpening = styled(NFTStatus)`
+  color: #fbc662;
+`
+
+const NFTStatusUpcoming = styled(NFTStatus)`
+  color: #30cd60;
 `
 
 // interface PoolDetailProps {
@@ -152,9 +177,9 @@ const NFTCard = () => {
   return (
     <CardWrapper>
       <StyledCardBody>
-        <Flex alignItems="flex-start" justifyContent="space-between" flexWrap="wrap">
+        <Flex alignItems="center" justifyContent="space-between" flexWrap="wrap">
           <Flex mb="15px" alignItems="center">
-            {/* <ImageContainer src={img} alt="img" onClick={navigateToProjectDetail} /> */}
+            <ImageContainer src={`${process.env.PUBLIC_URL}/favicon.png`} alt="img" onClick={navigateToProjectDetail} />
             <PoolInfoBlock>
               <Text
                 fontSize="24px"
@@ -167,8 +192,8 @@ const NFTCard = () => {
                 {/* {name} */}
                 LuaNFT
               </Text>
-              {/* <Flex marginBottom="5px" alignItems="center">
-                <IconWrapper href={getLink(socials, 'TELEGRAM')} target="__blank">
+              <Flex marginBottom="5px" alignItems="center">
+                {/* <IconWrapper href={getLink(socials, 'TELEGRAM')} target="__blank">
                   <TelegramIcon />
                 </IconWrapper>
                 <IconWrapper href={getLink(socials, 'TWITTER')} target="__blank">
@@ -179,29 +204,25 @@ const NFTCard = () => {
                 </IconWrapper>
                 <IconWrapper href={getLink(socials, 'FORUM')} target="__blank" hide-border-right="true">
                   <WorldIcon />
-                </IconWrapper>
-              </Flex> */}
+                </IconWrapper> */}
+                <NFTStatusClosedSoldOut>Closed</NFTStatusClosedSoldOut>
+              </Flex>
             </PoolInfoBlock>
           </Flex>
-          {/* {!isWhitelist ? (
-            <SecondaryButtonPool onClick={navigateToProjectDetail} scale="sm" mb="15px">
-              <Text fontSize="12px" color="#FABC46">
-                TIER MEMBER
-              </Text>
-            </SecondaryButtonPool>
-          ) : (
-            <SecondaryButtonWhite onClick={navigateToProjectDetail} scale="sm" mb="15px">
-              <Text fontSize="12px" color="#FFFCF6">
-                WHITELIST MEMBER
-              </Text>
-            </SecondaryButtonWhite>
-          )} */}
+          <CardStamp>
+            <Text fontSize="14px" color="#FFFFFF" fontWeight="bold">
+              INO
+            </Text>
+          </CardStamp>
         </Flex>
         {/* <Box>
           {get(pool, 'network', []).map((network) => {
             return <YellowCard>{network}</YellowCard>
           })}
         </Box> */}
+        <Box>
+          <YellowCard>BinanceSmartChain</YellowCard>
+        </Box>
         {/* {poolTimeStamp && (
           <Flex alignItems="center" mt="16px">
             <CalendarIcon />
@@ -231,6 +252,19 @@ const NFTCard = () => {
             <Progress variant="round" scale="sm" primaryStep={progressPercentage} />
           </>
         )} */}
+        <>
+          <Flex justifyContent="space-between" mb="4px" mt="16px">
+            <Flex justifyContent="flex-start" flexDirection="row">
+              <Text color="#8B8B8B" mr="5px">
+                Total sale:{' '}
+              </Text>
+              <Text color="primary" fontWeight="600">
+                1500
+              </Text>
+            </Flex>
+          </Flex>
+          <Progress variant="round" scale="sm" primaryStep={80} />
+        </>
       </StyledCardBody>
     </CardWrapper>
   )
