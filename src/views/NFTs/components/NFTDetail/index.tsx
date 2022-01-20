@@ -1,7 +1,12 @@
 import Page from 'components/layout/Page'
-import { Card, Flex } from 'luastarter-uikits'
-import React from 'react'
+import { Card, Flex, Spinner } from 'luastarter-uikits'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { selectIsLoadingNFTDetail, selectSelectedNFTPool } from 'state/nfts'
+import { getNFTPoolDetail } from 'state/nfts/getNfts'
 import styled from 'styled-components'
+import useGetNFTPoolDetail from 'views/NFTs/hook/useGetNFTPoolDetail'
 import CountDown from '../CountDown'
 import DateStamp from '../DateStamp'
 import NFTContentBox from './NFTContentBox'
@@ -33,17 +38,42 @@ const TimeBlock = styled(Card)`
   }
 `
 
+const WrapperSpinner = styled(Flex)`
+  min-height: 300px;
+`
+
 const NFTDetail = () => {
+  const params: { id: string } = useParams()
+  const { onGetNFTPoolDetail } = useGetNFTPoolDetail()
+  const isLoadingNFTDetail = useSelector(selectIsLoadingNFTDetail)
+  const NFTPoolDetail = useSelector(selectSelectedNFTPool)
+
+  useEffect(() => {
+    if (params.id) {
+      onGetNFTPoolDetail(params.id)
+    }
+  }, [params])
+
   return (
     <Page>
       <Row>
-        <TimeSection alignItems="center" justifyContent="center">
-          <TimeBlock>
-            <DateStamp />
-            <CountDown />
-          </TimeBlock>
-        </TimeSection>
-        <NFTContentBox />
+        {isLoadingNFTDetail ? (
+          <WrapperSpinner justifyContent="center" alignItems="center">
+            <Spinner />
+          </WrapperSpinner>
+        ) : (
+          <>
+            {NFTPoolDetail && (
+              <TimeSection alignItems="center" justifyContent="center">
+                <TimeBlock>
+                  <DateStamp NFTPoolDetail={NFTPoolDetail} />
+                  <CountDown NFTPoolDetail={NFTPoolDetail} />
+                </TimeBlock>
+              </TimeSection>
+            )}
+            <NFTContentBox />
+          </>
+        )}
       </Row>
     </Page>
   )

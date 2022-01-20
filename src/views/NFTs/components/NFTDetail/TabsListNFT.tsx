@@ -1,5 +1,8 @@
+import { useWeb3React } from '@web3-react/core'
 import { Flex, Progress, Text } from 'luastarter-uikits'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectSelectedNFTPool } from 'state/nfts'
 import styled from 'styled-components'
 
 interface TabItemProps {
@@ -64,15 +67,25 @@ const ProgressBlock = styled.div`
 
 const ProgressTextBlock = styled(Flex)``
 
-const TabsListNFT = () => {
+const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
   const [hoverIndex, setHoverIndex] = useState(-1)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const NFTPoolDetail = useSelector(selectSelectedNFTPool)
+  const { chainId } = useWeb3React()
+
+  const totalSale = useMemo(() => {
+    let total = 0
+    NFTPoolDetail?.index['56'].forEach((item) => {
+      total += item.totalSale
+    })
+    return total
+  }, [NFTPoolDetail, chainId])
 
   return (
     <Wrapper>
       <TabsList>
-        {[1, 2, 3, 4, 5, 6, 7].map((item, index) => (
+        {NFTPoolDetail?.index['56'].map((item, index) => (
           <TabItem
+            key={item.id}
             isActive={activeIndex === index}
             onClick={() => setActiveIndex(index)}
             isHovered={hoverIndex === index}
@@ -85,14 +98,14 @@ const TabsListNFT = () => {
           >
             <TabName>
               <Text fontWeight="bold" fontSize="20px" color="#FFFFFF">
-                Zodiac Treasure
+                {item.name}
               </Text>
               <Text fontWeight="normal" fontSize="14px" color="#FFFFFF">
-                4,000 available
+                {item.totalSale} available
               </Text>
             </TabName>
             <TabPrice fontWeight="900" fontSize="15px" color="#FFFFFF">
-              149 BUSD
+              {item.price} BUSD
             </TabPrice>
           </TabItem>
         ))}
@@ -100,13 +113,13 @@ const TabsListNFT = () => {
       <ProgressBlock>
         <ProgressTextBlock justifyContent="space-between" alignItems="center">
           <Text fontWeight="normal" fontSize="15px" color="#FFFFFF">
-            4,000/5,000 Available{' '}
+            4,000/{totalSale} Available{' '}
           </Text>
           <Text fontWeight="normal" fontSize="15px" color="#FFFFFF">
             10% sold
           </Text>
         </ProgressTextBlock>
-        <Progress variant="round" scale="md" primaryStep={80} colorBackground="#353535" colorBar="#C3C3C3" />
+        <Progress variant="round" scale="md" primaryStep={10} colorBackground="#353535" colorBar="#C3C3C3" />
       </ProgressBlock>
     </Wrapper>
   )

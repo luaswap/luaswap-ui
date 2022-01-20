@@ -20,14 +20,9 @@ import {
   Box,
   CalendarIcon,
 } from 'luastarter-uikits'
-// import useDeepMemo from 'hooks/useDeepMemo'
-// import getLink from 'views/Idos/utils/getMediaUrl'
-// import { formatPoolDetail } from 'utils/formatPoolData'
-// import { formatNumberWithComma } from 'utils/formatBalance'
-// import get from 'lodash/get'
-// import useGetTimeOfPool from 'views/Idos/hooks/useGetTimeOfPool'
-// import { Pool, FormatPool } from '../../types'
-// import usePoolStatus from '../../hooks/usePoolStatus'
+import { get } from 'lodash'
+import useGetTimeOfPool from 'views/Idos/hooks/useGetTimeOfPool'
+import usePoolStatus from 'views/Idos/hooks/usePoolStatus'
 
 const PoolInfoBlock = styled.div`
   display: flex;
@@ -108,6 +103,7 @@ const NFTStatus = styled(Text)`
 
 const NFTStatusClosedSoldOut = styled(NFTStatus)`
   color: #8b8b8b;
+  text-transform: capitalize;
 `
 
 const NFTStatusOpening = styled(NFTStatus)`
@@ -118,66 +114,37 @@ const NFTStatusUpcoming = styled(NFTStatus)`
   color: #30cd60;
 `
 
-// interface PoolDetailProps {
-//   pool: Pool
-// }
-
-const NFTCard = () => {
+const NFTCard = ({ NFTpool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
   const location = useLocation()
-  // const [poolStatus] = usePoolStatus(pool)
-  // const [poolTimeStamp] = useGetTimeOfPool(pool)
+  const [poolStatus] = usePoolStatus(NFTpool)
+  const [poolTimeStamp] = useGetTimeOfPool(NFTpool)
+  const { name, img, description, index, id } = NFTpool
+
   const navigateToProjectDetail = useCallback(() => {
-    history.push(`${path}/detail/id-nft-hereeeeeeeeee`)
-  }, [history, path])
-  // const { isPresent, socials, isWhitelist, untilOpen, untilClose, untilClaim } = pool
-  // const {
-  //   img,
-  //   name,
-  //   description,
-  //   totalCommittedAmount,
-  //   totalAmountPay,
-  //   totalAmountIDO,
-  //   swappedAmountIDO,
-  //   status,
-  //   payToken,
-  //   minAmountPay,
-  //   maxAmountPay,
-  // } = useDeepMemo<FormatPool>(() => {
-  //   const { img: _img, name: _name, description: _description, status: _status, index: _index } = pool
-  //   const poolInfoChainId = Object.keys(_index).map((id) => {
-  //     return formatPoolDetail(_index[id])
-  //   })
-  //   const totalPoolData = formatPoolDetail(poolInfoChainId)
-  //   return {
-  //     img: _img,
-  //     name: _name,
-  //     description: _description,
-  //     status: _status,
-  //     ...totalPoolData,
-  //   }
-  // }, [pool, chainId])
+    history.push(`${path}/detail/${id}`)
+  }, [history, path, id])
 
-  // const progressPercentage = useMemo(() => {
-  //   if (poolStatus === 'closed') {
-  //     return new BigNumber(swappedAmountIDO).dividedBy(new BigNumber(totalAmountIDO)).multipliedBy(100).toNumber()
-  //   }
+  const totalSale = useMemo(() => {
+    let total = 0
+    index['56'].forEach((item) => {
+      total += item.totalSale
+    })
+    return total
+  }, [index, chainId])
 
-  //   if (totalCommittedAmount && totalAmountPay) {
-  //     return new BigNumber(totalCommittedAmount).dividedBy(new BigNumber(totalAmountPay)).multipliedBy(100).toNumber()
-  //   }
-
-  //   return 0
-  // }, [totalCommittedAmount, totalAmountPay, poolStatus, swappedAmountIDO, totalAmountIDO])
+  const progressPercentage = useMemo(() => {
+    return 0
+  }, [poolStatus])
 
   return (
     <CardWrapper>
       <StyledCardBody>
         <Flex alignItems="center" justifyContent="space-between" flexWrap="wrap">
           <Flex mb="15px" alignItems="center">
-            <ImageContainer src={`${process.env.PUBLIC_URL}/favicon.png`} alt="img" onClick={navigateToProjectDetail} />
+            <ImageContainer src={img} alt="img" onClick={navigateToProjectDetail} />
             <PoolInfoBlock>
               <Text
                 fontSize="24px"
@@ -187,23 +154,10 @@ const NFTCard = () => {
                   cursor: 'pointer',
                 }}
               >
-                {/* {name} */}
-                LuaNFT
+                {name}
               </Text>
               <Flex marginBottom="5px" alignItems="center">
-                {/* <IconWrapper href={getLink(socials, 'TELEGRAM')} target="__blank">
-                  <TelegramIcon />
-                </IconWrapper>
-                <IconWrapper href={getLink(socials, 'TWITTER')} target="__blank">
-                  <TwitterIcon />
-                </IconWrapper>
-                <IconWrapper href={getLink(socials, 'MEDIUM')} target="__blank">
-                  <MediumIcon />
-                </IconWrapper>
-                <IconWrapper href={getLink(socials, 'FORUM')} target="__blank" hide-border-right="true">
-                  <WorldIcon />
-                </IconWrapper> */}
-                <NFTStatusClosedSoldOut>Closed</NFTStatusClosedSoldOut>
+                <NFTStatusClosedSoldOut>{poolStatus}</NFTStatusClosedSoldOut>
               </Flex>
             </PoolInfoBlock>
           </Flex>
@@ -213,43 +167,20 @@ const NFTCard = () => {
             </Text>
           </CardStamp>
         </Flex>
-        {/* <Box>
-          {get(pool, 'network', []).map((network) => {
+        <Box>
+          {get(NFTpool, 'network', []).map((network) => {
             return <YellowCard>{network}</YellowCard>
           })}
-        </Box> */}
-        <Box>
-          <YellowCard>BinanceSmartChain</YellowCard>
         </Box>
-        {/* {poolTimeStamp && (
+        {poolTimeStamp && (
           <Flex alignItems="center" mt="16px">
             <CalendarIcon />
             <Text ml="8px">{poolTimeStamp}</Text>
           </Flex>
-        )} */}
-        <Flex alignItems="center" mt="16px">
-          <CalendarIcon />
-          <Text ml="8px">10 day(s) until token distribution</Text>
-        </Flex>
+        )}
         <Text color="#C3C3C3" mt="16px">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dui magna, bibefringilla pretium justo. Nullam
-          odio quam, fermentum at sapien eu...ndum quis libero quis,
+          {description}
         </Text>
-        {/* {!isPresent && (
-          <>
-            <Flex justifyContent="space-between" mb="4px" mt="16px">
-              <Flex justifyContent="flex-start" flexDirection="row">
-                <Text color="#8B8B8B" mr="5px">
-                  Cap:{' '}
-                </Text>
-                <Text color="primary" fontWeight="600">
-                  {formatNumberWithComma(totalAmountIDO, true)}
-                </Text>
-              </Flex>
-            </Flex>
-            <Progress variant="round" scale="sm" primaryStep={progressPercentage} />
-          </>
-        )} */}
         <>
           <Flex justifyContent="space-between" mb="4px" mt="16px">
             <Flex justifyContent="flex-start" flexDirection="row">
@@ -257,11 +188,11 @@ const NFTCard = () => {
                 Total sale:{' '}
               </Text>
               <Text color="primary" fontWeight="600">
-                1500
+                {totalSale}
               </Text>
             </Flex>
           </Flex>
-          <Progress variant="round" scale="sm" primaryStep={80} />
+          <Progress variant="round" scale="sm" primaryStep={progressPercentage} />
         </>
       </StyledCardBody>
     </CardWrapper>

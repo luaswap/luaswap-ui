@@ -1,6 +1,7 @@
 import { Card, Flex, Text } from 'luastarter-uikits'
 import React from 'react'
 import styled from 'styled-components'
+import useGetCountDownInSeconds from 'views/Idos/hooks/useGetCountDownInSeconds'
 
 const CountDownWrapper = styled(Flex)`
   width: 100%;
@@ -33,19 +34,21 @@ const TimeText = styled(Text)`
   color: #8b8b8b;
 `
 
-const CountDown = () => {
+const CountDown = ({ NFTPoolDetail }) => {
+  const timeUntil = useGetCountDownInSeconds(NFTPoolDetail.untilOpen)
+  console.log(timeUntil)
   return (
     <CountDownWrapper>
       <TimeItem>
-        <TimeValue>22</TimeValue>
+        <TimeValue>{timeUntil.hours}</TimeValue>
         <TimeText>HOUR</TimeText>
       </TimeItem>
       <TimeItem>
-        <TimeValue>34</TimeValue>
+        <TimeValue>{timeUntil.minutes}</TimeValue>
         <TimeText>MIN</TimeText>
       </TimeItem>
       <TimeItem>
-        <TimeValue>57</TimeValue>
+        <TimeValue>{timeUntil.seconds}</TimeValue>
         <TimeText>SEC</TimeText>
       </TimeItem>
     </CountDownWrapper>

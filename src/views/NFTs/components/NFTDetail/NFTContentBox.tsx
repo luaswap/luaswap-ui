@@ -1,5 +1,5 @@
 import { Card } from 'luastarter-uikits'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import TabDetailNFT from './TabDetailNFT'
 import TabsListNFT from './TabsListNFT'
@@ -15,10 +15,11 @@ const Wrapper = styled(Card)`
 `
 
 const NFTContentBox = () => {
+  const [activeIndex, setActiveIndex] = useState(0)
   return (
     <Wrapper>
-      <TabsListNFT />
-      <TabDetailNFT />
+      <TabsListNFT activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
+      <TabDetailNFT activeIndex={activeIndex} />
     </Wrapper>
   )
 }
