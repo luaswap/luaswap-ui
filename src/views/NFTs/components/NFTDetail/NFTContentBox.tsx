@@ -9,7 +9,8 @@ const Wrapper = styled(Card)`
   border-radius: 40px;
   margin-top: 24px;
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 3fr 5fr;
+  grid-gap: 50px;
   min-height: 480px;
 `
 

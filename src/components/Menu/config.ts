@@ -9,7 +9,7 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
   },
   {
     label: t('NFT'),
-    icon: 'IfoIcon',
+    icon: 'NftIcon',
     href: '/nfts',
   },
   {
