@@ -32,11 +32,26 @@ export const NFTPoolsSlice = createSlice({
 // Actions
 export const { setNFTPools, setIsLoading, setSelectedNFTPool, setIsLoadingNFTDetail } = NFTPoolsSlice.actions
 
+const mapDataNFT = (NFTDetailData) => {
+  const indexFlat = {
+    data: [],
+    networkId: '',
+  }
+  Object.keys(NFTDetailData.index).forEach((key) => {
+    indexFlat.data = [...indexFlat.data, ...NFTDetailData.index[key]]
+    indexFlat.networkId = key
+  })
+  return {
+    ...NFTDetailData,
+    indexFlat,
+  }
+}
+
 export const fetchNFTPools = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(setIsLoading(true))
     const data = await getNFTPools()
-    dispatch(setNFTPools(data))
+    dispatch(setNFTPools(data.map((item) => mapDataNFT(item))))
     dispatch(setIsLoading(false))
   } catch (e) {
     console.log(e)
@@ -48,7 +63,7 @@ export const fetchNFTPoolDetail = (NFTPoolId) => async (dispatch: AppDispatch) =
   try {
     dispatch(setIsLoadingNFTDetail(true))
     const data = await getNFTPoolDetail(NFTPoolId)
-    dispatch(setSelectedNFTPool(data))
+    dispatch(setSelectedNFTPool(mapDataNFT(data)))
     dispatch(setIsLoadingNFTDetail(false))
   } catch (e) {
     console.log(e)

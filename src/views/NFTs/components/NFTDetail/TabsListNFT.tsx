@@ -1,4 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
+import { get } from 'lodash'
 import { Flex, Progress, Text } from 'luastarter-uikits'
 import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -55,6 +56,15 @@ const TabItem = styled.div<TabItemProps>`
     position: absolute;
     content: '';
   }
+
+  @media (max-width: 991px) {
+    padding: 18px 25px 18px 20px;
+  }
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `
 
 const TabName = styled.div``
@@ -63,18 +73,28 @@ const TabPrice = styled(Text)``
 
 const ProgressBlock = styled.div`
   padding: 24px 44px 24px 32px;
+
+  @media (max-width: 991px) {
+    padding: 18px 25px 18px 20px;
+  }
 `
 
-const ProgressTextBlock = styled(Flex)``
+const ProgressTextBlock = styled(Flex)`
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`
 
 const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
   const [hoverIndex, setHoverIndex] = useState(-1)
   const NFTPoolDetail = useSelector(selectSelectedNFTPool)
   const { chainId } = useWeb3React()
+  const payTokenSymbol = get(NFTPoolDetail, `indexFlat.data[${activeIndex}]payToken.symbol`, null)
 
   const totalSale = useMemo(() => {
     let total = 0
-    NFTPoolDetail?.index['56'].forEach((item) => {
+    NFTPoolDetail?.indexFlat.data.forEach((item) => {
       total += item.totalSale
     })
     return total
@@ -83,7 +103,7 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
   return (
     <Wrapper>
       <TabsList>
-        {NFTPoolDetail?.index['56'].map((item, index) => (
+        {NFTPoolDetail?.indexFlat.data.map((item, index) => (
           <TabItem
             key={item.id}
             isActive={activeIndex === index}
@@ -105,7 +125,7 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
               </Text>
             </TabName>
             <TabPrice fontWeight="900" fontSize="15px" color="#FFFFFF">
-              {item.price} BUSD
+              {item.price} {payTokenSymbol}
             </TabPrice>
           </TabItem>
         ))}

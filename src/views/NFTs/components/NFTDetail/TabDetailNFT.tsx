@@ -5,8 +5,16 @@ import { useSelector } from 'react-redux'
 import get from 'lodash/get'
 import { selectSelectedNFTPool } from 'state/nfts'
 import styled from 'styled-components'
+import useNFTPoolStatus from 'views/NFTs/hook/useNFTPoolStatus'
+import { chain } from 'lodash'
+import { supportIdoNetwork } from 'config/constants/idos'
 
-const Wrapper = styled(Flex)``
+const Wrapper = styled(Flex)`
+  @media (max-width: 991px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`
 
 const CardImage = styled(Card)`
   background: #1a1a1a;
@@ -18,14 +26,38 @@ const CardImage = styled(Card)`
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
+
+  @media (max-width: 1400px) {
+    width: 50%;
+    min-width: unset;
+  }
+  @media (max-width: 991px) {
+    width: 80%;
+  }
 `
+
+const SoldOutBack = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(103, 103, 103, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const ImageNFT = styled.img`
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: auto;
+  max-width: 300px;
   margin: 32px 0;
 `
 
-const QuantityBlock = styled(Flex)``
+const QuantityBlock = styled(Flex)`
+  margin-bottom: 32px;
+`
 
 const CountNumber = styled(Text)`
   margin: 0 32px;
@@ -56,6 +88,12 @@ const ButtonCount = styled.button`
 
 const DetailNFTBlock = styled.div`
   margin: 40px;
+  @media (max-width: 1400px) {
+    width: 50%;
+  }
+  @media (max-width: 991px) {
+    width: 80%;
+  }
 `
 
 const NFTTitle = styled(Text)`
@@ -85,18 +123,37 @@ const BuyNFTBlock = styled.div`
 const ByNowNFTButton = styled(Button)`
   width: 350px;
   margin-top: 30px;
+
+  @media (max-width: 1400px) {
+    width: 100%;
+  }
 `
 
 const TabDetailNFT = ({ activeIndex }) => {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(1)
   const NFTPoolDetail = useSelector(selectSelectedNFTPool)
-  const { chainId } = useWeb3React()
-  const [activeDetail, setActiveDetail] = useState<any>()
+  const { account, chainId } = useWeb3React()
+  const [activeDetail, setActiveDetail] = useState(null)
+  const [poolStatus] = useNFTPoolStatus(NFTPoolDetail)
+
+  const indexFlatData = get(NFTPoolDetail, 'indexFlat.data', [])
+  const networkNFTId = get(NFTPoolDetail, 'indexFlat.networkId', '')
+
+  const isOpenNFTPool = useMemo(() => {
+    return poolStatus === 'open'
+  }, [poolStatus, NFTPoolDetail])
+
+  const isMatchNetworkId = useMemo(() => {
+    if (account) {
+      return Number(chainId) === Number(networkNFTId)
+    }
+    return false
+  }, [account, networkNFTId, chainId])
 
   useEffect(() => {
-    setActiveDetail(NFTPoolDetail?.index['56'][activeIndex])
-    setCount(0)
-  }, [activeIndex, NFTPoolDetail])
+    setActiveDetail(indexFlatData[activeIndex])
+    setCount(1)
+  }, [activeIndex, indexFlatData])
 
   const tabId = get(NFTPoolDetail, `projectDetail[${activeDetail?.id}]`, null)
   const payTokenSymbol = get(activeDetail, 'payToken.symbol', null)
@@ -111,18 +168,23 @@ const TabDetailNFT = ({ activeIndex }) => {
   return (
     <Wrapper>
       <CardImage>
-        <ImageNFT src={`${process.env.PUBLIC_URL}/images/Redluckyenvelop.png`} alt="nftimage" />
+        <ImageNFT src={activeDetail?.img} alt="nftimage" />
         <QuantityBlock justifyContent="center" alignItems="center">
-          <ButtonCount onClick={decreaseCount} disabled={count < 1}>
+          <ButtonCount onClick={decreaseCount} disabled={!isMatchNetworkId || !isOpenNFTPool || count < 2}>
             <Text fontSize="28px">-</Text>
           </ButtonCount>
           <CountNumber fontWeight="normal" fontSize="24px" color="#FFFFFF">
             {count}
           </CountNumber>
-          <ButtonCount onClick={increaseCount}>
+          <ButtonCount onClick={increaseCount} disabled={!isMatchNetworkId || !isOpenNFTPool}>
             <Text fontSize="28px">+</Text>
           </ButtonCount>
         </QuantityBlock>
+        {false && (
+          <SoldOutBack>
+            <img src={`${process.env.PUBLIC_URL}/images/sold-out.png`} alt="" />
+          </SoldOutBack>
+        )}
       </CardImage>
       <DetailNFTBlock>
         <NFTTitle fontWeight="900" fontSize="32px" color="#FFFFFF">
@@ -135,7 +197,10 @@ const TabDetailNFT = ({ activeIndex }) => {
           <NFTTotalPrice fontWeight="bold" fontSize="24px" color="#FFFFFF">
             {activeDetail?.price * count} {payTokenSymbol}
           </NFTTotalPrice>
-          <ByNowNFTButton disabled={count < 1}>
+          {!isMatchNetworkId && (
+            <Text>You need to connect wallet and select {supportIdoNetwork[networkNFTId]} network.</Text>
+          )}
+          <ByNowNFTButton disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1}>
             <Text fontWeight="bold" fontSize="15px" color="#353535">
               Buy Now
             </Text>

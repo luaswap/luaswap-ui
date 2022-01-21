@@ -8,6 +8,9 @@ const CountDownWrapper = styled(Flex)`
   height: 100%;
   align-items: center;
   justify-content: flex-end;
+  @media screen and (max-width: 500px) {
+    justify-content: center;
+  }
 `
 
 const TimeItem = styled(Card)`
@@ -35,8 +38,7 @@ const TimeText = styled(Text)`
 `
 
 const CountDown = ({ NFTPoolDetail }) => {
-  const timeUntil = useGetCountDownInSeconds(NFTPoolDetail.untilOpen)
-  console.log(timeUntil)
+  const timeUntil = useGetCountDownInSeconds(NFTPoolDetail.untilOpen || NFTPoolDetail.untilClose)
   return (
     <CountDownWrapper>
       <TimeItem>

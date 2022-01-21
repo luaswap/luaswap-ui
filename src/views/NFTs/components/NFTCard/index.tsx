@@ -1,28 +1,11 @@
 import React, { useCallback, useMemo } from 'react'
 import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
-import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import {
-  Card,
-  CardBody,
-  CardRibbon,
-  Text,
-  Link,
-  Flex,
-  TwitterIcon,
-  MediumIcon,
-  WorldIcon,
-  TelegramIcon,
-  Progress,
-  SecondaryButton,
-  Image,
-  Box,
-  CalendarIcon,
-} from 'luastarter-uikits'
+import { Card, CardBody, Text, Flex, Progress, SecondaryButton, Box, CalendarIcon } from 'luastarter-uikits'
 import { get } from 'lodash'
 import useGetTimeOfPool from 'views/Idos/hooks/useGetTimeOfPool'
-import usePoolStatus from 'views/Idos/hooks/usePoolStatus'
+import useNFTPoolStatus from 'views/NFTs/hook/useNFTPoolStatus'
 
 const PoolInfoBlock = styled.div`
   display: flex;
@@ -119,9 +102,9 @@ const NFTCard = ({ NFTpool }) => {
   const { path } = useRouteMatch()
   const { chainId } = useWeb3React()
   const location = useLocation()
-  const [poolStatus] = usePoolStatus(NFTpool)
+  const [poolStatus] = useNFTPoolStatus(NFTpool)
   const [poolTimeStamp] = useGetTimeOfPool(NFTpool)
-  const { name, img, description, index, id } = NFTpool
+  const { name, img, description, indexFlat, id } = NFTpool
 
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/detail/${id}`)
@@ -129,11 +112,11 @@ const NFTCard = ({ NFTpool }) => {
 
   const totalSale = useMemo(() => {
     let total = 0
-    index['56'].forEach((item) => {
+    indexFlat.data.forEach((item) => {
       total += item.totalSale
     })
     return total
-  }, [index, chainId])
+  }, [indexFlat, chainId])
 
   const progressPercentage = useMemo(() => {
     return 0

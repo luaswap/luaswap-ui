@@ -27,14 +27,17 @@ const TimeSection = styled(Flex)``
 const TimeBlock = styled(Card)`
   width: 30%;
   border-radius: 10px;
-  height: 105px;
+  min-height: 105px;
   min-width: 470px;
-  display: grid;
-  grid-template-columns: 2fr 3fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0 24px;
   @media screen and (max-width: 500px) {
     width: 100%;
     min-width: unset;
+    flex-direction: column;
+    padding: 10px 24px;
   }
 `
 
@@ -67,7 +70,9 @@ const NFTDetail = () => {
               <TimeSection alignItems="center" justifyContent="center">
                 <TimeBlock>
                   <DateStamp NFTPoolDetail={NFTPoolDetail} />
-                  <CountDown NFTPoolDetail={NFTPoolDetail} />
+                  {NFTPoolDetail.untilOpen || NFTPoolDetail.untilClose ? (
+                    <CountDown NFTPoolDetail={NFTPoolDetail} />
+                  ) : null}
                 </TimeBlock>
               </TimeSection>
             )}

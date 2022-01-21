@@ -12,6 +12,14 @@ const Wrapper = styled(Card)`
   grid-template-columns: 3fr 5fr;
   grid-gap: 50px;
   min-height: 480px;
+
+  @media (max-width: 1400px) {
+    grid-template-columns: 1fr 3fr;
+  }
+  @media (max-width: 991px) {
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 0px;
+  }
 `
 
 const NFTContentBox = () => {
