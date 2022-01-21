@@ -152,3 +152,7 @@ export const soushHarvestBnb = async (sousChefContract, account) => {
       return tx.transactionHash
     })
 }
+
+export const getNumberOfNftSold = async (nftPoolContract, addressNFT, nftId) => {
+  return nftPoolContract.methods.numberOfNftSold(addressNFT, nftId).call()
+}

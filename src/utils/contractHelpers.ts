@@ -55,6 +55,7 @@ import easterNftAbi from 'config/abi/easterNft.json'
 import cakeVaultAbi from 'config/abi/cakeVault.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import chainlinkOracleAbi from 'config/abi/chainlinkOracle.json'
+import nftPoolAbi from 'config/abi/nftPool.json'
 
 const getContract = (abi: any, address: string, web3?: Web3) => {
   const _web3 = web3 ?? getWeb3NoAccount()
@@ -144,4 +145,8 @@ export const getPredictionsContract = (web3?: Web3) => {
 }
 export const getChainlinkOracleContract = (web3?: Web3) => {
   return getContract(chainlinkOracleAbi, getChainlinkOracleAddress(), web3)
+}
+
+export const getNFTPoolContract = (web3?: Web3, address?: string) => {
+  return getContract(nftPoolAbi, address, web3)
 }
