@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
 import { Button, Card, Flex, SecondaryButton, Text } from 'luastarter-uikits'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import get from 'lodash/get'
 import { selectSelectedNFTPool } from 'state/nfts'
@@ -8,6 +8,13 @@ import styled from 'styled-components'
 import useNFTPoolStatus from 'views/NFTs/hook/useNFTPoolStatus'
 import { chain } from 'lodash'
 import { supportIdoNetwork } from 'config/constants/idos'
+import useIsApproved from 'views/Idos/hooks/useIsApproved'
+import { useApproveIdo } from 'hooks/useApproveIdo'
+import { getERC20Contract } from 'utils/contractHelpers'
+import { Contract } from 'web3-eth-contract'
+import useBuyNFT from 'views/NFTs/hook/useBuyNFT'
+import BigNumber from 'bignumber.js'
+import { BIG_TEN } from 'utils/bigNumber'
 
 const Wrapper = styled(Flex)`
   @media (max-width: 991px) {
@@ -132,12 +139,27 @@ const ByNowNFTButton = styled(Button)`
 const TabDetailNFT = ({ activeIndex }) => {
   const [count, setCount] = useState(1)
   const NFTPoolDetail = useSelector(selectSelectedNFTPool)
-  const { account, chainId } = useWeb3React()
+  const { account, chainId, library } = useWeb3React()
   const [activeDetail, setActiveDetail] = useState(null)
   const [poolStatus] = useNFTPoolStatus(NFTPoolDetail)
+  const [isLoading, setIsLoading] = useState(false)
 
   const indexFlatData = get(NFTPoolDetail, 'indexFlat.data', [])
   const networkNFTId = get(NFTPoolDetail, 'indexFlat.networkId', '')
+
+  const addressInoContract = get(activeDetail, 'addressInoContract', '')
+  const addressNftContract = get(activeDetail, 'addressNftContract', '')
+  const nftId = get(activeDetail, 'nftId', '')
+  const priceNFT = get(activeDetail, 'price', '')
+  const paytokenAddress = get(activeDetail, 'payToken.address', '')
+  const paytokenDecimal = get(activeDetail, 'payToken.decimals', 18)
+
+  const paytokenContract = getERC20Contract(library, paytokenAddress, chainId)
+
+  const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(paytokenContract, addressInoContract)
+  const { onApprove } = useApproveIdo(paytokenContract, addressInoContract)
+
+  const { onBuyNFT } = useBuyNFT(addressInoContract, paytokenAddress)
 
   const isOpenNFTPool = useMemo(() => {
     return poolStatus === 'open'
@@ -165,6 +187,36 @@ const TabDetailNFT = ({ activeIndex }) => {
   const increaseCount = () => {
     setCount(count + 1)
   }
+
+  const handleApprove = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      await onApprove()
+      fetchAllowanceData()
+      setIsLoading(false)
+    } catch (e) {
+      setIsLoading(false)
+      console.error(e)
+    }
+  }, [onApprove, fetchAllowanceData])
+
+  const handleBuy = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      await onBuyNFT(
+        addressNftContract,
+        nftId,
+        count,
+        paytokenAddress,
+        new BigNumber(priceNFT * count).times(BIG_TEN.pow(paytokenDecimal || 18)).toString(),
+      )
+      setIsLoading(false)
+    } catch (e) {
+      setIsLoading(false)
+      console.error(e)
+    }
+  }, [onApprove, fetchAllowanceData])
+
   return (
     <Wrapper>
       <CardImage>
@@ -200,11 +252,19 @@ const TabDetailNFT = ({ activeIndex }) => {
           {!isMatchNetworkId && (
             <Text>You need to connect wallet and select {supportIdoNetwork[networkNFTId]} network.</Text>
           )}
-          <ByNowNFTButton disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1}>
-            <Text fontWeight="bold" fontSize="15px" color="#353535">
-              Buy Now
-            </Text>
-          </ByNowNFTButton>
+          {isApproved ? (
+            <ByNowNFTButton disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1} onClick={handleBuy}>
+              <Text fontWeight="bold" fontSize="15px" color="#353535">
+                Buy Now
+              </Text>
+            </ByNowNFTButton>
+          ) : (
+            <ByNowNFTButton disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1} onClick={handleApprove}>
+              <Text fontWeight="bold" fontSize="15px" color="#353535">
+                Approve Pay Token
+              </Text>
+            </ByNowNFTButton>
+          )}
         </BuyNFTBlock>
       </DetailNFTBlock>
     </Wrapper>

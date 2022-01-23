@@ -93,8 +93,7 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
   const NFTPoolDetail = useSelector(selectSelectedNFTPool)
   const { chainId } = useWeb3React()
   const payTokenSymbol = get(NFTPoolDetail, `indexFlat.data[${activeIndex}]payToken.symbol`, null)
-
-  const { indexFlat } = NFTPoolDetail
+  const indexFlat = get(NFTPoolDetail, 'indexFlat', null)
 
   const [totalNFTSold] = useGetNumberOfNftSold(indexFlat)
 
