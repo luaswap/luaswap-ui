@@ -8,12 +8,10 @@ import makeBatchRequest from 'utils/makeBatchRequest'
 
 const useGetNumberOfNftSold = (packNFT) => {
   const { account, chainId } = useWeb3React()
-  //   const nftPoolContract = useNFTPoolContract(contractAddress)
   const [totalNFTSold, setTotalNFTSold] = useState(0)
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(packNFT)
       try {
         const listActionGetNumberSoldNFT = []
         const web3 = getWeb3BasedOnChainId(Number(packNFT.networkId))
@@ -27,19 +25,19 @@ const useGetNumberOfNftSold = (packNFT) => {
           ).call
           listActionGetNumberSoldNFT.push(methodGetNumberOfNftSold)
         })
-
-        console.log(listActionGetNumberSoldNFT)
-
         const dataList = await makeBatchRequest(listActionGetNumberSoldNFT, web3)
-
-        console.log(dataList)
+        setTotalNFTSold(
+          dataList.reduce((totalA, totalB) => {
+            return Number(totalA) + Number(totalB)
+          }, 0),
+        )
       } catch (error) {
         console.log(error)
       }
     }
     fetchData()
   }, [account, chainId])
-  return []
+  return [totalNFTSold]
 }
 
 export default useGetNumberOfNftSold

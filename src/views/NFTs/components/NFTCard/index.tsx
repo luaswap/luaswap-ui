@@ -6,7 +6,8 @@ import { Card, CardBody, Text, Flex, Progress, SecondaryButton, Box, CalendarIco
 import { get } from 'lodash'
 import useGetTimeOfPool from 'views/Idos/hooks/useGetTimeOfPool'
 import useNFTPoolStatus from 'views/NFTs/hook/useNFTPoolStatus'
-import useGetNumberOfNftSold from 'views/NFTs/hook/useNFTContracAction'
+import useGetNumberOfNftSold from 'views/NFTs/hook/useGetNumberOfNftSold'
+import BigNumber from 'bignumber.js'
 
 const PoolInfoBlock = styled.div`
   display: flex;
@@ -106,9 +107,7 @@ const NFTCard = ({ NFTpool }) => {
   const [poolStatus] = useNFTPoolStatus(NFTpool)
   const [poolTimeStamp] = useGetTimeOfPool(NFTpool)
   const { name, img, description, indexFlat, id } = NFTpool
-  const xxx = useGetNumberOfNftSold(indexFlat)
-
-  // console.log(indexFlat)
+  const [totalNFTSold] = useGetNumberOfNftSold(indexFlat)
 
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/detail/${id}`)
@@ -123,8 +122,8 @@ const NFTCard = ({ NFTpool }) => {
   }, [indexFlat, chainId])
 
   const progressPercentage = useMemo(() => {
-    return 0
-  }, [poolStatus])
+    return new BigNumber(totalNFTSold).dividedBy(new BigNumber(totalSale)).multipliedBy(100).toNumber()
+  }, [totalNFTSold, totalSale])
 
   return (
     <CardWrapper>

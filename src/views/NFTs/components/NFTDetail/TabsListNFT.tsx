@@ -1,10 +1,12 @@
 import { useWeb3React } from '@web3-react/core'
+import BigNumber from 'bignumber.js'
 import { get } from 'lodash'
 import { Flex, Progress, Text } from 'luastarter-uikits'
 import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectSelectedNFTPool } from 'state/nfts'
 import styled from 'styled-components'
+import useGetNumberOfNftSold from 'views/NFTs/hook/useGetNumberOfNftSold'
 
 interface TabItemProps {
   isActive?: boolean
@@ -92,6 +94,10 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
   const { chainId } = useWeb3React()
   const payTokenSymbol = get(NFTPoolDetail, `indexFlat.data[${activeIndex}]payToken.symbol`, null)
 
+  const { indexFlat } = NFTPoolDetail
+
+  const [totalNFTSold] = useGetNumberOfNftSold(indexFlat)
+
   const totalSale = useMemo(() => {
     let total = 0
     NFTPoolDetail?.indexFlat.data.forEach((item) => {
@@ -99,6 +105,10 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
     })
     return total
   }, [NFTPoolDetail, chainId])
+
+  const progressPercentage = useMemo(() => {
+    return new BigNumber(totalNFTSold).dividedBy(new BigNumber(totalSale)).multipliedBy(100).toNumber()
+  }, [totalNFTSold, totalSale])
 
   return (
     <Wrapper>
@@ -133,13 +143,19 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
       <ProgressBlock>
         <ProgressTextBlock justifyContent="space-between" alignItems="center">
           <Text fontWeight="normal" fontSize="15px" color="#FFFFFF">
-            4,000/{totalSale} Available{' '}
+            {totalNFTSold}/{totalSale} Available{' '}
           </Text>
           <Text fontWeight="normal" fontSize="15px" color="#FFFFFF">
-            10% sold
+            {progressPercentage}% sold
           </Text>
         </ProgressTextBlock>
-        <Progress variant="round" scale="md" primaryStep={10} colorBackground="#353535" colorBar="#C3C3C3" />
+        <Progress
+          variant="round"
+          scale="md"
+          primaryStep={progressPercentage}
+          colorBackground="#353535"
+          colorBar="#C3C3C3"
+        />
       </ProgressBlock>
     </Wrapper>
   )
