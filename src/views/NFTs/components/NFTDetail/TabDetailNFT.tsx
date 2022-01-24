@@ -200,11 +200,11 @@ const TabDetailNFT = ({ activeIndex }) => {
       await onApprove()
       fetchAllowanceData()
       setIsLoading(false)
-      toastSuccess('Approve Successfully')
+      toastSuccess('Approve successfully')
     } catch (e) {
       setIsLoading(false)
       console.error(e)
-      toastError('Approve Failed')
+      toastError('Request approval failed')
     }
   }, [onApprove, fetchAllowanceData])
 
@@ -219,11 +219,11 @@ const TabDetailNFT = ({ activeIndex }) => {
         new BigNumber(priceNFT * count).times(BIG_TEN.pow(paytokenDecimal || 18)).toString(),
       )
       setIsLoading(false)
-      toastSuccess('Buy Successfully')
+      toastSuccess('Successfully purchase NFTs')
     } catch (e) {
       setIsLoading(false)
       console.error(e)
-      toastError('Buy Failed')
+      toastError('Purchase NFTs failed')
     }
   }, [onApprove, fetchAllowanceData])
 
@@ -262,7 +262,12 @@ const TabDetailNFT = ({ activeIndex }) => {
           {!isMatchNetworkId && (
             <Text>You need to connect wallet and select {supportIdoNetwork[networkNFTId]} network.</Text>
           )}
-          {userBuyCount >= maxBuy && <Text>You cannot buy this NFT. Because max buy for each user is {maxBuy}</Text>}
+
+          {userBuyCount >= maxBuy ? (
+            <Text>Unable to buy due to reaching out the maximum NFT purchase</Text>
+          ) : (
+            <Text>You can purchase up to {maxBuy} NFTs</Text>
+          )}
           {isApproved ? (
             <ByNowNFTButton
               disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1 || isLoading || userBuyCount >= maxBuy}
