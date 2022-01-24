@@ -288,7 +288,7 @@ const TabDetailNFT = ({ activeIndex }) => {
               onClick={handleApprove}
             >
               <Text fontWeight="bold" fontSize="15px" color="#353535">
-                {isLoading ? 'Approving...' : 'Approve Pay Token'}
+                {isLoading ? 'Approving...' : 'Approve Contract'}
               </Text>
             </ByNowNFTButton>
           )}
