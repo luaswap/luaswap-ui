@@ -8,6 +8,7 @@ const initialState = {
   nftPools: [],
   isLoadingNFTDetail: false,
   selectedNFTPool: null,
+  updateNumberOfSoldNFTCount: 0,
 }
 
 export const NFTPoolsSlice = createSlice({
@@ -26,11 +27,15 @@ export const NFTPoolsSlice = createSlice({
     setIsLoadingNFTDetail: (state, action) => {
       state.isLoadingNFTDetail = action.payload
     },
+    setUpdateNumberOfSoldNFTCount: (state, action) => {
+      state.updateNumberOfSoldNFTCount = action.payload
+    },
   },
 })
 
 // Actions
-export const { setNFTPools, setIsLoading, setSelectedNFTPool, setIsLoadingNFTDetail } = NFTPoolsSlice.actions
+export const { setNFTPools, setIsLoading, setSelectedNFTPool, setIsLoadingNFTDetail, setUpdateNumberOfSoldNFTCount } =
+  NFTPoolsSlice.actions
 
 const mapDataNFT = (NFTDetailData) => {
   const indexFlat = {
@@ -78,3 +83,4 @@ export const selectNFTPools = (state) => state.nftPools.nftPools
 export const selectIsLoadingNFTPools = (state) => state.nftPools.isLoading
 export const selectSelectedNFTPool = (state) => state.nftPools.selectedNFTPool
 export const selectIsLoadingNFTDetail = (state) => state.nftPools.isLoadingNFTDetail
+export const selectUpdateNumberOfSoldNFTCount = (state) => state.nftPools.updateNumberOfSoldNFTCount

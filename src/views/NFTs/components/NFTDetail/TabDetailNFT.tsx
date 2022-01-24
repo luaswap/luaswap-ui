@@ -3,7 +3,7 @@ import { Button, Card, Flex, SecondaryButton, Text } from 'luastarter-uikits'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import get from 'lodash/get'
-import { selectSelectedNFTPool } from 'state/nfts'
+import { selectSelectedNFTPool, selectUpdateNumberOfSoldNFTCount, setUpdateNumberOfSoldNFTCount } from 'state/nfts'
 import styled from 'styled-components'
 import useNFTPoolStatus from 'views/NFTs/hook/useNFTPoolStatus'
 import { chain } from 'lodash'
@@ -17,6 +17,7 @@ import BigNumber from 'bignumber.js'
 import { BIG_TEN } from 'utils/bigNumber'
 import useGetUserBuyCount from 'views/NFTs/hook/useGetUserBuyCount'
 import useToast from 'hooks/useToast'
+import { useAppDispatch } from 'state'
 
 const Wrapper = styled(Flex)`
   @media (max-width: 991px) {
@@ -167,6 +168,9 @@ const TabDetailNFT = ({ activeIndex }) => {
 
   const { onBuyNFT } = useBuyNFT(addressInoContract, paytokenAddress)
 
+  const updateNumberOfSoldNFTCount = useSelector(selectUpdateNumberOfSoldNFTCount)
+  const dispatch = useAppDispatch()
+
   const isOpenNFTPool = useMemo(() => {
     return poolStatus === 'open'
   }, [poolStatus, NFTPoolDetail])
@@ -219,6 +223,7 @@ const TabDetailNFT = ({ activeIndex }) => {
         new BigNumber(priceNFT * count).times(BIG_TEN.pow(paytokenDecimal || 18)).toString(),
       )
       setIsLoading(false)
+      dispatch(setUpdateNumberOfSoldNFTCount(updateNumberOfSoldNFTCount + 1))
       toastSuccess('Successfully purchase NFTs')
     } catch (e) {
       setIsLoading(false)
@@ -266,7 +271,7 @@ const TabDetailNFT = ({ activeIndex }) => {
           {userBuyCount >= maxBuy ? (
             <Text>Unable to buy due to reaching out the maximum NFT purchase</Text>
           ) : (
-            <Text>You can purchase up to {maxBuy} NFTs</Text>
+            <Text>You can purchase up to {maxBuy - userBuyCount} NFTs</Text>
           )}
           {isApproved ? (
             <ByNowNFTButton

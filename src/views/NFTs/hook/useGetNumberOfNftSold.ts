@@ -5,10 +5,13 @@ import { useCallback, useEffect, useState } from 'react'
 import { getWeb3BasedOnChainId } from 'utils/web3'
 import { getNFTPoolContract } from 'utils/contractHelpers'
 import makeBatchRequest from 'utils/makeBatchRequest'
+import { useSelector } from 'react-redux'
+import { selectUpdateNumberOfSoldNFTCount } from 'state/nfts'
 
 const useGetNumberOfNftSold = (packNFT) => {
   const { account, chainId } = useWeb3React()
   const [totalNFTSold, setTotalNFTSold] = useState(0)
+  const updateNumberOfSoldNFTCount = useSelector(selectUpdateNumberOfSoldNFTCount)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +39,7 @@ const useGetNumberOfNftSold = (packNFT) => {
       }
     }
     fetchData()
-  }, [account, chainId])
+  }, [account, chainId, updateNumberOfSoldNFTCount])
   return [totalNFTSold]
 }
 
