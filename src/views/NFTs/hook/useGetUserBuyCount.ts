@@ -17,7 +17,9 @@ const useGetUserBuyCount = (contractAddress: string, nftAddress: string) => {
         console.log(error)
       }
     }
-    fetchData()
+    if (contractAddress && nftAddress && account) {
+      fetchData()
+    }
   }, [inoContract, account, nftAddress])
 
   return [Number(userBuyCountVal)]

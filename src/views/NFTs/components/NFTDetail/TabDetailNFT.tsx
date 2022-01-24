@@ -172,7 +172,7 @@ const TabDetailNFT = ({ activeIndex }) => {
   const dispatch = useAppDispatch()
 
   const isOpenNFTPool = useMemo(() => {
-    return poolStatus === 'open'
+    return poolStatus === 'opening'
   }, [poolStatus, NFTPoolDetail])
 
   const isMatchNetworkId = useMemo(() => {
@@ -243,7 +243,10 @@ const TabDetailNFT = ({ activeIndex }) => {
           <CountNumber fontWeight="normal" fontSize="24px" color="#FFFFFF">
             {count}
           </CountNumber>
-          <ButtonCount onClick={increaseCount} disabled={!isMatchNetworkId || !isOpenNFTPool}>
+          <ButtonCount
+            onClick={increaseCount}
+            disabled={!isMatchNetworkId || !isOpenNFTPool || count >= maxBuy - userBuyCount}
+          >
             <Text fontSize="28px">+</Text>
           </ButtonCount>
         </QuantityBlock>
@@ -273,24 +276,28 @@ const TabDetailNFT = ({ activeIndex }) => {
           ) : (
             <Text>You can purchase up to {maxBuy - userBuyCount} NFTs</Text>
           )}
-          {isApproved ? (
-            <ByNowNFTButton
-              disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1 || isLoading || userBuyCount >= maxBuy}
-              onClick={handleBuy}
-            >
-              <Text fontWeight="bold" fontSize="15px" color="#353535">
-                {isLoading ? 'Buying...' : 'Buy Now'}
-              </Text>
-            </ByNowNFTButton>
-          ) : (
-            <ByNowNFTButton
-              disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1 || isLoading || userBuyCount >= maxBuy}
-              onClick={handleApprove}
-            >
-              <Text fontWeight="bold" fontSize="15px" color="#353535">
-                {isLoading ? 'Approving...' : 'Approve Contract'}
-              </Text>
-            </ByNowNFTButton>
+          {!isLoadingApproveStatus && (
+            <>
+              {isApproved ? (
+                <ByNowNFTButton
+                  disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1 || isLoading || userBuyCount >= maxBuy}
+                  onClick={handleBuy}
+                >
+                  <Text fontWeight="bold" fontSize="15px" color="#353535">
+                    {isLoading ? 'Buying...' : 'Buy Now'}
+                  </Text>
+                </ByNowNFTButton>
+              ) : (
+                <ByNowNFTButton
+                  disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1 || isLoading || userBuyCount >= maxBuy}
+                  onClick={handleApprove}
+                >
+                  <Text fontWeight="bold" fontSize="15px" color="#353535">
+                    {isLoading ? 'Approving...' : 'Approve Contract'}
+                  </Text>
+                </ByNowNFTButton>
+              )}
+            </>
           )}
         </BuyNFTBlock>
       </DetailNFTBlock>

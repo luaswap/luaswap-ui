@@ -1,7 +1,8 @@
 import { Card, Flex, Text } from 'luastarter-uikits'
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import useGetCountDownInSeconds from 'views/Idos/hooks/useGetCountDownInSeconds'
+import useNFTPoolStatus from '../hook/useNFTPoolStatus'
 
 const CountDownWrapper = styled(Flex)`
   width: 100%;
@@ -38,7 +39,17 @@ const TimeText = styled(Text)`
 `
 
 const CountDown = ({ NFTPoolDetail }) => {
-  const timeUntil = useGetCountDownInSeconds(NFTPoolDetail.untilOpen || NFTPoolDetail.untilClose)
+  const [poolStatus] = useNFTPoolStatus(NFTPoolDetail)
+  const countDownTime = useMemo(() => {
+    if (poolStatus === 'upcoming') {
+      return NFTPoolDetail.untilOpen
+    }
+    if (poolStatus === 'opening') {
+      return NFTPoolDetail.untilClose
+    }
+    return 0
+  }, [poolStatus, NFTPoolDetail])
+  const timeUntil = useGetCountDownInSeconds(countDownTime)
   return (
     <CountDownWrapper>
       <TimeItem>

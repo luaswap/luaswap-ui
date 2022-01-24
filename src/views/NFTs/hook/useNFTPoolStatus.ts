@@ -5,7 +5,7 @@ import { Pool, PoolStatus } from 'views/Idos/types'
 /**
  * Get pool's current status based on timestamp
  */
-const useNFTPoolStatus = (NFTPool: Pool): [s: PoolStatus, o: number, c: number] => {
+const useNFTPoolStatus = (NFTPool: Pool) => {
   const [status, setStatus] = useState(null)
   const openAtSeconds = useSecondsUntilCurrent(NFTPool?.untilOpen)
   const closedAtSeconds = useSecondsUntilCurrent(NFTPool?.untilClose)
@@ -16,9 +16,9 @@ const useNFTPoolStatus = (NFTPool: Pool): [s: PoolStatus, o: number, c: number] 
       setStatus('preview')
       /* If open time > 0 and closed time > 0 -> the Pool is not open yet */
     } else if (openAtSeconds > 0 && closedAtSeconds > 0) {
-      setStatus('not open')
+      setStatus('upcoming')
     } else if (openAtSeconds <= 0 && closedAtSeconds > 0) {
-      setStatus('open')
+      setStatus('opening')
     } else if (openAtSeconds <= 0 && closedAtSeconds <= 0) {
       setStatus('closed')
     } else {

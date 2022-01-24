@@ -24,24 +24,37 @@ const TextStatus = styled(Text)`
 const DateStamp = ({ NFTPoolDetail }) => {
   const [poolStatus] = useNFTPoolStatus(NFTPoolDetail)
   const [dateValue, setDateValue] = useState(null)
+  const [timeValue, setTimeValue] = useState(null)
+
+  const textShow = useMemo(() => {
+    if (poolStatus === 'upcoming') {
+      return 'Open'
+    }
+    if (poolStatus === 'opening') {
+      return 'Close'
+    }
+    return 'Closed'
+  }, [poolStatus])
 
   useEffect(() => {
     if (NFTPoolDetail) {
       const { untilOpen, untilClose, openAt, closeAt } = NFTPoolDetail
-      if (untilOpen) {
-        setDateValue(format(new Date(openAt * 1000), 'dd MMM, yyyy (hh:mm)'))
-      } else if (untilClose) {
-        setDateValue(format(new Date(closeAt * 1000), 'dd MMM, yyyy (hh:mm)'))
+      if (poolStatus === 'upcoming') {
+        setDateValue(format(new Date(openAt * 1000), 'dd MMM, yyyy'))
+        setTimeValue(format(new Date(openAt * 1000), '(hh:mm)'))
+      } else {
+        setDateValue(format(new Date(closeAt * 1000), 'dd MMM, yyyy'))
+        setTimeValue(format(new Date(closeAt * 1000), '(hh:mm)'))
       }
     }
-  }, [NFTPoolDetail])
+  }, [NFTPoolDetail, poolStatus])
   return (
     <DateStampWrapper>
       <Text fontSize="20px" fontWeight="bold" color="#FFFFFF">
         {dateValue}
       </Text>
       <TextStatus fontSize="14px" fontWeight="bold" color="#8B8B8B">
-        {poolStatus}
+        {textShow} {timeValue}
       </TextStatus>
     </DateStampWrapper>
   )

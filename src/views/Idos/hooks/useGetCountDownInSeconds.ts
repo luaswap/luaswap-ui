@@ -8,6 +8,10 @@ const useGetCountDownInSeconds = (numberOfSeconds) => {
   const [timeUntil, setTimeUntil] = useState(getTimePeriods(countdownInSeconds))
 
   useEffect(() => {
+    setCoundownInSeconds(numberOfSeconds)
+  }, [numberOfSeconds])
+
+  useEffect(() => {
     const countDown = () => {
       timeoutId = setTimeout(() => {
         const secondsLeft = countdownInSeconds - 1

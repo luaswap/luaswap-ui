@@ -81,14 +81,23 @@ const CardStamp = styled.div`
   border-radius: 24px 0px 0px 24px;
 `
 
-const NFTStatus = styled(Text)`
+const NFTStatus = styled(Text)<{ poolStatus: string }>`
   font-weight: bold;
   font-size: 14px;
+  text-transform: capitalize;
+  color: ${(props) => {
+    if (props.poolStatus === 'opening') {
+      return '#fbc662'
+    }
+    if (props.poolStatus === 'upcoming') {
+      return '#30cd60'
+    }
+    return '#8b8b8b'
+  }};
 `
 
 const NFTStatusClosedSoldOut = styled(NFTStatus)`
   color: #8b8b8b;
-  text-transform: capitalize;
 `
 
 const NFTStatusOpening = styled(NFTStatus)`
@@ -143,7 +152,7 @@ const NFTCard = ({ NFTpool }) => {
                 {name}
               </Text>
               <Flex marginBottom="5px" alignItems="center">
-                <NFTStatusClosedSoldOut>{poolStatus}</NFTStatusClosedSoldOut>
+                <NFTStatus poolStatus={poolStatus}>{poolStatus}</NFTStatus>
               </Flex>
             </PoolInfoBlock>
           </Flex>

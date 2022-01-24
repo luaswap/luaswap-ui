@@ -55,7 +55,7 @@ const NFTDetail = () => {
     if (params.id) {
       onGetNFTPoolDetail(params.id)
     }
-  }, [params])
+  }, [params.id])
 
   return (
     <Page>
@@ -67,16 +67,18 @@ const NFTDetail = () => {
         ) : (
           <>
             {NFTPoolDetail && (
-              <TimeSection alignItems="center" justifyContent="center">
-                <TimeBlock>
-                  <DateStamp NFTPoolDetail={NFTPoolDetail} />
-                  {NFTPoolDetail.untilOpen || NFTPoolDetail.untilClose ? (
-                    <CountDown NFTPoolDetail={NFTPoolDetail} />
-                  ) : null}
-                </TimeBlock>
-              </TimeSection>
+              <>
+                <TimeSection alignItems="center" justifyContent="center">
+                  <TimeBlock>
+                    <DateStamp NFTPoolDetail={NFTPoolDetail} />
+                    {NFTPoolDetail.untilOpen || NFTPoolDetail.untilClose ? (
+                      <CountDown NFTPoolDetail={NFTPoolDetail} />
+                    ) : null}
+                  </TimeBlock>
+                </TimeSection>
+                <NFTContentBox />
+              </>
             )}
-            <NFTContentBox />
           </>
         )}
       </Row>
