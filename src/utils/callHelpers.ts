@@ -153,6 +153,36 @@ export const soushHarvestBnb = async (sousChefContract, account) => {
     })
 }
 
+export const getNumberOfNftSold = async (nftPoolContract, addressNFT, nftId) => {
+  return nftPoolContract.methods.numberOfNftSold(addressNFT, nftId).call()
+}
+
+export const buyNFT = async (
+  addressInoContract,
+  account,
+  nftAddress,
+  nftType,
+  quantity,
+  payToken,
+  payAmount,
+  isNativeToken,
+) => {
+  // If pay token is native token, we will send amount or else we wont'
+  return addressInoContract.methods
+    .buyNFT(nftAddress, nftType, quantity, payToken, payAmount)
+    .send({
+      from: account,
+      ...(isNativeToken && { value: payAmount }),
+    })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
+export const userBuyCount = async (addressInoContract, account, nftAddress) => {
+  return addressInoContract.methods.userBuyCount(account).call()
+}
+
 export const stakeLock = async (luaIdoLockContract, account, amount, isNativeToken, tokenAddress) => {
   // If pay token is native token, we will send amount or else we wont'
   return luaIdoLockContract.methods

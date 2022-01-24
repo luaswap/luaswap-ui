@@ -8,6 +8,11 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     href: '/ido',
   },
   {
+    label: t('NFT'),
+    icon: 'NftIcon',
+    href: '/nfts',
+  },
+  {
     label: t('Portfolio'),
     icon: 'ListView',
     href: '/portfolio',

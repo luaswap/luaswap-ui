@@ -10,7 +10,6 @@ const StakeTable: React.FC = () => {
   const estTotalLua = useSelector(selectEstTotalLua)
   const isLoadingStakeTable = useSelector(selectIsLoadingStakeTable)
   const tier = useSelector(selectTier)
-  console.log(tier)
 
   return (
     <>

@@ -22,7 +22,7 @@ export const stakeSlice = createSlice({
     setEstTotalLua: (state, action) => {
       state.estTotalLua = action.payload
     },
-    setIsLoading: (state, action) => {
+    setIsLoadingStake: (state, action) => {
       state.isLoading = action.payload
     },
     setLockDuration: (state, action) => {
@@ -35,7 +35,7 @@ export const stakeSlice = createSlice({
 })
 
 // Actions
-export const { setTokensLock, setEstTotalLua, setIsLoading, setLockDuration, setTier } = stakeSlice.actions
+export const { setTokensLock, setEstTotalLua, setIsLoadingStake, setLockDuration, setTier } = stakeSlice.actions
 
 export const getTokensLock = (account: string, chainId: number) => async (dispatch: AppDispatch) => {
   const titleNetwork = {
@@ -43,7 +43,7 @@ export const getTokensLock = (account: string, chainId: number) => async (dispat
     '1': 'ethereum',
   }
   try {
-    dispatch(setIsLoading(true))
+    dispatch(setIsLoadingStake(true))
     const { details, estLua, tier } = await getUserTokensLock(account)
     dispatch(
       setTokensLock(
@@ -58,11 +58,11 @@ export const getTokensLock = (account: string, chainId: number) => async (dispat
       ),
     )
     dispatch(setEstTotalLua(estLua.toFixed(3)))
-    dispatch(setIsLoading(false))
+    dispatch(setIsLoadingStake(false))
     dispatch(setTier(tier))
   } catch (e) {
     console.log(e)
-    dispatch(setIsLoading(false))
+    dispatch(setIsLoadingStake(false))
   }
 }
 

@@ -10,6 +10,7 @@ import blockReducer from './block'
 import blockfolioReducer from './blockfolio'
 import idosReducer from './ido'
 import stakeReducer from './stake'
+import nftsReducer from './nfts'
 
 const blockfolioConfig = {
   key: 'blockfolio',
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   blockfolio: persistReducer(blockfolioConfig, blockfolioReducer),
   idos: idosReducer,
   stake: stakeReducer,
+  nftPools: nftsReducer,
 })
 
 const store = configureStore({

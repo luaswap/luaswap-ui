@@ -27,6 +27,7 @@ import {
   getLuaIdoContract,
   getLuaVestingContract,
   getLuaIdoLockContract,
+  getNFTPoolContract,
 } from 'utils/contractHelpers'
 
 /**
@@ -165,4 +166,9 @@ export const usePredictionsContract = () => {
 export const useChainlinkOracleContract = () => {
   const web3 = useWeb3()
   return useMemo(() => getChainlinkOracleContract(web3), [web3])
+}
+
+export const useNFTPoolContract = (address) => {
+  const web3 = useWeb3()
+  return useMemo(() => getNFTPoolContract(web3, address), [web3, address])
 }
