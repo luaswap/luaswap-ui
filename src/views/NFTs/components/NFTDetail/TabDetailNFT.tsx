@@ -15,6 +15,8 @@ import { Contract } from 'web3-eth-contract'
 import useBuyNFT from 'views/NFTs/hook/useBuyNFT'
 import BigNumber from 'bignumber.js'
 import { BIG_TEN } from 'utils/bigNumber'
+import useGetUserBuyCount from 'views/NFTs/hook/useGetUserBuyCount'
+import useToast from 'hooks/useToast'
 
 const Wrapper = styled(Flex)`
   @media (max-width: 991px) {
@@ -143,6 +145,7 @@ const TabDetailNFT = ({ activeIndex }) => {
   const [activeDetail, setActiveDetail] = useState(null)
   const [poolStatus] = useNFTPoolStatus(NFTPoolDetail)
   const [isLoading, setIsLoading] = useState(false)
+  const { toastSuccess, toastError } = useToast()
 
   const indexFlatData = get(NFTPoolDetail, 'indexFlat.data', [])
   const networkNFTId = get(NFTPoolDetail, 'indexFlat.networkId', '')
@@ -153,8 +156,11 @@ const TabDetailNFT = ({ activeIndex }) => {
   const priceNFT = get(activeDetail, 'price', '')
   const paytokenAddress = get(activeDetail, 'payToken.address', '')
   const paytokenDecimal = get(activeDetail, 'payToken.decimals', 18)
+  const maxBuy = get(activeDetail, 'maxBuy', 0)
 
   const paytokenContract = getERC20Contract(library, paytokenAddress, chainId)
+
+  const [userBuyCount] = useGetUserBuyCount(addressInoContract, addressNftContract)
 
   const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(paytokenContract, addressInoContract)
   const { onApprove } = useApproveIdo(paytokenContract, addressInoContract)
@@ -194,9 +200,11 @@ const TabDetailNFT = ({ activeIndex }) => {
       await onApprove()
       fetchAllowanceData()
       setIsLoading(false)
+      toastSuccess('Approve Successfully')
     } catch (e) {
       setIsLoading(false)
       console.error(e)
+      toastError('Approve Failed')
     }
   }, [onApprove, fetchAllowanceData])
 
@@ -211,9 +219,11 @@ const TabDetailNFT = ({ activeIndex }) => {
         new BigNumber(priceNFT * count).times(BIG_TEN.pow(paytokenDecimal || 18)).toString(),
       )
       setIsLoading(false)
+      toastSuccess('Buy Successfully')
     } catch (e) {
       setIsLoading(false)
       console.error(e)
+      toastError('Buy Failed')
     }
   }, [onApprove, fetchAllowanceData])
 
@@ -252,16 +262,23 @@ const TabDetailNFT = ({ activeIndex }) => {
           {!isMatchNetworkId && (
             <Text>You need to connect wallet and select {supportIdoNetwork[networkNFTId]} network.</Text>
           )}
+          {userBuyCount >= maxBuy && <Text>You cannot buy this NFT. Because max buy for each user is {maxBuy}</Text>}
           {isApproved ? (
-            <ByNowNFTButton disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1} onClick={handleBuy}>
+            <ByNowNFTButton
+              disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1 || isLoading || userBuyCount >= maxBuy}
+              onClick={handleBuy}
+            >
               <Text fontWeight="bold" fontSize="15px" color="#353535">
-                Buy Now
+                {isLoading ? 'Buying...' : 'Buy Now'}
               </Text>
             </ByNowNFTButton>
           ) : (
-            <ByNowNFTButton disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1} onClick={handleApprove}>
+            <ByNowNFTButton
+              disabled={!isMatchNetworkId || !isOpenNFTPool || count < 1 || isLoading || userBuyCount >= maxBuy}
+              onClick={handleApprove}
+            >
               <Text fontWeight="bold" fontSize="15px" color="#353535">
-                Approve Pay Token
+                {isLoading ? 'Approving...' : 'Approve Pay Token'}
               </Text>
             </ByNowNFTButton>
           )}

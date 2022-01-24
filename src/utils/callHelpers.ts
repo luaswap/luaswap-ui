@@ -178,3 +178,7 @@ export const buyNFT = async (
       return tx.transactionHash
     })
 }
+
+export const userBuyCount = async (addressInoContract, account, nftAddress) => {
+  return addressInoContract.methods.userBuyCount(account).call()
+}
