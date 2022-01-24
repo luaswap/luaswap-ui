@@ -9,6 +9,7 @@ const initialState = {
   tokensLock: [],
   estTotalLua: 0,
   lockDuration: 0,
+  tier: 0,
 }
 
 export const stakeSlice = createSlice({
@@ -27,11 +28,14 @@ export const stakeSlice = createSlice({
     setLockDuration: (state, action) => {
       state.lockDuration = action.payload
     },
+    setTier: (state, action) => {
+      state.tier = action.payload
+    },
   },
 })
 
 // Actions
-export const { setTokensLock, setEstTotalLua, setIsLoading, setLockDuration } = stakeSlice.actions
+export const { setTokensLock, setEstTotalLua, setIsLoading, setLockDuration, setTier } = stakeSlice.actions
 
 export const getTokensLock = (account: string, chainId: number) => async (dispatch: AppDispatch) => {
   const titleNetwork = {
@@ -40,7 +44,7 @@ export const getTokensLock = (account: string, chainId: number) => async (dispat
   }
   try {
     dispatch(setIsLoading(true))
-    const { details, estLua } = await getUserTokensLock(account)
+    const { details, estLua, tier } = await getUserTokensLock(account)
     dispatch(
       setTokensLock(
         details[titleNetwork[chainId]].map((token) => {
@@ -55,6 +59,7 @@ export const getTokensLock = (account: string, chainId: number) => async (dispat
     )
     dispatch(setEstTotalLua(estLua.toFixed(3)))
     dispatch(setIsLoading(false))
+    dispatch(setTier(tier))
   } catch (e) {
     console.log(e)
     dispatch(setIsLoading(false))
@@ -68,3 +73,4 @@ export const selectTokensLock = (state) => state.stake.tokensLock
 export const selectEstTotalLua = (state) => state.stake.estTotalLua
 export const selectLockDuration = (state) => state.stake.lockDuration
 export const selectIsLoadingStakeTable = (state) => state.stake.isLoading
+export const selectTier = (state) => state.stake.tier

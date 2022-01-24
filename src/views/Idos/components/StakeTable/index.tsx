@@ -1,14 +1,16 @@
 import { Spinner, Text } from 'luastarter-uikits'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { selectEstTotalLua, selectIsLoadingStakeTable, selectTokensLock } from 'state/stake'
+import { selectEstTotalLua, selectIsLoadingStakeTable, selectTier, selectTokensLock } from 'state/stake'
 import RowItem from './RowItem'
-import { Table, TBody, TD, TextHeader, TFooter, THead, TR, WrapperLoadingTable } from './StakeTableStyled'
+import { Table, TBody, TD, TextHeader, TFooter, THead, TierStamp, TR, WrapperLoadingTable } from './StakeTableStyled'
 
 const StakeTable: React.FC = () => {
   const tokensLock = useSelector(selectTokensLock)
   const estTotalLua = useSelector(selectEstTotalLua)
   const isLoadingStakeTable = useSelector(selectIsLoadingStakeTable)
+  const tier = useSelector(selectTier)
+  console.log(tier)
 
   return (
     <>
@@ -53,6 +55,11 @@ const StakeTable: React.FC = () => {
                 </TD>
                 <TD justifyContent="flex-end" width="15%" />
                 <TD justifyContent="flex-end" width="27%">
+                  <TierStamp>
+                    <Text fontSize="10px" fontWeight="bold" color="#8B8B8B">
+                      TIER {tier}
+                    </Text>
+                  </TierStamp>
                   <Text fontSize="12px">{estTotalLua}</Text>
                 </TD>
                 <TD justifyContent="flex-end" width="28%" />

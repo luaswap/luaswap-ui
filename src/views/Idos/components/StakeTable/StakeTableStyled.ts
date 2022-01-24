@@ -209,3 +209,13 @@ export const Overlay = styled.div`
 export const WrapperRow = styled.div`
   border-bottom: 1px solid #7e7d7d;
 `
+
+export const TierStamp = styled.span`
+  padding: 4px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #353535;
+  border-radius: 20px;
+  margin-right: 8px;
+`
