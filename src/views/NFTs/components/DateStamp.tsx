@@ -26,6 +26,10 @@ const DateStamp = ({ NFTPoolDetail }) => {
   const [dateValue, setDateValue] = useState(null)
   const [timeValue, setTimeValue] = useState(null)
 
+  const pad2 = (number) => {
+    return (number < 10 ? '0' : '') + number
+  }
+
   const textShow = useMemo(() => {
     if (poolStatus === 'upcoming') {
       return 'Open'
@@ -41,10 +45,12 @@ const DateStamp = ({ NFTPoolDetail }) => {
       const { untilOpen, untilClose, openAt, closeAt } = NFTPoolDetail
       if (poolStatus === 'upcoming') {
         setDateValue(format(new Date(openAt * 1000), 'dd MMM, yyyy'))
-        setTimeValue(format(new Date(openAt * 1000), '(hh:mm)'))
+        setTimeValue(`(${new Date(openAt * 1000).getUTCHours()}:${new Date(openAt * 1000).getUTCMinutes()} UTC)`)
       } else {
         setDateValue(format(new Date(closeAt * 1000), 'dd MMM, yyyy'))
-        setTimeValue(format(new Date(closeAt * 1000), '(hh:mm)'))
+        setTimeValue(
+          `(${pad2(new Date(closeAt * 1000).getUTCHours())}:${pad2(new Date(closeAt * 1000).getUTCMinutes())} UTC)`,
+        )
       }
     }
   }, [NFTPoolDetail, poolStatus])

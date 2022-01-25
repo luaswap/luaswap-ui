@@ -114,6 +114,7 @@ const NFTTitle = styled(Text)`
 
 const NFTDesc = styled(Text)`
   line-height: 24px;
+  white-space: pre-line;
 `
 
 const NFTTotalPrice = styled(Text)``
