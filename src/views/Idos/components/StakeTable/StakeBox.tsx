@@ -4,7 +4,7 @@ import { useApprove } from 'hooks/useApprove'
 import { useApproveIdo } from 'hooks/useApproveIdo'
 import useStakeLock from 'views/Idos/hooks/useStakeLock'
 import { useTokenBalance } from 'hooks/useTokenBalance'
-import { Text, useModal } from 'luastarter-uikits'
+import { Spinner, Text, useModal } from 'luastarter-uikits'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { getTokensAccept, getValueTokenByLUA } from 'state/stake/getStake'
 import { BIG_TEN } from 'utils/bigNumber'
@@ -176,7 +176,7 @@ const StakeBox = () => {
       <StakeBoxDropDown tokensAccept={tokensAccept} tokenSelected={tokenSelected} setTokenSelected={setTokenSelected} />
       {!isApproved ? (
         <ButtonStakeBox scale="md" onClick={handleApprove} disabled={isLoading || !inputValue || !tokenSelected}>
-          {!isLoading ? 'Approve' : 'Approving...'}
+          {!isLoading && !isLoadingApproveStatus ? 'Approve' : 'Approving...'}
         </ButtonStakeBox>
       ) : (
         <ButtonStakeBox scale="md" onClick={onClickButtonStake} disabled={isLoading || !inputValue || !tokenSelected}>
