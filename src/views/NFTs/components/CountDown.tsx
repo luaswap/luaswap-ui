@@ -54,15 +54,15 @@ const CountDown = ({ NFTPoolDetail }) => {
     <CountDownWrapper>
       <TimeItem>
         <TimeValue>{timeUntil.hours}</TimeValue>
-        <TimeText>HOUR</TimeText>
+        <TimeText>HOURS</TimeText>
       </TimeItem>
       <TimeItem>
         <TimeValue>{timeUntil.minutes}</TimeValue>
-        <TimeText>MIN</TimeText>
+        <TimeText>MINS</TimeText>
       </TimeItem>
       <TimeItem>
         <TimeValue>{timeUntil.seconds}</TimeValue>
-        <TimeText>SEC</TimeText>
+        <TimeText>SECS</TimeText>
       </TimeItem>
     </CountDownWrapper>
   )
