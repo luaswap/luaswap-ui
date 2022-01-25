@@ -6,7 +6,7 @@ import useStakeLock from 'views/Idos/hooks/useStakeLock'
 import { useTokenBalance } from 'hooks/useTokenBalance'
 import { Text, useModal } from 'luastarter-uikits'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { getTokensAccept } from 'state/stake/getStake'
+import { getTokensAccept, getValueTokenByLUA } from 'state/stake/getStake'
 import { BIG_TEN } from 'utils/bigNumber'
 import { getERC20Contract } from 'utils/contractHelpers'
 import useIsApproved from 'views/Idos/hooks/useIsApproved'
@@ -24,6 +24,7 @@ import {
   WrappInputOnStakeBox,
 } from './StakeTableStyled'
 import ConfirmModal from './ConfirmModal'
+import { lockLPAddressOBJ } from './constants/lockLPContractAddress'
 
 interface TokenSelectedModel {
   address: string
@@ -37,6 +38,7 @@ const StakeBox = () => {
   const [inputValue, setInputValue] = useState('')
   const [paytokenContract, setPayTokenContract] = useState({} as Contract)
   const tokenValue = useTokenBalance(tokenSelected ? tokenSelected?.address : '')
+  const [estimateLuaQty, setEstimateLuaQty] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const dispath = useAppDispatch()
@@ -47,17 +49,15 @@ const StakeBox = () => {
 
   const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(
     paytokenContract,
-    '0x0a875D0cE6c8A6C49FCC848974C60d73f83CEcB6',
+    lockLPAddressOBJ[cid],
   )
 
-  const { onApprove } = useApproveIdo(paytokenContract, '0x0a875D0cE6c8A6C49FCC848974C60d73f83CEcB6')
-  const { onStakeLock } = useStakeLock(
-    '0x0a875D0cE6c8A6C49FCC848974C60d73f83CEcB6',
-    tokenSelected ? tokenSelected?.address : '',
-  )
+  const { onApprove } = useApproveIdo(paytokenContract, lockLPAddressOBJ[cid])
+  const { onStakeLock } = useStakeLock(lockLPAddressOBJ[cid], tokenSelected ? tokenSelected?.address : '')
 
   useEffect(() => {
     clearInputValue()
+    setEstimateLuaQty(0)
     if (tokenSelected) {
       setPayTokenContract(getERC20Contract(library, tokenSelected?.address, cid))
     }
@@ -115,8 +115,10 @@ const StakeBox = () => {
     }
   }, [cid])
 
-  const onChangeInput = (e) => {
+  const onChangeInput = async (e) => {
     setInputValue(e.target.value)
+    const data = await getValueTokenByLUA(tokenSelected?.address, cid, Number(e.target.value))
+    setEstimateLuaQty(data?.estimateLuaQty || 0)
   }
 
   const onClickMax = () => {
@@ -159,7 +161,7 @@ const StakeBox = () => {
 
   return (
     <StakeBoxCard>
-      <Text fontSize="14px">Estimate: 10,000 Lua</Text>
+      <Text fontSize="14px">Estimate: {Number(estimateLuaQty).toFixed(3)} Lua</Text>
       <WrappInputOnStakeBox>
         <InputOnStakeBox
           type="text"

@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { BIG_TEN } from 'utils/bigNumber'
 import useGetTokensLock from 'views/Idos/hooks/useGetTokensLock'
 import useToast from 'hooks/useToast'
+import { useWeb3React } from '@web3-react/core'
 import {
   Arrow,
   InputOnRow,
@@ -16,12 +17,14 @@ import {
   WrappInputOnRow,
 } from './StakeTableStyled'
 import ConfirmModal from './ConfirmModal'
+import { lockLPAddressOBJ } from './constants/lockLPContractAddress'
 
 const RowItem = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [valueTokenToLua, setValueTokenToLua] = useState(0)
-  const { onUnStakeLock } = useStakeLock('0x0a875D0cE6c8A6C49FCC848974C60d73f83CEcB6', item?.address)
+  const { chainId: cid } = useWeb3React()
+  const { onUnStakeLock } = useStakeLock(lockLPAddressOBJ[cid], item?.address)
   const { onGetTokensLock } = useGetTokensLock()
   const [isLoading, setIsLoading] = useState(false)
   const { toastSuccess, toastError } = useToast()
