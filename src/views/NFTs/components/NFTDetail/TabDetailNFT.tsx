@@ -284,16 +284,6 @@ const TabDetailNFT = ({ activeIndex }) => {
           <NFTTotalPrice fontWeight="bold" fontSize="24px" color="#FFFFFF">
             {activeDetail?.price * count} {payTokenSymbol}
           </NFTTotalPrice>
-          {isMatchNetworkId && (
-            <>
-              {userBuyCount >= maxBuy ? (
-                <Text>Unable to buy due to reaching out the maximum NFT purchase.</Text>
-              ) : (
-                <Text>You can purchase up to {maxBuy - userBuyCount} NFTs.</Text>
-              )}
-            </>
-          )}
-
           {totalSale === totalNFTSold ? (
             <ButtonSoldOut disabled>
               <Text fontWeight="bold" fontSize="15px" color="#353535">
@@ -331,6 +321,19 @@ const TabDetailNFT = ({ activeIndex }) => {
             <Text color="#DA4343" marginTop="15px">
               You need to connect wallet and select {supportIdoNetwork[networkNFTId]} network.
             </Text>
+          )}
+          {isMatchNetworkId && (
+            <>
+              {userBuyCount >= maxBuy ? (
+                <Text color="#DA4343" marginTop="15px">
+                  Unable to buy due to reaching out the maximum NFT purchase.
+                </Text>
+              ) : (
+                <Text color="#DA4343" marginTop="15px">
+                  You can purchase up to {maxBuy - userBuyCount} NFTs.
+                </Text>
+              )}
+            </>
           )}
         </BuyNFTBlock>
       </DetailNFTBlock>
