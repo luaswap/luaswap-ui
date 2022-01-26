@@ -408,7 +408,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             </ProcessColumnWrapper>
           </Flex>
         )}
-        {isShowPoolData && isShowTierInfor && (
+        {isShowPoolData && isShowTierInfor && !isExclusive && (
           <InfoText>
             (*) You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of
             the percentage shown.
