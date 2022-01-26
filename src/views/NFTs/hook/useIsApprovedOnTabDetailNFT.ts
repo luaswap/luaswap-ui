@@ -38,7 +38,6 @@ const useIsApprovedOnTabDetailNFT = (
   }
 
   useEffect(() => {
-    //   console.log(networkNFTId, chainId, tokenContract)
     if (tokenContract.methods && account && spenderAddress && !!networkNFTId && chainId === Number(networkNFTId)) {
       fetchAllowanceData()
     }
