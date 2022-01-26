@@ -25,6 +25,7 @@ import {
 } from './StakeTableStyled'
 import ConfirmModal from './ConfirmModal'
 import { lockLPAddressOBJ } from './constants/lockLPContractAddress'
+import LoaderIcon from './StakeSpinner'
 
 interface TokenSelectedModel {
   address: string
@@ -174,13 +175,25 @@ const StakeBox = () => {
         <MaxButtomOnStakeBox onClick={onClickMax}>Max</MaxButtomOnStakeBox>
       </WrappInputOnStakeBox>
       <StakeBoxDropDown tokensAccept={tokensAccept} tokenSelected={tokenSelected} setTokenSelected={setTokenSelected} />
-      {!isApproved ? (
-        <ButtonStakeBox scale="md" onClick={handleApprove} disabled={isLoading || !inputValue || !tokenSelected}>
-          {!isLoading && !isLoadingApproveStatus ? 'Approve' : 'Approving...'}
-        </ButtonStakeBox>
+      {tokenSelected ? (
+        <>
+          {!isApproved ? (
+            <ButtonStakeBox scale="md" onClick={handleApprove} disabled={isLoading || !inputValue || !tokenSelected}>
+              {!isLoading && !isLoadingApproveStatus ? 'Approve' : <LoaderIcon />}
+            </ButtonStakeBox>
+          ) : (
+            <ButtonStakeBox
+              scale="md"
+              onClick={onClickButtonStake}
+              disabled={isLoading || !inputValue || !tokenSelected}
+            >
+              {!isLoading ? 'Stake' : <LoaderIcon />}
+            </ButtonStakeBox>
+          )}
+        </>
       ) : (
-        <ButtonStakeBox scale="md" onClick={onClickButtonStake} disabled={isLoading || !inputValue || !tokenSelected}>
-          {!isLoading ? 'Stake' : 'Staking...'}
+        <ButtonStakeBox scale="md" disabled>
+          <LoaderIcon />
         </ButtonStakeBox>
       )}
     </StakeBoxCard>

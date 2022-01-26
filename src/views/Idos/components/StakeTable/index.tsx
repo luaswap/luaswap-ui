@@ -3,6 +3,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectEstTotalLua, selectIsLoadingStakeTable, selectTier, selectTokensLock } from 'state/stake'
 import RowItem from './RowItem'
+import LoaderIcon from './StakeSpinner'
 import { Table, TBody, TD, TextHeader, TFooter, THead, TierStamp, TR, WrapperLoadingTable } from './StakeTableStyled'
 
 const StakeTable: React.FC = () => {
@@ -15,7 +16,7 @@ const StakeTable: React.FC = () => {
     <>
       {isLoadingStakeTable ? (
         <WrapperLoadingTable>
-          <Spinner />
+          <LoaderIcon />
         </WrapperLoadingTable>
       ) : (
         <div

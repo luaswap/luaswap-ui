@@ -18,6 +18,7 @@ import {
 } from './StakeTableStyled'
 import ConfirmModal from './ConfirmModal'
 import { lockLPAddressOBJ } from './constants/lockLPContractAddress'
+import LoaderIcon from './StakeSpinner'
 
 const RowItem = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -121,7 +122,7 @@ const RowItem = ({ item }) => {
               onClick={onClickUnstakeButton}
             >
               <Text fontSize="10px" color="#FABC46">
-                {!isLoading ? 'UNSTAKE' : 'UNSTAKING...'}
+                {!isLoading ? 'UNSTAKE' : <LoaderIcon innerWidth="20px" outerWidth="35px" />}
               </Text>
             </SecondaryButtonRowItem>
           </TD>

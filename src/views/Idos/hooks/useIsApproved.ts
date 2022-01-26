@@ -34,11 +34,11 @@ const useIsApproved = (tokenContract: Contract, spenderAddress: string): [a: boo
   }
 
   useEffect(() => {
-    if (tokenContract && account && spenderAddress) {
+    if (tokenContract.methods && account && spenderAddress) {
       fetchAllowanceData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, spenderAddress])
+  }, [account, spenderAddress, tokenContract])
 
   return [isApproved, fetchAllowanceData, isLoadingApproved]
 }
