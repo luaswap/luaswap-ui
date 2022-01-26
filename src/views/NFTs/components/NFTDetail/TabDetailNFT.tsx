@@ -6,9 +6,7 @@ import get from 'lodash/get'
 import { selectSelectedNFTPool, selectUpdateNumberOfSoldNFTCount, setUpdateNumberOfSoldNFTCount } from 'state/nfts'
 import styled from 'styled-components'
 import useNFTPoolStatus from 'views/NFTs/hook/useNFTPoolStatus'
-import { chain } from 'lodash'
 import { supportIdoNetwork } from 'config/constants/idos'
-import useIsApproved from 'views/Idos/hooks/useIsApproved'
 import { useApproveIdo } from 'hooks/useApproveIdo'
 import { getERC20Contract } from 'utils/contractHelpers'
 import { Contract } from 'web3-eth-contract'
@@ -19,6 +17,8 @@ import useGetUserBuyCount from 'views/NFTs/hook/useGetUserBuyCount'
 import useToast from 'hooks/useToast'
 import { useAppDispatch } from 'state'
 import useGetNumberOfNftSold from 'views/NFTs/hook/useGetNumberOfNftSold'
+import useIsApprovedOnTabDetailNFT from 'views/NFTs/hook/useIsApprovedOnTabDetailNFT'
+import LoaderIcon from 'views/Idos/components/StakeTable/StakeSpinner'
 
 const Wrapper = styled(Flex)`
   @media (max-width: 991px) {
@@ -168,12 +168,20 @@ const TabDetailNFT = ({ activeIndex }) => {
 
   const paytokenContract = getERC20Contract(library, paytokenAddress, chainId)
 
-  const [userBuyCount] = useGetUserBuyCount(addressInoContract, addressNftContract)
+  const [userBuyCount, isLoadingGetUserBuyCount] = useGetUserBuyCount(
+    addressInoContract,
+    addressNftContract,
+    networkNFTId,
+  )
 
-  const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApproved(paytokenContract, addressInoContract)
+  const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApprovedOnTabDetailNFT(
+    paytokenContract,
+    addressInoContract,
+    networkNFTId,
+  )
   const { onApprove } = useApproveIdo(paytokenContract, addressInoContract)
 
-  const { onBuyNFT } = useBuyNFT(addressInoContract, paytokenAddress)
+  const { onBuyNFT } = useBuyNFT(addressInoContract, paytokenAddress, networkNFTId)
 
   const updateNumberOfSoldNFTCount = useSelector(selectUpdateNumberOfSoldNFTCount)
   const dispatch = useAppDispatch()
@@ -292,7 +300,7 @@ const TabDetailNFT = ({ activeIndex }) => {
             </ButtonSoldOut>
           ) : (
             <>
-              {!isLoadingApproveStatus && (
+              {!isLoadingApproveStatus && !isLoadingGetUserBuyCount ? (
                 <>
                   {isApproved ? (
                     <ByNowNFTButton
@@ -314,6 +322,10 @@ const TabDetailNFT = ({ activeIndex }) => {
                     </ByNowNFTButton>
                   )}
                 </>
+              ) : (
+                <ByNowNFTButton disabled>
+                  <LoaderIcon />
+                </ByNowNFTButton>
               )}
             </>
           )}

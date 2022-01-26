@@ -7,7 +7,11 @@ import { Contract } from 'web3-eth-contract'
  * Check if user approve to spend the pay token amount or not
  * If the pay token is native token - we can skip this step
  */
-const useIsApproved = (tokenContract: Contract, spenderAddress: string): [a: boolean, b: () => any, c: boolean] => {
+const useIsApprovedOnTabDetailNFT = (
+  tokenContract: Contract,
+  spenderAddress: string,
+  networkNFTId: string,
+): [a: boolean, b: () => any, c: boolean] => {
   const [isApproved, setIsApproved] = useState(false)
   const [isLoadingApproved, setIsLoadingApproved] = useState(true)
   const { account, chainId } = useWeb3React()
@@ -34,13 +38,14 @@ const useIsApproved = (tokenContract: Contract, spenderAddress: string): [a: boo
   }
 
   useEffect(() => {
-    if (tokenContract.methods && account && spenderAddress) {
+    //   console.log(networkNFTId, chainId, tokenContract)
+    if (tokenContract.methods && account && spenderAddress && !!networkNFTId && chainId === Number(networkNFTId)) {
       fetchAllowanceData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, spenderAddress, tokenContract])
+  }, [account, spenderAddress, networkNFTId, chainId])
 
   return [isApproved, fetchAllowanceData, isLoadingApproved]
 }
 
-export default useIsApproved
+export default useIsApprovedOnTabDetailNFT

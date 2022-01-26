@@ -4,8 +4,8 @@ import { ZERO_ADDRESS } from 'config/constants/idos'
 import { useNFTPoolContract } from 'hooks/useContract'
 import { buyNFT } from 'utils/callHelpers'
 
-const useBuyNFT = (contractAddress: string, payTokenAddress: string) => {
-  const { account } = useWeb3React()
+const useBuyNFT = (contractAddress: string, payTokenAddress: string, networkNFTId: string) => {
+  const { account, chainId } = useWeb3React()
   const inoContract = useNFTPoolContract(contractAddress)
   const isNativeToken = payTokenAddress === ZERO_ADDRESS
 
@@ -23,7 +23,7 @@ const useBuyNFT = (contractAddress: string, payTokenAddress: string) => {
       )
       console.info(txHash)
     },
-    [account, inoContract, isNativeToken, payTokenAddress],
+    [account, inoContract, isNativeToken, payTokenAddress, networkNFTId, chainId],
   )
 
   return { onBuyNFT: handleBuyNFT }

@@ -193,7 +193,7 @@ const StakeBox = () => {
         </>
       ) : (
         <ButtonStakeBox scale="md" disabled>
-          <LoaderIcon />
+          Stake
         </ButtonStakeBox>
       )}
     </StakeBoxCard>
