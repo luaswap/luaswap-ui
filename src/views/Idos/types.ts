@@ -52,6 +52,7 @@ export interface Pool {
   description: string
   isPresent: boolean
   isWhitelist?: boolean
+  isExclusive?: boolean
   whitelistLink?: string
   openAt: number
   closeAt: number

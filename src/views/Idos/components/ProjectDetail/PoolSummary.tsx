@@ -187,7 +187,7 @@ const PoolInfoSocialBlock = styled.div`
 `
 
 const SecondaryButtonPool = styled(SecondaryButton)`
-  width: 165px;
+  width: auto;
   margin-bottom: 0;
   height: 28px;
   margin-left: 10px;
@@ -195,6 +195,13 @@ const SecondaryButtonPool = styled(SecondaryButton)`
 
 const SecondaryButtonWhite = styled(SecondaryButtonPool)`
   border-color: #fffcf6;
+`
+
+const ExclusiveButton = styled(SecondaryButtonPool)`
+  border: none;
+  background-color: #606060;
+  padding: 8px 16px;
+  width: auto;
 `
 
 interface CardWrapperProps {
@@ -224,7 +231,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
   const { socials, timeVesting, percentVesting, versionContract, isVesting } = currentPoolData
-  const { whitelistLink, isWhitelist } = currentPoolData
+  const { whitelistLink, isWhitelist, isExclusive } = currentPoolData
   const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
@@ -319,18 +326,28 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               {get(currentPoolData, 'network', []).map((network) => {
                 return <YellowCard key={network}>{network}</YellowCard>
               })}
-              {!isWhitelist ? (
-                <SecondaryButtonPool scale="sm" mb="15px">
-                  <Text fontSize="12px" color="#FABC46">
-                    TIER MEMBER
+              {isExclusive ? (
+                <ExclusiveButton scale="sm" mb="15px">
+                  <Text fontSize="10px" color="#FABC46" fontWeight="bold">
+                    EXCLUSIVE POOL
                   </Text>
-                </SecondaryButtonPool>
+                </ExclusiveButton>
               ) : (
-                <SecondaryButtonWhite scale="sm" mb="15px">
-                  <Text fontSize="12px" color="#FFFCF6">
-                    WHITELIST MEMBER
-                  </Text>
-                </SecondaryButtonWhite>
+                <>
+                  {!isWhitelist ? (
+                    <SecondaryButtonPool scale="sm" mb="15px">
+                      <Text fontSize="10px" color="#FABC46" fontWeight="bold">
+                        TIER MEMBER
+                      </Text>
+                    </SecondaryButtonPool>
+                  ) : (
+                    <SecondaryButtonWhite scale="sm" mb="15px">
+                      <Text fontSize="10px" color="#FFFCF6" fontWeight="bold">
+                        WHITELIST MEMBER
+                      </Text>
+                    </SecondaryButtonWhite>
+                  )}
+                </>
               )}
             </PoolTag>
           </PoolInfoSocialBlock>
