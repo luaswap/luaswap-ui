@@ -6,9 +6,10 @@ let timeoutId = null
 const useGetCountDownInSeconds = (numberOfSeconds) => {
   const [countdownInSeconds, setCoundownInSeconds] = useState(numberOfSeconds)
   const [timeUntil, setTimeUntil] = useState(getTimePeriods(countdownInSeconds))
-
   useEffect(() => {
     setCoundownInSeconds(numberOfSeconds)
+    setTimeUntil(numberOfSeconds)
+    clearTimeout(timeoutId)
   }, [numberOfSeconds])
 
   useEffect(() => {
