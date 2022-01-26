@@ -31,13 +31,13 @@ const StakeTable: React.FC = () => {
                 <TD justifyContent="flex-start" width="23%">
                   <TextHeader fontSize="12px">TOKEN</TextHeader>
                 </TD>
-                <TD justifyContent="flex-end" width="15%">
+                <TD justifyContent="center" width="20%">
                   <TextHeader fontSize="12px">QUANTITY</TextHeader>
                 </TD>
-                <TD justifyContent="flex-end" width="27%">
+                <TD justifyContent="center" width="27%">
                   <TextHeader fontSize="12px">ESTIMATE LUA</TextHeader>
                 </TD>
-                <TD justifyContent="flex-end" width="28%">
+                <TD justifyContent="flex-start" width="23%">
                   <TextHeader fontSize="12px">LOCKED UNTIL</TextHeader>
                 </TD>
                 <TD justifyContent="flex-end" width="7%" />
@@ -53,8 +53,8 @@ const StakeTable: React.FC = () => {
                 <TD justifyContent="flex-start" width="23%">
                   <Text fontSize="12px">Total</Text>
                 </TD>
-                <TD justifyContent="flex-end" width="15%" />
-                <TD justifyContent="flex-end" width="27%">
+                <TD justifyContent="center" width="20%" />
+                <TD justifyContent="center" width="27%">
                   <TierStamp>
                     <Text fontSize="10px" fontWeight="bold" color="#8B8B8B">
                       TIER {tier}
@@ -62,7 +62,7 @@ const StakeTable: React.FC = () => {
                   </TierStamp>
                   <Text fontSize="12px">{estTotalLua}</Text>
                 </TD>
-                <TD justifyContent="flex-end" width="28%" />
+                <TD justifyContent="flex-start" width="23%" />
                 <TD justifyContent="flex-end" width="7%" />
               </TR>
             </TFooter>

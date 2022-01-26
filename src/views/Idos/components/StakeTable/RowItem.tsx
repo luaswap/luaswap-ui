@@ -85,13 +85,13 @@ const RowItem = ({ item }) => {
         <TD justifyContent="flex-start" width="23%">
           <Text fontSize="12px">{item.name}</Text>
         </TD>
-        <TD justifyContent="flex-end" width="15%">
+        <TD justifyContent="center" width="20%">
           <Text fontSize="12px">{item.quantity}</Text>
         </TD>
-        <TD justifyContent="flex-end" width="27%">
+        <TD justifyContent="center" width="27%">
           <Text fontSize="12px">{item.luaEstimate}</Text>
         </TD>
-        <TD justifyContent="flex-end" width="28%">
+        <TD justifyContent="flex-start" width="23%">
           <Text fontSize="12px">{item.unlockAt}</Text>
         </TD>
         <TD justifyContent="flex-end" width="7%">
