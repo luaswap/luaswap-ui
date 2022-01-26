@@ -178,14 +178,18 @@ const StakeBox = () => {
       {tokenSelected ? (
         <>
           {!isApproved ? (
-            <ButtonStakeBox scale="md" onClick={handleApprove} disabled={isLoading || !inputValue || !tokenSelected}>
+            <ButtonStakeBox
+              scale="md"
+              onClick={handleApprove}
+              disabled={isLoading || !Number(inputValue) || !tokenSelected}
+            >
               {!isLoading && !isLoadingApproveStatus ? 'Approve' : <LoaderIcon />}
             </ButtonStakeBox>
           ) : (
             <ButtonStakeBox
               scale="md"
               onClick={onClickButtonStake}
-              disabled={isLoading || !inputValue || !tokenSelected}
+              disabled={isLoading || !Number(inputValue) || !tokenSelected}
             >
               {!isLoading ? 'Stake' : <LoaderIcon />}
             </ButtonStakeBox>
