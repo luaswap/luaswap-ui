@@ -33,6 +33,7 @@ export const API_BLOCKFOLIO = 'https://api.luaswap.org/api-v3/'
 export const API_ETH = 'https://wallet.tomochain.com/api/luaswap'
 export const API_TOMO = 'https://wallet.tomochain.com/api/luaswap/tomochain'
 export const API_IDO_URL = 'https://api.luaswap.org/api/ido'
+// export const API_IDO_URL = 'https://api.luaswap.org/api-test/ido'
 export const API_URL: { [chainId in ChainId]: string } = {
   1: 'https://wallet.tomochain.com/api/luaswap',
   3: '',
