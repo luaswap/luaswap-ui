@@ -28,19 +28,22 @@ const StakeTable: React.FC = () => {
           <Table>
             <THead>
               <TR>
-                <TD justifyContent="flex-start" width="23%">
+                <TD justifyContent="flex-start" width="15%">
                   <TextHeader fontSize="12px">TOKEN</TextHeader>
                 </TD>
-                <TD justifyContent="center" width="20%">
+                <TD justifyContent="flex-end" width="20%">
                   <TextHeader fontSize="12px">QUANTITY</TextHeader>
                 </TD>
-                <TD justifyContent="center" width="27%">
+                <TD justifyContent="flex-end" width="22%">
                   <TextHeader fontSize="12px">ESTIMATE LUA</TextHeader>
                 </TD>
-                <TD justifyContent="flex-start" width="23%">
+                <TD justifyContent="flex-end" width="23%">
                   <TextHeader fontSize="12px">LOCKED UNTIL</TextHeader>
                 </TD>
-                <TD justifyContent="flex-end" width="7%" />
+                <TD justifyContent="flex-end" width="15%">
+                  <TextHeader fontSize="12px">NETWORK</TextHeader>
+                </TD>
+                <TD justifyContent="flex-end" width="5%" />
               </TR>
             </THead>
             <TBody>
@@ -50,11 +53,11 @@ const StakeTable: React.FC = () => {
             </TBody>
             <TFooter>
               <TR>
-                <TD justifyContent="flex-start" width="23%">
+                <TD justifyContent="flex-start" width="15%">
                   <Text fontSize="12px">Total</Text>
                 </TD>
-                <TD justifyContent="center" width="20%" />
-                <TD justifyContent="center" width="27%">
+                <TD justifyContent="flex-end" width="20%" />
+                <TD justifyContent="flex-end" width="22%">
                   <TierStamp>
                     <Text fontSize="10px" fontWeight="bold" color="#8B8B8B">
                       TIER {tier}
@@ -62,8 +65,9 @@ const StakeTable: React.FC = () => {
                   </TierStamp>
                   <Text fontSize="12px">{estTotalLua}</Text>
                 </TD>
-                <TD justifyContent="flex-start" width="23%" />
-                <TD justifyContent="flex-end" width="7%" />
+                <TD justifyContent="flex-end" width="23%" />
+                <TD justifyContent="flex-end" width="15%" />
+                <TD justifyContent="flex-end" width="5%" />
               </TR>
             </TFooter>
           </Table>

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import type { AppDispatch } from 'state'
-import { formatDateTime } from 'utils/formatTime'
+import { getUtcDateTimeString } from 'utils/formatTime'
 import { getUserTokensLock } from './getStake'
 
 const initialState = {
@@ -37,26 +37,44 @@ export const stakeSlice = createSlice({
 // Actions
 export const { setTokensLock, setEstTotalLua, setIsLoadingStake, setLockDuration, setTier } = stakeSlice.actions
 
+const titleNetwork = {
+  '88': 'tomochain',
+  '1': 'ethereum',
+}
+
+const idNetwork = {
+  tomochain: 88,
+  ethereum: 1,
+}
+
+const mapTokensLockData = (list, key) => {
+  return list[key].map((token) => {
+    return {
+      ...token,
+      quantity: token.quantity.toFixed(3),
+      luaEstimate: token.luaEstimate.toFixed(3),
+      unlockAtDate: getUtcDateTimeString(new Date(token.unlockAt).getTime(), 'MM/dd/yyyy', false),
+      unlockAtTime: getUtcDateTimeString(new Date(token.unlockAt).getTime(), 'HH:mm', true),
+      network: idNetwork[key],
+    }
+  })
+}
+
 export const getTokensLock = (account: string, chainId: number) => async (dispatch: AppDispatch) => {
-  const titleNetwork = {
-    '88': 'tomochain',
-    '1': 'ethereum',
-  }
   try {
     dispatch(setIsLoadingStake(true))
     const { details, estLua, tier } = await getUserTokensLock(account)
-    dispatch(
-      setTokensLock(
-        details[titleNetwork[chainId]].map((token) => {
-          return {
-            ...token,
-            quantity: token.quantity.toFixed(3),
-            luaEstimate: token.luaEstimate.toFixed(3),
-            unlockAt: formatDateTime(new Date(token.unlockAt).getTime(), 'MM/dd/yyyy HH:mm:ss'),
-          }
-        }),
-      ),
-    )
+    let firstPart = []
+    let secondPart = []
+    Object.keys(details).forEach((key) => {
+      if (key === titleNetwork[chainId]) {
+        firstPart = mapTokensLockData(details, key)
+      } else {
+        secondPart = mapTokensLockData(details, key)
+      }
+    })
+    const dataTable = [...firstPart, ...secondPart]
+    dispatch(setTokensLock(dataTable))
     dispatch(setEstTotalLua(estLua.toFixed(3)))
     dispatch(setIsLoadingStake(false))
     dispatch(setTier(tier))

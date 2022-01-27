@@ -1,9 +1,8 @@
 import { format } from 'date-fns'
 import { Flex, Text } from 'luastarter-uikits'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectSelectedNFTPool } from 'state/nfts'
 import styled from 'styled-components'
+import { getUtcDateTimeString } from 'utils/formatTime'
 import useNFTPoolStatus from '../hook/useNFTPoolStatus'
 
 const DateStampWrapper = styled(Flex)`
@@ -44,13 +43,11 @@ const DateStamp = ({ NFTPoolDetail }) => {
     if (NFTPoolDetail) {
       const { untilOpen, untilClose, openAt, closeAt } = NFTPoolDetail
       if (poolStatus === 'upcoming') {
-        setDateValue(format(new Date(openAt * 1000), 'dd MMM, yyyy'))
-        setTimeValue(`(${new Date(openAt * 1000).getUTCHours()}:${new Date(openAt * 1000).getUTCMinutes()} UTC)`)
+        setDateValue(getUtcDateTimeString(new Date(openAt), 'dd MMM, yyyy', false))
+        setTimeValue(getUtcDateTimeString(new Date(openAt), 'HH:mm', true))
       } else {
-        setDateValue(format(new Date(closeAt * 1000), 'dd MMM, yyyy'))
-        setTimeValue(
-          `(${pad2(new Date(closeAt * 1000).getUTCHours())}:${pad2(new Date(closeAt * 1000).getUTCMinutes())} UTC)`,
-        )
+        setDateValue(getUtcDateTimeString(new Date(closeAt), 'dd MMM, yyyy', false))
+        setTimeValue(getUtcDateTimeString(new Date(closeAt), 'HH:mm', true))
       }
     }
   }, [NFTPoolDetail, poolStatus])

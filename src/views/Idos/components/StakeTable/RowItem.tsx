@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import useStakeLock from 'views/Idos/hooks/useStakeLock'
-import { Text, useModal } from 'luastarter-uikits'
-import React, { useCallback, useEffect, useState } from 'react'
+import { Flex, Text, useModal } from 'luastarter-uikits'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { BIG_TEN } from 'utils/bigNumber'
 import useGetTokensLock from 'views/Idos/hooks/useGetTokensLock'
 import useToast from 'hooks/useToast'
@@ -20,6 +20,11 @@ import ConfirmModal from './ConfirmModal'
 import { lockLPAddressOBJ } from './constants/lockLPContractAddress'
 import LoaderIcon from './StakeSpinner'
 
+const titleNetwork = {
+  '88': 'tomochain',
+  '1': 'ethereum',
+}
+
 const RowItem = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -30,8 +35,13 @@ const RowItem = ({ item }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { toastSuccess, toastError } = useToast()
 
+  const isItemActiveOnNetwork = useMemo(() => {
+    return cid === item.network
+  }, [cid, item])
   const handleSetIsOpen = () => {
-    setIsOpen(!isOpen)
+    if (isItemActiveOnNetwork) {
+      setIsOpen(!isOpen)
+    }
   }
   const onMaxBtnClick = () => {
     setInputValue(item.quantity)
@@ -82,28 +92,46 @@ const RowItem = ({ item }) => {
   return (
     <WrapperRow>
       <TR onClick={handleSetIsOpen}>
-        <TD justifyContent="flex-start" width="23%">
-          <Text fontSize="12px">{item.name}</Text>
+        <TD justifyContent="flex-start" width="15%">
+          <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+            {item.name}
+          </Text>
         </TD>
-        <TD justifyContent="center" width="20%">
-          <Text fontSize="12px">{item.quantity}</Text>
+        <TD justifyContent="flex-end" width="20%">
+          <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+            {item.quantity}
+          </Text>
         </TD>
-        <TD justifyContent="center" width="27%">
-          <Text fontSize="12px">{item.luaEstimate}</Text>
+        <TD justifyContent="flex-end" width="22%">
+          <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+            {item.luaEstimate}
+          </Text>
         </TD>
-        <TD justifyContent="flex-start" width="23%">
-          <Text fontSize="12px">{item.unlockAt}</Text>
+        <TD justifyContent="flex-end" width="23%">
+          <Flex flexDirection="column" alignItems="flex-end">
+            <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+              {item.unlockAtDate}
+            </Text>
+            <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+              {item.unlockAtTime}
+            </Text>
+          </Flex>
         </TD>
-        <TD justifyContent="flex-end" width="7%">
-          <Arrow isOpen={isOpen} src={`${process.env.PUBLIC_URL}/images/arr-down.png`} alt="" />
+        <TD justifyContent="flex-end" width="15%">
+          <img src={`${process.env.PUBLIC_URL}/images/${titleNetwork[item.network]}.png`} alt="empty" />
+        </TD>
+        <TD justifyContent="flex-end" width="5%">
+          {isItemActiveOnNetwork && (
+            <Arrow isOpen={isOpen} src={`${process.env.PUBLIC_URL}/images/arr-down.png`} alt="" />
+          )}
         </TD>
       </TR>
       {isOpen && (
         <TR>
-          <TD justifyContent="flex-start" width="50%">
+          <TD justifyContent="flex-start" width="auto">
             {/* <Text fontSize="12px">The rest: 1,000 xLua ≈ 2,000 Lua</Text> */}
           </TD>
-          <TD justifyContent="space-between" width="50%">
+          <TD justifyContent="space-between" width="auto">
             <WrappInputOnRow>
               <InputOnRow
                 type="text"

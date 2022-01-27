@@ -32,6 +32,22 @@ export const getUtcDateString = (timestamp): string | null => {
   return null
 }
 
+export const getUtcDateTimeString = (timestamp, formatString, isShowUTC): string | null => {
+  if (timestamp) {
+    const dateIsoFormatted = parseISO(fromUnixTime(timestamp).toISOString())
+    const dateWithOffset = new Date(
+      dateIsoFormatted.getUTCFullYear(),
+      dateIsoFormatted.getUTCMonth(),
+      dateIsoFormatted.getUTCDate(),
+      dateIsoFormatted.getUTCHours(),
+      dateIsoFormatted.getUTCMinutes(),
+      dateIsoFormatted.getUTCSeconds(),
+    )
+    return `${format(dateWithOffset, formatString)} ${isShowUTC ? 'UTC' : ''}`
+  }
+  return null
+}
+
 export const formatDateTime = (timestamp, formatType = 'yyyy-MM-dd'): string | null => {
   if (timestamp) {
     return format(fromUnixTime(timestamp), formatType)

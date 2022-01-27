@@ -32,7 +32,6 @@ export const TR = styled.div`
 export const TD = styled.div<{ width: string; justifyContent: string }>`
   width: ${(props) => props.width};
   display: flex;
-  min-width: 100px;
   justify-content: ${(props) => props.justifyContent};
   cursor: pointer;
   align-items: center;
@@ -101,6 +100,7 @@ export const MaxButtom = styled.span`
 
   @media (max-width: 576px) {
     font-size: 12px;
+    top: 12px;
   }
 `
 export const StakeBoxCard = styled(Card)`

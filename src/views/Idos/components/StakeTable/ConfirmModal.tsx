@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { selectLockDuration } from 'state/stake'
 import { getValueTokenByLUA } from 'state/stake/getStake'
 import { useWeb3React } from '@web3-react/core'
-import { formatDateTime } from 'utils/formatTime'
+import { getUtcDateTimeString } from 'utils/formatTime'
 
 const ModalStyled = styled(Modal)`
   border: none;
@@ -49,7 +49,7 @@ const ConfirmModal = (props) => {
       setIsFetching(true)
       const data = await getValueTokenByLUA(token?.address, chainId, quantity)
       if (isStake) {
-        data.dateLock = formatDateTime(new Date().getTime() / 1000 + lockDuration, 'MM/dd/yyyy HH:mm:ss')
+        data.dateLock = getUtcDateTimeString(new Date().getTime() / 1000 + lockDuration, 'MM/dd/yyyy HH:mm', true)
       }
       setContentData(data)
       setIsFetching(false)
