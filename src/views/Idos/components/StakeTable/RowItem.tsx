@@ -63,7 +63,7 @@ const RowItem = ({ item }) => {
     } catch (error) {
       console.log(error)
       setIsLoading(false)
-      toastError('Unstake faild')
+      toastError('Unstake failed')
     }
   }, [onUnStakeLock, inputValue, onGetTokensLock])
 

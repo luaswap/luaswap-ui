@@ -102,7 +102,7 @@ const StakeBox = () => {
       toastSuccess('Stake Successfully')
     } catch (error) {
       console.error(error)
-      toastError('Stake faild')
+      toastError('Stake failed')
     }
   }, [onStakeLock, inputValue])
 
