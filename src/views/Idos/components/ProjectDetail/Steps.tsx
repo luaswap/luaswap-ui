@@ -162,7 +162,7 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier?: number; selectedUserEstLua?
             </TertiaryMessage>
             {isShowTierInfor && (
               <Text color="#8B8B8B">
-                Your Tier: {selectedUserTier} (Estimate LUA: {selectedUserEstLua})
+                Your Tier: {selectedUserTier} (Est LUA: {Number(selectedUserEstLua).toFixed(2)})
               </Text>
             )}
           </Box>
@@ -223,7 +223,7 @@ const IfoStepsMobile: React.FC<{ selectedUserTier?: number; selectedUserEstLua?:
             </TertiaryMessage>
             {isShowTierInfor && (
               <Text color="#8B8B8B">
-                Your Tier: {selectedUserTier} (Estimate LUA: {selectedUserEstLua})
+                Your Tier: {selectedUserTier} (Est LUA: {Number(selectedUserEstLua).toFixed(2)})
               </Text>
             )}
           </Box>
@@ -273,7 +273,6 @@ const IfoSteps: React.FC<{
   isShowTierInfor: boolean
 }> = ({ selectedUserTier, isShowTierInfor, selectedUserEstLua }) => {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-  // console.log(selectedUserEstLua)
   return isMobile ? (
     <IfoStepsMobile
       selectedUserTier={selectedUserTier}
