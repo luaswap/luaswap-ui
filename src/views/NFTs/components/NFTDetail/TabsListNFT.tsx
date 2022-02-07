@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { selectSelectedNFTPool } from 'state/nfts'
 import styled from 'styled-components'
 import useGetNumberOfNftSold from 'views/NFTs/hook/useGetNumberOfNftSold'
+import TabNameNFT from './TabNameNFT'
 
 interface TabItemProps {
   isActive?: boolean
@@ -125,14 +126,7 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
               setHoverIndex(-1)
             }}
           >
-            <TabName>
-              <Text fontWeight="bold" fontSize="20px" color="#FFFFFF">
-                {item.name}
-              </Text>
-              <Text fontWeight="normal" fontSize="14px" color="#FFFFFF">
-                {item.totalSale} available
-              </Text>
-            </TabName>
+            <TabNameNFT nft={item} />
             <TabPrice fontWeight="900" fontSize="15px" color="#FFFFFF">
               {item.price} {payTokenSymbol}
             </TabPrice>
@@ -142,7 +136,7 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
       <ProgressBlock>
         <ProgressTextBlock justifyContent="space-between" alignItems="center">
           <Text fontWeight="normal" fontSize="15px" color="#FFFFFF">
-            {totalNFTSold}/{totalSale} Available{' '}
+            {totalSale - totalNFTSold}/{totalSale} Available
           </Text>
           <Text fontWeight="normal" fontSize="15px" color="#FFFFFF">
             {progressPercentage}% sold

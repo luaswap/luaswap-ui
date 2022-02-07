@@ -1,11 +1,9 @@
-import { getNumberOfNftSold } from 'utils/callHelpers'
-import { useWeb3React } from '@web3-react/core'
-import { useNFTPoolContract } from 'hooks/useContract'
 import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useWeb3React } from '@web3-react/core'
 import { getWeb3BasedOnChainId } from 'utils/web3'
 import { getNFTPoolContract } from 'utils/contractHelpers'
 import makeBatchRequest from 'utils/makeBatchRequest'
-import { useSelector } from 'react-redux'
 import { selectUpdateNumberOfSoldNFTCount } from 'state/nfts'
 
 const useGetNumberOfNftSold = (packNFT) => {
