@@ -231,7 +231,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
   const { img, name, description, totalAmountIDO, payToken, idoToken } = useTotalDataFromAllPools(currentPoolData)
   const { socials, timeVesting, percentVesting, versionContract, isVesting } = currentPoolData
-  const { whitelistLink, isWhitelist, isExclusive } = currentPoolData
+  const { whitelistLink, isWhitelist, isExclusive, isPresent } = currentPoolData
   const { totalCommittedAmount, totalAmountPay, swappedAmountIDO } = contractData
   const totalCommitedPercentage = useMemo(() => {
     if (totalCommittedAmount && totalAmountPay) {
@@ -428,7 +428,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             (*) Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration.
           </InfoText>
         )}
-        {isExclusive && !tierDataOfUser?.idoToken.symbol && (
+        {isExclusive && !tierDataOfUser?.idoToken.symbol && !isPresent && (
           <InfoText>
             (*) NOT eligible for the exclusive pool, please upgrade to Tier Galaxy or Galaxy Plus to join!
           </InfoText>

@@ -149,8 +149,18 @@ const Deposit: React.FC<DepositProps> = ({
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
-  const { openAt, closeAt, claimAt, versionContract, timeVesting, percentVesting, isVesting, isReject, isExclusive } =
-    currentPoolData
+  const {
+    openAt,
+    closeAt,
+    claimAt,
+    versionContract,
+    timeVesting,
+    percentVesting,
+    isVesting,
+    isReject,
+    isExclusive,
+    isPresent,
+  } = currentPoolData
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
 
   const maxAmountAllowedLeft = useMemo(() => {
@@ -413,7 +423,7 @@ const Deposit: React.FC<DepositProps> = ({
   }, [minAmountPay, totalAmountIDO, totalAmountPay])
   return (
     <FlexWrapper flexDirection="row" flexWrap="wrap" isShowPoolData={isShowPoolData}>
-      {isExclusive && !idoToken.symbol ? null : (
+      {isExclusive && !idoToken.symbol && !isPresent ? null : (
         <>
           {isShowPoolData && (
             <CardWrapper>
