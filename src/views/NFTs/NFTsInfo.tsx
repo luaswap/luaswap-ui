@@ -38,19 +38,19 @@ const NFTsInfo = () => {
           <Spinner />
         </SpinnerWrapper>
       ) : (
-        <NFTsContainer>
+        <>
           {NFTPools.length < 1 ? (
-            <SpinnerWrapper>
+            <SpinnerWrapper justifyContent="center" alignItems="center">
               <Text>No NFT Pools Data.</Text>
             </SpinnerWrapper>
           ) : (
-            <>
+            <NFTsContainer>
               {NFTPools.map((NFTpool) => (
                 <NFTCard NFTpool={NFTpool} key={NFTpool.id} />
               ))}
-            </>
+            </NFTsContainer>
           )}
-        </NFTsContainer>
+        </>
       )}
     </Page>
   )

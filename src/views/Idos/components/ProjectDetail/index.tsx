@@ -116,7 +116,7 @@ const ProjectDetail = () => {
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
   const secondsUntilSnapshot = useSecondsUntilCurrent(get(currentPoolData, 'untilSnapshootAt', null))
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
-  const { isPresent, isWhitelist, status } = currentPoolData
+  const { isPresent, isWhitelist, status, isExclusive } = currentPoolData
   const isShowPoolData = useMemo(() => {
     if (isPresent && status === 1) {
       return false
@@ -244,7 +244,7 @@ const ProjectDetail = () => {
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
             </StyledFlex>
-            {isShowTierInfor && isShowPoolData && (
+            {isShowTierInfor && isShowPoolData && !isExclusive && (
               <>
                 <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
                   Tier Information

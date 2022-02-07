@@ -86,7 +86,14 @@ export const StyledCardBody = styled(CardBody)`
 `
 
 const SecondaryButtonPool = styled(SecondaryButton)`
-  width: 165px;
+  width: auto;
+`
+
+const ExclusiveButton = styled(SecondaryButtonPool)`
+  border: none;
+  background-color: #606060;
+  padding: 8px 16px;
+  width: auto;
 `
 
 const SecondaryButtonWhite = styled(SecondaryButtonPool)`
@@ -107,7 +114,7 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/project/${pool.id}`)
   }, [history, path, pool.id])
-  const { isPresent, socials, isWhitelist, untilOpen, untilClose, untilClaim } = pool
+  const { isPresent, socials, isWhitelist, untilOpen, untilClose, untilClaim, isExclusive } = pool
   const {
     img,
     name,
@@ -180,18 +187,28 @@ const PoolDetail: React.FC<PoolDetailProps> = ({ pool }) => {
               </Flex>
             </PoolInfoBlock>
           </Flex>
-          {!isWhitelist ? (
-            <SecondaryButtonPool onClick={navigateToProjectDetail} scale="sm" mb="15px">
-              <Text fontSize="12px" color="#FABC46">
-                TIER MEMBER
+          {isExclusive ? (
+            <ExclusiveButton onClick={navigateToProjectDetail} scale="sm" mb="15px">
+              <Text fontSize="10px" color="#FABC46" fontWeight="bold">
+                EXCLUSIVE POOL
               </Text>
-            </SecondaryButtonPool>
+            </ExclusiveButton>
           ) : (
-            <SecondaryButtonWhite onClick={navigateToProjectDetail} scale="sm" mb="15px">
-              <Text fontSize="12px" color="#FFFCF6">
-                WHITELIST MEMBER
-              </Text>
-            </SecondaryButtonWhite>
+            <>
+              {!isWhitelist ? (
+                <SecondaryButtonPool onClick={navigateToProjectDetail} scale="sm" mb="15px">
+                  <Text fontSize="10px" color="#FABC46" fontWeight="bold">
+                    TIER MEMBER
+                  </Text>
+                </SecondaryButtonPool>
+              ) : (
+                <SecondaryButtonWhite onClick={navigateToProjectDetail} scale="sm" mb="15px">
+                  <Text fontSize="10px" color="#FFFCF6" fontWeight="bold">
+                    WHITELIST MEMBER
+                  </Text>
+                </SecondaryButtonWhite>
+              )}
+            </>
           )}
         </Flex>
         <Box>

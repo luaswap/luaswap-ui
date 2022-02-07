@@ -149,7 +149,7 @@ const Deposit: React.FC<DepositProps> = ({
   // Data we receive from API
   const { maxAmountPay, payToken, minAmountPay, idoToken, totalAmountIDO, totalAmountPay, index, projectId } =
     tierDataOfUser
-  const { openAt, closeAt, claimAt, versionContract, timeVesting, percentVesting, isVesting, isReject } =
+  const { openAt, closeAt, claimAt, versionContract, timeVesting, percentVesting, isVesting, isReject, isExclusive } =
     currentPoolData
   const [poolStatus, openAtSeconds, closedAtSeconds, claimAtSeconds] = usePoolStatus(currentPoolData)
 
