@@ -68,9 +68,9 @@ export const getTokensLock = (account: string, chainId: number) => async (dispat
     let secondPart = []
     Object.keys(details).forEach((key) => {
       if (key === titleNetwork[chainId]) {
-        firstPart = mapTokensLockData(details, key)
+        firstPart = firstPart.concat(mapTokensLockData(details, key))
       } else {
-        secondPart = mapTokensLockData(details, key)
+        secondPart = secondPart.concat(mapTokensLockData(details, key))
       }
     })
     const dataTable = [...firstPart, ...secondPart]

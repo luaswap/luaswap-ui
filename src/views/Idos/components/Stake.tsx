@@ -26,7 +26,7 @@ const NoticeWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 300px;
+  height: 100px;
 `
 
 const StakeContainerCenter = styled.div`
@@ -58,34 +58,29 @@ const Stake: React.FC = () => {
   }, [onGetTokensLock, account])
   const tokensLock = useSelector(selectTokensLock)
 
+  console.log(tokensLock)
+
   return (
     <>
       {account ? (
         <>
-          {chainId === 1 || chainId === 88 ? (
-            <>
-              {tokensLock.length > 0 ? (
-                <StakeContainer>
-                  <StakeTable />
-                  <StakeBox />
-                </StakeContainer>
-              ) : (
-                <StakeContainerCenter>
-                  <StakeBoxNoDataCase>
-                    <StakeBox />
-                  </StakeBoxNoDataCase>
-                </StakeContainerCenter>
-              )}
-            </>
-          ) : (
+          {!(chainId === 1 || chainId === 88) && (
             <NoticeWrap>
-              <Text fontSize="16px">Connect your wallet to LuaStarter & select TomoChain or Ethereum network.</Text>
+              <Text fontSize="16px" color="red">
+                Select TomoChain or Ethereum network to stake.
+              </Text>
             </NoticeWrap>
           )}
+          <StakeContainer>
+            <StakeTable />
+            <StakeBox />
+          </StakeContainer>
         </>
       ) : (
         <NoticeWrap>
-          <Text fontSize="16px">Select TomoChain or Ethereum network to stake.</Text>
+          <Text fontSize="16px" color="red">
+            Connect your wallet to LuaStarter & select TomoChain or Ethereum network.
+          </Text>
         </NoticeWrap>
       )}
     </>
