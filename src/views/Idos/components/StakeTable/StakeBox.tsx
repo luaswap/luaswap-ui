@@ -164,7 +164,7 @@ const StakeBox = ({ isDisable }) => {
     <>
       {isDisable ? (
         <StakeBoxCard>
-          <Text fontSize="14px">Estimate: {Number(estimateLuaQty).toFixed(3)} Lua</Text>
+          <Text fontSize="14px">Estimate: {Number(estimateLuaQty).toFixed(3)} LUA</Text>
           <WrappInputOnStakeBox>
             <InputOnStakeBox type="text" scale="md" placeholder="Quantity" disabled />
             <MaxButtomOnStakeBox disabled>Max</MaxButtomOnStakeBox>
