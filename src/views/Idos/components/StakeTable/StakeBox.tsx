@@ -33,7 +33,7 @@ interface TokenSelectedModel {
   decimals: number
 }
 
-const StakeBox = () => {
+const StakeBox = ({ isDisable }) => {
   const [tokensAccept, setTokensAccept] = useState([])
   const [tokenSelected, setTokenSelected] = useState(null as TokenSelectedModel)
   const [inputValue, setInputValue] = useState('')
@@ -161,46 +161,70 @@ const StakeBox = () => {
   }
 
   return (
-    <StakeBoxCard>
-      <Text fontSize="14px">Estimate: {Number(estimateLuaQty).toFixed(3)} Lua</Text>
-      <WrappInputOnStakeBox>
-        <InputOnStakeBox
-          type="text"
-          scale="md"
-          placeholder="Quantity"
-          value={inputValue}
-          onChange={onChangeInput}
-          onKeyPress={handleKeyPress}
-        />
-        <MaxButtomOnStakeBox onClick={onClickMax}>Max</MaxButtomOnStakeBox>
-      </WrappInputOnStakeBox>
-      <StakeBoxDropDown tokensAccept={tokensAccept} tokenSelected={tokenSelected} setTokenSelected={setTokenSelected} />
-      {tokenSelected ? (
-        <>
-          {!isApproved ? (
-            <ButtonStakeBox
+    <>
+      {isDisable ? (
+        <StakeBoxCard>
+          <Text fontSize="14px">Estimate: {Number(estimateLuaQty).toFixed(3)} Lua</Text>
+          <WrappInputOnStakeBox>
+            <InputOnStakeBox type="text" scale="md" placeholder="Quantity" disabled />
+            <MaxButtomOnStakeBox disabled>Max</MaxButtomOnStakeBox>
+          </WrappInputOnStakeBox>
+          <StakeBoxDropDown
+            tokensAccept={tokensAccept}
+            tokenSelected={tokenSelected}
+            setTokenSelected={setTokenSelected}
+          />
+          <ButtonStakeBox scale="md" disabled>
+            Stake
+          </ButtonStakeBox>
+        </StakeBoxCard>
+      ) : (
+        <StakeBoxCard>
+          <Text fontSize="14px">Estimate: {Number(estimateLuaQty).toFixed(3)} Lua</Text>
+          <WrappInputOnStakeBox>
+            <InputOnStakeBox
+              type="text"
               scale="md"
-              onClick={handleApprove}
-              disabled={isLoading || !Number(inputValue) || !tokenSelected}
-            >
-              {!isLoading && !isLoadingApproveStatus ? 'Approve' : <LoaderIcon />}
-            </ButtonStakeBox>
+              placeholder="Quantity"
+              value={inputValue}
+              onChange={onChangeInput}
+              onKeyPress={handleKeyPress}
+            />
+            <MaxButtomOnStakeBox onClick={onClickMax}>Max</MaxButtomOnStakeBox>
+          </WrappInputOnStakeBox>
+          <StakeBoxDropDown
+            tokensAccept={tokensAccept}
+            tokenSelected={tokenSelected}
+            setTokenSelected={setTokenSelected}
+          />
+          {tokenSelected ? (
+            <>
+              {!isApproved ? (
+                <ButtonStakeBox
+                  scale="md"
+                  onClick={handleApprove}
+                  disabled={isLoading || !Number(inputValue) || !tokenSelected}
+                >
+                  {!isLoading && !isLoadingApproveStatus ? 'Approve' : <LoaderIcon />}
+                </ButtonStakeBox>
+              ) : (
+                <ButtonStakeBox
+                  scale="md"
+                  onClick={onClickButtonStake}
+                  disabled={isLoading || !Number(inputValue) || !tokenSelected}
+                >
+                  {!isLoading ? 'Stake' : <LoaderIcon />}
+                </ButtonStakeBox>
+              )}
+            </>
           ) : (
-            <ButtonStakeBox
-              scale="md"
-              onClick={onClickButtonStake}
-              disabled={isLoading || !Number(inputValue) || !tokenSelected}
-            >
-              {!isLoading ? 'Stake' : <LoaderIcon />}
+            <ButtonStakeBox scale="md" disabled>
+              Stake
             </ButtonStakeBox>
           )}
-        </>
-      ) : (
-        <ButtonStakeBox scale="md" disabled>
-          Stake
-        </ButtonStakeBox>
+        </StakeBoxCard>
       )}
-    </StakeBoxCard>
+    </>
   )
 }
 

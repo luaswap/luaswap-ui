@@ -1,5 +1,5 @@
 import { Card, Text } from 'luastarter-uikits'
-import React, { Component, useEffect } from 'react'
+import React, { Component, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { selectTokensLock } from 'state/stake'
@@ -26,7 +26,13 @@ const NoticeWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100px;
+  height: 300px;
+`
+
+const NoticeWrapText = styled(NoticeWrap)`
+  height: auto;
+  margin-bottom: 10px;
+  justify-content: flex-start;
 `
 
 const StakeContainerCenter = styled.div`
@@ -58,22 +64,24 @@ const Stake: React.FC = () => {
   }, [onGetTokensLock, account])
   const tokensLock = useSelector(selectTokensLock)
 
-  console.log(tokensLock)
+  const isOnRightNetWork = useMemo(() => {
+    return chainId === 1 || chainId === 88
+  }, [chainId])
 
   return (
     <>
       {account ? (
         <>
-          {!(chainId === 1 || chainId === 88) && (
-            <NoticeWrap>
+          {!isOnRightNetWork && (
+            <NoticeWrapText>
               <Text fontSize="16px" color="red">
-                Select TomoChain or Ethereum network to stake.
+                Connect your wallet to LuaStarter & select TomoChain or Ethereum network.
               </Text>
-            </NoticeWrap>
+            </NoticeWrapText>
           )}
           <StakeContainer>
             <StakeTable />
-            <StakeBox />
+            <StakeBox isDisable={!isOnRightNetWork} />
           </StakeContainer>
         </>
       ) : (

@@ -117,8 +117,16 @@ export const WrappInputOnStakeBox = styled(WrappInputOnRow)`
 export const InputOnStakeBox = styled(InputOnRow)`
   margin-top: 6px;
   margin-bottom: 12px;
+
+  &:disabled {
+    &::placeholder {
+      color: #606060;
+    }
+  }
 `
-export const MaxButtomOnStakeBox = styled(MaxButtom)`
+export const MaxButtomOnStakeBox = styled(MaxButtom)<{ disabled?: boolean }>`
+  color: ${(props) => (props.disabled ? '#606060' : '#fabc46')};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   top: 12px;
   right: 16px;
 `
@@ -127,6 +135,11 @@ export const ButtonStakeBox = styled(Button)`
   width: 100%;
   border-radius: 24px;
   height: 40px;
+
+  &:disabled {
+    background-color: #606060;
+    color: #8b8b8b;
+  }
 `
 
 export const DropDownStakeWrapp = styled.div`
@@ -139,11 +152,11 @@ export const DropDownStakeWrapp = styled.div`
   padding: 0 16px;
 `
 
-export const DropDownInput = styled.div`
+export const DropDownInput = styled.div<{ disabled?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   width: 100%;
   height: 100%;
 
@@ -152,9 +165,9 @@ export const DropDownInput = styled.div`
   }
 `
 
-export const DropDownValue = styled.span`
+export const DropDownValue = styled.span<{ disabled?: boolean }>`
   font-size: 15px;
-  color: #d8d8d8;
+  color: ${(props) => (props.disabled ? '#606060' : '#d8d8d8')};
   font-weight: bold;
 
   @media (max-width: 576px) {

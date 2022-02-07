@@ -24,13 +24,15 @@ const StakeBoxDropDown = ({ tokensAccept, tokenSelected, setTokenSelected }) => 
   }
 
   const handleOpen = () => {
-    setIsOpen(!isOpen)
+    if (tokensAccept?.length > 0) {
+      setIsOpen(!isOpen)
+    }
   }
 
   return (
     <DropDownStakeWrapp>
-      <DropDownInput onClick={handleOpen}>
-        <DropDownValue>{tokenSelected?.name || 'Token'}</DropDownValue>
+      <DropDownInput onClick={handleOpen} disabled={tokensAccept?.length < 1}>
+        <DropDownValue disabled={tokensAccept?.length < 1}>{tokenSelected?.name || 'Token'}</DropDownValue>
         <img src={`${process.env.PUBLIC_URL}/images/arr-down-stake-dropdown.png`} alt="" />
       </DropDownInput>
       {isOpen && (
