@@ -428,6 +428,11 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
             (*) Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration.
           </InfoText>
         )}
+        {isExclusive && !tierDataOfUser?.idoToken.symbol && (
+          <InfoText>
+            (*) NOT eligible for the exclusive pool, please upgrade to Tier Galaxy or Galaxy Plus to join!
+          </InfoText>
+        )}
       </CardBody>
     </CardWrapper>
   )
