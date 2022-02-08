@@ -213,7 +213,7 @@ const ProjectDetail = () => {
     return availalbeNetwork.includes(String(chainId))
   }, [currentPoolData.index, chainId])
 
-  const titleTier = useGetTitleOfTier(Number(selectedUserEstLua || 0))
+  const titleTier = useGetTitleOfTier(Number(selectedUserEstLua || 0), isExclusive)
 
   /**
    * currentPoolData: all tier's information
@@ -299,21 +299,11 @@ const ProjectDetail = () => {
             <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               How to LuaStarts
             </Heading>
-            <>
-              {isExclusive ? (
-                <Steps
-                  selectedUserTier={titleTier}
-                  isShowTierInfor={isShowTierInfor}
-                  selectedUserEstLua={selectedUserEstLua}
-                />
-              ) : (
-                <Steps
-                  selectedUserTier={selectedUserTier}
-                  isShowTierInfor={isShowTierInfor}
-                  selectedUserEstLua={selectedUserEstLua}
-                />
-              )}
-            </>
+            <Steps
+              selectedUserTier={titleTier}
+              isShowTierInfor={isShowTierInfor}
+              selectedUserEstLua={selectedUserEstLua}
+            />
           </>
         )}
       </Row>

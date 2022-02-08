@@ -9,7 +9,7 @@ const titleTierObj = {
   galaxyPlus: 'Galaxy plus',
 }
 
-const useGetTitleOfTier = (estLua) => {
+const useGetTitleOfTier = (estLua, isExclusive) => {
   const [titleTier, setTitleTier] = useState(titleTierObj.none)
 
   useEffect(() => {
@@ -23,10 +23,12 @@ const useGetTitleOfTier = (estLua) => {
       setTitleTier(titleTierObj.mars)
     } else if (estLua >= 250000 && estLua < 400000) {
       setTitleTier(titleTierObj.galaxy)
-    } else {
+    } else if (isExclusive) {
       setTitleTier(titleTierObj.galaxyPlus)
+    } else {
+      setTitleTier(titleTierObj.galaxy)
     }
-  }, [estLua])
+  }, [estLua, isExclusive])
   return titleTier
 }
 
