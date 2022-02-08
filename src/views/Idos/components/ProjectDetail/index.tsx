@@ -15,6 +15,7 @@ import { useAppDispatch } from 'state'
 import get from 'lodash/get'
 import useSecondsUntilCurrent from 'views/Idos/hooks/useSecondsUntilCurrent'
 
+import useGetTitleOfTier from 'views/Idos/hooks/useGetTitleOfTier'
 import Steps from './Steps'
 import Deposit from './Deposit'
 import PoolSummary from './PoolSummary'
@@ -212,6 +213,8 @@ const ProjectDetail = () => {
     return availalbeNetwork.includes(String(chainId))
   }, [currentPoolData.index, chainId])
 
+  const titleTier = useGetTitleOfTier(Number(selectedUserEstLua || 0))
+
   /**
    * currentPoolData: all tier's information
    * tierDataOfUser: The correct tier data for user (based on user's tier)
@@ -243,6 +246,7 @@ const ProjectDetail = () => {
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
               <Deposit
+                titleTier={titleTier}
                 isShowPoolData={isShowPoolData}
                 isShowTierInfor={isShowTierInfor}
                 isLoadingTierInfo={isLoadingTierInfo}
@@ -295,11 +299,21 @@ const ProjectDetail = () => {
             <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               How to LuaStarts
             </Heading>
-            <Steps
-              selectedUserTier={selectedUserTier}
-              isShowTierInfor={isShowTierInfor}
-              selectedUserEstLua={selectedUserEstLua}
-            />
+            <>
+              {isExclusive ? (
+                <Steps
+                  selectedUserTier={titleTier}
+                  isShowTierInfor={isShowTierInfor}
+                  selectedUserEstLua={selectedUserEstLua}
+                />
+              ) : (
+                <Steps
+                  selectedUserTier={selectedUserTier}
+                  isShowTierInfor={isShowTierInfor}
+                  selectedUserEstLua={selectedUserEstLua}
+                />
+              )}
+            </>
           </>
         )}
       </Row>

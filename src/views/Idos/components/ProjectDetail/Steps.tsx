@@ -109,7 +109,7 @@ const DotsComponent = ({ numberOfDots, isVertical = false }) => {
   )
 }
 
-const IfoStepsDesktop: React.FC<{ selectedUserTier?: number; selectedUserEstLua?: number; isShowTierInfor: boolean }> =
+const IfoStepsDesktop: React.FC<{ selectedUserTier?: string; selectedUserEstLua?: number; isShowTierInfor: boolean }> =
   ({ selectedUserTier, selectedUserEstLua, isShowTierInfor }) => {
     return (
       <Wrapper>
@@ -185,7 +185,7 @@ const IfoStepsDesktop: React.FC<{ selectedUserTier?: number; selectedUserEstLua?
     )
   }
 
-const IfoStepsMobile: React.FC<{ selectedUserTier?: number; selectedUserEstLua?: number; isShowTierInfor: boolean }> =
+const IfoStepsMobile: React.FC<{ selectedUserTier?: string; selectedUserEstLua?: number; isShowTierInfor: boolean }> =
   ({ selectedUserTier, selectedUserEstLua, isShowTierInfor }) => {
     return (
       <MobileWrapper>
@@ -268,7 +268,7 @@ const IfoStepsMobile: React.FC<{ selectedUserTier?: number; selectedUserEstLua?:
   }
 
 const IfoSteps: React.FC<{
-  selectedUserTier?: number
+  selectedUserTier?: string
   selectedUserEstLua?: number
   isShowTierInfor: boolean
 }> = ({ selectedUserTier, isShowTierInfor, selectedUserEstLua }) => {

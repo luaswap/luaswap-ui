@@ -32,6 +32,7 @@ import { ZERO_ADDRESS } from 'config/constants/idos'
 import { API_IDO_URL } from 'config'
 import { getERC20Contract } from 'utils/contractHelpers'
 import { getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
+import useGetTitleOfTier from 'views/Idos/hooks/useGetTitleOfTier'
 import ActionButton from './ActionButton'
 import usePoolStatus from '../../hooks/usePoolStatus'
 import useIsApproved from '../../hooks/useIsApproved'
@@ -102,6 +103,7 @@ interface DepositProps {
   isLoadingTierInfo: boolean
   isShowPoolData: boolean
   isShowTierInfor: boolean
+  titleTier: string
 }
 
 const Deposit: React.FC<DepositProps> = ({
@@ -115,6 +117,7 @@ const Deposit: React.FC<DepositProps> = ({
   isLoadingTierInfo,
   isShowPoolData,
   isShowTierInfor,
+  titleTier,
 }) => {
   const [value, setValue] = useState('0')
   const [idoReceivedAmount, setIdoReceivedAmount] = useState('0')
@@ -442,9 +445,13 @@ const Deposit: React.FC<DepositProps> = ({
                     {isShowTierInfor && (
                       <Flex justifyContent="space-between">
                         <Text>Your Tier</Text>
-                        <Text bold>
-                          Tier {selectedUserTier} - {getTierName(selectedUserTier)}
-                        </Text>
+                        {isExclusive ? (
+                          <Text bold>Tier {titleTier}</Text>
+                        ) : (
+                          <Text bold>
+                            Tier {selectedUserTier} - {getTierName(selectedUserTier)}
+                          </Text>
+                        )}
                       </Flex>
                     )}
                     {minAmountPay !== 0 && (
