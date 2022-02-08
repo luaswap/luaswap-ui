@@ -13,6 +13,7 @@ const initialState: ProfileState = {
     totalLuaLock: '0',
     userTier: null,
     nextTier: [],
+    estLua: 0,
   },
 }
 
@@ -33,11 +34,12 @@ export const profileSlice = createSlice({
       }
     },
     profileTierFetchSucceeded: (_state, action) => {
-      const { tier, nextTiers } = action.payload
+      const { tier, nextTiers, estLua } = action.payload
       _state.isLoading = false
       _state.data = {
         ..._state.data,
         userTier: tier,
+        estLua,
         nextTier: nextTiers,
       }
     },
@@ -88,3 +90,4 @@ export default profileSlice.reducer
 export const selectUserData = (state) => state.profile.data
 export const selectUserTier = (state) => selectUserData(state).userTier
 export const selectUserNextTier = (state) => selectUserData(state).nextTier
+export const selectUserEstLua = (state) => selectUserData(state).estLua

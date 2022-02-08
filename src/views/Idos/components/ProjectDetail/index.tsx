@@ -8,13 +8,15 @@ import Page from 'components/layout/Page'
 import PageLoader from 'components/PageLoader'
 import useDeepMemo from 'hooks/useDeepMemo'
 import { fetchPool, selectCurrentPool, selectLoadingCurrentPool, setDefaultCurrentPool } from 'state/ido'
-import { selectUserTier } from 'state/profile'
+import { selectUserEstLua, selectUserTier } from 'state/profile'
 import { getTierDataAfterSnapshot } from 'state/profile/getProfile'
 import { useBlock } from 'state/hooks'
 import { useAppDispatch } from 'state'
 import get from 'lodash/get'
 import useSecondsUntilCurrent from 'views/Idos/hooks/useSecondsUntilCurrent'
 
+import useGetTitleOfTier from 'views/Idos/hooks/useGetTitleOfTier'
+import isNaN from 'lodash/isNaN'
 import Steps from './Steps'
 import Deposit from './Deposit'
 import PoolSummary from './PoolSummary'
@@ -108,11 +110,13 @@ const ProjectDetail = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isLoadingTierInfo, setIsLoadingTierInfo] = useState(true)
   const [userTierAfterSnapshot, setUserTierAfterSnapshot] = useState(0)
+  const [userEstLuaAfterSnapshot, setUserEstLuaAfterSnapshot] = useState(0)
   const { id } = useParams<ParamsType>()
   const dispatch = useAppDispatch()
   const blockNumber = useBlock()
   const currentPoolData = useSelector(selectCurrentPool)
   const userTier = useSelector(selectUserTier)
+  const userEstLua = useSelector(selectUserEstLua)
   const isLoadingPool = useSelector(selectLoadingCurrentPool)
   const secondsUntilSnapshot = useSecondsUntilCurrent(get(currentPoolData, 'untilSnapshootAt', null))
   const idoSupportedNetwork = getIdoSupportedNetwork(currentPoolData.index)
@@ -145,11 +149,13 @@ const ProjectDetail = () => {
   useEffect(() => {
     const fetchTierAfterSnapshotTime = async () => {
       try {
-        const { tier } = await getTierDataAfterSnapshot(account, id)
+        const { tier, estLua } = await getTierDataAfterSnapshot(account, id)
         setUserTierAfterSnapshot(tier)
+        setUserEstLuaAfterSnapshot(estLua)
         setIsLoadingTierInfo(false)
       } catch (error) {
         setUserTierAfterSnapshot(0)
+        setUserEstLuaAfterSnapshot(0)
         setIsLoadingTierInfo(false)
         console.log(error, 'fail to fetch tier after snapshot time')
       }
@@ -177,6 +183,14 @@ const ProjectDetail = () => {
     return userTier
   }, [secondsUntilSnapshot, userTier, userTierAfterSnapshot])
 
+  const selectedUserEstLua = useMemo(() => {
+    // We will get the userEstLua if current date time < snapshot time or else we will get userTierAfterSnapshot
+    if (secondsUntilSnapshot !== null && secondsUntilSnapshot <= 0) {
+      return userEstLuaAfterSnapshot
+    }
+    return userEstLua
+  }, [secondsUntilSnapshot, userEstLua, userEstLuaAfterSnapshot])
+
   const tierDataOfUser = useDeepMemo(() => {
     const { index = [] } = currentPoolData
     return getIdoDataBasedOnChainIdAndTier(index, chainId, selectedUserTier)
@@ -199,6 +213,8 @@ const ProjectDetail = () => {
     const availalbeNetwork = Object.keys(currentPoolData.index)
     return availalbeNetwork.includes(String(chainId))
   }, [currentPoolData.index, chainId])
+
+  const titleTier = useGetTitleOfTier(Number(selectedUserEstLua || 0), isExclusive)
 
   /**
    * currentPoolData: all tier's information
@@ -231,6 +247,7 @@ const ProjectDetail = () => {
                 isAvailalbeOnCurrentNetwork={isAvailalbeOnCurrentNetwork}
               />
               <Deposit
+                titleTier={titleTier}
                 isShowPoolData={isShowPoolData}
                 isShowTierInfor={isShowTierInfor}
                 isLoadingTierInfo={isLoadingTierInfo}
@@ -283,7 +300,11 @@ const ProjectDetail = () => {
             <Heading as="h2" scale="lg" color="#D8D8D8" mb="14px">
               How to LuaStarts
             </Heading>
-            <Steps selectedUserTier={selectedUserTier} isShowTierInfor={isShowTierInfor} />
+            <Steps
+              selectedUserTier={titleTier}
+              isShowTierInfor={isShowTierInfor}
+              selectedUserEstLua={isNaN(Number(selectedUserEstLua)) ? 0 : selectedUserEstLua}
+            />
           </>
         )}
       </Row>

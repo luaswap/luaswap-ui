@@ -67,6 +67,7 @@ export interface Profile {
   luaUnlockAble: string
   userTier: number | null
   nextTier: Tier[]
+  estLua: number
 }
 
 // Slices states

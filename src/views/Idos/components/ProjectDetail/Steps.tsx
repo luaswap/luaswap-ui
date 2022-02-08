@@ -109,169 +109,182 @@ const DotsComponent = ({ numberOfDots, isVertical = false }) => {
   )
 }
 
-const IfoStepsDesktop: React.FC<{ selectedUserTier?: number; isShowTierInfor: boolean }> = ({
-  selectedUserTier,
-  isShowTierInfor,
-}) => {
-  return (
-    <Wrapper>
-      <StepWrapper>
-        <StepContainer alignItems="center">
-          <StepWithTail>
+const IfoStepsDesktop: React.FC<{ selectedUserTier?: string; selectedUserEstLua?: number; isShowTierInfor: boolean }> =
+  ({ selectedUserTier, selectedUserEstLua, isShowTierInfor }) => {
+    return (
+      <Wrapper>
+        <StepWrapper>
+          <StepContainer alignItems="center">
+            <StepWithTail>
+              <Text bold color="#353535">
+                1
+              </Text>
+            </StepWithTail>
+          </StepContainer>
+          <StepContainer alignItems="center">
+            <StepWithTail>
+              <Text bold color="#353535">
+                2
+              </Text>
+            </StepWithTail>
+          </StepContainer>
+          <StepContainer alignItems="center">
+            <StepWithTail>
+              <Text bold color="#353535">
+                3
+              </Text>
+            </StepWithTail>
+          </StepContainer>
+          <StepContainer alignItems="center">
+            <Step>
+              <Text bold color="#353535">
+                4
+              </Text>
+            </Step>
+          </StepContainer>
+        </StepWrapper>
+        <Flex>
+          <Box width="25%" mr="15px">
+            <Text bold color="#F6F6F6">
+              Connect to your wallet
+            </Text>
+            <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
+            <Text color="red" fontSize="11px" fontStyle="italic">
+              Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration
+            </Text>
+          </Box>
+          <Box width="25%" mr="15px">
+            <Text bold color="#F6F6F6">
+              Guarantee your spot
+            </Text>
+            <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="right" color="#8B8B8B">
+              Stake more LUA to be qualified for a higher tier level
+            </TertiaryMessage>
+            {isShowTierInfor && (
+              <Text color="#8B8B8B">
+                Your Tier: {selectedUserTier} (Est LUA: {Number(selectedUserEstLua).toFixed(2)})
+              </Text>
+            )}
+          </Box>
+          <Box width="25%" mr="15px">
+            <Text bold color="#F6F6F6">
+              At IDO time
+            </Text>
+            <Text color="#8B8B8B">Purchase your token by committing between the mininum and maximum set value.</Text>
+          </Box>
+          <Box width="25%">
+            <Text bold color="#F6F6F6">
+              After IDO time
+            </Text>
+            <Text color="#8B8B8B">
+              Claim the tokens you have purchased. Any unspent assets will be returned to your wallet.
+            </Text>
+          </Box>
+        </Flex>
+      </Wrapper>
+    )
+  }
+
+const IfoStepsMobile: React.FC<{ selectedUserTier?: string; selectedUserEstLua?: number; isShowTierInfor: boolean }> =
+  ({ selectedUserTier, selectedUserEstLua, isShowTierInfor }) => {
+    return (
+      <MobileWrapper>
+        <MobileStepWrapper alignItems="center" justifyContent="center">
+          <Step width="25%">
             <Text bold color="#353535">
               1
             </Text>
-          </StepWithTail>
-        </StepContainer>
-        <StepContainer alignItems="center">
-          <StepWithTail>
+          </Step>
+          <Box width="75%">
+            <Text bold color="#F6F6F6">
+              Connect to your wallet
+            </Text>
+            <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
+            <Text color="red" fontSize="11px" fontStyle="italic">
+              Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration
+            </Text>
+          </Box>
+        </MobileStepWrapper>
+        <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
+          <DotsComponent isVertical numberOfDots={10} />
+        </Flex>
+        <MobileStepWrapper alignItems="center" justifyContent="center">
+          <Step width="25%">
             <Text bold color="#353535">
               2
             </Text>
-          </StepWithTail>
-        </StepContainer>
-        <StepContainer alignItems="center">
-          <StepWithTail>
+          </Step>
+          <Box width="75%">
+            <Text bold color="#F6F6F6">
+              Guarantee your spot
+            </Text>
+            <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="top" color="#8B8B8B">
+              Stake more LUA to be qualified for a higher tier level
+            </TertiaryMessage>
+            {isShowTierInfor && (
+              <Text color="#8B8B8B">
+                Your Tier: {selectedUserTier} (Est LUA: {Number(selectedUserEstLua).toFixed(2)})
+              </Text>
+            )}
+          </Box>
+        </MobileStepWrapper>
+        <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
+          <DotsComponent isVertical numberOfDots={10} />
+        </Flex>
+        <MobileStepWrapper alignItems="center" justifyContent="center">
+          <Step width="25%">
             <Text bold color="#353535">
               3
             </Text>
-          </StepWithTail>
-        </StepContainer>
-        <StepContainer alignItems="center">
-          <Step>
+          </Step>
+          <Box width="75%">
+            <Text bold color="#F6F6F6">
+              At IDO time
+            </Text>
+            <Text color="#8B8B8B">Purchase your token by committing between the mininum and maximum set value.</Text>
+          </Box>
+        </MobileStepWrapper>
+        <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
+          <DotsComponent isVertical numberOfDots={10} />
+        </Flex>
+        <MobileStepWrapper alignItems="center" justifyContent="center">
+          <Step width="25%">
             <Text bold color="#353535">
               4
             </Text>
           </Step>
-        </StepContainer>
-      </StepWrapper>
-      <Flex>
-        <Box width="25%" mr="15px">
-          <Text bold color="#F6F6F6">
-            Connect to your wallet
-          </Text>
-          <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
-          <Text color="red" fontSize="11px" fontStyle="italic">
-            Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration
-          </Text>
-        </Box>
-        <Box width="25%" mr="15px">
-          <Text bold color="#F6F6F6">
-            Guarantee your spot
-          </Text>
-          <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="right" color="#8B8B8B">
-            Stake more LUA to be qualified for a higher tier level
-          </TertiaryMessage>
-          {isShowTierInfor && <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>}
-        </Box>
-        <Box width="25%" mr="15px">
-          <Text bold color="#F6F6F6">
-            At IDO time
-          </Text>
-          <Text color="#8B8B8B">Purchase your token by committing between the mininum and maximum set value.</Text>
-        </Box>
-        <Box width="25%">
-          <Text bold color="#F6F6F6">
-            After IDO time
-          </Text>
-          <Text color="#8B8B8B">
-            Claim the tokens you have purchased. Any unspent assets will be returned to your wallet.
-          </Text>
-        </Box>
-      </Flex>
-    </Wrapper>
-  )
-}
-
-const IfoStepsMobile: React.FC<{ selectedUserTier?: number; isShowTierInfor: boolean }> = ({
-  selectedUserTier,
-  isShowTierInfor,
-}) => {
-  return (
-    <MobileWrapper>
-      <MobileStepWrapper alignItems="center" justifyContent="center">
-        <Step width="25%">
-          <Text bold color="#353535">
-            1
-          </Text>
-        </Step>
-        <Box width="75%">
-          <Text bold color="#F6F6F6">
-            Connect to your wallet
-          </Text>
-          <Text color="#8B8B8B">Connect your wallet to participate in the IDO</Text>
-          <Text color="red" fontSize="11px" fontStyle="italic">
-            Connect your wallet to LuaStarter at least 3 days before the IDO opens to complete your registration
-          </Text>
-        </Box>
-      </MobileStepWrapper>
-      <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
-        <DotsComponent isVertical numberOfDots={10} />
-      </Flex>
-      <MobileStepWrapper alignItems="center" justifyContent="center">
-        <Step width="25%">
-          <Text bold color="#353535">
-            2
-          </Text>
-        </Step>
-        <Box width="75%">
-          <Text bold color="#F6F6F6">
-            Guarantee your spot
-          </Text>
-          <TertiaryMessage hoverContent={TIER_HOVER_CONTENT} hoverPlacement="top" color="#8B8B8B">
-            Stake more LUA to be qualified for a higher tier level
-          </TertiaryMessage>
-          {isShowTierInfor && <Text color="#8B8B8B">Your Tier: {selectedUserTier}</Text>}
-        </Box>
-      </MobileStepWrapper>
-      <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
-        <DotsComponent isVertical numberOfDots={10} />
-      </Flex>
-      <MobileStepWrapper alignItems="center" justifyContent="center">
-        <Step width="25%">
-          <Text bold color="#353535">
-            3
-          </Text>
-        </Step>
-        <Box width="75%">
-          <Text bold color="#F6F6F6">
-            At IDO time
-          </Text>
-          <Text color="#8B8B8B">Purchase your token by committing between the mininum and maximum set value.</Text>
-        </Box>
-      </MobileStepWrapper>
-      <Flex alignItems="center" justifyContent="center" mb="8px" mt="8px">
-        <DotsComponent isVertical numberOfDots={10} />
-      </Flex>
-      <MobileStepWrapper alignItems="center" justifyContent="center">
-        <Step width="25%">
-          <Text bold color="#353535">
-            4
-          </Text>
-        </Step>
-        <Box width="75%">
-          <Text bold color="#F6F6F6">
-            After IDO time
-          </Text>
-          <Text color="#8B8B8B">
-            {' '}
-            Claim the tokens you have purchased. Any unspent assets will be returned to your wallet.
-          </Text>
-        </Box>
-      </MobileStepWrapper>
-    </MobileWrapper>
-  )
-}
+          <Box width="75%">
+            <Text bold color="#F6F6F6">
+              After IDO time
+            </Text>
+            <Text color="#8B8B8B">
+              {' '}
+              Claim the tokens you have purchased. Any unspent assets will be returned to your wallet.
+            </Text>
+          </Box>
+        </MobileStepWrapper>
+      </MobileWrapper>
+    )
+  }
 
 const IfoSteps: React.FC<{
-  selectedUserTier?: number
+  selectedUserTier?: string
+  selectedUserEstLua?: number
   isShowTierInfor: boolean
-}> = ({ selectedUserTier, isShowTierInfor }) => {
+}> = ({ selectedUserTier, isShowTierInfor, selectedUserEstLua }) => {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   return isMobile ? (
-    <IfoStepsMobile selectedUserTier={selectedUserTier} isShowTierInfor={isShowTierInfor} />
+    <IfoStepsMobile
+      selectedUserTier={selectedUserTier}
+      isShowTierInfor={isShowTierInfor}
+      selectedUserEstLua={selectedUserEstLua}
+    />
   ) : (
-    <IfoStepsDesktop selectedUserTier={selectedUserTier} isShowTierInfor={isShowTierInfor} />
+    <IfoStepsDesktop
+      selectedUserTier={selectedUserTier}
+      isShowTierInfor={isShowTierInfor}
+      selectedUserEstLua={selectedUserEstLua}
+    />
   )
 }
 
