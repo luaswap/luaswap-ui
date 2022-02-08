@@ -445,13 +445,7 @@ const Deposit: React.FC<DepositProps> = ({
                     {isShowTierInfor && (
                       <Flex justifyContent="space-between">
                         <Text>Your Tier</Text>
-                        {isExclusive ? (
-                          <Text bold>Tier {titleTier}</Text>
-                        ) : (
-                          <Text bold>
-                            Tier {selectedUserTier} - {getTierName(selectedUserTier)}
-                          </Text>
-                        )}
+                        <Text bold>{titleTier}</Text>
                       </Flex>
                     )}
                     {minAmountPay !== 0 && (

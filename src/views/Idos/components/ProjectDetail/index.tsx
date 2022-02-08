@@ -16,6 +16,7 @@ import get from 'lodash/get'
 import useSecondsUntilCurrent from 'views/Idos/hooks/useSecondsUntilCurrent'
 
 import useGetTitleOfTier from 'views/Idos/hooks/useGetTitleOfTier'
+import isNaN from 'lodash/isNaN'
 import Steps from './Steps'
 import Deposit from './Deposit'
 import PoolSummary from './PoolSummary'
@@ -302,7 +303,7 @@ const ProjectDetail = () => {
             <Steps
               selectedUserTier={titleTier}
               isShowTierInfor={isShowTierInfor}
-              selectedUserEstLua={selectedUserEstLua}
+              selectedUserEstLua={isNaN(Number(selectedUserEstLua)) ? 0 : selectedUserEstLua}
             />
           </>
         )}
