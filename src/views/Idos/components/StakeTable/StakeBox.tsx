@@ -38,7 +38,7 @@ const StakeBox = ({ isDisable }) => {
   const [tokenSelected, setTokenSelected] = useState(null as TokenSelectedModel)
   const [inputValue, setInputValue] = useState('')
   const [paytokenContract, setPayTokenContract] = useState({} as Contract)
-  const tokenValue = useTokenBalance(tokenSelected ? tokenSelected?.address : '')
+  const tokenValue = useTokenBalance(tokenSelected?.address, tokenSelected?.decimals)
   const [estimateLuaQty, setEstimateLuaQty] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const { toastSuccess, toastError } = useToast()
@@ -66,7 +66,7 @@ const StakeBox = ({ isDisable }) => {
 
   const tokenPrice = useMemo(() => {
     if (tokenValue) {
-      return tokenValue.toNumber()
+      return tokenValue.toString()
     }
 
     return 0
@@ -122,8 +122,10 @@ const StakeBox = ({ isDisable }) => {
     setEstimateLuaQty(data?.estimateLuaQty || 0)
   }
 
-  const onClickMax = () => {
+  const onClickMax = async () => {
     setInputValue(tokenPrice.toString())
+    const data = await getValueTokenByLUA(tokenSelected?.address, cid, Number(tokenPrice))
+    setEstimateLuaQty(data?.estimateLuaQty || 0)
   }
 
   const onStakeToken = async () => {

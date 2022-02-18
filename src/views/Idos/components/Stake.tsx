@@ -29,10 +29,10 @@ const NoticeWrap = styled.div`
   height: 300px;
 `
 
-const NoticeWrapText = styled(NoticeWrap)`
+const NoticeWrapText = styled(NoticeWrap)<{ isCenter: boolean }>`
   height: auto;
   margin-bottom: 10px;
-  justify-content: flex-start;
+  justify-content: ${({ isCenter }) => (isCenter ? 'center' : 'flex-start')};
 `
 
 const StakeContainerCenter = styled.div`
@@ -73,16 +73,24 @@ const Stake: React.FC = () => {
       {account ? (
         <>
           {!isOnRightNetWork && (
-            <NoticeWrapText>
+            <NoticeWrapText isCenter={tokensLock.length <= 0}>
               <Text fontSize="16px" color="red">
                 Connect your wallet to LuaStarter & select TomoChain or Ethereum network.
               </Text>
             </NoticeWrapText>
           )}
-          <StakeContainer>
-            <StakeTable />
-            <StakeBox isDisable={!isOnRightNetWork} />
-          </StakeContainer>
+          {tokensLock.length > 0 ? (
+            <StakeContainer>
+              <StakeTable />
+              <StakeBox isDisable={!isOnRightNetWork} />
+            </StakeContainer>
+          ) : (
+            <StakeContainerCenter>
+              <StakeBoxNoDataCase>
+                <StakeBox isDisable={!isOnRightNetWork} />
+              </StakeBoxNoDataCase>
+            </StakeContainerCenter>
+          )}
         </>
       ) : (
         <NoticeWrap>
