@@ -1,16 +1,22 @@
-import { Spinner, Text } from 'luastarter-uikits'
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
+import { Spinner, Text } from 'luastarter-uikits'
 import { selectEstTotalLua, selectIsLoadingStakeTable, selectTier, selectTokensLock } from 'state/stake'
 import RowItem from './RowItem'
 import LoaderIcon from './StakeSpinner'
 import { Table, TBody, TD, TextHeader, TFooter, THead, TierStamp, TR, WrapperLoadingTable } from './StakeTableStyled'
 
 const StakeTable: React.FC = () => {
+  const { account, chainId } = useWeb3React()
   const tokensLock = useSelector(selectTokensLock)
   const estTotalLua = useSelector(selectEstTotalLua)
   const isLoadingStakeTable = useSelector(selectIsLoadingStakeTable)
   const tier = useSelector(selectTier)
+
+  const isOnRightNetWork = useMemo(() => {
+    return chainId === 1 || chainId === 88
+  }, [chainId])
 
   return (
     <>
@@ -54,7 +60,9 @@ const StakeTable: React.FC = () => {
             <TFooter>
               <TR>
                 <TD justifyContent="flex-start" width="15%">
-                  <Text fontSize="12px">Total</Text>
+                  <Text fontSize="14px" fontWeight="900" color={isOnRightNetWork ? '#D8D8D8' : '#606060'}>
+                    Total
+                  </Text>
                 </TD>
                 <TD justifyContent="flex-end" width="20%" />
                 <TD justifyContent="flex-end" width="22%">
@@ -63,7 +71,9 @@ const StakeTable: React.FC = () => {
                       TIER {tier}
                     </Text>
                   </TierStamp>
-                  <Text fontSize="12px">{estTotalLua}</Text>
+                  <Text fontSize="14px" color={isOnRightNetWork ? '#D8D8D8' : '#606060'} fontWeight="900">
+                    {estTotalLua}
+                  </Text>
                 </TD>
                 <TD justifyContent="flex-end" width="23%" />
                 <TD justifyContent="flex-end" width="15%" />

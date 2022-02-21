@@ -74,7 +74,7 @@ const Stake: React.FC = () => {
         <>
           {!isOnRightNetWork && (
             <NoticeWrapText isCenter={tokensLock.length <= 0}>
-              <Text fontSize="16px" color="red">
+              <Text fontSize="15px" color="#DA4343">
                 Connect your wallet to LuaStarter & select TomoChain or Ethereum network.
               </Text>
             </NoticeWrapText>
@@ -94,7 +94,7 @@ const Stake: React.FC = () => {
         </>
       ) : (
         <NoticeWrap>
-          <Text fontSize="16px" color="red">
+          <Text fontSize="15px" color="#DA4343">
             Connect your wallet to LuaStarter & select TomoChain or Ethereum network.
           </Text>
         </NoticeWrap>

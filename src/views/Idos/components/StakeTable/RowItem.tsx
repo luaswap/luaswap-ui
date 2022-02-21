@@ -93,23 +93,23 @@ const RowItem = ({ item }) => {
     <WrapperRow>
       <TR onClick={handleSetIsOpen}>
         <TD justifyContent="flex-start" width="15%">
-          <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+          <Text fontSize="14px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
             {item.name}
           </Text>
         </TD>
         <TD justifyContent="flex-end" width="20%">
-          <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+          <Text fontSize="14px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
             {item.quantity}
           </Text>
         </TD>
         <TD justifyContent="flex-end" width="22%">
-          <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+          <Text fontSize="14px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
             {item.luaEstimate}
           </Text>
         </TD>
         <TD justifyContent="flex-end" width="23%">
           <Flex flexDirection="column" alignItems="flex-end">
-            <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
+            <Text fontSize="14px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
               {item.unlockAtDate}
             </Text>
             <Text fontSize="12px" color={isItemActiveOnNetwork ? '#D8D8D8' : '#606060'}>
@@ -129,7 +129,7 @@ const RowItem = ({ item }) => {
       {isOpen && (
         <TR>
           <TD justifyContent="flex-start" width="auto">
-            {/* <Text fontSize="12px">The rest: 1,000 xLua ≈ 2,000 Lua</Text> */}
+            {/* <Text fontSize="14px">The rest: 1,000 xLua ≈ 2,000 Lua</Text> */}
           </TD>
           <TD justifyContent="space-between" width="auto">
             <WrappInputOnRow>
