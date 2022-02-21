@@ -52,18 +52,22 @@ const RowItem = ({ item }) => {
   }
 
   const onHandleUnStakeLock = useCallback(async () => {
-    try {
-      setIsLoading(true)
-      await onUnStakeLock(item.index, new BigNumber(inputValue).times(BIG_TEN.pow(item.decimals || 18)).toString())
-      await onGetTokensLock()
-      setInputValue('')
-      setIsOpen(false)
-      setIsLoading(false)
-      toastSuccess('Unstake successfully')
-    } catch (error) {
-      console.log(error)
-      setIsLoading(false)
-      toastError('Unstake failed')
+    if (new Date().getTime() < item.unlockAt * 1000) {
+      toastError(`It’s not yet time to withdraw. You can unstake at ${item.unlockAtDate}${item.unlockAtTime}`)
+    } else {
+      try {
+        setIsLoading(true)
+        await onUnStakeLock(item.index, new BigNumber(inputValue).times(BIG_TEN.pow(item.decimals || 18)).toString())
+        await onGetTokensLock()
+        setInputValue('')
+        setIsOpen(false)
+        setIsLoading(false)
+        toastSuccess('Unstake successfully')
+      } catch (error) {
+        console.log(error)
+        setIsLoading(false)
+        toastError('Unstake failed')
+      }
     }
   }, [onUnStakeLock, inputValue, onGetTokensLock])
 
