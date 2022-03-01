@@ -179,8 +179,8 @@ export const buyNFT = async (
     })
 }
 
-export const userBuyCount = async (addressInoContract, account, nftAddress) => {
-  return addressInoContract.methods.userBuyCount(account).call()
+export const userBuyCount = async (addressInoContract, account, nftId) => {
+  return addressInoContract.methods.userBuyCount(account, nftId).call()
 }
 
 export const stakeLock = async (luaIdoLockContract, account, amount, isNativeToken, tokenAddress) => {

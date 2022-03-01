@@ -5,11 +5,7 @@ import { userBuyCount } from 'utils/callHelpers'
 import { useSelector } from 'react-redux'
 import { selectUpdateNumberOfSoldNFTCount } from 'state/nfts'
 
-const useGetUserBuyCount = (
-  contractAddress: string,
-  nftAddress: string,
-  networkNFTId: string,
-): [a: number, b: boolean] => {
+const useGetUserBuyCount = (contractAddress: string, nftId: string, networkNFTId: string): [a: number, b: boolean] => {
   const { account, chainId } = useWeb3React()
   const inoContract = useNFTPoolContract(contractAddress)
   const [userBuyCountVal, setUserButCountVal] = useState(0)
@@ -20,7 +16,7 @@ const useGetUserBuyCount = (
     const fetchData = async () => {
       try {
         setIsLoadingGetUserBuyCount(true)
-        const count = await userBuyCount(inoContract, account, nftAddress)
+        const count = await userBuyCount(inoContract, account, nftId)
         setUserButCountVal(count || 0)
         setIsLoadingGetUserBuyCount(false)
       } catch (error) {
@@ -28,10 +24,10 @@ const useGetUserBuyCount = (
         setIsLoadingGetUserBuyCount(false)
       }
     }
-    if (contractAddress && nftAddress && account && !!networkNFTId && chainId === Number(networkNFTId)) {
+    if (contractAddress && nftId && account && !!networkNFTId && chainId === Number(networkNFTId)) {
       fetchData()
     }
-  }, [inoContract, account, nftAddress, updateNumberOfSoldNFTCount, networkNFTId, chainId])
+  }, [inoContract, account, nftId, updateNumberOfSoldNFTCount, networkNFTId, chainId])
 
   return [Number(userBuyCountVal), isLoadingGetUserBuyCount]
 }

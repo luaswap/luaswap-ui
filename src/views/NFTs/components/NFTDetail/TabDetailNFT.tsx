@@ -168,11 +168,7 @@ const TabDetailNFT = ({ activeIndex }) => {
 
   const paytokenContract = getERC20Contract(library, paytokenAddress, chainId)
 
-  const [userBuyCount, isLoadingGetUserBuyCount] = useGetUserBuyCount(
-    addressInoContract,
-    addressNftContract,
-    networkNFTId,
-  )
+  const [userBuyCount, isLoadingGetUserBuyCount] = useGetUserBuyCount(addressInoContract, nftId, networkNFTId)
 
   const [isApproved, fetchAllowanceData, isLoadingApproveStatus] = useIsApprovedOnTabDetailNFT(
     paytokenContract,
