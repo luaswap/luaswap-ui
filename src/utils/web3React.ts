@@ -8,11 +8,11 @@ import Web3 from 'web3'
 const POLLING_INTERVAL = 12000
 const NETWORK_URL = process.env.REACT_APP_NETWORK_URL
 
-export const injected = new InjectedConnector({ supportedChainIds: [1, 88, 89, 56] })
-const bscConnector = new BscConnector({ supportedChainIds: [56] })
+export const injected = new InjectedConnector({ supportedChainIds: [1, 88, 89, 56, 97] })
+const bscConnector = new BscConnector({ supportedChainIds: [56, 97] })
 
 const walletconnect = new WalletConnectConnector({
-  rpc: { 1: getRpcUrl(1), 88: getRpcUrl(88), 89: getRpcUrl(89), 56: getRpcUrl(56) },
+  rpc: { 1: getRpcUrl(1), 88: getRpcUrl(88), 89: getRpcUrl(89), 56: getRpcUrl(56), 97: getRpcUrl(97) },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
