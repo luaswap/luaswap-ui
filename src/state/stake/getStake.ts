@@ -7,11 +7,11 @@ export const getTokensAccept = async () => {
 }
 
 export const getUserTokensLock = async (address) => {
-  const { data } = await axios.get(`${API_IDO_URL}/tier-v2/${address}`)
+  const { data } = await axios.get(`${API_IDO_URL}/tier/${address}`)
   return data
 }
 
 export const getValueTokenByLUA = async (tokenAddress, chainId, quantity) => {
-  const { data } = await axios.get(`${API_IDO_URL}/tier-v2/${chainId}/${tokenAddress}/${quantity}`)
+  const { data } = await axios.get(`${API_IDO_URL}/tier/${chainId}/${tokenAddress}/${quantity}`)
   return data
 }

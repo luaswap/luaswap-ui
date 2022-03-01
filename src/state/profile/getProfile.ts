@@ -28,7 +28,7 @@ const getProfile = async (address: string, chainId: number) => {
 }
 
 export const getTierData = async (account: string) => {
-  const { data = {} } = await axios.get(`${API_IDO_URL}/tier-v2/${account}`)
+  const { data = {} } = await axios.get(`${API_IDO_URL}/tier/${account}`)
   return data
 }
 
