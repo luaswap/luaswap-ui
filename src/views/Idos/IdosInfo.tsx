@@ -26,9 +26,10 @@ const Idos = () => {
       setIndex(0)
     } else if (location.pathname === `${url}/history`) {
       setIndex(1)
-    } else if (location.pathname === `${url}/stake`) {
-      setIndex(2)
     }
+    // else if (location.pathname === `${url}/stake`) {
+    //   setIndex(2)
+    // }
   }, [location])
 
   return (
@@ -43,9 +44,9 @@ const Idos = () => {
             <SecondaryMenuItem as={Link} to={`${url}/history`} pt="24px" pb="24px" className={styles.tabStyle}>
               PREVIOUS POOLS
             </SecondaryMenuItem>
-            <SecondaryMenuItem as={Link} to={`${url}/stake`} pt="24px" pb="24px" className={styles.tabStyle}>
+            {/* <SecondaryMenuItem as={Link} to={`${url}/stake`} pt="24px" pb="24px" className={styles.tabStyle}>
               <TextStake>STAKE</TextStake>
-            </SecondaryMenuItem>
+            </SecondaryMenuItem> */}
           </SecondaryButtonMenu>
         </Flex>
         <Route exact path={`${path}`}>
@@ -54,9 +55,9 @@ const Idos = () => {
         <Route path={`${path}/history`}>
           <PastIdo />
         </Route>
-        <Route path={`${path}/stake`}>
+        {/* <Route path={`${path}/stake`}>
           <Stake />
-        </Route>
+        </Route> */}
       </Page>
     </>
   )
