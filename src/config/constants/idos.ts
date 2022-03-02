@@ -12,6 +12,7 @@ export const supportIdoNetwork = {
   88: 'Tomochain',
   56: 'BSC',
   1: 'Ethereum',
+  97: 'BSC Testnet',
 }
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'

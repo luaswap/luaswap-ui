@@ -319,9 +319,7 @@ const TabDetailNFT = ({ activeIndex }) => {
                   )}
                 </>
               ) : (
-                <ByNowNFTButton disabled>
-                  <LoaderIcon />
-                </ByNowNFTButton>
+                <ByNowNFTButton disabled>{isMatchNetworkId ? <LoaderIcon /> : 'Approve Contract'}</ByNowNFTButton>
               )}
             </>
           )}
