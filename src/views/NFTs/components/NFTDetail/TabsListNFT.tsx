@@ -89,12 +89,21 @@ const ProgressTextBlock = styled(Flex)`
   }
 `
 
+const TextLink = styled.a`
+  font-style: italic;
+  color: #fbbb44;
+`
+
 const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
   const [hoverIndex, setHoverIndex] = useState(-1)
   const NFTPoolDetail = useSelector(selectSelectedNFTPool)
   const { chainId } = useWeb3React()
   const payTokenSymbol = get(NFTPoolDetail, `indexFlat.data[${activeIndex}]payToken.symbol`, null)
   const indexFlat = get(NFTPoolDetail, 'indexFlat', null)
+  const openNft = get(NFTPoolDetail, 'openNft', {
+    link: '#',
+    text: '',
+  })
 
   const [totalNFTSold] = useGetNumberOfNftSold(indexFlat)
 
@@ -135,10 +144,10 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
       </TabsList>
       <ProgressBlock>
         <ProgressTextBlock justifyContent="space-between" alignItems="center">
-          <Text fontWeight="normal" fontSize="15px" color="#FFFFFF">
+          <Text fontWeight="normal" fontSize="15px" color="#FFFFFF" mb="10px">
             {totalSale - totalNFTSold}/{totalSale} Available
           </Text>
-          <Text fontWeight="normal" fontSize="15px" color="#FFFFFF">
+          <Text fontWeight="normal" fontSize="15px" color="#FFFFFF" mb="10px">
             {progressPercentage}% sold
           </Text>
         </ProgressTextBlock>
@@ -149,6 +158,14 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
           colorBackground="#353535"
           colorBar="#C3C3C3"
         />
+        {openNft.text ? (
+          <Text mt="10px" fontWeight="bold" fontSize="15px" color="#FFFFFF">
+            {openNft.text}{' '}
+            <TextLink href={openNft.link} target="_blank" rel="noreferrer">
+              Here
+            </TextLink>
+          </Text>
+        ) : null}
       </ProgressBlock>
     </Wrapper>
   )
