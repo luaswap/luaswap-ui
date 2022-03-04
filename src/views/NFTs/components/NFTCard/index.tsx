@@ -20,10 +20,7 @@ const CardWrapper = styled(Card)`
   ${({ theme }) => theme.mediaQueries.lg} {
     width: 100%;
   }
-
-  &:not(:last-of-type) {
-    margin-bottom: 24px;
-  }
+  margin-bottom: 24px;
 `
 
 const IconWrapper = styled.a`
