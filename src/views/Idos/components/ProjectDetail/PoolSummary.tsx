@@ -368,7 +368,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                     <ProcessAmountWrapper justifyContent="flex-start">
                       {isShowTierInfor ? (
                         <TertiaryMessage
-                          hoverContent="You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of the percentage shown."
+                          hoverContent="You can still commit &amp; own a guaranteed share of the token IDO (except for tier None), regardless of the percentage shown."
                           hoverPlacement="top"
                         >
                           Commit Process
@@ -410,7 +410,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
         )}
         {isShowPoolData && isShowTierInfor && !isExclusive && (
           <InfoText>
-            (*) You can still commit &amp; own a guaranteed share of the token IDO (except for tier 0), regardless of
+            (*) You can still commit &amp; own a guaranteed share of the token IDO (except for tier None), regardless of
             the percentage shown.
           </InfoText>
         )}
