@@ -378,7 +378,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
                       )}
                       <Text color="primary" bold fontSize="18px">
                         &nbsp;{formatNumberWithComma(totalCommittedAmount, true)}/
-                        {formatNumberWithComma(totalAmountPay)} {payToken?.symbol}
+                        {formatNumberWithComma(totalAmountPay, true)} {payToken?.symbol}
                       </Text>
                     </ProcessAmountWrapper>
                   ) : (
