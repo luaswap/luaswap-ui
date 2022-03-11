@@ -7,7 +7,7 @@ export const getTokensAccept = async () => {
 }
 
 export const getUserTokensLock = async (address) => {
-  const { data } = await axios.get(`${API_IDO_URL}/tier/${address}`)
+  const { data } = await axios.get(`${API_IDO_URL}/tier-v2/${address}`)
   return data
 }
 
