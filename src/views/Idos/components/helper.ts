@@ -6,7 +6,7 @@ import { supportIdoNetwork, tierMap } from 'config/constants/idos'
 
 export const calculateSwapRate = (totalAmountIDO: string | number, totalAmountPay: string | number): string => {
   if (totalAmountIDO && totalAmountPay) {
-    return new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(6)
+    return new BigNumber(new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)).toFixed(6)).toString()
   }
 
   return null

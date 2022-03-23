@@ -225,13 +225,13 @@ const TierCard: React.FC<TierProps> = ({
               <Text bold color="#353535">
                 Your Tier. GET READY!
               </Text>
-              <Image
+              {/* <Image
                 src="https://image.flaticon.com/icons/png/512/1067/1067357.png"
                 alt="img"
                 width={40}
                 height={40}
                 ml="20px"
-              />
+              /> */}
             </Button>
           )}
           {userTier < tier && (

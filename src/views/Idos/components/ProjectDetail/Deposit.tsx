@@ -416,10 +416,11 @@ const Deposit: React.FC<DepositProps> = ({
   }, [poolStatus, totalAmountUserSwapped, userTotalCommitted])
   const minimumClaimableAmount = useMemo(() => {
     if (minAmountPay && totalAmountPay && totalAmountIDO) {
-      return new BigNumber(minAmountPay)
+      const _minAmountPay = new BigNumber(minAmountPay)
         .multipliedBy(new BigNumber(totalAmountIDO).dividedBy(new BigNumber(totalAmountPay)))
         .toFixed(6)
         .toString()
+      return new BigNumber(_minAmountPay).toString()
     }
 
     return 0
