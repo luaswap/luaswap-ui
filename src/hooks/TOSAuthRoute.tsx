@@ -9,29 +9,29 @@ import { TOUResponse } from 'views/Idos/types'
 
 const TOSAuthRoute = ({ component: Component, ...rest }) => {
   const { account } = useWeb3React()
-  const [onDisplayTermOfUseModal, onDismiss] = useModal(<TermOfUseModal />, false)
+  // const [onDisplayTermOfUseModal, onDismiss] = useModal(<TermOfUseModal />, false)
 
-  useEffect(() => {
-    const fetchUserTOSInfo = async () => {
-      try {
-        const response = await axios.get(`${API_IDO_URL}/users/tou/${account}`)
-        const { touApproved } = response.data as TOUResponse
-        if (!touApproved) {
-          onDisplayTermOfUseModal()
-        } else {
-          onDismiss()
-        }
-      } catch (error) {
-        onDismiss()
-        console.log(error, 'Fail to fetch Term of use information')
-      }
-    }
+  // useEffect(() => {
+  //   const fetchUserTOSInfo = async () => {
+  //     try {
+  //       const response = await axios.get(`${API_IDO_URL}/users/tou/${account}`)
+  //       const { touApproved } = response.data as TOUResponse
+  //       if (!touApproved) {
+  //         onDisplayTermOfUseModal()
+  //       } else {
+  //         onDismiss()
+  //       }
+  //     } catch (error) {
+  //       onDismiss()
+  //       console.log(error, 'Fail to fetch Term of use information')
+  //     }
+  //   }
 
-    if (account) {
-      fetchUserTOSInfo()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
+  //   if (account) {
+  //     fetchUserTOSInfo()
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [account])
 
   return <Route render={(props) => <Component {...props} />} {...rest} />
 }
