@@ -75,7 +75,7 @@ export const YellowCard = styled(Box)`
 `
 
 export const StyledCardBody = styled(CardBody)`
-  height: 300px;
+  height: 350px;
   background-color: #353535;
 
   @media (max-width: 1080px) {

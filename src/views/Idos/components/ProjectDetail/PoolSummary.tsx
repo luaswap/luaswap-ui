@@ -204,6 +204,12 @@ const ExclusiveButton = styled(SecondaryButtonPool)`
   width: auto;
 `
 
+const StyledFlex = styled(Flex)`
+  @media (max-width: 576px) {
+    flex-direction: column;
+  }
+`
+
 interface CardWrapperProps {
   isShowPoolData: boolean
 }
@@ -294,7 +300,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
           height: 'auto',
         }}
       >
-        <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
+        <StyledFlex justifyContent="space-between" alignItems="center" flexWrap="wrap">
           <PoolWrapper mb="15px" alignItems="center" flex="1">
             <ImageContainer src={img} alt="img" width="30%" />
             <PoolInfoBlock>
@@ -351,7 +357,7 @@ const PoolSummary: React.FC<PoolSummaryProps> = ({
               )}
             </PoolTag>
           </PoolInfoSocialBlock>
-        </Flex>
+        </StyledFlex>
         <Text>{description}</Text>
         {isShowPoolData && (
           <Flex justifyContent="space-between" mb="10px" mt="15px" alignItems="flex-start" flexWrap="wrap">

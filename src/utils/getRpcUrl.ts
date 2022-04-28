@@ -21,6 +21,15 @@ const getNodeUrl = (chainId?: number) => {
   if (chainId === 56) {
     return sample(BSC_NODES)
   }
+
+  if (chainId === 43114) {
+    return 'https://api.avax.network/ext/bc/C/rpc'
+  }
+
+  if (chainId === 43113) {
+    return 'https://api.avax-test.network/ext/bc/C/rpc'
+  }
+
   return RPC_URL[chainId] ? RPC_URL[chainId] : RPC_URL[1]
 }
 

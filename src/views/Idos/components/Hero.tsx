@@ -109,6 +109,12 @@ const StyledText = styled(Text)`
   }
 `
 
+const StyledFlex = styled(Flex)`
+  @media (max-width: 576px) {
+    flex-direction: column;
+  }
+`
+
 const Loader = () => {
   return (
     <LoaderIcon>
@@ -163,7 +169,7 @@ const Hero = () => {
           <StyledHeading mb="16px" textAlign="center" color="#FFFFFF">
             Decentralize your way of investing
           </StyledHeading>
-          <Flex alignItems="center" mt="20px" justifyContent="center">
+          <StyledFlex alignItems="center" mt="20px" justifyContent="center">
             <StyledText bold textAlign="center" color="#FEF5E3" mr="16px">
               Subscribe to upcoming pools
             </StyledText>
@@ -184,7 +190,7 @@ const Hero = () => {
                 <SubscribeButton onClick={onSubmit}>Subscribe</SubscribeButton>
               )}
             </Flex>
-          </Flex>
+          </StyledFlex>
         </Container>
       </StyledHero>
     </Box>
