@@ -97,7 +97,7 @@ const TextLink = styled.a`
 const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
   const [hoverIndex, setHoverIndex] = useState(-1)
   const NFTPoolDetail = useSelector(selectSelectedNFTPool)
-  const { chainId } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const payTokenSymbol = get(NFTPoolDetail, `indexFlat.data[${activeIndex}]payToken.symbol`, null)
   const indexFlat = get(NFTPoolDetail, 'indexFlat', null)
   const openNft = get(NFTPoolDetail, 'openNft', {
@@ -105,7 +105,16 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
     text: '',
   })
 
-  const [totalNFTSold] = useGetNumberOfNftSold(indexFlat)
+  const networkNFTId = get(NFTPoolDetail, 'indexFlat.networkId', '')
+
+  const isMatchNetworkId = useMemo(() => {
+    if (account) {
+      return Number(chainId) === Number(networkNFTId)
+    }
+    return false
+  }, [account, networkNFTId, chainId])
+
+  const [totalNFTSold] = useGetNumberOfNftSold(indexFlat, isMatchNetworkId)
 
   const totalSale = useMemo(() => {
     let total = 0
@@ -135,7 +144,7 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
               setHoverIndex(-1)
             }}
           >
-            <TabNameNFT nft={item} />
+            <TabNameNFT nft={item} isMatchNetworkId={isMatchNetworkId} />
             <TabPrice fontWeight="900" fontSize="15px" color="#FFFFFF">
               {item.price} {payTokenSymbol}
             </TabPrice>
@@ -143,21 +152,25 @@ const TabsListNFT = ({ activeIndex, setActiveIndex }) => {
         ))}
       </TabsList>
       <ProgressBlock>
-        <ProgressTextBlock justifyContent="space-between" alignItems="center">
-          <Text fontWeight="normal" fontSize="15px" color="#FFFFFF" mb="10px">
-            {totalSale - totalNFTSold}/{totalSale} Available
-          </Text>
-          <Text fontWeight="normal" fontSize="15px" color="#FFFFFF" mb="10px">
-            {progressPercentage}% sold
-          </Text>
-        </ProgressTextBlock>
-        <Progress
-          variant="round"
-          scale="md"
-          primaryStep={progressPercentage}
-          colorBackground="#353535"
-          colorBar="#C3C3C3"
-        />
+        {isMatchNetworkId && (
+          <>
+            <ProgressTextBlock justifyContent="space-between" alignItems="center">
+              <Text fontWeight="normal" fontSize="15px" color="#FFFFFF" mb="10px">
+                {totalSale - totalNFTSold}/{totalSale} Available
+              </Text>
+              <Text fontWeight="normal" fontSize="15px" color="#FFFFFF" mb="10px">
+                {progressPercentage}% sold
+              </Text>
+            </ProgressTextBlock>
+            <Progress
+              variant="round"
+              scale="md"
+              primaryStep={progressPercentage}
+              colorBackground="#353535"
+              colorBar="#C3C3C3"
+            />
+          </>
+        )}
         {openNft.text ? (
           <Text mt="10px" fontWeight="bold" fontSize="15px" color="#FFFFFF">
             {openNft.text}{' '}

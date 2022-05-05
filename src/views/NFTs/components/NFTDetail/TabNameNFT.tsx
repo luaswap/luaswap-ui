@@ -5,16 +5,18 @@ import useGetNumberOfNftItemSold from 'views/NFTs/hook/useGetNumberOfNftItemSold
 
 const TabName = styled.div``
 
-const TabNameNFT = ({ nft }) => {
-  const [totalNFTItemSold] = useGetNumberOfNftItemSold(nft)
+const TabNameNFT = ({ nft, isMatchNetworkId }) => {
+  const [totalNFTItemSold] = useGetNumberOfNftItemSold(nft, isMatchNetworkId)
   return (
     <TabName>
       <Text fontWeight="bold" fontSize="20px" color="#FFFFFF">
         {nft.name}
       </Text>
-      <Text fontWeight="normal" fontSize="14px" color="#FFFFFF">
-        {nft.totalSale - totalNFTItemSold} available
-      </Text>
+      {isMatchNetworkId && (
+        <Text fontWeight="normal" fontSize="14px" color="#FFFFFF">
+          {nft.totalSale - totalNFTItemSold} available
+        </Text>
+      )}
     </TabName>
   )
 }

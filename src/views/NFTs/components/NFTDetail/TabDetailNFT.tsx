@@ -193,7 +193,7 @@ const TabDetailNFT = ({ activeIndex }) => {
     return false
   }, [account, networkNFTId, chainId])
 
-  const [totalNFTSold] = useGetNumberOfNftSold(indexFlat)
+  const [totalNFTSold] = useGetNumberOfNftSold(indexFlat, isMatchNetworkId)
 
   const totalSale = useMemo(() => {
     let total = 0

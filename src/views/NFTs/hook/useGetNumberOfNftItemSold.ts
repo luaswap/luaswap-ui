@@ -5,7 +5,7 @@ import { selectUpdateNumberOfSoldNFTCount } from 'state/nfts'
 import { getNumberOfNftSold } from 'utils/callHelpers'
 import { useNFTPoolContract } from 'hooks/useContract'
 
-const useGetNumberOfNftItemSold = (nft) => {
+const useGetNumberOfNftItemSold = (nft, isMatchNetworkId) => {
   const { account, chainId } = useWeb3React()
   const [totalNFTItemSold, setTotalNFTItemSold] = useState(0)
   const updateNumberOfSoldNFTCount = useSelector(selectUpdateNumberOfSoldNFTCount)
@@ -20,7 +20,7 @@ const useGetNumberOfNftItemSold = (nft) => {
         console.log(error)
       }
     }
-    if (nft.nftId) {
+    if (nft.nftId && isMatchNetworkId) {
       fetchData()
     }
   }, [account, chainId, updateNumberOfSoldNFTCount, nft.nftId])

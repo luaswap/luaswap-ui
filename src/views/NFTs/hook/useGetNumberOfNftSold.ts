@@ -5,17 +5,18 @@ import { getWeb3BasedOnChainId } from 'utils/web3'
 import { getNFTPoolContract } from 'utils/contractHelpers'
 import makeBatchRequest from 'utils/makeBatchRequest'
 import { selectUpdateNumberOfSoldNFTCount } from 'state/nfts'
+import useWeb3 from 'hooks/useWeb3'
 
-const useGetNumberOfNftSold = (packNFT) => {
+const useGetNumberOfNftSold = (packNFT, isMatchNetworkId) => {
   const { account, chainId } = useWeb3React()
   const [totalNFTSold, setTotalNFTSold] = useState(0)
   const updateNumberOfSoldNFTCount = useSelector(selectUpdateNumberOfSoldNFTCount)
+  const web3 = useWeb3()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const listActionGetNumberSoldNFT = []
-        const web3 = getWeb3BasedOnChainId(Number(packNFT.networkId))
         packNFT.data.forEach((nft) => {
           const nftPoolContractAddress = nft.addressInoContract
 
@@ -36,7 +37,9 @@ const useGetNumberOfNftSold = (packNFT) => {
         console.log(error)
       }
     }
-    fetchData()
+    if (isMatchNetworkId) {
+      fetchData()
+    }
   }, [account, chainId, updateNumberOfSoldNFTCount])
   return [totalNFTSold]
 }

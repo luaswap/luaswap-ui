@@ -108,12 +108,22 @@ const NFTStatusUpcoming = styled(NFTStatus)`
 const NFTCard = ({ NFTpool }) => {
   const history = useHistory()
   const { path } = useRouteMatch()
-  const { chainId } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const location = useLocation()
   const [poolStatus] = useNFTPoolStatus(NFTpool)
   const [poolTimeStamp] = useGetTimeOfPool(NFTpool)
   const { name, img, description, indexFlat, id } = NFTpool
-  const [totalNFTSold] = useGetNumberOfNftSold(indexFlat)
+
+  const networkNFTId = get(NFTpool, 'indexFlat.networkId', '')
+
+  const isMatchNetworkId = useMemo(() => {
+    if (account) {
+      return Number(chainId) === Number(networkNFTId)
+    }
+    return false
+  }, [account, networkNFTId, chainId])
+
+  const [totalNFTSold] = useGetNumberOfNftSold(indexFlat, isMatchNetworkId)
 
   const navigateToProjectDetail = useCallback(() => {
     history.push(`${path}/detail/${id}`)
@@ -184,7 +194,7 @@ const NFTCard = ({ NFTpool }) => {
               </Text>
             </Flex>
           </Flex>
-          <Progress variant="round" scale="sm" primaryStep={progressPercentage} />
+          {isMatchNetworkId && <Progress variant="round" scale="sm" primaryStep={progressPercentage} />}
         </>
       </StyledCardBody>
     </CardWrapper>
