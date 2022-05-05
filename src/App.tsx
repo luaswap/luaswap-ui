@@ -18,7 +18,7 @@ const NotFound = lazy(() => import('./views/NotFound'))
 // const Farms = lazy(() => import('./views/Farms'))
 const DualFarms = lazy(() => import('./views/DualFarms'))
 const Idos = lazy(() => import('./views/Idos'))
-// const NFTs = lazy(() => import('./views/NFTs'))
+const NFTs = lazy(() => import('./views/NFTs'))
 
 // This config is required for number formatting
 BigNumber.config({
@@ -41,9 +41,9 @@ const App: React.FC = () => {
             <Route path="/ido">
               <Idos />
             </Route>
-            {/* <Route path="/nfts">
+            <Route path="/nfts">
               <NFTs />
-            </Route> */}
+            </Route>
             {/* <Route path="/farms">
               <Farms />
             </Route> */}

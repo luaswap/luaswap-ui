@@ -54,7 +54,7 @@ const StakeTable: React.FC = () => {
             </THead>
             <TBody>
               {tokensLock.map((row, index) => (
-                <RowItem item={row} key={index.toString()} />
+                <RowItem item={row} />
               ))}
             </TBody>
             <TFooter>
