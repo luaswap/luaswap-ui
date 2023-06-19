@@ -30,17 +30,17 @@ export const LOTTERY_TICKET_PRICE = 1
 export const DEFAULT_TOKEN_DECIMAL = BIG_TEN.pow(18)
 export const DEFAULT_GAS = 200000
 export const API_BLOCKFOLIO = 'https://api.luaswap.org/api-v3/'
-export const API_ETH = 'https://wallet.tomochain.com/api/luaswap'
-export const API_TOMO = 'https://wallet.tomochain.com/api/luaswap/tomochain'
+export const API_ETH = 'https://rpc-farm.luaswap.org'
+export const API_TOMO = 'https://rpc-farm.luaswap.org/tomochain'
 export const API_IDO_URL = 'https://api.luaswap.org/api/ido'
 // export const API_IDO_URL = 'https://api.luaswap.org/api-test/ido'
 export const API_URL: { [chainId in ChainId]: string } = {
-  1: 'https://wallet.tomochain.com/api/luaswap',
+  1: 'https://rpc-farm.luaswap.org',
   3: '',
   4: '',
   5: '',
   42: '',
-  88: 'https://wallet.tomochain.com/api/luaswap/tomochain',
+  88: 'https://rpc-farm.luaswap.org/tomochain',
   89: '',
   99: '',
 }

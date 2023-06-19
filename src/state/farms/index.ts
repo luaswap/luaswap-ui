@@ -93,6 +93,7 @@ export const fetchFarms =
       const apiUrl = IsTomo ? API_TOMO : API_ETH
       const finalUrl = isDual ? `${apiUrl}/dualfarm` : apiUrl
       const { data } = await axios.get(`${finalUrl}/pools`)
+      console.log(data, 'DATa ? ')
       dispatch(setFarmsPublicData(data))
       const apyListResponse = data.map((farm) => {
         if (isDual) return getNewRewardPerBlockDual(web3, farm.pid + 1, chainId, farm.master)
